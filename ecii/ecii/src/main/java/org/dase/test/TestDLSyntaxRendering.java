@@ -5,8 +5,7 @@ Written at 5/18/18.
 */
 
 import org.dase.util.ConfigParams;
-import org.dase.util.DLSyntaxRendererExt;
-import org.dase.util.SharedDataHolder;
+import org.dase.ontofactory.DLSyntaxRendererExt;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 

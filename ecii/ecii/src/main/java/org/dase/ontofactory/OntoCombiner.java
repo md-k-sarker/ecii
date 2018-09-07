@@ -1,10 +1,12 @@
-package org.dase.util;
+package org.dase.ontofactory;
 /*
 Written by sarker.
 Written at 5/22/18.
 */
 
 import org.apache.commons.logging.impl.Log4JLogger;
+import org.dase.util.Monitor;
+import org.dase.util.Utility;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 import org.slf4j.Logger;

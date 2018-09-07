@@ -1,4 +1,4 @@
-package org.dase.util;
+package org.dase.ontofactory;
 /*
 Written by sarker.
 Written at 5/18/18.

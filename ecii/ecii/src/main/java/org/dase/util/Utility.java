@@ -6,9 +6,10 @@ package org.dase.util;
 import com.google.common.collect.Lists;
 import com.wcohen.ss.Levenstein;
 import org.apache.log4j.Level;
+import org.dase.core.SharedDataHolder;
 import org.dase.exceptions.MalFormedIRIException;
+import org.dase.ontofactory.LabelExtractor;
 import org.semanticweb.HermiT.Configuration;
-import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.model.parameters.ChangeApplied;
@@ -22,7 +23,6 @@ import uk.ac.manchester.cs.jfact.JFactFactory;
 import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
 import org.semanticweb.elk.owlapi.ElkReasonerFactory;
 import uk.ac.manchester.cs.factplusplus.owlapiv3.FaCTPlusPlusReasonerFactory;
-import uk.ac.manchester.cs.jfact.JFactFactory;
 
 
 import java.io.*;

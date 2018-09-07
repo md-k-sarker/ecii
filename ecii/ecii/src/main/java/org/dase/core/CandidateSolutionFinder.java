@@ -4,6 +4,7 @@ import org.dase.datastructure.CandidateClass;
 import org.dase.datastructure.CandidateSolution;
 import org.dase.datastructure.ConjunctiveHornClause;
 import org.dase.exceptions.MalFormedIRIException;
+import org.dase.ontofactory.DLSyntaxRendererExt;
 import org.dase.util.*;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.model.parameters.ChangeApplied;

@@ -5,9 +5,7 @@ Written at 5/18/18.
 */
 
 import org.dase.core.Score;
-import org.dase.util.SharedDataHolder;
-import org.dase.util.Utility;
-import org.semanticweb.owlapi.model.OWLClass;
+import org.dase.core.SharedDataHolder;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.slf4j.Logger;
@@ -17,10 +15,6 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
-
-import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.AND;
-import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.NOT;
-import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.OR;
 
 /**
  * A conjunctive Horn clause is a class expression of the form B ⊓ D,

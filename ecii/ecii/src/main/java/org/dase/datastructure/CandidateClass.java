@@ -5,7 +5,7 @@ Written at 8/20/18.
 */
 
 import org.dase.core.Score;
-import org.dase.util.SharedDataHolder;
+import org.dase.core.SharedDataHolder;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 

@@ -1,5 +1,6 @@
-package org.dase.util;
+package org.dase.ontofactory;
 
+import org.dase.util.ConfigParams;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
 import org.semanticweb.owlapi.model.*;

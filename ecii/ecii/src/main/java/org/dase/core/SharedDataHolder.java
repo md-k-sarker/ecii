@@ -1,6 +1,7 @@
-package org.dase.util;
+package org.dase.core;
 
 import org.dase.datastructure.CandidateSolution;
+import org.dase.ontofactory.DLSyntaxRendererExt;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 

@@ -1,4 +1,4 @@
-package org.dase.util;
+package org.dase.ontofactory;
 
 import org.semanticweb.owlapi.model.*;
 

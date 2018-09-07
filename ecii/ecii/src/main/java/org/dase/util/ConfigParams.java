@@ -1,5 +1,6 @@
 package org.dase.util;
 
+import org.dase.core.SharedDataHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -4,7 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 
 /**
- * This class will write statistics in disk. This class acts like a static class.
+ * This class will write stats in disk. This class acts like a static class.
  * @author sarker
  *
  */

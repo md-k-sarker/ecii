@@ -2,7 +2,9 @@ package org.dase;
 
 
 import org.dase.core.CandidateSolutionFinder;
+import org.dase.core.SharedDataHolder;
 import org.dase.exceptions.MalFormedIRIException;
+import org.dase.ontofactory.DLSyntaxRendererExt;
 import org.dase.util.*;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
