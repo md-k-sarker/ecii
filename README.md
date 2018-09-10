@@ -3,7 +3,7 @@ Learning description from examples: An efficient approach to analyzing big data
 
 This repository contains the source code of ECII. 
 Source code is in ecii/ecii directory.
-Configuration files is in scripts_to_reproduce_results directory.
+Sample configuration files is in config-file-sample-scripts directory.
 
 ## How to run the program:
     Program runs in two mode. Batch mode and single mode. In single mode it will take a config file as input parameter and run the program as mentioned by the parameters in config file.
