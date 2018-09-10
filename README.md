@@ -1,8 +1,9 @@
 # ecii
 Learning description from examples: An efficient approach to analyzing big data
 
-This repository contains the source code of ECII.
-
+This repository contains the source code of ECII. 
+Source code is in ecii/ecii directory.
+Configuration files is in scripts_to_reproduce_results directory.
 
 ## How to run the program:
     Program runs in two mode. Batch mode and single mode. In single mode it will take a config file as input parameter and run the program as mentioned by the parameters in config file.
@@ -20,7 +21,7 @@ This repository contains the source code of ECII.
 
 ## How to write Config file:
     Config file is a text file with user defined parameters and must end with .config
-    Parameters are written as key, value pair.
+    Parameters are written as key, value pair. 
 
     #### Parameters:
         // default namespace
