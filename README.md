@@ -7,13 +7,15 @@ This repository contains the source code of ECII.
 ## How to run the program:
     Program runs in two mode. Batch mode and single mode. In single mode it will take a config file as input parameter and run the program as mentioned by the parameters in config file.
     
-    In Batch mode it take directory as parameter and will run all the config files within that directory.
+    In Batch mode it take directory as parameter and will run all the config files within that directory. 
 
     #### For single mode:
         java -jar ecii.jar config_file
 
     #### For Batch mode:
         java -jar ecii.jar -b directory
+    
+    Delete java -jar ecii.jar if you run it from the source code.
 
 
 ## How to write Config file:
