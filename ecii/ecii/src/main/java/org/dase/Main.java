@@ -297,7 +297,7 @@ public class Main {
         if (args.length == 1) {
 
             if (args[0].equals("-h")) {
-                printHelp(args);
+                printHelp();
                 return;
             }
             /**
@@ -312,7 +312,7 @@ public class Main {
                 initiateSingleDoOps(ConfigParams.outputResultPath);
             } else {
                 System.out.println("Config file must ends with .config");
-                printHelp(args);
+                printHelp();
             }
 
         } else if (args.length == 2) {
@@ -338,11 +338,11 @@ public class Main {
 
             } else {
                 System.out.println(argErrorStr1 + sb.toString() + argErrorStr2);
-                printHelp(args);
+                printHelp();
             }
         } else {
             System.out.println(argErrorStr1 + sb.toString() + argErrorStr2);
-            printHelp(args);
+            printHelp();
         }
     }
 }
