@@ -128,7 +128,7 @@ public final class ConfigParams {
             removeCommonTypes = Boolean.getBoolean(prop.getProperty("removeCommonTypes", "true"));
 
             confFileDir = Paths.get(confFilePath).getParent().toString();
-            String replacement = "_expl_by_ecii_limit__0" + ConfigParams.hornClausesListMaxSize + "_reasoner_" + ConfigParams.reasonerName + "_accuracy_calc_by_reasoner.txt";
+            String replacement = "_concept_induction.txt";
             String resultFileName = Paths.get(confFilePath).getFileName().toString().replace(".config", replacement);
             outputResultPath = confFileDir + "/" + resultFileName;
 

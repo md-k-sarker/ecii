@@ -3,6 +3,7 @@ package org.dase.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
 import java.io.PrintStream;
 import java.lang.invoke.MethodHandles;
 import java.text.DateFormat;
@@ -20,6 +21,7 @@ public class Monitor {
     private long startTime;
     private final PrintStream out;
     private DateFormat dateFormat;
+    private JTextPane jTextPane;
 
     public DateFormat getDateFormat() {
         return dateFormat;
@@ -36,6 +38,12 @@ public class Monitor {
         this.dateFormat = Utility.getDateTimeFormat();
     }
 
+    public Monitor(PrintStream _printStream, JTextPane textPane) {
+        this.out = _printStream;
+        this.dateFormat = Utility.getDateTimeFormat();
+        this.jTextPane = textPane;
+    }
+
     /*
      * http://slf4j.42922.n3.nabble.com/Logging-to-file-with-slf4j-Logger-Where-do
      * -log-file-go-td46087.html It appears that you have misunderstood the purpose
@@ -50,15 +58,28 @@ public class Monitor {
     // }
 
     public void displayMessage(String message, boolean write) {
+
         System.out.println(message);
         if (write) {
             out.println(message);
+
         }
+        String txt = jTextPane.getText();
+        if (txt == null) {
+            txt = "";
+        }
+        jTextPane.setText(txt + "\n" + message);
     }
 
     public void writeMessage(String message) {
         out.println(message);
         out.flush();
+
+//        String txt = jTextPane.getText();
+//        if (txt == null) {
+//            txt = "";
+//        }
+//        jTextPane.setText(txt + "\n" + message);
     }
 
     public void error(String message) {

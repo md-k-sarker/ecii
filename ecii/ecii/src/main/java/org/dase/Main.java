@@ -11,6 +11,7 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
 import java.io.*;
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
@@ -35,6 +36,12 @@ public class Main {
 
     static String alreadyGotResultPath = "/home/sarker/MegaCloud/ProjectHCBD/experiments/ade_with_wn_sumo/automated/without_score_got_result/";
     static ArrayList<String> alreadyGotResult = new ArrayList<String>();
+
+    private static JTextPane jTextPane;
+
+    public static void setTextPane(JTextPane textPane) {
+        jTextPane = textPane;
+    }
 
 
     /**
@@ -102,13 +109,15 @@ public class Main {
             PrintStream printStream = new PrintStream(bos, true);
             outPutStream = printStream;
 
-            monitor = new Monitor(outPutStream);
+            monitor = new Monitor(outPutStream, jTextPane);
             monitor.start("Program started.............", true);
             logger.info("Program started................");
             doOps();
 
+            monitor.displayMessage("Result saved at: "+ ConfigParams.outputResultPath, true);
             monitor.stop(System.lineSeparator() + "Program finished.", true);
             logger.info("Program finished.");
+
             outPutStream.close();
         } catch (Exception e) {
             logger.info("\n\n!!!!!!!Fatal error!!!!!!!\n" + Utility.getStackTraceAsString(e));
@@ -241,7 +250,7 @@ public class Main {
 
 
     public static void printHelp() {
-              String helpCommand = "Program runs in two mode. " +
+        String helpCommand = "Program runs in two mode. " +
                 "\n\tBatch mode and " +
                 "\n\tsingle mode. " +
                 "\nIn single mode it will take a config file as input parameter and run the program as mentioned by the parameters in config file.\n" +
@@ -282,7 +291,7 @@ public class Main {
      */
     public static void main(String[] args) throws OWLOntologyCreationException, IOException, MalFormedIRIException {
 
-         StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         for (String arg : args) {
             sb.append(arg);
         }
