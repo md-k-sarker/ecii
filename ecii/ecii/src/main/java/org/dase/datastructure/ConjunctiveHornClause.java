@@ -133,7 +133,7 @@ public class ConjunctiveHornClause {
         this.negObjectTypes = negObjectTypes;
     }
 
-    public void addNegObjectTypes(OWLClassExpression negObjectType) {
+    public void addNegObjectType(OWLClassExpression negObjectType) {
         this.negObjectTypes.add(negObjectType);
     }
 

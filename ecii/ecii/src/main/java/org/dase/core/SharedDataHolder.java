@@ -8,10 +8,12 @@ import org.semanticweb.owlapi.model.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class SharedDataHolder {
 
     public static String programStartingDir;
+    public static Map<String, String> prefixmap;
 
     public static OWLDataFactory owlDataFactory;
     public static OWLOntologyManager owlOntologyManager;
@@ -109,5 +111,6 @@ public class SharedDataHolder {
 
     public static ArrayList<CandidateSolution> SortedCandidateSolutionSet = new ArrayList<>();
 
+    public static ArrayList<CandidateSolution> SortedByReasonerCandidateSolutionSet = new ArrayList<>();
 
 }

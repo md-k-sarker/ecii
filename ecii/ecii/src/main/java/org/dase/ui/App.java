@@ -186,6 +186,5 @@ public class App {
         App app = new App();
         app.init();
         app.initGui();
-
     }
 }

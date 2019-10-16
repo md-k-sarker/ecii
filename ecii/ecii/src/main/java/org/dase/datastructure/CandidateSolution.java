@@ -93,8 +93,8 @@ public class CandidateSolution {
         this.candidateClasses = candidateClasses;
     }
 
-    public void addCandidateClasses(CandidateClass candidateClasses) {
-        this.candidateClasses.add(candidateClasses);
+    public void addCandidateClass(CandidateClass candidateClass) {
+        this.candidateClasses.add(candidateClass);
     }
 
     /**
