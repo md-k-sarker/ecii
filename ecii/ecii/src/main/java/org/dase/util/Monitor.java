@@ -64,11 +64,16 @@ public class Monitor {
             out.println(message);
 
         }
-        String txt = jTextPane.getText();
+        String txt = "";
+
+        if(null != jTextPane){
+            txt = jTextPane.getText();
+        }
         if (txt == null) {
             txt = "";
         }
-        jTextPane.setText(txt + "\n" + message);
+        if(null != jTextPane)
+            jTextPane.setText(txt + "\n" + message);
     }
 
     public void writeMessage(String message) {

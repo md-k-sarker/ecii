@@ -5,6 +5,8 @@ package org.dase.util;
 
 import com.google.common.collect.Lists;
 import com.wcohen.ss.Levenstein;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import org.apache.log4j.Level;
 import org.dase.core.SharedDataHolder;
 import org.dase.exceptions.MalFormedIRIException;
@@ -77,6 +79,28 @@ public class Utility {
         }
     }
 
+    public static void saveOntology(OWLOntology ontology,  OWLDocumentFormat owlDocumentFormat, String path) throws OWLOntologyStorageException {
+
+
+        String encodedPath = "";
+        try {
+            // encoded path not working with owlapi.
+            encodedPath = URLEncoder.encode(path, "UTF-8");
+            IRI owlDiskFileIRIForSave = IRI.create("file:" + path);
+
+//            OWLDocumentFormat existingFormat = ontology.getOWLOntologyManager().getOntologyFormat(ontology);
+//            if (existingFormat.isPrefixOWLOntologyFormat()) {
+//                owlDocumentFormat.copyPrefixesFrom(existingFormat.asPrefixOWLOntologyFormat());
+//            }
+
+            ontology.getOWLOntologyManager().saveOntology(ontology, owlDocumentFormat, owlDiskFileIRIForSave);
+        } catch (UnsupportedEncodingException ex) {
+            logger.error("This path is not valid according to java: " + encodedPath);
+            logger.error("UnsupportedEncodingException error. program exiting");
+            logger.error(getStackTraceAsString(ex));
+            System.exit(-1);
+        }
+    }
 
     /**
      * Load ontology from file system
@@ -155,6 +179,11 @@ public class Utility {
         }
         logger.info("Format : " + owlOntologyManager.getOntologyFormat(owlOntology));
 
+        // save the prefixes
+        OWLDocumentFormat format = owlOntologyManager.getOntologyFormat(owlOntology);
+        logger.info("Format : " + owlOntologyManager.getOntologyFormat(owlOntology));
+
+        SharedDataHolder.prefixmap = format.asPrefixOWLOntologyFormat().getPrefixName2PrefixMap();
 
         return owlOntology;
     }
@@ -266,6 +295,25 @@ public class Utility {
         return confidenceValue;
     }
 
+    /*
+    Parse csv files using apache comons
+    http://commons.apache.org/proper/commons-csv/user-guide.html
+     */
+    public  static CSVParser parseCSV(String csvPath, boolean withHeader){
+        CSVParser csvRecords = null;
+        try {
+            Reader in = new FileReader(csvPath);
+            if(withHeader){
+                csvRecords = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(in);
+            }
+            else csvRecords =  CSVFormat.EXCEL.parse(in);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return csvRecords;
+    }
 
     /**
      * Create string of current date_time according to default date_time format.
@@ -930,6 +978,7 @@ public class Utility {
         } catch (StackOverflowError ex) {
             ex.printStackTrace();
             logger.error("Memory overflow!!!!!!!!!!!!!!!!! ");
+
         }
 
         return result;

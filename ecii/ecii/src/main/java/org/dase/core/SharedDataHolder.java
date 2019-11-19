@@ -1,6 +1,7 @@
 package org.dase.core;
 
 import org.dase.datastructure.CandidateSolution;
+import org.dase.datastructure.CandidateSolutionV1;
 import org.dase.ontofactory.DLSyntaxRendererExt;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
@@ -108,8 +109,12 @@ public class SharedDataHolder {
     // score is inside of a solution
     // i.e. solution class contains the score also.
     public static HashSet<CandidateSolution> CandidateSolutionSet = new HashSet<>();
+    // to support both v0 and v1
+    public static HashSet<CandidateSolutionV1> CandidateSolutionSetV1 = new HashSet<>();
 
     public static ArrayList<CandidateSolution> SortedCandidateSolutionSet = new ArrayList<>();
+    // to support both v0 and v1
+    public static ArrayList<CandidateSolutionV1> SortedCandidateSolutionSetV1 = new ArrayList<>();
 
     public static ArrayList<CandidateSolution> SortedByReasonerCandidateSolutionSet = new ArrayList<>();
 

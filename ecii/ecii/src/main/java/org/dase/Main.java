@@ -1,7 +1,9 @@
 package org.dase;
 
 
+import org.apache.log4j.PropertyConfigurator;
 import org.dase.core.CandidateSolutionFinder;
+import org.dase.core.CandidateSolutionFinderV1;
 import org.dase.core.SharedDataHolder;
 import org.dase.exceptions.MalFormedIRIException;
 import org.dase.ontofactory.DLSyntaxRendererExt;
@@ -182,7 +184,7 @@ public class Main {
         });
 
         // Create a new ConceptFinder object with the given reasoner.
-        CandidateSolutionFinder findConceptsObj = new CandidateSolutionFinder(owlReasoner, ontology, outPutStream, monitor);
+        CandidateSolutionFinderV1 findConceptsObj = new CandidateSolutionFinderV1(owlReasoner, ontology, outPutStream, monitor);
         //ConceptFinderComplex findConceptsObj = new ConceptFinderComplex(owlReasoner, ontology, outPutStream, monitor);
 
         logger.info("finding solutions started...............");
@@ -290,6 +292,8 @@ public class Main {
      * @throws IOException
      */
     public static void main(String[] args) throws OWLOntologyCreationException, IOException, MalFormedIRIException {
+
+        PropertyConfigurator.configure("/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/main/resources/log4j.properties");
 
         StringBuilder sb = new StringBuilder();
         for (String arg : args) {

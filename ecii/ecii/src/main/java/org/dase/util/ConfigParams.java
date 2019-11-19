@@ -51,8 +51,9 @@ public final class ConfigParams {
     public static int objPropsCombinationLimit;
     /**
      * This is also called as K4. We can use it, but for simplicity do not use it now.
+     * ecii-extension: we are using this one. it can be called as directTypeLimit or conceptLimitInPosExpr
      */
-    public static int directTypeLimit;
+    public static int conceptLimitInPosExpr;
 
     /**
      * K5 select upto k5 hornClauses to make combination
@@ -120,6 +121,7 @@ public final class ConfigParams {
             SharedDataHolder.objProperties.put(SharedDataHolder.noneOWLObjProp, 1.0);
 
 
+            conceptLimitInPosExpr = Integer.valueOf(prop.getProperty("conceptLimitInPosExpr","3"));
             conceptLimitInNegExpr = Integer.valueOf(prop.getProperty("conceptLimitInNegExpr","3"));
             hornClauseLimit = Integer.valueOf(prop.getProperty("hornClauseLimit","3"));
             objPropsCombinationLimit = Integer.valueOf(prop.getProperty("objPropsCombinationLimit","3"));
@@ -154,6 +156,7 @@ public final class ConfigParams {
         logger.info("\tontoPath: " + ontoPath);
         logger.info("\toutputResultPath: " + outputResultPath);
         logger.info("\tnamespace: " + namespace);
+        logger.info("\tconceptLimitInPosExpr: " + conceptLimitInPosExpr);
         logger.info("\tconceptLimitInNegExpr: " + conceptLimitInNegExpr);
         logger.info("\thornClauseLimit: " + hornClauseLimit);
         logger.info("\tobjPropsCombinationLimit: " + objPropsCombinationLimit);

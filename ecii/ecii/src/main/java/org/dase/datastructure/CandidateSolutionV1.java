@@ -11,7 +11,10 @@ import org.dase.util.Utility;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.lang.invoke.MethodHandles;
 import java.util.*;
 
 import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
@@ -45,7 +48,9 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
  * * Implementation note:
  * * Atomic class is also added using candidate class. If the object property is empty = SharedDataHolder.noneOWLObjProp then it is atomic class.
  */
-public class CandidateSolution {
+public class CandidateSolutionV1 {
+
+    private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     /**
      * This is direct type/bare type, i.e. without object property.
@@ -66,34 +71,50 @@ public class CandidateSolution {
      * Implementation note:
      * Atomic class is also added using candidate class. If the object property is empty = SharedDataHolder.noneOWLObjProp then it is atomic class.
      */
-    private ArrayList<CandidateClass> candidateClasses;
+    private ArrayList<CandidateClassV1> candidateClasses;
 
     /**
      * Candidate classes as group.
      */
-    private HashMap<OWLObjectProperty, ArrayList<CandidateClass>> groupedCandidateClasses;
+    private HashMap<OWLObjectProperty, ArrayList<CandidateClassV1>> groupedCandidateClasses;
+
+    /**
+     * candidate solution
+     */
+    private OWLClassExpression candidateSolutionAsOWLClass = null;
+
+    /**
+     * candidate solution as String
+     */
+    private String candidateSolutionAsString= null;
+
+    private boolean solutionChanged = false;
 
     // Score associated with this solution
     private Score score;
 
-    public CandidateSolution() {
+    public CandidateSolutionV1() {
+        solutionChanged = true;
         this.candidateClasses = new ArrayList<>();
     }
 
-    public CandidateSolution(CandidateSolution anotherCandidateSolution) {
+    public CandidateSolutionV1(CandidateSolutionV1 anotherCandidateSolution) {
+        solutionChanged = true;
         this.candidateClasses = new ArrayList<>(anotherCandidateSolution.candidateClasses);
     }
 
 
-    public ArrayList<CandidateClass> getCandidateClasses() {
+    public ArrayList<CandidateClassV1> getCandidateClasses() {
         return candidateClasses;
     }
 
-    public void setCandidateClasses(ArrayList<CandidateClass> candidateClasses) {
+    public void setCandidateClasses(ArrayList<CandidateClassV1> candidateClasses) {
+        solutionChanged = true;
         this.candidateClasses = candidateClasses;
     }
 
-    public void addCandidateClass(CandidateClass candidateClass) {
+    public void addCandidateClass(CandidateClassV1 candidateClass) {
+        solutionChanged = true;
         this.candidateClasses.add(candidateClass);
     }
 
@@ -121,7 +142,7 @@ public class CandidateSolution {
      *
      * @return
      */
-    public HashMap<OWLObjectProperty, ArrayList<CandidateClass>> getGroupedCandidateClasses() {
+    public HashMap<OWLObjectProperty, ArrayList<CandidateClassV1>> getGroupedCandidateClasses() {
         if (null == groupedCandidateClasses) {
             createGroup();
         }
@@ -133,18 +154,23 @@ public class CandidateSolution {
      */
     public OWLClassExpression getSolutionAsOWLClassExpression() {
 
+        if(!solutionChanged && null != candidateSolutionAsOWLClass)
+            return candidateSolutionAsOWLClass;
+
+        solutionChanged = false;
         if (null == groupedCandidateClasses) {
             createGroup();
         }
 
+        // bare portion
         OWLClassExpression directTypePortion = null;
         if (groupedCandidateClasses.containsKey(SharedDataHolder.noneOWLObjProp)) {
-            ArrayList<CandidateClass> candidateClasses = groupedCandidateClasses.get(SharedDataHolder.noneOWLObjProp);
+            ArrayList<CandidateClassV1> candidateClasses = groupedCandidateClasses.get(SharedDataHolder.noneOWLObjProp);
 
             if (null != candidateClasses) {
                 if (candidateClasses.size() > 0) {
                     HashSet<OWLClassExpression> directCandidateClassesAsOWLClassExpression = new HashSet<>();
-                    for (CandidateClass candidateClass : candidateClasses) {
+                    for (CandidateClassV1 candidateClass : candidateClasses) {
                         directCandidateClassesAsOWLClassExpression.add(candidateClass.getCandidateClassAsOWLClassExpression());
                     }
                     // convert to list to get the single item, so that we don't need to make union
@@ -154,6 +180,9 @@ public class CandidateSolution {
                             directTypePortion = directCandidateClassesAsOWLClassExpressionAList.get(0);
                         } else {
                             // make OR between candidate classes for direct Type.
+                            // TODO(zaman): this is conflicting, need to verify, why we are using union for multiple bare types.
+                            // the thing is we should not have multiple candidate class for bare types.
+                            logger.info("This code should not be executed, need to check CandidateSolutionV1.getSolutionAsOWLClassExpression() ");
                             directTypePortion = SharedDataHolder.owlDataFactory.getOWLObjectUnionOf(directCandidateClassesAsOWLClassExpression);
                         }
                     }
@@ -161,13 +190,14 @@ public class CandidateSolution {
             }
         }
 
+        // rFilled portion
         OWLClassExpression rFilledPortion = null;
         HashSet<OWLClassExpression> rFilledPortionForAllGroups = new HashSet<>();
-        for (Map.Entry<OWLObjectProperty, ArrayList<CandidateClass>> entry : groupedCandidateClasses.entrySet()) {
+        for (Map.Entry<OWLObjectProperty, ArrayList<CandidateClassV1>> entry : groupedCandidateClasses.entrySet()) {
 
             // each group will be concatenated by AND.
             OWLObjectProperty owlObjectProperty = entry.getKey();
-            ArrayList<CandidateClass> candidateClasses = entry.getValue();
+            ArrayList<CandidateClassV1> candidateClasses = entry.getValue();
 
             if (null != owlObjectProperty && !owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
                 if (null != candidateClasses) {
@@ -176,7 +206,7 @@ public class CandidateSolution {
                         OWLClassExpression rFilledPortionForThisGroup = null;
                         HashSet<OWLClassExpression> rFilledcandidateClassesAsOWLClassExpression = new HashSet<>();
 
-                        for (CandidateClass candidateClass : candidateClasses) {
+                        for (CandidateClassV1 candidateClass : candidateClasses) {
                             rFilledcandidateClassesAsOWLClassExpression.add(candidateClass.getCandidateClassAsOWLClassExpression());
                         }
 
@@ -186,7 +216,7 @@ public class CandidateSolution {
                             if (rFilledcandidateClassesAsOWLClassExpressionAList.size() == 1) {
                                 rFilledPortionForThisGroup = rFilledcandidateClassesAsOWLClassExpressionAList.get(0);
                             } else {
-                                // make OR between candidate classes for direct Type.
+                                // make OR between candidate classes
                                 rFilledPortionForThisGroup = SharedDataHolder.owlDataFactory.getOWLObjectUnionOf(rFilledcandidateClassesAsOWLClassExpression);
                             }
                         }
@@ -198,7 +228,6 @@ public class CandidateSolution {
                         if (null != rFilledPortionForThisGroup) {
                             rFilledPortionForThisGroup = SharedDataHolder.owlDataFactory.getOWLObjectSomeValuesFrom(owlObjectProperty, rFilledPortionForThisGroup);
                             if (null != rFilledPortionForThisGroup) {
-
                                 rFilledPortionForAllGroups.add(rFilledPortionForThisGroup);
                             }
                         }
@@ -214,7 +243,7 @@ public class CandidateSolution {
                 rFilledPortion = rFilledPortionForAllGroupsAList.get(0);
             } else {
                 // make AND between multiple object Property.
-                // bug-fix : it should be owlObjectIntersectionOf
+                // bug-fix : it should be owlObjectIntersectionOf instead of owlObjectUnionOf
                 rFilledPortion = SharedDataHolder.owlDataFactory.getOWLObjectIntersectionOf(rFilledPortionForAllGroups);
             }
         }
@@ -233,6 +262,7 @@ public class CandidateSolution {
             complexClassExpression = rFilledPortion;
         }
 
+        this.candidateSolutionAsOWLClass = complexClassExpression;
         return complexClassExpression;
     }
 
@@ -242,6 +272,12 @@ public class CandidateSolution {
      * @return
      */
     public String getSolutionAsString() {
+
+        if(!solutionChanged && null != candidateSolutionAsString)
+            return candidateSolutionAsString;
+
+        solutionChanged = false;
+
         if (null == groupedCandidateClasses) {
             createGroup();
         }
@@ -252,7 +288,7 @@ public class CandidateSolution {
 
         // print bare type at first
         if (groupedCandidateClasses.containsKey(SharedDataHolder.noneOWLObjProp)) {
-            ArrayList<CandidateClass> candidateClasses = groupedCandidateClasses.get(SharedDataHolder.noneOWLObjProp);
+            ArrayList<CandidateClassV1> candidateClasses = groupedCandidateClasses.get(SharedDataHolder.noneOWLObjProp);
             if (null != candidateClasses) {
                 if (candidateClasses.size() > 0) {
                     // we expect atomic class size will be one but it is not the case always.
@@ -264,7 +300,8 @@ public class CandidateSolution {
                         sb.append(getCandidateClassAsString(candidateClasses.get(0)));
 
                         for (int i = 1; i < candidateClasses.size(); i++) {
-                            sb.append(" " + OR.toString() + " ");
+                            // ecii extension-- making it AND instead of OR
+                            sb.append(" " + AND.toString() + " ");
                             sb.append(getCandidateClassAsString(candidateClasses.get(i)));
                         }
                         sb.append(")");
@@ -275,11 +312,11 @@ public class CandidateSolution {
 
         int rFilledSize = 0;
         // print r filled type then
-        for (Map.Entry<OWLObjectProperty, ArrayList<CandidateClass>> entry : groupedCandidateClasses.entrySet()) {
+        for (Map.Entry<OWLObjectProperty, ArrayList<CandidateClassV1>> entry : groupedCandidateClasses.entrySet()) {
 
             // each group will be concatenated by AND.
             OWLObjectProperty owlObjectProperty = entry.getKey();
-            ArrayList<CandidateClass> candidateClasses = entry.getValue();
+            ArrayList<CandidateClassV1> candidateClasses = entry.getValue();
 
             if (null != owlObjectProperty && !owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
                 if (null != candidateClasses) {
@@ -307,7 +344,8 @@ public class CandidateSolution {
             }
         }
 
-        return sb.toString();
+        this.candidateSolutionAsString = sb.toString();
+        return this.candidateSolutionAsString;
     }
 
     /**
@@ -315,7 +353,7 @@ public class CandidateSolution {
      *
      * @return
      */
-    private String getCandidateClassAsString(CandidateClass candidateClass) {
+    private String getCandidateClassAsString(CandidateClassV1 candidateClass) {
 
         StringBuilder sb = new StringBuilder();
 
@@ -355,20 +393,34 @@ public class CandidateSolution {
 
     /**
      * Print ConjunctiveHornClause  as String
-     *
+     * TODO(Zaman) : need to modify the method to cope v1
      * @return
      */
-    private String getHornClauseAsString(ConjunctiveHornClause conjunctiveHornClause) {
+    private String getHornClauseAsString(ConjunctiveHornClauseV1 conjunctiveHornClause) {
         StringBuilder sb = new StringBuilder();
 
         boolean hasPositive = false;
 
         if (null != conjunctiveHornClause) {
 
-            if (null != conjunctiveHornClause.getPosObjectType()) {
-                sb.append(Utility.getShortName((OWLClass) conjunctiveHornClause.getPosObjectType()));
-                hasPositive = true;
+            // print postypes
+            if(null != conjunctiveHornClause.getPosObjectTypes()){
+                if(conjunctiveHornClause.getPosObjectTypes().size() > 0){
+                    hasPositive = true;
+                    if(conjunctiveHornClause.getPosObjectTypes().size() == 1){
+                        sb.append(Utility.getShortName((OWLClass) conjunctiveHornClause.getPosObjectTypes().get(0)));
+                    }else{
+                        // not using parenthesis for multiple positive types.
+                        sb.append(Utility.getShortName((OWLClass) conjunctiveHornClause.getPosObjectTypes().get(0)));
+                        for(int i=1;i<conjunctiveHornClause.getPosObjectTypes().size(); i++){
+                            sb.append(" "+ AND.toString());
+                            sb.append(Utility.getShortName((OWLClass) conjunctiveHornClause.getPosObjectTypes().get(i)));
+                        }
+                    }
+                }
             }
+
+            // print negtypes
             if (null != conjunctiveHornClause.getNegObjectTypes()) {
                 if (conjunctiveHornClause.getNegObjectTypes().size() > 0) {
                     if (hasPositive) {
@@ -379,9 +431,7 @@ public class CandidateSolution {
                         sb.append(" " + Utility.getShortName((OWLClass) conjunctiveHornClause.getNegObjectTypes().get(0)));
                     } else {
                         sb.append(" (");
-
                         sb.append(Utility.getShortName((OWLClass) conjunctiveHornClause.getNegObjectTypes().get(0)));
-
                         for (int i = 1; i < conjunctiveHornClause.getNegObjectTypes().size(); i++) {
                             sb.append(" " + OR.toString());
                             sb.append(" " + Utility.getShortName((OWLClass) conjunctiveHornClause.getNegObjectTypes().get(i)));
@@ -405,7 +455,7 @@ public class CandidateSolution {
             if (groupedCandidateClasses.containsKey(candidateClass.getOwlObjectProperty())) {
                 groupedCandidateClasses.get(candidateClass.getOwlObjectProperty()).add(candidateClass);
             } else {
-                ArrayList<CandidateClass> candidateClassArrayList = new ArrayList<>();
+                ArrayList<CandidateClassV1> candidateClassArrayList = new ArrayList<>();
                 candidateClassArrayList.add(candidateClass);
                 groupedCandidateClasses.put(candidateClass.getOwlObjectProperty(), candidateClassArrayList);
             }
@@ -416,7 +466,7 @@ public class CandidateSolution {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CandidateSolution that = (CandidateSolution) o;
+        CandidateSolutionV1 that = (CandidateSolutionV1) o;
         return Objects.equals(new HashSet<>(candidateClasses), new HashSet<>(that.candidateClasses));
     }
 
