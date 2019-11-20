@@ -581,7 +581,7 @@ public class CandidateSolutionFinder {
         }
     }
 
-     /**
+    /**
      * extract all objects contains in the images and find their types.
      * <p>
      * Some ontology dont have object properties. So we need to use direct types without r filler for that case.
@@ -595,15 +595,15 @@ public class CandidateSolutionFinder {
 
 
         // find the indivs and corresponding types of indivs which appeared in the positive images
-        logger.info("size: "+ SharedDataHolder.posIndivs.size());
+        logger.info("size: " + SharedDataHolder.posIndivs.size());
         for (OWLNamedIndividual posIndiv : SharedDataHolder.posIndivs) {
             //bare type/direct type
             if (owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
                 //for no object property or direct types we used SharedDataHolder.noneOWLObjProp
-                logger.info("Below individuals appeared in given positive " + posIndiv.getIRI().toString() + " individual.");
+                logger.info("Below concepts are type/supertype of positive " + posIndiv.getIRI().toString() + " individual.");
                 logger.info("object count: " + reasoner.getTypes(posIndiv, false).getFlattened().size());
                 reasoner.getTypes(posIndiv, false).getFlattened().forEach(posType -> {
-                    logger.info("posType: "+ posType.toString());
+                    logger.info("posType: " + posType.toString());
                     if (!posType.equals(owlDataFactory.getOWLThing()) && !posType.equals(owlDataFactory.getOWLNothing())) {
                         // insert into individualObject's type count
                         insertIntoHashMap(SharedDataHolder.typeOfObjectsInPosIndivs, owlObjectProperty, posType);
@@ -614,7 +614,7 @@ public class CandidateSolutionFinder {
                 });
             } else {
 
-                logger.info("Below individuals appeared in given positive " + posIndiv.getIRI().toString() + " individual through objProp "+ owlObjectProperty.getIRI().getShortForm());
+                logger.info("Below concepts are type/supertype of positive " + posIndiv.getIRI().toString() + " individual through objProp " + owlObjectProperty.getIRI().getShortForm());
                 logger.info("object count: " + reasoner.getObjectPropertyValues(posIndiv, owlObjectProperty).getFlattened().size());
                 reasoner.getObjectPropertyValues(posIndiv, owlObjectProperty).getFlattened().forEach(eachIndi -> {
                     logger.debug("\tindi: " + eachIndi.getIRI());
@@ -623,7 +623,7 @@ public class CandidateSolutionFinder {
                     insertIntoHashMap(SharedDataHolder.objectsInPosIndivs, owlObjectProperty, eachIndi);
 
                     reasoner.getTypes(eachIndi, false).getFlattened().forEach(posType -> {
-                        logger.info("posType: "+ posType.toString());
+                        logger.info("posType: " + posType.toString());
                         if (!posType.equals(owlDataFactory.getOWLThing()) && !posType.equals(owlDataFactory.getOWLNothing())) {
                             // insert into individualObject's type count
                             insertIntoHashMap(SharedDataHolder.typeOfObjectsInPosIndivs, owlObjectProperty, posType);
@@ -641,10 +641,10 @@ public class CandidateSolutionFinder {
 
             if (owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
                 //for no object property or direct types we used SharedDataHolder.noneOWLObjProp
-                logger.info("Below individuals appeared in given negative " + negIndiv.getIRI().toString() + " individual.");
+                logger.info("Below concepts are type/supertype of negative " + negIndiv.getIRI().toString() + " individual.");
                 logger.info("object count: " + reasoner.getTypes(negIndiv, false).getFlattened().size());
                 reasoner.getTypes(negIndiv, false).getFlattened().forEach(negType -> {
-                    logger.info("negType: "+ negType.toString());
+                    logger.info("negType: " + negType.toString());
                     if (!negType.equals(owlDataFactory.getOWLThing()) && !negType.equals(owlDataFactory.getOWLNothing())) {
                         // insert into individualObject's type count
                         insertIntoHashMap(SharedDataHolder.typeOfObjectsInNegIndivs, owlObjectProperty, negType);
@@ -654,7 +654,7 @@ public class CandidateSolutionFinder {
                     }
                 });
             } else {
-                logger.info("Below individuals appeared in given negative " + negIndiv.getIRI().toString() + " individual through objProp "+ owlObjectProperty.getIRI().getShortForm());
+                logger.info("Below concepts are type/supertype of negative " + negIndiv.getIRI().toString() + " individual through objProp " + owlObjectProperty.getIRI().getShortForm());
                 logger.info("object count: " + reasoner.getObjectPropertyValues(negIndiv, owlObjectProperty).getFlattened().size());
                 reasoner.getObjectPropertyValues(negIndiv, owlObjectProperty).getFlattened().forEach(eachIndi -> {
 
@@ -662,7 +662,7 @@ public class CandidateSolutionFinder {
                     insertIntoHashMap(SharedDataHolder.objectsInNegIndivs, owlObjectProperty, eachIndi);
 
                     reasoner.getTypes(eachIndi, false).getFlattened().forEach(negType -> {
-                        logger.info("negType: "+ negType.toString());
+                        logger.info("negType: " + negType.toString());
                         if (!negType.equals(owlDataFactory.getOWLThing()) && !negType.equals(owlDataFactory.getOWLNothing())) {
                             //insert into individualObject's type count
                             insertIntoHashMap(SharedDataHolder.typeOfObjectsInNegIndivs, owlObjectProperty, negType);

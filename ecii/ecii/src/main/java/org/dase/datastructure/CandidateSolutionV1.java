@@ -23,7 +23,12 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
  * CandidateSolution consists of atomic classes and candidate classes.
  * Atomic Class and candidate class will be concatenated by AND/Conjunction.
  * Atomic Class must be printed first.
- * Some ontology dont have any object property, so they dont have any candidateClass.
+ * <p>
+ * * Implementation note:
+ * * Atomic class is also added using candidate class. If the object property is empty = SharedDataHolder.noneOWLObjProp then it is atomic class.
+ * So essentially we have multiple candidate class for a single candidate solution.
+ * As we may multiple candidateClass for single objectProperty we need to make group of them,
+ * for printing and for calculating accuracy. And it must be the same procedure in both.
  *
  * <pre>
  *   Candidate solution is of the form:
@@ -42,28 +47,17 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
  *
  *   k3 = limit of object properties considered. = ConfigParams.objPropsCombinationLimit
  *   k2 = limit of horn clauses. = ConfigParams.hornClauseLimit.
- * </pre>
- * For simplicity, we are using a single direct type to form s single solution now.
- * <p>
- * * Implementation note:
- * * Atomic class is also added using candidate class. If the object property is empty = SharedDataHolder.noneOWLObjProp then it is atomic class.
+ *
+ *   More generic example will be:
+ *   Solution = (A1 ¬(D1)) ⊓ (A2 ¬(D1))  ⊓  R1.( (B1 ⊓ ... ⊓ Bn ⊓ ¬(D1 ⊔...⊔ Djk) ⊔ (B1 ⊓ ... ⊓ Bn ⊓ ¬(D1 ⊔...⊔ Djk)) ) ⊓ R2.(..)...
+ *   Inside of CandidateClass:
+ *      multiple horclauses are conjuncted when we have hare object property, and unioned when we have proper object property.
  */
 public class CandidateSolutionV1 {
 
     private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    /**
-     * This is direct type/bare type, i.e. without object property.
-     * This is usually an array, but for simplicity use it as a single atomic class. Like A or B or C.
-     */
-    //private ArrayList<OWLClassExpression> atomicPosOwlClasses;
 
-    /**
-     * This is direct type/bare type, i.e. without object property.
-     * This is usually an array, but for simplicity use it as a single atomic class. Like A or B or C.
-     */
-
-    //private ArrayList<OWLClassExpression> atomicNegOwlClasses;
     /**
      * ArrayList of Candidate Class.
      * Limit K3 = limit of object properties considered = ConfigParams.objPropsCombinationLimit.
@@ -86,33 +80,66 @@ public class CandidateSolutionV1 {
     /**
      * candidate solution as String
      */
-    private String candidateSolutionAsString= null;
+    private String candidateSolutionAsString = null;
 
     private boolean solutionChanged = false;
 
     // Score associated with this solution
     private Score score;
 
+    /**
+     * public constructor
+     */
     public CandidateSolutionV1() {
         solutionChanged = true;
         this.candidateClasses = new ArrayList<>();
     }
 
+    /**
+     * Copy constructor
+     *
+     * @param anotherCandidateSolution
+     */
     public CandidateSolutionV1(CandidateSolutionV1 anotherCandidateSolution) {
-        solutionChanged = true;
+
         this.candidateClasses = new ArrayList<>(anotherCandidateSolution.candidateClasses);
+
+        if (null != anotherCandidateSolution.candidateSolutionAsOWLClass) {
+            this.candidateSolutionAsOWLClass = anotherCandidateSolution.candidateSolutionAsOWLClass;
+        }
+        if (null != anotherCandidateSolution.candidateSolutionAsString) {
+            this.candidateSolutionAsString = anotherCandidateSolution.candidateSolutionAsString;
+        }
+        if (null != anotherCandidateSolution.score) {
+            this.score = anotherCandidateSolution.score;
+        }
+        solutionChanged = false;
     }
 
-
+    /**
+     * Getter
+     *
+     * @return ArrayList<CandidateClassV1>
+     */
     public ArrayList<CandidateClassV1> getCandidateClasses() {
         return candidateClasses;
     }
 
+    /**
+     * setter
+     *
+     * @param ArrayList<CandidateClassV1>
+     */
     public void setCandidateClasses(ArrayList<CandidateClassV1> candidateClasses) {
         solutionChanged = true;
         this.candidateClasses = candidateClasses;
     }
 
+    /**
+     * Adder
+     *
+     * @param candidateClass
+     */
     public void addCandidateClass(CandidateClassV1 candidateClass) {
         solutionChanged = true;
         this.candidateClasses.add(candidateClass);
@@ -150,11 +177,11 @@ public class CandidateSolutionV1 {
     }
 
     /**
-     * @return
+     * @return OWLClassExpression
      */
     public OWLClassExpression getSolutionAsOWLClassExpression() {
 
-        if(!solutionChanged && null != candidateSolutionAsOWLClass)
+        if (!solutionChanged && null != candidateSolutionAsOWLClass)
             return candidateSolutionAsOWLClass;
 
         solutionChanged = false;
@@ -179,11 +206,12 @@ public class CandidateSolutionV1 {
                         if (directCandidateClassesAsOWLClassExpressionAList.size() == 1) {
                             directTypePortion = directCandidateClassesAsOWLClassExpressionAList.get(0);
                         } else {
-                            // make OR between candidate classes for direct Type.
+                            // make AND between candidate classes for direct Type.
                             // TODO(zaman): this is conflicting, need to verify, why we are using union for multiple bare types.
-                            // the thing is we should not have multiple candidate class for bare types.
-                            logger.info("This code should not be executed, need to check CandidateSolutionV1.getSolutionAsOWLClassExpression() ");
-                            directTypePortion = SharedDataHolder.owlDataFactory.getOWLObjectUnionOf(directCandidateClassesAsOWLClassExpression);
+                            //  the thing is we should not have multiple candidate class for bare types. --- because for single objectproperty there will be a single candidate class, no no, no
+                            //  becuase we may create multiple candidate class with same objectproperty. so if this happens for bare type we need to make it intersected.
+                            logger.info("This code must not be executed!!!!, need to check CandidateSolutionV1.getSolutionAsOWLClassExpression() ");
+                            directTypePortion = SharedDataHolder.owlDataFactory.getOWLObjectIntersectionOf(directCandidateClassesAsOWLClassExpression);
                         }
                     }
                 }
@@ -220,9 +248,6 @@ public class CandidateSolutionV1 {
                                 rFilledPortionForThisGroup = SharedDataHolder.owlDataFactory.getOWLObjectUnionOf(rFilledcandidateClassesAsOWLClassExpression);
                             }
                         }
-
-                        // make OR between candidate classes for same object property.
-                        //rFilledPortionForThisGroup = SharedDataHolder.owlDataFactory.getOWLObjectUnionOf(rFilledcandidateClassesAsOWLClassExpression);
 
                         // use rFill
                         if (null != rFilledPortionForThisGroup) {
@@ -269,11 +294,11 @@ public class CandidateSolutionV1 {
     /**
      * Get the solution as String
      *
-     * @return
+     * @return String
      */
     public String getSolutionAsString() {
 
-        if(!solutionChanged && null != candidateSolutionAsString)
+        if (!solutionChanged && null != candidateSolutionAsString)
             return candidateSolutionAsString;
 
         solutionChanged = false;
@@ -300,7 +325,7 @@ public class CandidateSolutionV1 {
                         sb.append(getCandidateClassAsString(candidateClasses.get(0)));
 
                         for (int i = 1; i < candidateClasses.size(); i++) {
-                            // ecii extension-- making it AND instead of OR
+                            // ecii extension-- making it AND instead of OR, same as the getASOWLClassExpression
                             sb.append(" " + AND.toString() + " ");
                             sb.append(getCandidateClassAsString(candidateClasses.get(i)));
                         }
@@ -349,27 +374,35 @@ public class CandidateSolutionV1 {
     }
 
     /**
-     * Print candidate class as String
+     * get candidate class as String
      *
-     * @return
+     * @return String
      */
     private String getCandidateClassAsString(CandidateClassV1 candidateClass) {
 
         StringBuilder sb = new StringBuilder();
 
         if (null != candidateClass) {
-
             if (candidateClass.getConjunctiveHornClauses().size() > 0) {
+
+                // as we are counting it differently for bare type and r filled type.
+                String ANDOR = "";
+                if (candidateClass.getOwlObjectProperty().equals(SharedDataHolder.noneOWLObjProp)) {
+                    ANDOR = AND.toString();
+                } else {
+                    ANDOR = OR.toString();
+                }
+
                 if (candidateClass.getConjunctiveHornClauses().size() == 1) {
                     sb.append("(");
-                    sb.append(getHornClauseAsString(candidateClass.getConjunctiveHornClauses().get(0)));
+                    sb.append(candidateClass.getConjunctiveHornClauses().get(0).getHornClauseAsString());
                     sb.append(")");
                 } else {
 
                     sb.append("(");
 
                     sb.append("(");
-                    sb.append(getHornClauseAsString(candidateClass.getConjunctiveHornClauses().get(0)));
+                    sb.append(candidateClass.getConjunctiveHornClauses().get(0).getHornClauseAsString());
                     sb.append(")");
 
                     for (int i = 1; i < candidateClass.getConjunctiveHornClauses().size(); i++) {
@@ -377,12 +410,11 @@ public class CandidateSolutionV1 {
                         // This is especially important when we have only bare type, i.e. no R-Filled type.
                         // If changed here changes must reflect in accuracy measure too.
                         // TODO:  check with Pascal.
-                        sb.append(" " + OR.toString() + " ");
+                        sb.append(" " + ANDOR + " ");
                         sb.append("(");
-                        sb.append(getHornClauseAsString(candidateClass.getConjunctiveHornClauses().get(i)));
+                        sb.append(candidateClass.getConjunctiveHornClauses().get(i).getHornClauseAsString());
                         sb.append(")");
                     }
-
                     sb.append(")");
                 }
             }
@@ -394,56 +426,57 @@ public class CandidateSolutionV1 {
     /**
      * Print ConjunctiveHornClause  as String
      * TODO(Zaman) : need to modify the method to cope v1
+     * now implemented inside of the ConjunctiveHornClauseV1.java class
      * @return
      */
-    private String getHornClauseAsString(ConjunctiveHornClauseV1 conjunctiveHornClause) {
-        StringBuilder sb = new StringBuilder();
-
-        boolean hasPositive = false;
-
-        if (null != conjunctiveHornClause) {
-
-            // print postypes
-            if(null != conjunctiveHornClause.getPosObjectTypes()){
-                if(conjunctiveHornClause.getPosObjectTypes().size() > 0){
-                    hasPositive = true;
-                    if(conjunctiveHornClause.getPosObjectTypes().size() == 1){
-                        sb.append(Utility.getShortName((OWLClass) conjunctiveHornClause.getPosObjectTypes().get(0)));
-                    }else{
-                        // not using parenthesis for multiple positive types.
-                        sb.append(Utility.getShortName((OWLClass) conjunctiveHornClause.getPosObjectTypes().get(0)));
-                        for(int i=1;i<conjunctiveHornClause.getPosObjectTypes().size(); i++){
-                            sb.append(" "+ AND.toString());
-                            sb.append(Utility.getShortName((OWLClass) conjunctiveHornClause.getPosObjectTypes().get(i)));
-                        }
-                    }
-                }
-            }
-
-            // print negtypes
-            if (null != conjunctiveHornClause.getNegObjectTypes()) {
-                if (conjunctiveHornClause.getNegObjectTypes().size() > 0) {
-                    if (hasPositive) {
-                        sb.append(" " + AND.toString());
-                    }
-                    sb.append(" " + NOT.toString());
-                    if (conjunctiveHornClause.getNegObjectTypes().size() == 1) {
-                        sb.append(" " + Utility.getShortName((OWLClass) conjunctiveHornClause.getNegObjectTypes().get(0)));
-                    } else {
-                        sb.append(" (");
-                        sb.append(Utility.getShortName((OWLClass) conjunctiveHornClause.getNegObjectTypes().get(0)));
-                        for (int i = 1; i < conjunctiveHornClause.getNegObjectTypes().size(); i++) {
-                            sb.append(" " + OR.toString());
-                            sb.append(" " + Utility.getShortName((OWLClass) conjunctiveHornClause.getNegObjectTypes().get(i)));
-                        }
-                        sb.append(")");
-                    }
-                }
-            }
-        }
-
-        return sb.toString();
-    }
+//    private String getHornClauseAsString(ConjunctiveHornClauseV1 conjunctiveHornClause) {
+//        StringBuilder sb = new StringBuilder();
+//
+//        boolean hasPositive = false;
+//
+//        if (null != conjunctiveHornClause) {
+//
+//            // print postypes
+//            if (null != conjunctiveHornClause.getPosObjectTypes()) {
+//                if (conjunctiveHornClause.getPosObjectTypes().size() > 0) {
+//                    hasPositive = true;
+//                    if (conjunctiveHornClause.getPosObjectTypes().size() == 1) {
+//                        sb.append(Utility.getShortName((OWLClass) conjunctiveHornClause.getPosObjectTypes().get(0)));
+//                    } else {
+//                        // not using parenthesis for multiple positive types.
+//                        sb.append(Utility.getShortName((OWLClass) conjunctiveHornClause.getPosObjectTypes().get(0)));
+//                        for (int i = 1; i < conjunctiveHornClause.getPosObjectTypes().size(); i++) {
+//                            sb.append(" " + AND.toString());
+//                            sb.append(Utility.getShortName((OWLClass) conjunctiveHornClause.getPosObjectTypes().get(i)));
+//                        }
+//                    }
+//                }
+//            }
+//
+//            // print negtypes
+//            if (null != conjunctiveHornClause.getNegObjectTypes()) {
+//                if (conjunctiveHornClause.getNegObjectTypes().size() > 0) {
+//                    if (hasPositive) {
+//                        sb.append(" " + AND.toString());
+//                    }
+//                    sb.append(" " + NOT.toString());
+//                    if (conjunctiveHornClause.getNegObjectTypes().size() == 1) {
+//                        sb.append(" " + Utility.getShortName((OWLClass) conjunctiveHornClause.getNegObjectTypes().get(0)));
+//                    } else {
+//                        sb.append(" (");
+//                        sb.append(Utility.getShortName((OWLClass) conjunctiveHornClause.getNegObjectTypes().get(0)));
+//                        for (int i = 1; i < conjunctiveHornClause.getNegObjectTypes().size(); i++) {
+//                            sb.append(" " + OR.toString());
+//                            sb.append(" " + Utility.getShortName((OWLClass) conjunctiveHornClause.getNegObjectTypes().get(i)));
+//                        }
+//                        sb.append(")");
+//                    }
+//                }
+//            }
+//        }
+//
+//        return sb.toString();
+//    }
 
     /**
      * Create group

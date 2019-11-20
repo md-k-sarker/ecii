@@ -79,8 +79,9 @@ public final class ConfigParams {
      */
     public static void parseConfigParams(String _confFilePath) {
 
+        // config file's comment must only contain #, can't start with // or /*
+        // java properties doesn't allow multiline comment
         confFilePath = Utility.getCorrectPath(SharedDataHolder.programStartingDir, _confFilePath);
-
         prop = new Properties();
 
         try (InputStream input = new BufferedInputStream(new FileInputStream(confFilePath))) {
@@ -106,7 +107,6 @@ public final class ConfigParams {
             logger.info(System.lineSeparator() + "#############################" + System.lineSeparator());
 
 
-
             SharedDataHolder.confFileFullContent = readAllContent(confFilePath);
 
             prefixes = Utility.extractPrefixesFromConf(SharedDataHolder.confFileFullContent);
@@ -121,16 +121,16 @@ public final class ConfigParams {
             SharedDataHolder.objProperties.put(SharedDataHolder.noneOWLObjProp, 1.0);
 
 
-            conceptLimitInPosExpr = Integer.valueOf(prop.getProperty("conceptLimitInPosExpr","3"));
-            conceptLimitInNegExpr = Integer.valueOf(prop.getProperty("conceptLimitInNegExpr","3"));
-            hornClauseLimit = Integer.valueOf(prop.getProperty("hornClauseLimit","3"));
-            objPropsCombinationLimit = Integer.valueOf(prop.getProperty("objPropsCombinationLimit","3"));
-            hornClausesListMaxSize = Integer.valueOf(prop.getProperty("hornClausesListMaxSize","50"));
-            candidateClassesListMaxSize = Integer.valueOf(prop.getProperty("candidateClassesListMaxSize","50"));
+            conceptLimitInPosExpr = Integer.valueOf(prop.getProperty("conceptLimitInPosExpr", "3"));
+            conceptLimitInNegExpr = Integer.valueOf(prop.getProperty("conceptLimitInNegExpr", "3"));
+            hornClauseLimit = Integer.valueOf(prop.getProperty("hornClauseLimit", "3"));
+            objPropsCombinationLimit = Integer.valueOf(prop.getProperty("objPropsCombinationLimit", "3"));
+            hornClausesListMaxSize = Integer.valueOf(prop.getProperty("hornClausesListMaxSize", "50"));
+            candidateClassesListMaxSize = Integer.valueOf(prop.getProperty("candidateClassesListMaxSize", "50"));
             removeCommonTypes = Boolean.getBoolean(prop.getProperty("removeCommonTypes", "true"));
 
             confFileDir = Paths.get(confFilePath).getParent().toString();
-            String replacement = "_concept_induction.txt";
+            String replacement = "_ecii_v1_results_e7.txt";
             String resultFileName = Paths.get(confFilePath).getFileName().toString().replace(".config", replacement);
             outputResultPath = confFileDir + "/" + resultFileName;
 

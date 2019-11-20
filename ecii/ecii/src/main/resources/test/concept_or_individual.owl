@@ -82,7 +82,7 @@
     <!-- http://www.daselab.com/sarker/mock#IFP_1 -->
 
     <owl:NamedIndividual rdf:about="http://www.daselab.com/sarker/mock#IFP_1">
-        <talksAbout rdf:resource="http://www.daselab.com/sarker/mock#MiddleEast"/>
+        <talksAbout rdf:resource="http://www.daselab.com/sarker/mock#Syria"/>
     </owl:NamedIndividual>
     
 
@@ -95,9 +95,9 @@
     
 
 
-    <!-- http://www.daselab.com/sarker/mock#MiddleEast -->
+    <!-- http://www.daselab.com/sarker/mock#Syria -->
 
-    <owl:Thing rdf:about="http://www.daselab.com/sarker/mock#MiddleEast">
+    <owl:Thing rdf:about="http://www.daselab.com/sarker/mock#Syria">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
         <rdf:type rdf:resource="http://www.daselab.com/sarker/mock#WestAsia"/>
     </owl:Thing>

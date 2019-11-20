@@ -116,7 +116,7 @@ public class Main {
             logger.info("Program started................");
             doOps();
 
-            monitor.displayMessage("Result saved at: "+ ConfigParams.outputResultPath, true);
+            monitor.displayMessage("Result saved at: " + ConfigParams.outputResultPath, true);
             monitor.stop(System.lineSeparator() + "Program finished.", true);
             logger.info("Program finished.");
 
