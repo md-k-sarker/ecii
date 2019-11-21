@@ -120,6 +120,9 @@ public final class ConfigParams {
             // add none object property
             SharedDataHolder.objProperties.put(SharedDataHolder.noneOWLObjProp, 1.0);
 
+            logger.info("indivs---------");
+            logger.info(prop.get("lp.positiveExamples").toString());
+            logger.info("indivs---------");
 
             conceptLimitInPosExpr = Integer.valueOf(prop.getProperty("conceptLimitInPosExpr", "3"));
             conceptLimitInNegExpr = Integer.valueOf(prop.getProperty("conceptLimitInNegExpr", "3"));
@@ -130,7 +133,7 @@ public final class ConfigParams {
             removeCommonTypes = Boolean.getBoolean(prop.getProperty("removeCommonTypes", "true"));
 
             confFileDir = Paths.get(confFilePath).getParent().toString();
-            String replacement = "_ecii_v1_results_e7.txt";
+            String replacement = "_ecii_v1_results_e8_ade20val.txt";
             String resultFileName = Paths.get(confFilePath).getFileName().toString().replace(".config", replacement);
             outputResultPath = confFileDir + "/" + resultFileName;
 

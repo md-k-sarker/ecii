@@ -9,10 +9,7 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class RawTest {
 
@@ -71,17 +68,31 @@ public class RawTest {
 
     // main function
     public static void main(String[] args) {
-        int[] A = {1, 0, 5, -5, -1, 5};
-        // 3, 4, -7, 3, 1, 3, 1, -4, -2, -2
-        //printallSubarrays(A);
-
-        String str = "";
-        System.out.println("lenght: " + str.length());
-
-        System.out.println("noneOWLObjProp: " + noneOWLObjProp);
-
-        OWLClassExpression owlClassExpression = null;
+//        int[] A = {1, 0, 5, -5, -1, 5};
+//        // 3, 4, -7, 3, 1, 3, 1, -4, -2, -2
+//        //printallSubarrays(A);
+//
+//        String str = "";
+//        System.out.println("lenght: " + str.length());
+//
+//        System.out.println("noneOWLObjProp: " + noneOWLObjProp);
+//
+//        OWLClassExpression owlClassExpression = null;
         //owlClassExpression.getClassExpressionType()
+
+        HashSet<String> hashSet1 = new HashSet<>();
+        hashSet1.add("1");
+        hashSet1.add("2");
+
+        HashSet<String> hashSet2 = new HashSet<>();
+//        hashSet2.add("2");
+        hashSet2.add("3");
+
+        hashSet2.retainAll(hashSet1);
+
+        hashSet1.forEach(s -> {
+            System.out.println(s);
+        });
     }
 
 }

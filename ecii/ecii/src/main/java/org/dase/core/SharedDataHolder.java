@@ -2,6 +2,7 @@ package org.dase.core;
 
 import org.dase.datastructure.CandidateSolution;
 import org.dase.datastructure.CandidateSolutionV1;
+import org.dase.datastructure.ConjunctiveHornClauseV1;
 import org.dase.ontofactory.DLSyntaxRendererExt;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
@@ -117,5 +118,13 @@ public class SharedDataHolder {
     public static ArrayList<CandidateSolutionV1> SortedCandidateSolutionSetV1 = new ArrayList<>();
 
     public static ArrayList<CandidateSolution> SortedByReasonerCandidateSolutionSet = new ArrayList<>();
+
+
+    // cache all reasoner calls, specifically finding individuals of an owlClassExpression must be cached.
+    public static HashMap<OWLClassExpression,HashSet<OWLNamedIndividual>> IndividualsOfThisOWLClassExpressionByReasoner = new HashMap<>();
+
+    // cache all accuracy call, by ecii
+    public static HashMap<OWLClassExpression,HashSet<OWLNamedIndividual>> IndividualsOfThisOWLClassExpressionByECII = new HashMap<>();
+
 
 }

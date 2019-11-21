@@ -155,18 +155,23 @@ public class Main {
         monitor.displayMessage("Algorithm starts at: " + dateFormat.format(new Date()), true);
 
         // initiate reasoner
+        logger.info("reasoner initializing started........");
         owlReasoner = Utility.initReasoner(ConfigParams.reasonerName, ontology, monitor);
+        logger.info("reasoner initialized successfully");
 
+        logger.info("reading pos and neg indivs from conf file started........");
         SharedDataHolder.posIndivs = Utility.readPosExamplesFromConf(SharedDataHolder.confFileFullContent);
         SharedDataHolder.negIndivs = Utility.readNegExamplesFromConf(SharedDataHolder.confFileFullContent);
+        logger.info("reading pos and neg indivs from conf file finished successfully");
 
         // write user defined values to resultFile
         monitor.writeMessage("\nUser defined parameters:");
         monitor.writeMessage("K1/negExprTypeLimit: " + ConfigParams.conceptLimitInNegExpr);
         monitor.writeMessage("K2/hornClauseLimit: " + ConfigParams.hornClauseLimit);
         monitor.writeMessage("K3/objPropsCombinationLimit: " + ConfigParams.objPropsCombinationLimit);
-        monitor.writeMessage("K4/hornClausesListMaxSize: " + ConfigParams.hornClausesListMaxSize);
-        monitor.writeMessage("K5/candidateClassesListMaxSize: " + ConfigParams.candidateClassesListMaxSize);
+        monitor.writeMessage("K4/posExprTypeLimit: " + ConfigParams.conceptLimitInPosExpr);
+        monitor.writeMessage("K5/hornClausesListMaxSize: " + ConfigParams.hornClausesListMaxSize);
+        monitor.writeMessage("K6/candidateClassesListMaxSize: " + ConfigParams.candidateClassesListMaxSize);
         monitor.writeMessage("ReasonerName: " + ConfigParams.reasonerName);
 
         logger.info("posIndivs from conf:");

@@ -8,9 +8,8 @@ Written at 8/20/18.
 import org.dase.core.Score;
 import org.dase.core.SharedDataHolder;
 import org.dase.util.Utility;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,18 +19,15 @@ import java.util.*;
 import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
 
 /**
- * CandidateSolution consists of atomic classes and candidate classes.
- * Atomic Class and candidate class will be concatenated by AND/Conjunction.
- * Atomic Class must be printed first.
- * <p>
- * * Implementation note:
- * * Atomic class is also added using candidate class. If the object property is empty = SharedDataHolder.noneOWLObjProp then it is atomic class.
- * So essentially we have multiple candidate class for a single candidate solution.
- * As we may multiple candidateClass for single objectProperty we need to make group of them,
- * for printing and for calculating accuracy. And it must be the same procedure in both.
- *
  * <pre>
- *   Candidate solution is of the form:
+ * Candidate solution consists of multiple candidate classes. Multiple candidate class are grouped by owlObjectproperty.
+ * Each groups are combined by AND/Intersection.
+ * Inside the group:
+ *  * 1. When we have none ObjectProperty or bare types, then candidate classes will be combined by AND/Intersection
+ *  * 2. When we have proper ObjectProperty, then candidate classes will be combined with OR/Disjunction
+ *
+ *  Example Solution
+ *  Candidate solution is of the form:
  *
  *   l
  * A ⊓ 􏰃∃Ri.Ci,
@@ -44,14 +40,36 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
  *   i=1    j=1
  *
  *   here,
- *
  *   k3 = limit of object properties considered. = ConfigParams.objPropsCombinationLimit
  *   k2 = limit of horn clauses. = ConfigParams.hornClauseLimit.
  *
- *   More generic example will be:
- *   Solution = (A1 ¬(D1)) ⊓ (A2 ¬(D1))  ⊓  R1.( (B1 ⊓ ... ⊓ Bn ⊓ ¬(D1 ⊔...⊔ Djk) ⊔ (B1 ⊓ ... ⊓ Bn ⊓ ¬(D1 ⊔...⊔ Djk)) ) ⊓ R2.(..)...
- *   Inside of CandidateClass:
- *      multiple horclauses are conjuncted when we have hare object property, and unioned when we have proper object property.
+ * An Example
+ *  *   Solution = (A1 ¬(D1)) ⊓ (A2 ¬(D1))  ⊓  R1.( (B1 ⊓ ... ⊓ Bn ⊓ ¬(D1 ⊔...⊔ Djk) ⊔ (B1 ⊓ ... ⊓ Bn ⊓ ¬(D1 ⊔...⊔ Djk)) ) ⊓ R2.(..)...
+ *  *      here, we have 3 groups.
+ *  *       group1: with bare objectProperty: (A1 ¬(D1)) ⊓ (A2 ¬(D1))
+ *  *       group2: with R1 objectProperty:   R1.( (B1 ⊓ ... ⊓ Bn ⊓ ¬(D1 ⊔...⊔ Djk) ⊔ (B1 ⊓ ... ⊓ Bn ⊓ ¬(D1 ⊔...⊔ Djk)) )
+ *  *       group3: with R2 objectProperty:   R2.(..)
+ *
+ *  *   Inside of a group, we have multiple candidateClass
+ *  *       multiple candidateClass are conjuncted when we have hare object property, and
+ *                                      unioned when we have proper object property.
+ *  *       Inside of CandidateClass:
+ *  *           multiple horclauses are conjuncted when we have hare object property, and
+ *                                      unioned when we have proper object property.
+ *
+ * * Implementation note:
+ * * Atomic class is also added using candidate class. If the object property is empty = SharedDataHolder.noneOWLObjProp then it is atomic class.
+ * * it must be the same procedure in both
+ *      1. Printing getAsString(
+ *      2. calculating accuracy,
+ *      3. making getAsOWLClassExpression(
+ *  * We will have a single group for a single objectProperty.
+ *
+ * OLD-stuff:
+ * CandidateSolution consists of atomic classes and candidate classes.
+ * Atomic Class and candidate class will be concatenated by AND/Conjunction.
+ * Atomic Class must be printed first.
+ *  </pre>
  */
 public class CandidateSolutionV1 {
 
@@ -88,11 +106,24 @@ public class CandidateSolutionV1 {
     private Score score;
 
     /**
+     * Bad design should fix it
+     */
+    private final OWLOntology ontology;
+    private final OWLDataFactory owlDataFactory;
+    private final OWLOntologyManager owlOntologyManager;
+    private OWLReasoner reasoner;
+
+    /**
      * public constructor
      */
-    public CandidateSolutionV1() {
+    public CandidateSolutionV1(OWLReasoner _reasoner, OWLOntology _ontology) {
         solutionChanged = true;
         this.candidateClasses = new ArrayList<>();
+
+        this.reasoner = _reasoner;
+        this.ontology = _ontology;
+        this.owlOntologyManager = this.ontology.getOWLOntologyManager();
+        this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
     }
 
     /**
@@ -100,7 +131,7 @@ public class CandidateSolutionV1 {
      *
      * @param anotherCandidateSolution
      */
-    public CandidateSolutionV1(CandidateSolutionV1 anotherCandidateSolution) {
+    public CandidateSolutionV1(CandidateSolutionV1 anotherCandidateSolution, OWLOntology _ontology) {
 
         this.candidateClasses = new ArrayList<>(anotherCandidateSolution.candidateClasses);
 
@@ -114,6 +145,11 @@ public class CandidateSolutionV1 {
             this.score = anotherCandidateSolution.score;
         }
         solutionChanged = false;
+
+        this.reasoner = anotherCandidateSolution.reasoner;
+        this.ontology = _ontology;
+        this.owlOntologyManager = this.ontology.getOWLOntologyManager();
+        this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
     }
 
     /**
@@ -319,15 +355,15 @@ public class CandidateSolutionV1 {
                     // we expect atomic class size will be one but it is not the case always.
                     bareTypeSize = candidateClasses.size();
                     if (candidateClasses.size() == 1) {
-                        sb.append(getCandidateClassAsString(candidateClasses.get(0)));
+                        sb.append(candidateClasses.get(0).getCandidateClassAsString());
                     } else {
                         sb.append("(");
-                        sb.append(getCandidateClassAsString(candidateClasses.get(0)));
+                        sb.append(candidateClasses.get(0).getCandidateClassAsString());
 
                         for (int i = 1; i < candidateClasses.size(); i++) {
                             // ecii extension-- making it AND instead of OR, same as the getASOWLClassExpression
                             sb.append(" " + AND.toString() + " ");
-                            sb.append(getCandidateClassAsString(candidateClasses.get(i)));
+                            sb.append(candidateClasses.get(i).getCandidateClassAsString());
                         }
                         sb.append(")");
                     }
@@ -353,14 +389,14 @@ public class CandidateSolutionV1 {
                         }
                         sb.append(EXISTS + Utility.getShortName(owlObjectProperty) + ".");
                         if (candidateClasses.size() == 1) {
-                            sb.append(getCandidateClassAsString(candidateClasses.get(0)));
+                            sb.append(candidateClasses.get(0).getCandidateClassAsString());
                         } else {
                             sb.append("(");
-                            sb.append(getCandidateClassAsString(candidateClasses.get(0)));
+                            sb.append(candidateClasses.get(0).getCandidateClassAsString());
 
                             for (int i = 1; i < candidateClasses.size(); i++) {
                                 sb.append(" " + OR.toString() + " ");
-                                sb.append(getCandidateClassAsString(candidateClasses.get(i)));
+                                sb.append(candidateClasses.get(i).getCandidateClassAsString());
                             }
                             sb.append(")");
                         }
@@ -373,55 +409,79 @@ public class CandidateSolutionV1 {
         return this.candidateSolutionAsString;
     }
 
+
     /**
-     * get candidate class as String
+     * This will return all individuals covered by this complex concept from the ontology using reasoner,
+     * large number of individuals may be returned.
      *
-     * @return String
+     * @return
      */
-    private String getCandidateClassAsString(CandidateClassV1 candidateClass) {
+    public HashSet<OWLNamedIndividual> individualsCoveredByThisCandidateSolutionByReasoner() {
 
-        StringBuilder sb = new StringBuilder();
+        logger.info("calculating covered individuals by candidateSolution " + this.getSolutionAsOWLClassExpression() + " by reasoner.........");
 
-        if (null != candidateClass) {
-            if (candidateClass.getConjunctiveHornClauses().size() > 0) {
+        HashSet<OWLNamedIndividual> coveredIndividuals = new HashSet<>();
+        // this solution is already r filled, so we dont need to r fill again.
+        OWLClassExpression owlClassExpression = this.getSolutionAsOWLClassExpression();
 
-                // as we are counting it differently for bare type and r filled type.
-                String ANDOR = "";
-                if (candidateClass.getOwlObjectProperty().equals(SharedDataHolder.noneOWLObjProp)) {
-                    ANDOR = AND.toString();
-                } else {
-                    ANDOR = OR.toString();
-                }
-
-                if (candidateClass.getConjunctiveHornClauses().size() == 1) {
-                    sb.append("(");
-                    sb.append(candidateClass.getConjunctiveHornClauses().get(0).getHornClauseAsString());
-                    sb.append(")");
-                } else {
-
-                    sb.append("(");
-
-                    sb.append("(");
-                    sb.append(candidateClass.getConjunctiveHornClauses().get(0).getHornClauseAsString());
-                    sb.append(")");
-
-                    for (int i = 1; i < candidateClass.getConjunctiveHornClauses().size(); i++) {
-                        // should we use OR or AND between multiple hornClauses of same object property ?
-                        // This is especially important when we have only bare type, i.e. no R-Filled type.
-                        // If changed here changes must reflect in accuracy measure too.
-                        // TODO:  check with Pascal.
-                        sb.append(" " + ANDOR + " ");
-                        sb.append("(");
-                        sb.append(candidateClass.getConjunctiveHornClauses().get(i).getHornClauseAsString());
-                        sb.append(")");
-                    }
-                    sb.append(")");
-                }
+        // if we have calculated previously then just retrieve it from cache and return it.
+        if (null != SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner) {
+            if (SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.containsKey(owlClassExpression)) {
+                coveredIndividuals = SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.get(owlClassExpression);
+                logger.info("calculating covered individuals by candidateSolution " + this.getSolutionAsOWLClassExpression() + " found in cache.");
+                logger.info("\t size: " + coveredIndividuals.size());
+                return coveredIndividuals;
             }
         }
 
-        return sb.toString();
+        // not found in cache, now expensive reasoner calls through the candidateClass.
+        int groupNo = 0;
+        if (getGroupedCandidateClasses().size() > 0) {
+
+            // here if we have multiple group the each group need to be concatenated.
+            for (Map.Entry<OWLObjectProperty, ArrayList<CandidateClassV1>> owlObjectPropertyArrayListHashMap : getGroupedCandidateClasses().entrySet()) {
+
+                HashSet<OWLNamedIndividual> coveredIndividualsInThisGroup = new HashSet<>();
+                OWLObjectProperty key = owlObjectPropertyArrayListHashMap.getKey();
+                if (key.equals(SharedDataHolder.noneOWLObjProp)) {
+                    if (owlObjectPropertyArrayListHashMap.getValue().size() > 0) {
+                        coveredIndividualsInThisGroup = owlObjectPropertyArrayListHashMap.getValue().get(0).individualsCoveredByThisCandidateClassByReasoner();
+                        // each candidateclass are concatenated
+                        for (int i = 1; i < owlObjectPropertyArrayListHashMap.getValue().size(); i++) {
+                            // retainAll do set intersection
+                            coveredIndividualsInThisGroup.retainAll(owlObjectPropertyArrayListHashMap.getValue().get(i).individualsCoveredByThisCandidateClassByReasoner());
+                        }
+                    }
+                } else {
+                    if (owlObjectPropertyArrayListHashMap.getValue().size() > 0) {
+                        coveredIndividualsInThisGroup = owlObjectPropertyArrayListHashMap.getValue().get(0).individualsCoveredByThisCandidateClassByReasoner();
+                        // each candidateclass are unioned
+                        for (int i = 1; i < owlObjectPropertyArrayListHashMap.getValue().size(); i++) {
+                            // addAll for union
+                            coveredIndividualsInThisGroup.addAll(owlObjectPropertyArrayListHashMap.getValue().get(i).individualsCoveredByThisCandidateClassByReasoner());
+                        }
+                    }
+                }
+                if (groupNo == 0) {
+                    coveredIndividuals = coveredIndividualsInThisGroup;
+                } else {
+                    // make intersection between group 0 and all others
+                    coveredIndividuals.retainAll(coveredIndividuals);
+                }
+                groupNo++;
+            }
+        }
+
+        // save it to cache
+        SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.put(owlClassExpression, coveredIndividuals);
+
+        logger.info("calculating covered individuals by candidateSolution " + this.getSolutionAsOWLClassExpression() + " by reasoner finished");
+        logger.info("\t size: " + coveredIndividuals.size());
+
+        return coveredIndividuals;
+
     }
+
 
     /**
      * Print ConjunctiveHornClause  as String

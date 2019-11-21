@@ -7,41 +7,43 @@ Written at 5/18/18.
 import org.dase.core.Score;
 import org.dase.core.SharedDataHolder;
 import org.dase.util.Utility;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.*;
 
 import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
 
 /**
- * A conjunctive Horn clause is a class expression of the form B ⊓ D,
- * where B is an atomic class (positive) and
- * D is a negated disjunct of negative classes, D = ¬(D1⊔···⊔Dk).
- * So it's form will be: B ⊓ ¬(D1⊔···⊔Dk)
- * <p>
- * There is a limit  on disjunctions.
- * That is called K1 or ConfigParams.conceptLimitInNegExpr.
- * <p>
- * Implementation note:
+ * <pre>
+ * A conjunctive Horn clause is a class expression of the form  (R).(B ⊓ C ...⊓ ¬(D1⊔···⊔Dk)),
+ *  i.e. posTypes are conjuncted and negTypes are disjuncted and complemented.
+ *
+ *  * Implementation note:
+ *  * ObjectProperty (R) is implicity kept with the hornclause. This is important to calculate the accuracy.
+ *
+ * There is a limit  on negTypes.
+ *      That is called K1 or ConfigParams.conceptLimitInNegExpr.
+ * There is limit on posTypes.
+ *      That is called K4 or ConfigParams.conceptLimitInPosExpr.
+ *
  * Atomic class is also represented by posObjectType/negObjectTypes.
  * If the object property is empty = SharedDataHolder.noneOWLObjProp then it is atomic class.
- * <p>
- * <p>
- * <p>
- * For conjunctive horn clause at_most 1 positive atomic class (here B) can exist and
- * any number of negative class can exist.
- * <p>
+ *
+ *
  * Difference between v0 and v1:
- * v0 allow to make hornClause without a positive concepts, v1 make sure at-least 1 positive concept exist and possibly more.
+ * v0 allow to make hornClause without a positive concepts, v1 make sure at-least 1 positive concept exist and possibly more. there can be 0 or more negTypes
+ *
+ *
+ *   V0 --- old stuff
+ *  * where B is an atomic class (positive) and
+ *  * D is a negated disjunct of negative classes, D = ¬(D1⊔···⊔Dk).
+ *  * So it's form will be: B ⊓ ¬(D1⊔···⊔Dk)
+ *
+ *  </pre>
  */
 public class ConjunctiveHornClauseV1 {
 
@@ -104,9 +106,17 @@ public class ConjunctiveHornClauseV1 {
     private boolean solutionChanged = false;
 
     /**
+     * Bad design should fix it
+     */
+    private final OWLOntology ontology;
+    private final OWLDataFactory owlDataFactory;
+    private final OWLOntologyManager owlOntologyManager;
+    private OWLReasoner reasoner;
+
+    /**
      * Public constructor
      */
-    public ConjunctiveHornClauseV1(OWLObjectProperty owlObjectProperty) {
+    public ConjunctiveHornClauseV1(OWLObjectProperty owlObjectProperty, OWLReasoner _reasoner, OWLOntology _ontology) {
         if (null == owlObjectProperty) {
             this.owlObjectProperty = SharedDataHolder.noneOWLObjProp;
         } else {
@@ -115,6 +125,11 @@ public class ConjunctiveHornClauseV1 {
         this.posObjectTypes = new ArrayList<>();
         this.negObjectTypes = new ArrayList<>();
         solutionChanged = true;
+
+        this.reasoner = _reasoner;
+        this.ontology = _ontology;
+        this.owlOntologyManager = this.ontology.getOWLOntologyManager();
+        this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
     }
 
     /**
@@ -122,12 +137,16 @@ public class ConjunctiveHornClauseV1 {
      *
      * @param anotherSolutionPart
      */
-    public ConjunctiveHornClauseV1(ConjunctiveHornClauseV1 anotherSolutionPart) {
+    public ConjunctiveHornClauseV1(ConjunctiveHornClauseV1 anotherSolutionPart, OWLOntology _ontology) {
         this.posObjectTypes = new ArrayList<>();
         this.negObjectTypes = new ArrayList<>();
         this.owlObjectProperty = anotherSolutionPart.owlObjectProperty;
         this.posObjectTypes = anotherSolutionPart.posObjectTypes;
         this.negObjectTypes.addAll(anotherSolutionPart.negObjectTypes);
+        this.reasoner = anotherSolutionPart.reasoner;
+        this.ontology = _ontology;
+        this.owlOntologyManager = this.ontology.getOWLOntologyManager();
+        this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
         solutionChanged = true;
     }
 
@@ -238,6 +257,7 @@ public class ConjunctiveHornClauseV1 {
 
     /**
      * Get this ConjunctiveHornClause as AsOWLClassExpression
+     * Not filling the r filler/owlObjectProperty here.
      * V1 - fixed
      *
      * @return OWLClassExpression
@@ -348,6 +368,61 @@ public class ConjunctiveHornClauseV1 {
         return conjunctiveHornClauseAsString;
     }
 
+    /**
+     * This will return all individuals covered by this complex concept from the ontology using reasoner,
+     * large number of individuals may be returned.
+     *
+     * @return
+     */
+    public HashSet<OWLNamedIndividual> individualsCoveredByThisHornClauseByReasoner() {
+
+        logger.info("calculating covered individuals by hornClause " + this.getHornClauseAsString() + " by reasoner.........");
+        HashSet<OWLNamedIndividual> coveredIndividuals = new HashSet<>();
+        OWLClassExpression owlClassExpression = this.getConjunctiveHornClauseAsOWLClassExpression();
+
+        if (!this.owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
+            owlClassExpression = owlDataFactory.getOWLObjectSomeValuesFrom(owlObjectProperty, owlClassExpression);
+        }
+
+        // if we have calculated previously then just retrieve it from cache and return it.
+        if (null != SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner) {
+            if (SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.containsKey(owlClassExpression)) {
+
+                coveredIndividuals = SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.get(owlClassExpression);
+                logger.info("calculating covered individuals by candidateSolution " + this.getConjunctiveHornClauseAsOWLClassExpression() + " found in cache.");
+                logger.info("\t size: " + coveredIndividuals.size());
+                return coveredIndividuals;
+            }
+        }
+
+        // not found in cache, now expensive reasoner calls.
+        coveredIndividuals = (HashSet<OWLNamedIndividual>) reasoner.getInstances(owlClassExpression, false).getFlattened();
+
+        // save it to cache
+        SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.put(owlClassExpression, coveredIndividuals);
+
+        logger.info("calculating covered individuals by hornClause " + this.getHornClauseAsString() + " by reasoner finished");
+        logger.info("\t size: " + coveredIndividuals.size());
+
+        return coveredIndividuals;
+    }
+
+
+    /**
+     * This will return all individuals covered by this complex concept from the ontology using ECII system,
+     * large number of individuals may be returned.
+     * todo(zaman): Not yet implemented.
+     *
+     * @return
+     */
+    private HashSet<OWLNamedIndividual> individualsCoveredByThisHornClauseByECII() {
+
+        //
+        HashSet<OWLNamedIndividual> coveredIndividuals = new HashSet<>();
+
+        return coveredIndividuals;
+    }
+
 
     /**
      * Determine whether this owlnamedIndividual contained within  this hornclause.
@@ -356,10 +431,16 @@ public class ConjunctiveHornClauseV1 {
      * 1. all posTypes and
      * 2. not on the negativeSide.
      * verified/unit tested for single posType without negTypes -- this function is totally okay.
+     *
      * @param owlNamedIndividual
      * @return
      */
     public boolean isContainedInHornClause(OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
+
+
+        logger.info("Calculating isContainedInHornClause by reasoner of this hornclause: " + this.getHornClauseAsString());
+        Set<OWLNamedIndividual> indivsByReasoner = reasoner.getInstances(this.getConjunctiveHornClauseAsOWLClassExpression(), false).getFlattened();
+        logger.info("Calculating isContainedInHornClause by reasoner of this hornclause: " + this.getHornClauseAsString() + " finished");
 
         boolean contained = false;
 
@@ -468,32 +549,6 @@ public class ConjunctiveHornClauseV1 {
     }
 
 
-
-    /**
-     * most probably not being used now.
-     *
-     * @return
-     */
-//    private OWLClassExpression getConjunctiveHornClauseAsClassExpression() {
-//        // make disjunction of all posTypes.
-//        OWLClassExpression unionOfAllPosTypeObjects = SharedDataHolder.owlDataFactory.getOWLObjectUnionOf(posObjectTypes);
-//        // make disjunction of all negTypes.
-//        OWLClassExpression unionOfAllNegTypeObjects = SharedDataHolder.owlDataFactory.getOWLObjectUnionOf(new HashSet<>(negObjectTypes));
-//        // make complementOf the disjuncted negTypes.
-//        OWLClassExpression negateduUionOfAllNegTypeObjects = SharedDataHolder.owlDataFactory.getOWLObjectComplementOf(unionOfAllNegTypeObjects);
-//
-//        // make conjunction of disjunctedPos and negatedDisjunctedNeg
-//        OWLClassExpression conjunction = SharedDataHolder.owlDataFactory.getOWLObjectIntersectionOf(unionOfAllPosTypeObjects, negateduUionOfAllNegTypeObjects);
-//
-//        if (owlObjectProperty == SharedDataHolder.noneOWLObjProp) {
-//            return conjunction;
-//        } else {
-//            // add r filler using r=owlObjectProperty.
-//            OWLClassExpression solClass = SharedDataHolder.owlDataFactory.getOWLObjectSomeValuesFrom(owlObjectProperty, conjunction);
-//            //logger.info("solClass: " + solClass);
-//            return solClass;
-//        }
-//    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
