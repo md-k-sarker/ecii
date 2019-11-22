@@ -1,0 +1,49 @@
+Program started.............
+Program starts at: 11.19.2019  21.06.17 PM
+Working with confFile: concept_or_individual.config
+Algorithm starts at: 11.19.2019  21.06.18 PM
+
+User defined parameters:
+K1/negExprTypeLimit: 3
+K2/hornClauseLimit: 3
+K3/objPropsCombinationLimit: 3
+K4/hornClausesListMaxSize: 50
+K5/candidateClassesListMaxSize: 50
+ReasonerName: pellet
+posIndivs from conf:
+	China
+negIndivs from conf:
+	Syria
+
+Algorithm ends at: 11.19.2019  21.06.18 PM
+
+Algorithm duration: 0.281 sec
+
+####################Solutions####################:
+solution 1: (DevelopedAsia)
+	solution pretty-printed by reasoner: DevelopedAsia
+	 coverage_score: 1.0
+	 coverage_score_by_reasoner: 1.0
+	 precision: 1.0
+	 precision_by_reasoner: 0.5
+	 recall: 1.0
+	 recall_by_reasoner: 1.0
+	 f_measure: 1.0
+	 f_measure_by_reasoner: 0.6666666666666666
+solution 2: (SouthAsia)
+	solution pretty-printed by reasoner: SouthAsia
+	 coverage_score: 1.0
+	 coverage_score_by_reasoner: 1.0
+	 precision: 1.0
+	 precision_by_reasoner: 0.5
+	 recall: 1.0
+	 recall_by_reasoner: 1.0
+	 f_measure: 1.0
+	 f_measure_by_reasoner: 0.6666666666666666
+
+Total solutions found: 2
+Result saved at: /Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/main/resources/test/concept_or_individual_ecii_v1_results_e6.txt
+
+Program finished.
+Program ends at: 11.19.2019  21.06.18 PM
+Program duration: 0.759 sec

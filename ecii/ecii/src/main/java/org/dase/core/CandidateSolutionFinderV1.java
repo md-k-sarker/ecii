@@ -85,7 +85,7 @@ public class CandidateSolutionFinderV1 {
             extractObjectTypes(tolerance, entry.getKey());
         }
         logger.info("extractObjectTypes finished.");
-        debugExtractObjectTypes();
+//        debugExtractObjectTypes();
 
         if (ConfigParams.removeCommonTypes) {
             logger.info("Remove common types from positive and negative started.............");
@@ -457,6 +457,7 @@ public class CandidateSolutionFinderV1 {
         // TODO(zaman): multiple positive and multiple negative. ecii-extension, need to implement this
         // multiple positive (upto K4 limit) and multiple negative (upto K1 limit).
         //
+
         logger.info("solution using multiple positive and multiple negative type started...............");
         SharedDataHolder.typeOfObjectsInPosIndivs.forEach((owlObjectProperty, hashMap) -> {
             ArrayList<OWLClassExpression> allPosTypes = new ArrayList<>(hashMap.keySet());
@@ -470,7 +471,7 @@ public class CandidateSolutionFinderV1 {
             }
             logger.info("listCombinationOfPosClassesForPosPortion size: " + listCombinationOfPosClassesForPosPortion.size());
 
-            // keep only valid listCombinationOfSubClassesForNegPortion.
+            // keep only valid listCombinationOfPosClassesForPosPortion.
             // a combination is valid if and only if it doesn't have self subClass.
             // TODO: check with pascal. --- Okay
             ArrayList<ArrayList<OWLClassExpression>> validListCombinationOfPosClassesForPosPortion = new ArrayList<>();
@@ -508,10 +509,10 @@ public class CandidateSolutionFinderV1 {
 
 
                 ArrayList<ArrayList<OWLClassExpression>> listCombinationOfSubClassesForNegPortion;
-                // combination of 1
-                listCombinationOfSubClassesForNegPortion = Utility.combinationHelper(posTypeOwlSubClassExpressionsForCombination, 2);
+                // combination of 1, starting from 1 for negtypes. posTypes are at-least 2 here.
+                listCombinationOfSubClassesForNegPortion = Utility.combinationHelper(posTypeOwlSubClassExpressionsForCombination, 1);
                 // combination from 2 to upto ccombinationLimit
-                for (int combinationCounter = 3; combinationCounter <= ConfigParams.conceptLimitInNegExpr; combinationCounter++) {
+                for (int combinationCounter = 2; combinationCounter <= ConfigParams.conceptLimitInNegExpr; combinationCounter++) {
                     // combination of combinationCounter
                     listCombinationOfSubClassesForNegPortion.addAll(Utility.combinationHelper(posTypeOwlSubClassExpressionsForCombination, combinationCounter));
                 }
@@ -530,6 +531,7 @@ public class CandidateSolutionFinderV1 {
                 listCombinationOfSubClassesForNegPortion = null;
                 logger.info("validListCombinationOfSubClassesForNegPortion size: " + validListCombinationOfSubClassesForNegPortion.size());
 
+                // now combine the postypes and negtypes
                 validListCombinationOfSubClassesForNegPortion.forEach(subClasses -> {
 
                     // if every class of this combination is in negative types then include this combination otherwise skip this.
@@ -639,7 +641,7 @@ public class CandidateSolutionFinderV1 {
          * combination of candidateClass/objectproperties. (upto K3/objPropsCombinationLimit limit)
          *
          */
-        logger.info("solution using combination of object proeprties started...............");
+        logger.info("solution using combination of object proeprties/candidateClass started...............");
         SharedDataHolder.objPropertiesCombination.forEach(owlObjectProperties -> {
 
             List<Collection<CandidateClassV1>> origList = new ArrayList<>();
@@ -660,7 +662,7 @@ public class CandidateSolutionFinderV1 {
                 addToSolutions(candidateSolution);
             });
         });
-        logger.info("solution using combination of object proeprties finished. Total solutions: " + SharedDataHolder.CandidateSolutionSetV1.size());
+        logger.info("solution using combination of object proeprties/candidateClass finished. Total solutions: " + SharedDataHolder.CandidateSolutionSetV1.size());
     }
 
 
@@ -1199,158 +1201,6 @@ public class CandidateSolutionFinderV1 {
         return contained;
     }
 
-//    /**
-//     * Determine whether this owlnamedIndividual contained within  this hornclause.
-//     * Our v1 hornclause is of this formula: B1 ⊓ B2 ⊓ B3 …. ⊓  ¬(D1 ⊔...⊔Djk))
-//     * So, to satisfy, this individual must be in
-//     * 1. all posTypes and
-//     * 2. not on the negativeSide.
-//     * verified/unit tested for single posType without negTypes -- this function is totally okay.
-//     * @param hornClause
-//     * @param owlNamedIndividual
-//     * @return
-//     */
-//    private boolean isContainedInHornClause(ConjunctiveHornClauseV1 hornClause, OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
-//
-//        boolean contained = false;
-//
-//        // if an individual exists in both pos part and neg part then it is not a valid conjunctive horn clause.
-//        // TODO(Zaman): need to verify our candidate solution.
-//        // when this condition is meeting we are still saying contained=false.
-//
-//        if (hornClause != null && owlNamedIndividual != null) {
-//            if (SharedDataHolder.individualHasObjectTypes.containsKey(owlNamedIndividual)) {
-//                HashMap<OWLObjectProperty, HashSet<OWLClassExpression>> objPropsMap = SharedDataHolder.
-//                        individualHasObjectTypes.get(owlNamedIndividual);
-//
-//                if (objPropsMap.containsKey(hornClause.getOwlObjectProperty())) {
-//
-//                    if (isPosIndiv) {
-//                        // is in positive side  and not in negative side
-//                        if (null != hornClause.getPosObjectTypes()) {
-//                            // must be in allpostypes
-//                            int containedInPosTypeCounter = 0;
-//                            for (OWLClassExpression posType : hornClause.getPosObjectTypes()) {
-//                                if (objPropsMap.get(hornClause.getOwlObjectProperty()).contains(posType)) {
-//                                    containedInPosTypeCounter++;
-//                                }
-//                            }
-//                            if (hornClause.getPosObjectTypes().size() == containedInPosTypeCounter) {
-//                                // make sure it is also not caintained in the negative portions
-//                                if (!isContainedInAnyClassExpressions(hornClause.getNegObjectTypes(), owlNamedIndividual, hornClause.getOwlObjectProperty())) {
-//                                    contained = true;
-//                                }
-//                            }
-//                        } else {
-//                            // it dont have positive. so if it is excluded by negative then it is covered. TODO: check
-//                        }
-//                    } else {
-//                        // negindivs : is in negative side and not in positive side
-//                        // if any one of the negtypes contained this type then it is contained within the negTypes.
-//                        boolean containedInNegPortion = false;
-//                        for (OWLClassExpression negType : hornClause.getNegObjectTypes()) {
-//                            if (objPropsMap.get(hornClause.getOwlObjectProperty()).contains(negType)) {
-//                                //totalSolPartsInThisGroupCounter++;
-//                                containedInNegPortion = true;
-//                                break;
-//                            }
-//                        }
-//
-//                        if (containedInNegPortion) {
-//                            // need to make sure it is not in the posPortion.
-//                            int containedInPosTypeCounter = 0;
-//                            for (OWLClassExpression posType : hornClause.getPosObjectTypes()) {
-//                                if (objPropsMap.get(hornClause.getOwlObjectProperty()).contains(posType)) {
-//                                    containedInPosTypeCounter++;
-//                                }
-//                            }
-//                            // some postype may cover this individual but at-least 1 postype need to exclude this neg individual.
-//                            if (hornClause.getPosObjectTypes().size() > containedInPosTypeCounter) {
-//                                contained = true;
-//                            } else {
-//                                // TODO(Zaman): if individual contained in both negative portion and in Positive portion then, actually we should exclude this solution.
-//                                logger.info("individual contained in both negative portion and in Positive portion, so we should exclude this solution.");
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        if (isPosIndiv) {
-//            logger.info("PosIndiv " + Utility.getShortName(owlNamedIndividual) + " is contained in hornClause " + hornClause.getHornClauseAsString() + ": " + contained);
-//        } else {
-//            logger.info("NegIndiv " + Utility.getShortName(owlNamedIndividual) + " is contained in hornClause " + hornClause.getHornClauseAsString() + ": " + contained);
-//        }
-//        return contained;
-//    }
-//
-//
-
-
-//    /**
-//     * Calculate accuracy of a hornClause.
-//     * TODO(zaman): need to fix to make compatible with v1
-//     *
-//     * @param conjunctiveHornClauseV1
-//     * @return
-//     */
-//    private Score calculateAccuracy(ConjunctiveHornClauseV1 conjunctiveHornClauseV1) {
-//
-//        /**
-//         * Individuals covered by this hornClause
-//         */
-//        HashMap<OWLIndividual, Integer> coveredPosIndividualsMap = new HashMap<>();
-//        /**
-//         * Individuals excluded by this hornClause
-//         */
-//        HashMap<OWLIndividual, Integer> excludedNegIndividualsMap = new HashMap<>();
-//
-//        /**
-//         * For positive individuals, a individual must be contained within each AND section to be added as a coveredIndividuals.
-//         * I.e. each
-//         */
-//        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
-//
-//            if (conjunctiveHornClauseV1.isContainedInHornClause(thisOwlNamedIndividual, true)) {
-//                insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
-//            }
-//        }
-//
-//        /**
-//         * For negative individuals, a individual must be contained within any single section to be added as a excludedIndividuals.
-//         * I.e. each
-//         */
-//        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
-//
-//            if (conjunctiveHornClauseV1.isContainedInHornClause(thisOwlNamedIndividual, false)) {
-//                insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
-//            }
-//        }
-//
-//        // todo(zaman): there is severe problem. when we dont have negPortion in the hornClause then any negative is not being covered by that portion, need to fix it. so essentially this function isContainedInHornClause()
-//        //  need to be fixed. for example hornClause developedAsia is not excluding Syria as it is not being excluded by any negPortion.!!!!!!
-//        nrOfPositiveClassifiedAsPositive = coveredPosIndividualsMap.size();
-//        /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-//        nrOfPositiveClassifiedAsNegative = SharedDataHolder.posIndivs.size() - nrOfPositiveClassifiedAsPositive;
-//        nrOfNegativeClassifiedAsNegative = excludedNegIndividualsMap.size();
-//        /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-//        nrOfNegativeClassifiedAsPositive = SharedDataHolder.negIndivs.size() - nrOfNegativeClassifiedAsNegative;
-//
-//        double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
-//        double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);
-//        double f_measure = Heuristics.getFScore(recall, precision);
-//        double coverage = Heuristics.getCoverage(nrOfPositiveClassifiedAsPositive, SharedDataHolder.posIndivs.size(),
-//                nrOfNegativeClassifiedAsNegative, SharedDataHolder.negIndivs.size());
-//
-//        Score accScore = new Score();
-//        accScore.setPrecision(precision);
-//        accScore.setRecall(recall);
-//        accScore.setF_measure(f_measure);
-//        accScore.setCoverage(coverage);
-//
-//
-//        return accScore;
-//    }
 
     /**
      * Calculate accuracy of a hornClause.
@@ -1396,8 +1246,8 @@ public class CandidateSolutionFinderV1 {
         nrOfNegativeClassifiedAsNegative = SharedDataHolder.negIndivs.size() - negCoveredCounter;
         nrOfNegativeClassifiedAsPositive = negCoveredCounter;
 
-        assert 2 == 1;
-        assert excludedNegIndividualsMap.size() == nrOfNegativeClassifiedAsPositive;
+//        assert 2 == 1;
+        assert excludedNegIndividualsMap.size() == nrOfNegativeClassifiedAsNegative;
         assert coveredPosIndividualsMap.size() == nrOfPositiveClassifiedAsPositive;
 
         // TODO(zaman): it should be logger.debug instead of logger.info
@@ -1422,68 +1272,6 @@ public class CandidateSolutionFinderV1 {
 
         return accScore;
     }
-
-
-//    /**
-//     * Calculate accuracy of a candidateClass.
-//     *
-//     * @param candidateClassV1
-//     * @return
-//     */
-//    private Score calculateAccuracy(CandidateClassV1 candidateClassV1) {
-//
-//        /**
-//         * Individuals covered by all parts of solution
-//         */
-//        HashMap<OWLIndividual, Integer> coveredPosIndividualsMap = new HashMap<>();
-//        /**
-//         * Individuals excluded by all parts of solution
-//         */
-//        HashMap<OWLIndividual, Integer> excludedNegIndividualsMap = new HashMap<>();
-//
-//        /**
-//         * For positive individuals, a individual must be contained within each AND section to be added as a coveredIndividuals.
-//         * I.e. each
-//         */
-//        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
-//
-//            if (isContainedInCandidateClass(candidateClassV1, thisOwlNamedIndividual, true)) {
-//                insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
-//            }
-//        }
-//
-//        /**
-//         * For negative individuals, a individual must be contained within any single section to be added as a excludedIndividuals.
-//         * I.e. each
-//         */
-//        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
-//
-//            if (isContainedInCandidateClass(candidateClassV1, thisOwlNamedIndividual, false)) {
-//                insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
-//            }
-//        }
-//
-//        nrOfPositiveClassifiedAsPositive = coveredPosIndividualsMap.size();
-//        /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-//        nrOfPositiveClassifiedAsNegative = SharedDataHolder.posIndivs.size() - nrOfPositiveClassifiedAsPositive;
-//        nrOfNegativeClassifiedAsNegative = excludedNegIndividualsMap.size();
-//        /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-//        nrOfNegativeClassifiedAsPositive = SharedDataHolder.negIndivs.size() - nrOfNegativeClassifiedAsNegative;
-//
-//        double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
-//        double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);
-//        double f_measure = Heuristics.getFScore(recall, precision);
-//        double coverage = Heuristics.getCoverage(nrOfPositiveClassifiedAsPositive, SharedDataHolder.posIndivs.size(),
-//                nrOfNegativeClassifiedAsNegative, SharedDataHolder.negIndivs.size());
-//
-//        Score accScore = new Score();
-//        accScore.setPrecision(precision);
-//        accScore.setRecall(recall);
-//        accScore.setF_measure(f_measure);
-//        accScore.setCoverage(coverage);
-//
-//        return accScore;
-//    }
 
     /**
      * Calculate accuracy of a candidateClass.
@@ -1529,7 +1317,7 @@ public class CandidateSolutionFinderV1 {
         nrOfNegativeClassifiedAsPositive = negCoveredCounter;
 
 
-        assert excludedNegIndividualsMap.size() == nrOfNegativeClassifiedAsPositive;
+        assert excludedNegIndividualsMap.size() == nrOfNegativeClassifiedAsNegative;
         assert coveredPosIndividualsMap.size() == nrOfPositiveClassifiedAsPositive;
 
         // TODO(zaman): it should be logger.debug instead of logger.info
@@ -1553,128 +1341,6 @@ public class CandidateSolutionFinderV1 {
 
         return accScore;
     }
-
-
-//    /**
-//     * Calculate accuracy of a solution.
-//     * TODO(Zaman) : need to fix the accuracy calculation for v1
-//     *
-//     * @param candidateSolutionV1
-//     * @return
-//     */
-//    private Score calculateAccuracy(CandidateSolutionV1 candidateSolutionV1) {
-//
-//        HashMap<OWLObjectProperty, ArrayList<CandidateClassV1>> groupedCandidateClasses = candidateSolutionV1.getGroupedCandidateClasses();
-//
-//        /**
-//         * Individuals covered by all parts of solution
-//         */
-//        HashMap<OWLIndividual, Integer> coveredPosIndividualsMap = new HashMap<>();
-//        /**
-//         * Individuals excluded by all parts of solution
-//         */
-//        HashMap<OWLIndividual, Integer> excludedNegIndividualsMap = new HashMap<>();
-//
-//        /**
-//         * For positive individuals, a individual must be contained within each AND section to be added as a coveredIndividuals.
-//         * I.e. each
-//         */
-//        nextPosIndivIter:
-//        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
-//
-//            // it must be contained in each group of the candidate classes.
-//            int containedInTotalGroups = 0;
-//
-//            for (Map.Entry<OWLObjectProperty, ArrayList<CandidateClassV1>> singleGroupOfCandidateClasses : groupedCandidateClasses.entrySet()) {
-//
-//                ArrayList<CandidateClassV1> candidateClassesV1 = singleGroupOfCandidateClasses.getValue();
-//                if (candidateClassesV1.size() > 0) {
-//                    // if owlObjectProperty is none type then candidate classes are conjuncted
-//                    // if owlObjectProperty is proper type then candidate classes are unioned.
-//                    // this logic is handled in function isContainedInCandidateClasses(...), so we don't need to handle it here.
-//
-//                    if (!isContainedInCandidateClasses(candidateClassesV1, thisOwlNamedIndividual, true)) {
-//                        // this individual is not contained in this arraylist of candidate classes.
-//                        // so this individual is not covered.
-//                        // we need to start iterating with next individual
-//                        continue nextPosIndivIter;
-//                    } else {
-//                        containedInTotalGroups++;
-//                    }
-////                    OWLObjectProperty owlObjectProperty = singleGroupOfCandidateClasses.getKey();
-////                    if (owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
-////                        // todo(zaman): need to implement logic
-////                    } else {
-////
-////                    }
-//                }
-//            }
-//            if (containedInTotalGroups == groupedCandidateClasses.size()) {
-//                insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
-//            }
-//        }
-//
-//        /**
-//         * For negative individuals, a individual must be contained within each AND section to be added as a excludedInvdividuals.
-//         * TODO(zaman): fix-logic: it seems if an individual is excluded by any sections of the AND then is will be excluded by the whole solution.
-//         * I.e. each
-//         */
-//        nextNegIndivIter:
-//        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
-//
-////            int containedInTotalGroups = 0;
-//
-//            for (Map.Entry<OWLObjectProperty, ArrayList<CandidateClassV1>> entry : groupedCandidateClasses.entrySet()) {
-//                // each group will be concatenated by AND.
-//                OWLObjectProperty owlObjectProperty = entry.getKey();
-//                // not passing object property here, because we can recover object property from candidate class
-//                ArrayList<CandidateClassV1> candidateClasses = entry.getValue();
-//                if (candidateClasses.size() > 0) {
-//                    if (!isContainedInCandidateClasses(candidateClasses, thisOwlNamedIndividual, false)) {
-//                        // this individual is not contained in this arraylist of candidate classes.
-//                        // so this individual is not covered.
-//                        // we need to start iterating with next individual
-//                        insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
-//                        continue nextNegIndivIter;
-//                    } else {
-////                        containedInTotalGroups++;
-//                    }
-//                }
-//            }
-////            if (containedInTotalGroups == groupedCandidateClasses.size()) {
-////                insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
-////            }
-//        }
-//
-//        // TODO(zaman): it should be logger.debug instead of logger.info
-//        logger.info("solution: " + candidateSolutionV1.getSolutionAsString());
-//        logger.info("coveredPosIndividuals_by_ecii: " + coveredPosIndividualsMap.keySet());
-//        logger.info("coveredPosIndividuals_by_ecii size: " + coveredPosIndividualsMap.size());
-//        logger.info("excludedNegIndividuals_by_ecii: " + excludedNegIndividualsMap.keySet());
-//        logger.info("excludedNegIndividuals_by_ecii size: " + excludedNegIndividualsMap.size());
-//
-//        nrOfPositiveClassifiedAsPositive = coveredPosIndividualsMap.size();
-//        /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-//        nrOfPositiveClassifiedAsNegative = SharedDataHolder.posIndivs.size() - nrOfPositiveClassifiedAsPositive;
-//        nrOfNegativeClassifiedAsNegative = excludedNegIndividualsMap.size();
-//        /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-//        nrOfNegativeClassifiedAsPositive = SharedDataHolder.negIndivs.size() - nrOfNegativeClassifiedAsNegative;
-//
-//        double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
-//        double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);
-//        double f_measure = Heuristics.getFScore(recall, precision);
-//        double coverage = Heuristics.getCoverage(nrOfPositiveClassifiedAsPositive, SharedDataHolder.posIndivs.size(),
-//                nrOfNegativeClassifiedAsNegative, SharedDataHolder.negIndivs.size());
-//
-//        Score accScore = new Score();
-//        accScore.setPrecision(precision);
-//        accScore.setRecall(recall);
-//        accScore.setF_measure(f_measure);
-//        accScore.setCoverage(coverage);
-//
-//
-//        return accScore;
-//    }
 
     /**
      * Calculate accuracy of a solution, according to the new method.
@@ -1722,9 +1388,8 @@ public class CandidateSolutionFinderV1 {
         nrOfNegativeClassifiedAsNegative = SharedDataHolder.negIndivs.size() - negCoveredCounter;
         nrOfNegativeClassifiedAsPositive = negCoveredCounter;
 
-//        assert 2 == 1;
-        assert excludedNegIndividualsMap.size() == nrOfNegativeClassifiedAsPositive;
-        assert coveredPosIndividualsMap.size() == nrOfPositiveClassifiedAsPositive;
+//        logger.info("Calculating accuracy of candidateSolution: "+ candidateSolutionV1.getSolutionAsString());
+//        logger.info("Excluded negative Indivs:");
 
         // TODO(zaman): it should be logger.debug instead of logger.info
         logger.info("solution: " + candidateSolutionV1.getSolutionAsString());
@@ -1732,6 +1397,11 @@ public class CandidateSolutionFinderV1 {
         logger.info("\tcoveredPosIndividuals_by_ecii size: " + coveredPosIndividualsMap.size());
         logger.info("\texcludedNegIndividuals_by_ecii: " + excludedNegIndividualsMap.keySet());
         logger.info("\texcludedNegIndividuals_by_ecii size: " + excludedNegIndividualsMap.size());
+
+
+//        assert 2 == 1;
+        assert excludedNegIndividualsMap.size() == nrOfNegativeClassifiedAsNegative;
+        assert coveredPosIndividualsMap.size() == nrOfPositiveClassifiedAsPositive;
 
         double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
         double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);
@@ -1930,7 +1600,7 @@ public class CandidateSolutionFinderV1 {
                 }
             });
 
-            // todo(zaman): there is significant error in coverage score of a conjunctivehornclause. for china vs syria experiment developedAsia(China) shows coverage score of 0.5, but it must be 1.0
+            // todo(zaman): there is significant error in coverage score of a conjunctivehornclause. for china vs syria experiment developedAsia(China) shows coverage score of 0.5, but it must be 1.0 -- fixed
             // test sorting
             logger.info("Score of first hornClause:  " + conjunctiveHornClausesList.get(0).getScore().getCoverage());
             logger.info("Score of last hornClause:  " + conjunctiveHornClausesList.get(conjunctiveHornClausesList.size() - 1).getScore().getCoverage());
@@ -1974,7 +1644,7 @@ public class CandidateSolutionFinderV1 {
 
         if (candidateClassesList.size() > 0) {
             // sort the list
-            logger.info("horn clauses map  will be filtered initial size: " + candidateClassesList.size());
+            logger.info("candidate classes map  will be filtered. initial size: " + candidateClassesList.size());
             candidateClassesList.sort((o1, o2) -> {
                 if (o1.getScore().getCoverage() - o2.getScore().getCoverage() > 0) {
                     return -1;
@@ -1992,7 +1662,7 @@ public class CandidateSolutionFinderV1 {
 
                     o2.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
                         if (null != conjunctiveHornClause.getPosObjectTypes())
-                            o1Length += conjunctiveHornClause.getPosObjectTypes().size();
+                            o2Length += conjunctiveHornClause.getPosObjectTypes().size();
                         if (null != conjunctiveHornClause.getNegObjectTypes())
                             o2Length += conjunctiveHornClause.getNegObjectTypes().size();
                     });
@@ -2027,15 +1697,14 @@ public class CandidateSolutionFinderV1 {
 
             // make sure cconjunctivehornclausemap size is upto limit.
             if (candidateClassesList.size() <= limit + 1) {
-                logger.info("horn clauses map filtered and now size: " + candidateClassesList.size());
+                logger.info("candidate classes map filtered and now size: " + candidateClassesList.size());
             } else {
-                logger.error("!!!!!!!!!!!!!horn clause map didn't filter perfectly. !!!!!!!!!!!!!");
-                monitor.stopSystem("!!!!!!!!!!!!!horn clause map didn't filter perfectly. !!!!!!!!!!!!!", true);
+                logger.error("!!!!!!!!!!!!!candidate classes map didn't filter perfectly. !!!!!!!!!!!!!");
+                monitor.stopSystem("!!!!!!!!!!!!!candidate classes map didn't filter perfectly. !!!!!!!!!!!!!", true);
             }
         } else {
             logger.info("No filtering done. candidateClasses map empty");
         }
-
 
         return candidateClassesMap;
     }

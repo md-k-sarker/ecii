@@ -1,0 +1,37 @@
+Program started.............
+Program starts at: 11.18.2019  23.02.35 PM
+Working with confFile: trains_owl.config
+Algorithm starts at: 11.18.2019  23.02.35 PM
+
+User defined parameters:
+K1/negExprTypeLimit: 3
+K2/hornClauseLimit: 3
+K3/objPropsCombinationLimit: 3
+K4/hornClausesListMaxSize: 50
+K5/candidateClassesListMaxSize: 50
+ReasonerName: pellet
+posIndivs from conf:
+	east2
+	east3
+	east1
+	east4
+	east5
+negIndivs from conf:
+	west10
+	west8
+	west9
+	west6
+	west7
+
+Algorithm ends at: 11.18.2019  23.02.36 PM
+
+Algorithm duration: 0.404 sec
+
+####################Solutions####################:
+
+Total solutions found: 0
+Result saved at: /Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/main/resources/test/trains_owl_concept_induction.txt
+
+Program finished.
+Program ends at: 11.18.2019  23.02.36 PM
+Program duration: 0.842 sec

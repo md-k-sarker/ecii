@@ -1,0 +1,7 @@
+For ade20k largest example:
+    this is taking long time........
+        Calculating isContainedInHornClause by reasoner of this hornclause: Artifact ⊓ ¬ SelfPoweredRoadVehicle
+
+        Calculating isContainedInHornClause by reasoner of this hornclause: Artifact ⊓ ¬ SelfPoweredRoadVehicle
+
+        

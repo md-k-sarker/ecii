@@ -86,14 +86,19 @@ public class CandidateClassV1 {
      * @param owlObjectProperty
      */
     public CandidateClassV1(OWLObjectProperty owlObjectProperty, OWLReasoner _reasoner, OWLOntology _ontology) {
-        this.owlObjectProperty = owlObjectProperty;
+        if (null == owlObjectProperty) {
+            this.owlObjectProperty = SharedDataHolder.noneOWLObjProp;
+        } else {
+            this.owlObjectProperty = owlObjectProperty;
+        }
         this.conjunctiveHornClauses = new ArrayList<>();
-        solutionChanged = true;
 
         this.reasoner = _reasoner;
         this.ontology = _ontology;
         this.owlOntologyManager = this.ontology.getOWLOntologyManager();
         this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
+
+        solutionChanged = true;
     }
 
     /**
@@ -104,12 +109,13 @@ public class CandidateClassV1 {
     public CandidateClassV1(CandidateClassV1 anotherCandidateClass, OWLOntology _ontology) {
         this.owlObjectProperty = anotherCandidateClass.owlObjectProperty;
         this.conjunctiveHornClauses = new ArrayList<>(anotherCandidateClass.conjunctiveHornClauses);
-        solutionChanged = true;
 
         this.reasoner = anotherCandidateClass.reasoner;
         this.ontology = _ontology;
         this.owlOntologyManager = this.ontology.getOWLOntologyManager();
         this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
+
+        solutionChanged = true;
     }
 
     /**
@@ -121,14 +127,6 @@ public class CandidateClassV1 {
         return owlObjectProperty;
     }
 
-//    /**
-//     * we should not allow to set owlObjectProperty
-//     * @param owlObjectProperty
-//     */
-//    public void setOwlObjectProperty(OWLObjectProperty owlObjectProperty) {
-//        this.owlObjectProperty = owlObjectProperty;
-//        solutionChanged = true;
-//    }
 
     /**
      * @return ArrayList<ConjunctiveHornClauseV1>
@@ -221,6 +219,11 @@ public class CandidateClassV1 {
      */
     public String getCandidateClassAsString() {
 
+        if (!solutionChanged && null != candidateClassAsString)
+            return candidateClassAsString;
+
+        solutionChanged = false;
+
         StringBuilder sb = new StringBuilder();
 
         if (null != this) {
@@ -261,7 +264,8 @@ public class CandidateClassV1 {
             }
         }
 
-        return sb.toString();
+        this.candidateClassAsString = sb.toString();
+        return candidateClassAsString;
     }
 
 

@@ -199,7 +199,6 @@ public class CandidateSolutionV1 {
         this.score = score;
     }
 
-
     /**
      * Getter. It dont't have any public setter.
      *
@@ -482,61 +481,6 @@ public class CandidateSolutionV1 {
 
     }
 
-
-    /**
-     * Print ConjunctiveHornClause  as String
-     * TODO(Zaman) : need to modify the method to cope v1
-     * now implemented inside of the ConjunctiveHornClauseV1.java class
-     * @return
-     */
-//    private String getHornClauseAsString(ConjunctiveHornClauseV1 conjunctiveHornClause) {
-//        StringBuilder sb = new StringBuilder();
-//
-//        boolean hasPositive = false;
-//
-//        if (null != conjunctiveHornClause) {
-//
-//            // print postypes
-//            if (null != conjunctiveHornClause.getPosObjectTypes()) {
-//                if (conjunctiveHornClause.getPosObjectTypes().size() > 0) {
-//                    hasPositive = true;
-//                    if (conjunctiveHornClause.getPosObjectTypes().size() == 1) {
-//                        sb.append(Utility.getShortName((OWLClass) conjunctiveHornClause.getPosObjectTypes().get(0)));
-//                    } else {
-//                        // not using parenthesis for multiple positive types.
-//                        sb.append(Utility.getShortName((OWLClass) conjunctiveHornClause.getPosObjectTypes().get(0)));
-//                        for (int i = 1; i < conjunctiveHornClause.getPosObjectTypes().size(); i++) {
-//                            sb.append(" " + AND.toString());
-//                            sb.append(Utility.getShortName((OWLClass) conjunctiveHornClause.getPosObjectTypes().get(i)));
-//                        }
-//                    }
-//                }
-//            }
-//
-//            // print negtypes
-//            if (null != conjunctiveHornClause.getNegObjectTypes()) {
-//                if (conjunctiveHornClause.getNegObjectTypes().size() > 0) {
-//                    if (hasPositive) {
-//                        sb.append(" " + AND.toString());
-//                    }
-//                    sb.append(" " + NOT.toString());
-//                    if (conjunctiveHornClause.getNegObjectTypes().size() == 1) {
-//                        sb.append(" " + Utility.getShortName((OWLClass) conjunctiveHornClause.getNegObjectTypes().get(0)));
-//                    } else {
-//                        sb.append(" (");
-//                        sb.append(Utility.getShortName((OWLClass) conjunctiveHornClause.getNegObjectTypes().get(0)));
-//                        for (int i = 1; i < conjunctiveHornClause.getNegObjectTypes().size(); i++) {
-//                            sb.append(" " + OR.toString());
-//                            sb.append(" " + Utility.getShortName((OWLClass) conjunctiveHornClause.getNegObjectTypes().get(i)));
-//                        }
-//                        sb.append(")");
-//                    }
-//                }
-//            }
-//        }
-//
-//        return sb.toString();
-//    }
 
     /**
      * Create group

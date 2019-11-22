@@ -1,0 +1,2278 @@
+Program started.............
+Start Time: 2018/06/07 16:19:03
+working with confFile: sumo_with_ade_training_r.owl
+
+posIndivs from conf
+	River_ADE_train_00015879
+	River_ADE_train_00015878
+	River_ADE_train_00015875
+	River_ADE_train_00015897
+	River_ADE_train_00015874
+	River_ADE_train_00015896
+	River_ADE_train_00015877
+	River_ADE_train_00015899
+	River_ADE_train_00015876
+	River_ADE_train_00015898
+	River_ADE_train_00015871
+	River_ADE_train_00015893
+	River_ADE_train_00015870
+	River_ADE_train_00015892
+	River_ADE_train_00015873
+	River_ADE_train_00015895
+	River_ADE_train_00015872
+	River_ADE_train_00015894
+	River_ADE_train_00015891
+	River_ADE_train_00015890
+	River_ADE_train_00015868
+	River_ADE_train_00015867
+	River_ADE_train_00015889
+	River_ADE_train_00015869
+	River_ADE_train_00015864
+	River_ADE_train_00015886
+	River_ADE_train_00015863
+	River_ADE_train_00015885
+	River_ADE_train_00015866
+	River_ADE_train_00015888
+	River_ADE_train_00015865
+	River_ADE_train_00015887
+	River_ADE_train_00015882
+	River_ADE_train_00015881
+	River_ADE_train_00015862
+	River_ADE_train_00015884
+	River_ADE_train_00015861
+	River_ADE_train_00015883
+	River_ADE_train_00015880
+
+negIndivs from conf
+	Resort_ADE_train_00015788
+	Resort_ADE_train_00015789
+	Ruin_ADE_train_00016030
+	Restroom_ADE_train_00015841
+	Restroom_ADE_train_00015840
+	Restaurant_ADE_train_00015797
+	Restaurant_ADE_train_00015796
+	Restaurant_ADE_train_00015795
+	Restaurant_ADE_train_00015794
+	Restaurant_ADE_train_00015793
+	Roof_ADE_train_00015929
+	Runway_ADE_train_00016040
+	Runway_ADE_train_00016041
+	Resort_ADE_train_00015790
+	Resort_ADE_train_00015791
+	Runway_ADE_train_00016042
+	Runway_ADE_train_00016043
+	Roof_ADE_train_00015933
+	Runway_ADE_train_00016039
+	Roof_ADE_train_00015930
+	Roof_ADE_train_00015931
+	Roof_ADE_train_00015932
+	Ruin_ADE_train_00016026
+	Ruin_ADE_train_00016027
+	Restroom_ADE_train_00015838
+	Ruin_ADE_train_00016028
+	Restroom_ADE_train_00015837
+	Ruin_ADE_train_00016029
+	Restroom_ADE_train_00015839
+
+####################Solutions####################:
+solution 1: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (Hill))
+	 accuracy_score: 0.6666666666666666
+solution 2: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (Lake))
+	 accuracy_score: 0.6666666666666666
+solution 3: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (Bridge))
+	 accuracy_score: 0.6538461538461539
+solution 4: ∃imageContains.((Rock) ⊔ (Lake) ⊔ (Hill))
+	 accuracy_score: 0.6538461538461539
+solution 5: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (Shrub))
+	 accuracy_score: 0.641025641025641
+solution 6: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (Dam))
+	 accuracy_score: 0.641025641025641
+solution 7: ∃imageContains.((Stone) ⊔ (Lake) ⊔ (Hill))
+	 accuracy_score: 0.641025641025641
+solution 8: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (Truck))
+	 accuracy_score: 0.641025641025641
+solution 9: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (Fence))
+	 accuracy_score: 0.641025641025641
+solution 10: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (Water))
+	 accuracy_score: 0.641025641025641
+solution 11: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (Horse))
+	 accuracy_score: 0.641025641025641
+solution 12: ∃imageContains.((Rock) ⊔ (Lake) ⊔ (Bridge))
+	 accuracy_score: 0.641025641025641
+solution 13: ∃imageContains.((Rock) ⊔ (Fence) ⊔ (Hill))
+	 accuracy_score: 0.6282051282051282
+solution 14: ∃imageContains.((Waterfall) ⊔ (Stone) ⊔ (Rock))
+	 accuracy_score: 0.6282051282051282
+solution 15: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.6282051282051282
+solution 16: ∃imageContains.((HoofedMammal) ⊔ (Stone) ⊔ (Rock))
+	 accuracy_score: 0.6282051282051282
+solution 17: ∃imageContains.((Rock) ⊔ (Truck) ⊔ (Hill))
+	 accuracy_score: 0.6282051282051282
+solution 18: ∃imageContains.((Rock) ⊔ (Horse) ⊔ (Hill))
+	 accuracy_score: 0.6282051282051282
+solution 19: ∃imageContains.((Rock) ⊔ (Dam) ⊔ (Hill))
+	 accuracy_score: 0.6282051282051282
+solution 20: ∃imageContains.((Rock) ⊔ (Shrub) ⊔ (Hill))
+	 accuracy_score: 0.6282051282051282
+solution 21: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (Waterfall))
+	 accuracy_score: 0.6282051282051282
+solution 22: ∃imageContains.((Rock) ⊔ (Horse) ⊔ (Lake))
+	 accuracy_score: 0.6282051282051282
+solution 23: ∃imageContains.((CompoundSubstance) ⊔ (Stone) ⊔ (Rock))
+	 accuracy_score: 0.6282051282051282
+solution 24: ∃imageContains.((Rock) ⊔ (Bridge) ⊔ (Hill))
+	 accuracy_score: 0.6282051282051282
+solution 25: ∃imageContains.((Rock) ⊔ (Dam) ⊔ (Lake))
+	 accuracy_score: 0.6282051282051282
+solution 26: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (HoofedMammal))
+	 accuracy_score: 0.6282051282051282
+solution 27: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (FloweringPlant))
+	 accuracy_score: 0.6282051282051282
+solution 28: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.6282051282051282
+solution 29: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (StationaryArtifact))
+	 accuracy_score: 0.6282051282051282
+solution 30: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (UplandArea))
+	 accuracy_score: 0.6282051282051282
+solution 31: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.6282051282051282
+solution 32: ∃imageContains.((StationaryArtifact) ⊔ (Stone) ⊔ (Rock))
+	 accuracy_score: 0.6282051282051282
+solution 33: ∃imageContains.((Rock) ⊔ (Water) ⊔ (Hill))
+	 accuracy_score: 0.6282051282051282
+solution 34: ∃imageContains.((Rock) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.6282051282051282
+solution 35: ∃imageContains.((Rock) ⊔ (Lake) ⊔ (Shrub))
+	 accuracy_score: 0.6282051282051282
+solution 36: ∃imageContains.((Rock) ⊔ (Lake) ⊔ (Truck))
+	 accuracy_score: 0.6282051282051282
+solution 37: ∃imageContains.((Stone) ⊔ (Rock))
+	 accuracy_score: 0.6282051282051282
+solution 38: ∃imageContains.((Rock) ⊔ (Waterfall) ⊔ (Hill))
+	 accuracy_score: 0.6153846153846154
+solution 39: ∃imageContains.((Rock) ⊔ (StationaryArtifact) ⊔ (Lake))
+	 accuracy_score: 0.6153846153846154
+solution 40: ∃imageContains.((Rock) ⊔ (Dam) ⊔ (Bridge))
+	 accuracy_score: 0.6153846153846154
+solution 41: ∃imageContains.((Rock) ⊔ (Lake) ⊔ (Fence))
+	 accuracy_score: 0.6153846153846154
+solution 42: ∃imageContains.((Rock) ⊔ (Lake) ⊔ (UplandArea))
+	 accuracy_score: 0.6153846153846154
+solution 43: ∃imageContains.((Stone) ⊔ (Waterfall) ⊔ (Hill))
+	 accuracy_score: 0.6153846153846154
+solution 44: ∃imageContains.((Rock) ⊔ (Lake) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.6153846153846154
+solution 45: ∃imageContains.((Rock) ⊔ (Lake) ⊔ (FloweringPlant))
+	 accuracy_score: 0.6153846153846154
+solution 46: ∃imageContains.((Rock) ⊔ (Water) ⊔ (Bridge))
+	 accuracy_score: 0.6153846153846154
+solution 47: ∃imageContains.((Stone) ⊔ (Shrub) ⊔ (Hill))
+	 accuracy_score: 0.6153846153846154
+solution 48: ∃imageContains.((Rock) ⊔ (Fence) ⊔ (Bridge))
+	 accuracy_score: 0.6153846153846154
+solution 49: ∃imageContains.((Rock) ⊔ (Shrub) ⊔ (Bridge))
+	 accuracy_score: 0.6153846153846154
+solution 50: ∃imageContains.((Stone) ⊔ (Dam) ⊔ (Hill))
+	 accuracy_score: 0.6153846153846154
+solution 51: ∃imageContains.((Stone) ⊔ (Horse) ⊔ (Hill))
+	 accuracy_score: 0.6153846153846154
+solution 52: ∃imageContains.((Stone) ⊔ (Truck) ⊔ (Hill))
+	 accuracy_score: 0.6153846153846154
+solution 53: ∃imageContains.((Stone) ⊔ (Water) ⊔ (Hill))
+	 accuracy_score: 0.6153846153846154
+solution 54: ∃imageContains.((Stone) ⊔ (Bridge) ⊔ (Hill))
+	 accuracy_score: 0.6153846153846154
+solution 55: ∃imageContains.((Stone) ⊔ (Fence) ⊔ (Hill))
+	 accuracy_score: 0.6153846153846154
+solution 56: ∃imageContains.((Rock) ⊔ (Waterfall) ⊔ (Lake))
+	 accuracy_score: 0.6153846153846154
+solution 57: ∃imageContains.((Stone) ⊔ (Lake) ⊔ (Bridge))
+	 accuracy_score: 0.6153846153846154
+solution 58: ∃imageContains.((Rock) ⊔ (Horse) ⊔ (Bridge))
+	 accuracy_score: 0.6153846153846154
+solution 59: ∃imageContains.((Rock) ⊔ (Lake))
+	 accuracy_score: 0.6153846153846154
+solution 60: ∃imageContains.((Rock) ⊔ (Hill))
+	 accuracy_score: 0.6153846153846154
+solution 61: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.6109637488947834
+solution 62: ∃imageContains.((Dam) ⊔ (Lake) ⊔ (Hill))
+	 accuracy_score: 0.6025641025641025
+solution 63: ∃imageContains.((Lake) ⊔ (Truck) ⊔ (Hill))
+	 accuracy_score: 0.6025641025641025
+solution 64: ∃imageContains.((Rock) ⊔ (Shrub) ⊔ (Fence))
+	 accuracy_score: 0.6025641025641025
+solution 65: ∃imageContains.((Stone) ⊔ (Dam) ⊔ (Lake))
+	 accuracy_score: 0.6025641025641025
+solution 66: ∃imageContains.((Rock) ⊔ (Dam) ⊔ (Shrub))
+	 accuracy_score: 0.6025641025641025
+solution 67: ∃imageContains.((Stone) ⊔ (Horse) ⊔ (Lake))
+	 accuracy_score: 0.6025641025641025
+solution 68: ∃imageContains.((Rock) ⊔ (Water) ⊔ (Fence))
+	 accuracy_score: 0.6025641025641025
+solution 69: ∃imageContains.((Horse) ⊔ (Lake) ⊔ (Hill))
+	 accuracy_score: 0.6025641025641025
+solution 70: ∃imageContains.((Water) ⊔ (Lake) ⊔ (Hill))
+	 accuracy_score: 0.6025641025641025
+solution 71: ∃imageContains.((Rock) ⊔ (UplandArea) ⊔ (Bridge))
+	 accuracy_score: 0.6025641025641025
+solution 72: ∃imageContains.((Lake) ⊔ (Shrub) ⊔ (Hill))
+	 accuracy_score: 0.6025641025641025
+solution 73: ∃imageContains.((Rock) ⊔ (Water) ⊔ (Truck))
+	 accuracy_score: 0.6025641025641025
+solution 74: ∃imageContains.((Rock) ⊔ (Dam) ⊔ (Fence))
+	 accuracy_score: 0.6025641025641025
+solution 75: ∃imageContains.((Rock) ⊔ (Water) ⊔ (Shrub))
+	 accuracy_score: 0.6025641025641025
+solution 76: ∃imageContains.((Rock) ⊔ (Waterfall) ⊔ (Bridge))
+	 accuracy_score: 0.6025641025641025
+solution 77: ∃imageContains.((Stone) ⊔ (Waterfall) ⊔ (Lake))
+	 accuracy_score: 0.6025641025641025
+solution 78: ∃imageContains.((Rock) ⊔ (Horse) ⊔ (Fence))
+	 accuracy_score: 0.6025641025641025
+solution 79: ∃imageContains.((Rock) ⊔ (Water) ⊔ (Dam))
+	 accuracy_score: 0.6025641025641025
+solution 80: ∃imageContains.((Rock) ⊔ (Dam) ⊔ (Truck))
+	 accuracy_score: 0.6025641025641025
+solution 81: ∃imageContains.((Rock) ⊔ (Truck) ⊔ (Fence))
+	 accuracy_score: 0.6025641025641025
+solution 82: ∃imageContains.((Rock) ⊔ (Truck) ⊔ (Shrub))
+	 accuracy_score: 0.6025641025641025
+solution 83: ∃imageContains.((Rock) ⊔ (Horse) ⊔ (Shrub))
+	 accuracy_score: 0.6025641025641025
+solution 84: ∃imageContains.((Rock) ⊔ (Horse) ⊔ (Dam))
+	 accuracy_score: 0.6025641025641025
+solution 85: ∃imageContains.((Lake) ⊔ (Bridge) ⊔ (Hill))
+	 accuracy_score: 0.6025641025641025
+solution 86: ∃imageContains.((Waterfall) ⊔ (Lake) ⊔ (Hill))
+	 accuracy_score: 0.6025641025641025
+solution 87: ∃imageContains.((Stone) ⊔ (Lake) ⊔ (Truck))
+	 accuracy_score: 0.6025641025641025
+solution 88: ∃imageContains.((Rock) ⊔ (Horse) ⊔ (Truck))
+	 accuracy_score: 0.6025641025641025
+solution 89: ∃imageContains.((Stone) ⊔ (Lake) ⊔ (Shrub))
+	 accuracy_score: 0.6025641025641025
+solution 90: ∃imageContains.((Rock) ⊔ (Truck) ⊔ (Bridge))
+	 accuracy_score: 0.6025641025641025
+solution 91: ∃imageContains.((Stone) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.6025641025641025
+solution 92: ∃imageContains.((Stone) ⊔ (Hill))
+	 accuracy_score: 0.6025641025641025
+solution 93: ∃imageContains.((Rock) ⊔ (Bridge))
+	 accuracy_score: 0.6025641025641025
+solution 94: ∃imageContains.((Rock) ⊔ (Lake) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5981432360742706
+solution 95: ∃imageContains.((Rock) ⊔ (Waterfall) ⊔ (Truck))
+	 accuracy_score: 0.5897435897435898
+solution 96: ∃imageContains.((Rock) ⊔ (Water) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5897435897435898
+solution 97: ∃imageContains.((Rock) ⊔ (Water) ⊔ (UplandArea))
+	 accuracy_score: 0.5897435897435898
+solution 98: ∃imageContains.((Stone) ⊔ (Lake) ⊔ (UplandArea))
+	 accuracy_score: 0.5897435897435898
+solution 99: ∃imageContains.((Stone) ⊔ (Horse) ⊔ (Bridge))
+	 accuracy_score: 0.5897435897435898
+solution 100: ∃imageContains.((Stone) ⊔ (Dam) ⊔ (Bridge))
+	 accuracy_score: 0.5897435897435898
+solution 101: ∃imageContains.((Rock) ⊔ (Water) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5897435897435898
+solution 102: ∃imageContains.((Rock) ⊔ (Horse) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5897435897435898
+solution 103: ∃imageContains.((Rock) ⊔ (Truck) ⊔ (UplandArea))
+	 accuracy_score: 0.5897435897435898
+solution 104: ∃imageContains.((Rock) ⊔ (StationaryArtifact) ⊔ (Horse))
+	 accuracy_score: 0.5897435897435898
+solution 105: ∃imageContains.((Rock) ⊔ (Horse) ⊔ (UplandArea))
+	 accuracy_score: 0.5897435897435898
+solution 106: ∃imageContains.((Rock) ⊔ (StationaryArtifact) ⊔ (Shrub))
+	 accuracy_score: 0.5897435897435898
+solution 107: ∃imageContains.((Stone) ⊔ (Fence) ⊔ (Bridge))
+	 accuracy_score: 0.5897435897435898
+solution 108: ∃imageContains.((Rock) ⊔ (StationaryArtifact) ⊔ (Truck))
+	 accuracy_score: 0.5897435897435898
+solution 109: ∃imageContains.((Rock) ⊔ (Truck) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5897435897435898
+solution 110: ∃imageContains.((Rock) ⊔ (Horse) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5897435897435898
+solution 111: ∃imageContains.((Rock) ⊔ (Waterfall) ⊔ (Fence))
+	 accuracy_score: 0.5897435897435898
+solution 112: ∃imageContains.((Stone) ⊔ (Water) ⊔ (Bridge))
+	 accuracy_score: 0.5897435897435898
+solution 113: ∃imageContains.((Rock) ⊔ (HoofedMammal) ⊔ (Water))
+	 accuracy_score: 0.5897435897435898
+solution 114: ∃imageContains.((Stone) ⊔ (Lake) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5897435897435898
+solution 115: ∃imageContains.((Rock) ⊔ (Waterfall) ⊔ (Shrub))
+	 accuracy_score: 0.5897435897435898
+solution 116: ∃imageContains.((Rock) ⊔ (Waterfall) ⊔ (Dam))
+	 accuracy_score: 0.5897435897435898
+solution 117: ∃imageContains.((Rock) ⊔ (Waterfall) ⊔ (Horse))
+	 accuracy_score: 0.5897435897435898
+solution 118: ∃imageContains.((Rock) ⊔ (Horse) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5897435897435898
+solution 119: ∃imageContains.((Lake) ⊔ (Fence) ⊔ (Hill))
+	 accuracy_score: 0.5897435897435898
+solution 120: ∃imageContains.((Rock) ⊔ (Water) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5897435897435898
+solution 121: ∃imageContains.((Stone) ⊔ (Lake) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5897435897435898
+solution 122: ∃imageContains.((Rock) ⊔ (Shrub) ⊔ (UplandArea))
+	 accuracy_score: 0.5897435897435898
+solution 123: ∃imageContains.((Rock) ⊔ (Waterfall) ⊔ (Water))
+	 accuracy_score: 0.5897435897435898
+solution 124: ∃imageContains.((Stone) ⊔ (Lake) ⊔ (Fence))
+	 accuracy_score: 0.5897435897435898
+solution 125: ∃imageContains.((Stone) ⊔ (Waterfall) ⊔ (Bridge))
+	 accuracy_score: 0.5897435897435898
+solution 126: ∃imageContains.((Stone) ⊔ (Shrub) ⊔ (Bridge))
+	 accuracy_score: 0.5897435897435898
+solution 127: ∃imageContains.((Stone) ⊔ (StationaryArtifact) ⊔ (Lake))
+	 accuracy_score: 0.5897435897435898
+solution 128: ∃imageContains.((Rock) ⊔ (Fence) ⊔ (UplandArea))
+	 accuracy_score: 0.5897435897435898
+solution 129: ∃imageContains.((Rock) ⊔ (Dam) ⊔ (UplandArea))
+	 accuracy_score: 0.5897435897435898
+solution 130: ∃imageContains.((Rock) ⊔ (StationaryArtifact) ⊔ (Water))
+	 accuracy_score: 0.5897435897435898
+solution 131: ∃imageContains.((Rock) ⊔ (Water) ⊔ (Horse))
+	 accuracy_score: 0.5897435897435898
+solution 132: ∃imageContains.((Rock) ⊔ (Shrub))
+	 accuracy_score: 0.5897435897435898
+solution 133: ∃imageContains.((Lake) ⊔ (Hill))
+	 accuracy_score: 0.5897435897435898
+solution 134: ∃imageContains.((Rock) ⊔ (Dam))
+	 accuracy_score: 0.5897435897435898
+solution 135: ∃imageContains.((Rock) ⊔ (Water))
+	 accuracy_score: 0.5897435897435898
+solution 136: ∃imageContains.((Rock) ⊔ (Horse))
+	 accuracy_score: 0.5897435897435898
+solution 137: ∃imageContains.((Rock) ⊔ (Truck))
+	 accuracy_score: 0.5897435897435898
+solution 138: ∃imageContains.((Rock) ⊔ (Fence))
+	 accuracy_score: 0.5897435897435898
+solution 139: ∃imageContains.((Stone) ⊔ (Lake))
+	 accuracy_score: 0.5897435897435898
+solution 140: ∃imageContains.((Waterfall) ⊔ (Horse) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 141: ∃imageContains.((Rock) ⊔ (HoofedMammal) ⊔ (StationaryArtifact))
+	 accuracy_score: 0.5769230769230769
+solution 142: ∃imageContains.((Dam) ⊔ (Shrub) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 143: ∃imageContains.((Stone) ⊔ (Waterfall) ⊔ (Water))
+	 accuracy_score: 0.5769230769230769
+solution 144: ∃imageContains.((Waterfall) ⊔ (Truck) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 145: ∃imageContains.((Rock) ⊔ (CompoundSubstance) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5769230769230769
+solution 146: ∃imageContains.((Rock) ⊔ (SelfPoweredRoadVehicle) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5769230769230769
+solution 147: ∃imageContains.((Truck) ⊔ (Fence) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 148: ∃imageContains.((Stone) ⊔ (Truck) ⊔ (Bridge))
+	 accuracy_score: 0.5769230769230769
+solution 149: ∃imageContains.((Waterfall) ⊔ (Dam) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 150: ∃imageContains.((Rock) ⊔ (SelfPoweredRoadVehicle) ⊔ (UplandArea))
+	 accuracy_score: 0.5769230769230769
+solution 151: ∃imageContains.((Rock) ⊔ (CompoundSubstance) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5769230769230769
+solution 152: ∃imageContains.((Rock) ⊔ (StationaryArtifact) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5769230769230769
+solution 153: ∃imageContains.((Rock) ⊔ (Waterfall) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5769230769230769
+solution 154: ∃imageContains.((Fence) ⊔ (Bridge) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 155: ∃imageContains.((Waterfall) ⊔ (Water) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 156: ∃imageContains.((Rock) ⊔ (StreamWaterArea) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5769230769230769
+solution 157: ∃imageContains.((Truck) ⊔ (Shrub) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 158: ∃imageContains.((Water) ⊔ (Truck) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 159: ∃imageContains.((Rock) ⊔ (CompoundSubstance) ⊔ (UplandArea))
+	 accuracy_score: 0.5769230769230769
+solution 160: ∃imageContains.((CompoundSubstance) ⊔ (Rock) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.5769230769230769
+solution 161: ∃imageContains.((Shrub) ⊔ (Bridge) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 162: ∃imageContains.((Stone) ⊔ (Water) ⊔ (Dam))
+	 accuracy_score: 0.5769230769230769
+solution 163: ∃imageContains.((Stone) ⊔ (Dam) ⊔ (Shrub))
+	 accuracy_score: 0.5769230769230769
+solution 164: ∃imageContains.((Dam) ⊔ (Fence) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 165: ∃imageContains.((CompoundSubstance) ⊔ (Rock) ⊔ (UplandArea))
+	 accuracy_score: 0.5769230769230769
+solution 166: ∃imageContains.((Stone) ⊔ (Horse) ⊔ (Dam))
+	 accuracy_score: 0.5769230769230769
+solution 167: ∃imageContains.((Rock) ⊔ (CompoundSubstance) ⊔ (HoofedMammal))
+	 accuracy_score: 0.5769230769230769
+solution 168: ∃imageContains.((CompoundSubstance) ⊔ (Rock) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5769230769230769
+solution 169: ∃imageContains.((Stone) ⊔ (Waterfall) ⊔ (Shrub))
+	 accuracy_score: 0.5769230769230769
+solution 170: ∃imageContains.((Horse) ⊔ (Shrub) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 171: ∃imageContains.((Stone) ⊔ (Shrub) ⊔ (Fence))
+	 accuracy_score: 0.5769230769230769
+solution 172: ∃imageContains.((Waterfall) ⊔ (Bridge) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 173: ∃imageContains.((Water) ⊔ (Shrub) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 174: ∃imageContains.((Rock) ⊔ (UplandArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5769230769230769
+solution 175: ∃imageContains.((Rock) ⊔ (StationaryArtifact) ⊔ (Waterfall))
+	 accuracy_score: 0.5769230769230769
+solution 176: ∃imageContains.((Waterfall) ⊔ (Fence) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 177: ∃imageContains.((Rock) ⊔ (CompoundSubstance) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.5769230769230769
+solution 178: ∃imageContains.((Rock) ⊔ (HoofedMammal) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5769230769230769
+solution 179: ∃imageContains.((Rock) ⊔ (Waterfall) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5769230769230769
+solution 180: ∃imageContains.((Horse) ⊔ (Dam) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 181: ∃imageContains.((Rock) ⊔ (CompoundSubstance) ⊔ (Waterfall))
+	 accuracy_score: 0.5769230769230769
+solution 182: ∃imageContains.((Rock) ⊔ (HoofedMammal) ⊔ (UplandArea))
+	 accuracy_score: 0.5769230769230769
+solution 183: ∃imageContains.((Stone) ⊔ (Water) ⊔ (Truck))
+	 accuracy_score: 0.5769230769230769
+solution 184: ∃imageContains.((Stone) ⊔ (UplandArea) ⊔ (Bridge))
+	 accuracy_score: 0.5769230769230769
+solution 185: ∃imageContains.((Horse) ⊔ (Truck) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 186: ∃imageContains.((Water) ⊔ (Dam) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 187: ∃imageContains.((Rock) ⊔ (FloweringPlant) ⊔ (UplandArea))
+	 accuracy_score: 0.5769230769230769
+solution 188: ∃imageContains.((Rock) ⊔ (Waterfall) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5769230769230769
+solution 189: ∃imageContains.((Stone) ⊔ (Waterfall) ⊔ (Fence))
+	 accuracy_score: 0.5769230769230769
+solution 190: ∃imageContains.((Stone) ⊔ (Water) ⊔ (Shrub))
+	 accuracy_score: 0.5769230769230769
+solution 191: ∃imageContains.((Rock) ⊔ (HoofedMammal) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.5769230769230769
+solution 192: ∃imageContains.((Waterfall) ⊔ (Lake) ⊔ (Bridge))
+	 accuracy_score: 0.5769230769230769
+solution 193: ∃imageContains.((Stone) ⊔ (Dam) ⊔ (Fence))
+	 accuracy_score: 0.5769230769230769
+solution 194: ∃imageContains.((Rock) ⊔ (StationaryArtifact) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5769230769230769
+solution 195: ∃imageContains.((Dam) ⊔ (Lake) ⊔ (Bridge))
+	 accuracy_score: 0.5769230769230769
+solution 196: ∃imageContains.((Rock) ⊔ (StreamWaterArea) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5769230769230769
+solution 197: ∃imageContains.((Stone) ⊔ (Water) ⊔ (Fence))
+	 accuracy_score: 0.5769230769230769
+solution 198: ∃imageContains.((Stone) ⊔ (Horse) ⊔ (Truck))
+	 accuracy_score: 0.5769230769230769
+solution 199: ∃imageContains.((Stone) ⊔ (Dam) ⊔ (Truck))
+	 accuracy_score: 0.5769230769230769
+solution 200: ∃imageContains.((Dam) ⊔ (Bridge) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 201: ∃imageContains.((Rock) ⊔ (StreamWaterArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5769230769230769
+solution 202: ∃imageContains.((Rock) ⊔ (StreamWaterArea) ⊔ (UplandArea))
+	 accuracy_score: 0.5769230769230769
+solution 203: ∃imageContains.((CompoundSubstance) ⊔ (Rock) ⊔ (StationaryArtifact))
+	 accuracy_score: 0.5769230769230769
+solution 204: ∃imageContains.((Stone) ⊔ (Horse) ⊔ (Fence))
+	 accuracy_score: 0.5769230769230769
+solution 205: ∃imageContains.((Stone) ⊔ (Waterfall) ⊔ (Horse))
+	 accuracy_score: 0.5769230769230769
+solution 206: ∃imageContains.((HoofedMammal) ⊔ (CompoundSubstance) ⊔ (Rock))
+	 accuracy_score: 0.5769230769230769
+solution 207: ∃imageContains.((Stone) ⊔ (Truck) ⊔ (Fence))
+	 accuracy_score: 0.5769230769230769
+solution 208: ∃imageContains.((Dam) ⊔ (Truck) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 209: ∃imageContains.((Rock) ⊔ (HoofedMammal) ⊔ (Waterfall))
+	 accuracy_score: 0.5769230769230769
+solution 210: ∃imageContains.((Shrub) ⊔ (Fence) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 211: ∃imageContains.((Stone) ⊔ (Waterfall) ⊔ (Truck))
+	 accuracy_score: 0.5769230769230769
+solution 212: ∃imageContains.((Horse) ⊔ (Lake) ⊔ (Bridge))
+	 accuracy_score: 0.5769230769230769
+solution 213: ∃imageContains.((Rock) ⊔ (HoofedMammal) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5769230769230769
+solution 214: ∃imageContains.((Water) ⊔ (Fence) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 215: ∃imageContains.((CompoundSubstance) ⊔ (Rock) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5769230769230769
+solution 216: ∃imageContains.((Rock) ⊔ (CompoundSubstance) ⊔ (StationaryArtifact))
+	 accuracy_score: 0.5769230769230769
+solution 217: ∃imageContains.((Horse) ⊔ (Fence) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 218: ∃imageContains.((Water) ⊔ (Bridge) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 219: ∃imageContains.((Rock) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5769230769230769
+solution 220: ∃imageContains.((Water) ⊔ (Lake) ⊔ (Bridge))
+	 accuracy_score: 0.5769230769230769
+solution 221: ∃imageContains.((CompoundSubstance) ⊔ (Rock) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5769230769230769
+solution 222: ∃imageContains.((Rock) ⊔ (FloweringPlant) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5769230769230769
+solution 223: ∃imageContains.((Rock) ⊔ (CompoundSubstance) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5769230769230769
+solution 224: ∃imageContains.((Rock) ⊔ (StationaryArtifact) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5769230769230769
+solution 225: ∃imageContains.((Stone) ⊔ (Waterfall) ⊔ (Dam))
+	 accuracy_score: 0.5769230769230769
+solution 226: ∃imageContains.((Horse) ⊔ (Bridge) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 227: ∃imageContains.((Rock) ⊔ (Waterfall) ⊔ (UplandArea))
+	 accuracy_score: 0.5769230769230769
+solution 228: ∃imageContains.((Lake) ⊔ (Shrub) ⊔ (Bridge))
+	 accuracy_score: 0.5769230769230769
+solution 229: ∃imageContains.((Rock) ⊔ (HoofedMammal) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5769230769230769
+solution 230: ∃imageContains.((Rock) ⊔ (StationaryArtifact) ⊔ (UplandArea))
+	 accuracy_score: 0.5769230769230769
+solution 231: ∃imageContains.((Rock) ⊔ (StationaryArtifact) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.5769230769230769
+solution 232: ∃imageContains.((Stone) ⊔ (Truck) ⊔ (Shrub))
+	 accuracy_score: 0.5769230769230769
+solution 233: ∃imageContains.((Stone) ⊔ (Horse) ⊔ (Shrub))
+	 accuracy_score: 0.5769230769230769
+solution 234: ∃imageContains.((Waterfall) ⊔ (Shrub) ⊔ (Hill))
+	 accuracy_score: 0.5769230769230769
+solution 235: ∃imageContains.((CompoundSubstance) ⊔ (Rock))
+	 accuracy_score: 0.5769230769230769
+solution 236: ∃imageContains.((Rock) ⊔ (Waterfall))
+	 accuracy_score: 0.5769230769230769
+solution 237: ∃imageContains.((Rock) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5769230769230769
+solution 238: ∃imageContains.((Rock) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.5769230769230769
+solution 239: ∃imageContains.((Rock) ⊔ (UplandArea))
+	 accuracy_score: 0.5769230769230769
+solution 240: ∃imageContains.((Rock) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5769230769230769
+solution 241: ∃imageContains.((Rock) ⊔ (HoofedMammal))
+	 accuracy_score: 0.5769230769230769
+solution 242: ∃imageContains.((Rock) ⊔ (StationaryArtifact))
+	 accuracy_score: 0.5769230769230769
+solution 243: ∃imageContains.((Stone) ⊔ (Bridge))
+	 accuracy_score: 0.5769230769230769
+solution 244: ∃imageContains.((Rock) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5769230769230769
+solution 245: ∃imageContains.((Rock))
+	 accuracy_score: 0.5769230769230769
+solution 246: ∃imageContains.((Stone) ⊔ (Lake) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5725022104332449
+solution 247: ∃imageContains.((Rock) ⊔ (Water) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5725022104332449
+solution 248: ∃imageContains.((Rock) ⊔ (Horse) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5725022104332449
+solution 249: ∃imageContains.((Stone) ⊔ (Shrub) ⊔ (UplandArea))
+	 accuracy_score: 0.5641025641025641
+solution 250: ∃imageContains.((Stone) ⊔ (Fence) ⊔ (UplandArea))
+	 accuracy_score: 0.5641025641025641
+solution 251: ∃imageContains.((Dam) ⊔ (Lake) ⊔ (Truck))
+	 accuracy_score: 0.5641025641025641
+solution 252: ∃imageContains.((Stone) ⊔ (Waterfall) ⊔ (UplandArea))
+	 accuracy_score: 0.5641025641025641
+solution 253: ∃imageContains.((Water) ⊔ (Horse) ⊔ (Hill))
+	 accuracy_score: 0.5641025641025641
+solution 254: ∃imageContains.((Stone) ⊔ (Horse) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5641025641025641
+solution 255: ∃imageContains.((Stone) ⊔ (StationaryArtifact) ⊔ (Truck))
+	 accuracy_score: 0.5641025641025641
+solution 256: ∃imageContains.((Stone) ⊔ (Water) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5641025641025641
+solution 257: ∃imageContains.((Lake) ⊔ (Fence) ⊔ (Bridge))
+	 accuracy_score: 0.5641025641025641
+solution 258: ∃imageContains.((Stone) ⊔ (HoofedMammal) ⊔ (Waterfall))
+	 accuracy_score: 0.5641025641025641
+solution 259: ∃imageContains.((Stone) ⊔ (HoofedMammal) ⊔ (Water))
+	 accuracy_score: 0.5641025641025641
+solution 260: ∃imageContains.((Waterfall) ⊔ (Lake) ⊔ (Shrub))
+	 accuracy_score: 0.5641025641025641
+solution 261: ∃imageContains.((Stone) ⊔ (CompoundSubstance) ⊔ (Waterfall))
+	 accuracy_score: 0.5641025641025641
+solution 262: ∃imageContains.((Stone) ⊔ (Waterfall) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5641025641025641
+solution 263: ∃imageContains.((Stone) ⊔ (Truck) ⊔ (UplandArea))
+	 accuracy_score: 0.5641025641025641
+solution 264: ∃imageContains.((Stone) ⊔ (Horse) ⊔ (UplandArea))
+	 accuracy_score: 0.5641025641025641
+solution 265: ∃imageContains.((Waterfall) ⊔ (Lake) ⊔ (Truck))
+	 accuracy_score: 0.5641025641025641
+solution 266: ∃imageContains.((Lake) ⊔ (UplandArea) ⊔ (Bridge))
+	 accuracy_score: 0.5641025641025641
+solution 267: ∃imageContains.((Stone) ⊔ (Waterfall) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5641025641025641
+solution 268: ∃imageContains.((Waterfall) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.5641025641025641
+solution 269: ∃imageContains.((Stone) ⊔ (StationaryArtifact) ⊔ (Shrub))
+	 accuracy_score: 0.5641025641025641
+solution 270: ∃imageContains.((Truck) ⊔ (Bridge) ⊔ (Hill))
+	 accuracy_score: 0.5641025641025641
+solution 271: ∃imageContains.((Lake) ⊔ (Truck) ⊔ (Bridge))
+	 accuracy_score: 0.5641025641025641
+solution 272: ∃imageContains.((Lake) ⊔ (Truck) ⊔ (Shrub))
+	 accuracy_score: 0.5641025641025641
+solution 273: ∃imageContains.((Dam) ⊔ (Lake) ⊔ (Shrub))
+	 accuracy_score: 0.5641025641025641
+solution 274: ∃imageContains.((Stone) ⊔ (Truck) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5641025641025641
+solution 275: ∃imageContains.((Stone) ⊔ (Horse) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5641025641025641
+solution 276: ∃imageContains.((Horse) ⊔ (Dam) ⊔ (Lake))
+	 accuracy_score: 0.5641025641025641
+solution 277: ∃imageContains.((Stone) ⊔ (Dam) ⊔ (UplandArea))
+	 accuracy_score: 0.5641025641025641
+solution 278: ∃imageContains.((Water) ⊔ (Dam) ⊔ (Lake))
+	 accuracy_score: 0.5641025641025641
+solution 279: ∃imageContains.((Stone) ⊔ (StationaryArtifact) ⊔ (Horse))
+	 accuracy_score: 0.5641025641025641
+solution 280: ∃imageContains.((Stone) ⊔ (Water) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5641025641025641
+solution 281: ∃imageContains.((Stone) ⊔ (StationaryArtifact) ⊔ (Waterfall))
+	 accuracy_score: 0.5641025641025641
+solution 282: ∃imageContains.((Waterfall) ⊔ (Dam) ⊔ (Lake))
+	 accuracy_score: 0.5641025641025641
+solution 283: ∃imageContains.((Horse) ⊔ (Lake) ⊔ (Truck))
+	 accuracy_score: 0.5641025641025641
+solution 284: ∃imageContains.((Horse) ⊔ (Lake) ⊔ (Shrub))
+	 accuracy_score: 0.5641025641025641
+solution 285: ∃imageContains.((Waterfall) ⊔ (Horse) ⊔ (Lake))
+	 accuracy_score: 0.5641025641025641
+solution 286: ∃imageContains.((Stone) ⊔ (StationaryArtifact) ⊔ (Water))
+	 accuracy_score: 0.5641025641025641
+solution 287: ∃imageContains.((Stone) ⊔ (Water) ⊔ (UplandArea))
+	 accuracy_score: 0.5641025641025641
+solution 288: ∃imageContains.((Water) ⊔ (Lake) ⊔ (Shrub))
+	 accuracy_score: 0.5641025641025641
+solution 289: ∃imageContains.((Stone) ⊔ (Water) ⊔ (Horse))
+	 accuracy_score: 0.5641025641025641
+solution 290: ∃imageContains.((Stone) ⊔ (Waterfall) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5641025641025641
+solution 291: ∃imageContains.((Water) ⊔ (Lake) ⊔ (Truck))
+	 accuracy_score: 0.5641025641025641
+solution 292: ∃imageContains.((Stone) ⊔ (Horse) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5641025641025641
+solution 293: ∃imageContains.((Stone) ⊔ (Water) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5641025641025641
+solution 294: ∃imageContains.((Stone) ⊔ (Truck))
+	 accuracy_score: 0.5641025641025641
+solution 295: ∃imageContains.((Fence) ⊔ (Hill))
+	 accuracy_score: 0.5641025641025641
+solution 296: ∃imageContains.((Bridge) ⊔ (Hill))
+	 accuracy_score: 0.5641025641025641
+solution 297: ∃imageContains.((Lake) ⊔ (Bridge))
+	 accuracy_score: 0.5641025641025641
+solution 298: ∃imageContains.((Stone) ⊔ (Fence))
+	 accuracy_score: 0.5641025641025641
+solution 299: ∃imageContains.((Stone) ⊔ (Shrub))
+	 accuracy_score: 0.5641025641025641
+solution 300: ∃imageContains.((Stone) ⊔ (Horse))
+	 accuracy_score: 0.5641025641025641
+solution 301: ∃imageContains.((Truck) ⊔ (Hill))
+	 accuracy_score: 0.5641025641025641
+solution 302: ∃imageContains.((Horse) ⊔ (Hill))
+	 accuracy_score: 0.5641025641025641
+solution 303: ∃imageContains.((Water) ⊔ (Hill))
+	 accuracy_score: 0.5641025641025641
+solution 304: ∃imageContains.((Stone) ⊔ (Waterfall))
+	 accuracy_score: 0.5641025641025641
+solution 305: ∃imageContains.((Stone) ⊔ (Water))
+	 accuracy_score: 0.5641025641025641
+solution 306: ∃imageContains.((Waterfall) ⊔ (Hill))
+	 accuracy_score: 0.5641025641025641
+solution 307: ∃imageContains.((Shrub) ⊔ (Hill))
+	 accuracy_score: 0.5641025641025641
+solution 308: ∃imageContains.((Stone) ⊔ (Dam))
+	 accuracy_score: 0.5641025641025641
+solution 309: ∃imageContains.((Dam) ⊔ (Hill))
+	 accuracy_score: 0.5641025641025641
+solution 310: ∃imageContains.((Rock) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5596816976127321
+solution 311: ∃imageContains.((Rock) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5596816976127321
+solution 312: ∃imageContains.((Rock) ⊔ (Waterfall) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5596816976127321
+solution 313: ∃imageContains.((CompoundSubstance) ⊔ (Rock) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5596816976127321
+solution 314: ∃imageContains.((Rock) ⊔ (StreamWaterArea) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5596816976127321
+solution 315: ∃imageContains.((Rock) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (UplandArea))
+	 accuracy_score: 0.5596816976127321
+solution 316: ∃imageContains.((Rock) ⊔ (CompoundSubstance) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5596816976127321
+solution 317: ∃imageContains.((Rock) ⊔ (HoofedMammal) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5596816976127321
+solution 318: ∃imageContains.((Rock) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5596816976127321
+solution 319: ∃imageContains.((Stone) ⊔ (HoofedMammal) ⊔ (UplandArea))
+	 accuracy_score: 0.5512820512820513
+solution 320: ∃imageContains.((Stone) ⊔ (HoofedMammal) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5512820512820513
+solution 321: ∃imageContains.((Water) ⊔ (Lake) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5512820512820513
+solution 322: ∃imageContains.((Lake) ⊔ (Truck) ⊔ (Fence))
+	 accuracy_score: 0.5512820512820513
+solution 323: ∃imageContains.((StationaryArtifact) ⊔ (Horse) ⊔ (Lake))
+	 accuracy_score: 0.5512820512820513
+solution 324: ∃imageContains.((Dam) ⊔ (Lake) ⊔ (Fence))
+	 accuracy_score: 0.5512820512820513
+solution 325: ∃imageContains.((Stone) ⊔ (UplandArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5512820512820513
+solution 326: ∃imageContains.((Stone) ⊔ (HoofedMammal) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5512820512820513
+solution 327: ∃imageContains.((Stone) ⊔ (StreamWaterArea) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5512820512820513
+solution 328: ∃imageContains.((Waterfall) ⊔ (Lake) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5512820512820513
+solution 329: ∃imageContains.((Stone) ⊔ (CompoundSubstance) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5512820512820513
+solution 330: ∃imageContains.((Horse) ⊔ (Lake) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5512820512820513
+solution 331: ∃imageContains.((Stone) ⊔ (CompoundSubstance) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.5512820512820513
+solution 332: ∃imageContains.((Horse) ⊔ (Lake) ⊔ (Fence))
+	 accuracy_score: 0.5512820512820513
+solution 333: ∃imageContains.((Stone) ⊔ (SelfPoweredRoadVehicle) ⊔ (UplandArea))
+	 accuracy_score: 0.5512820512820513
+solution 334: ∃imageContains.((Stone) ⊔ (CompoundSubstance) ⊔ (UplandArea))
+	 accuracy_score: 0.5512820512820513
+solution 335: ∃imageContains.((Stone) ⊔ (SelfPoweredRoadVehicle) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5512820512820513
+solution 336: ∃imageContains.((Waterfall) ⊔ (Lake) ⊔ (Fence))
+	 accuracy_score: 0.5512820512820513
+solution 337: ∃imageContains.((Lake) ⊔ (Shrub) ⊔ (Fence))
+	 accuracy_score: 0.5512820512820513
+solution 338: ∃imageContains.((StationaryArtifact) ⊔ (Lake) ⊔ (Shrub))
+	 accuracy_score: 0.5512820512820513
+solution 339: ∃imageContains.((Stone) ⊔ (StationaryArtifact) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5512820512820513
+solution 340: ∃imageContains.((Horse) ⊔ (Lake) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5512820512820513
+solution 341: ∃imageContains.((StationaryArtifact) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.5512820512820513
+solution 342: ∃imageContains.((Water) ⊔ (Fence) ⊔ (Bridge))
+	 accuracy_score: 0.5512820512820513
+solution 343: ∃imageContains.((Stone) ⊔ (HoofedMammal) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.5512820512820513
+solution 344: ∃imageContains.((Water) ⊔ (Lake) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5512820512820513
+solution 345: ∃imageContains.((Stone) ⊔ (FloweringPlant) ⊔ (UplandArea))
+	 accuracy_score: 0.5512820512820513
+solution 346: ∃imageContains.((Waterfall) ⊔ (Shrub) ⊔ (Bridge))
+	 accuracy_score: 0.5512820512820513
+solution 347: ∃imageContains.((Lake) ⊔ (Truck) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5512820512820513
+solution 348: ∃imageContains.((Stone) ⊔ (StreamWaterArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5512820512820513
+solution 349: ∃imageContains.((Horse) ⊔ (Fence) ⊔ (Bridge))
+	 accuracy_score: 0.5512820512820513
+solution 350: ∃imageContains.((Water) ⊔ (Lake) ⊔ (UplandArea))
+	 accuracy_score: 0.5512820512820513
+solution 351: ∃imageContains.((Lake) ⊔ (Truck) ⊔ (UplandArea))
+	 accuracy_score: 0.5512820512820513
+solution 352: ∃imageContains.((Water) ⊔ (Horse) ⊔ (Lake))
+	 accuracy_score: 0.5512820512820513
+solution 353: ∃imageContains.((Stone) ⊔ (StationaryArtifact) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5512820512820513
+solution 354: ∃imageContains.((Dam) ⊔ (Lake) ⊔ (UplandArea))
+	 accuracy_score: 0.5512820512820513
+solution 355: ∃imageContains.((Waterfall) ⊔ (Horse) ⊔ (Bridge))
+	 accuracy_score: 0.5512820512820513
+solution 356: ∃imageContains.((Dam) ⊔ (Shrub) ⊔ (Bridge))
+	 accuracy_score: 0.5512820512820513
+solution 357: ∃imageContains.((Waterfall) ⊔ (Lake) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5512820512820513
+solution 358: ∃imageContains.((Waterfall) ⊔ (Lake) ⊔ (UplandArea))
+	 accuracy_score: 0.5512820512820513
+solution 359: ∃imageContains.((Stone) ⊔ (CompoundSubstance) ⊔ (StationaryArtifact))
+	 accuracy_score: 0.5512820512820513
+solution 360: ∃imageContains.((Dam) ⊔ (Fence) ⊔ (Bridge))
+	 accuracy_score: 0.5512820512820513
+solution 361: ∃imageContains.((Waterfall) ⊔ (Dam) ⊔ (Bridge))
+	 accuracy_score: 0.5512820512820513
+solution 362: ∃imageContains.((Stone) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5512820512820513
+solution 363: ∃imageContains.((Horse) ⊔ (Lake) ⊔ (UplandArea))
+	 accuracy_score: 0.5512820512820513
+solution 364: ∃imageContains.((StationaryArtifact) ⊔ (Waterfall) ⊔ (Lake))
+	 accuracy_score: 0.5512820512820513
+solution 365: ∃imageContains.((Horse) ⊔ (Dam) ⊔ (Bridge))
+	 accuracy_score: 0.5512820512820513
+solution 366: ∃imageContains.((StationaryArtifact) ⊔ (Lake) ⊔ (Truck))
+	 accuracy_score: 0.5512820512820513
+solution 367: ∃imageContains.((Lake) ⊔ (Shrub) ⊔ (UplandArea))
+	 accuracy_score: 0.5512820512820513
+solution 368: ∃imageContains.((Stone) ⊔ (CompoundSubstance) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5512820512820513
+solution 369: ∃imageContains.((Stone) ⊔ (HoofedMammal) ⊔ (StationaryArtifact))
+	 accuracy_score: 0.5512820512820513
+solution 370: ∃imageContains.((Stone) ⊔ (StreamWaterArea) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5512820512820513
+solution 371: ∃imageContains.((Shrub) ⊔ (Fence) ⊔ (Bridge))
+	 accuracy_score: 0.5512820512820513
+solution 372: ∃imageContains.((Stone) ⊔ (CompoundSubstance) ⊔ (HoofedMammal))
+	 accuracy_score: 0.5512820512820513
+solution 373: ∃imageContains.((Water) ⊔ (Lake) ⊔ (Fence))
+	 accuracy_score: 0.5512820512820513
+solution 374: ∃imageContains.((Waterfall) ⊔ (Fence) ⊔ (Bridge))
+	 accuracy_score: 0.5512820512820513
+solution 375: ∃imageContains.((Horse) ⊔ (Shrub) ⊔ (Bridge))
+	 accuracy_score: 0.5512820512820513
+solution 376: ∃imageContains.((Water) ⊔ (Dam) ⊔ (Bridge))
+	 accuracy_score: 0.5512820512820513
+solution 377: ∃imageContains.((Waterfall) ⊔ (Water) ⊔ (Bridge))
+	 accuracy_score: 0.5512820512820513
+solution 378: ∃imageContains.((Stone) ⊔ (FloweringPlant) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5512820512820513
+solution 379: ∃imageContains.((Stone) ⊔ (CompoundSubstance) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5512820512820513
+solution 380: ∃imageContains.((Stone) ⊔ (StationaryArtifact) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5512820512820513
+solution 381: ∃imageContains.((Stone) ⊔ (StreamWaterArea) ⊔ (UplandArea))
+	 accuracy_score: 0.5512820512820513
+solution 382: ∃imageContains.((Stone) ⊔ (StationaryArtifact) ⊔ (UplandArea))
+	 accuracy_score: 0.5512820512820513
+solution 383: ∃imageContains.((Stone) ⊔ (HoofedMammal) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5512820512820513
+solution 384: ∃imageContains.((Stone) ⊔ (StationaryArtifact) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.5512820512820513
+solution 385: ∃imageContains.((Water) ⊔ (Shrub) ⊔ (Bridge))
+	 accuracy_score: 0.5512820512820513
+solution 386: ∃imageContains.((Stone) ⊔ (HoofedMammal))
+	 accuracy_score: 0.5512820512820513
+solution 387: ∃imageContains.((Stone) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5512820512820513
+solution 388: ∃imageContains.((Lake) ⊔ (Truck))
+	 accuracy_score: 0.5512820512820513
+solution 389: ∃imageContains.((Stone) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5512820512820513
+solution 390: ∃imageContains.((Lake) ⊔ (Shrub))
+	 accuracy_score: 0.5512820512820513
+solution 391: ∃imageContains.((Water) ⊔ (Lake))
+	 accuracy_score: 0.5512820512820513
+solution 392: ∃imageContains.((Stone) ⊔ (StationaryArtifact))
+	 accuracy_score: 0.5512820512820513
+solution 393: ∃imageContains.((Stone) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5512820512820513
+solution 394: ∃imageContains.((Waterfall) ⊔ (Lake))
+	 accuracy_score: 0.5512820512820513
+solution 395: ∃imageContains.((Horse) ⊔ (Lake))
+	 accuracy_score: 0.5512820512820513
+solution 396: ∃imageContains.((Stone) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.5512820512820513
+solution 397: ∃imageContains.((Dam) ⊔ (Lake))
+	 accuracy_score: 0.5512820512820513
+solution 398: ∃imageContains.((Stone) ⊔ (UplandArea))
+	 accuracy_score: 0.5512820512820513
+solution 399: ∃imageContains.((Hill))
+	 accuracy_score: 0.5512820512820513
+solution 400: ∃imageContains.((Stone))
+	 accuracy_score: 0.5512820512820513
+solution 401: ∃imageContains.((Stone) ⊔ (Waterfall) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5468611847922193
+solution 402: ∃imageContains.((Stone) ⊔ (Water) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5468611847922193
+solution 403: ∃imageContains.((Stone) ⊔ (Horse) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5468611847922193
+solution 404: ∃imageContains.((Truck) ⊔ (Shrub) ⊔ (Fence))
+	 accuracy_score: 0.5384615384615384
+solution 405: ∃imageContains.((Waterfall) ⊔ (Horse) ⊔ (Truck))
+	 accuracy_score: 0.5384615384615384
+solution 406: ∃imageContains.((Lake) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5384615384615384
+solution 407: ∃imageContains.((Waterfall) ⊔ (Water) ⊔ (Fence))
+	 accuracy_score: 0.5384615384615384
+solution 408: ∃imageContains.((Waterfall) ⊔ (Dam) ⊔ (Truck))
+	 accuracy_score: 0.5384615384615384
+solution 409: ∃imageContains.((Waterfall) ⊔ (Truck) ⊔ (Fence))
+	 accuracy_score: 0.5384615384615384
+solution 410: ∃imageContains.((Horse) ⊔ (Dam) ⊔ (Truck))
+	 accuracy_score: 0.5384615384615384
+solution 411: ∃imageContains.((Waterfall) ⊔ (Horse) ⊔ (Fence))
+	 accuracy_score: 0.5384615384615384
+solution 412: ∃imageContains.((Dam) ⊔ (Shrub) ⊔ (Fence))
+	 accuracy_score: 0.5384615384615384
+solution 413: ∃imageContains.((Water) ⊔ (Shrub) ⊔ (Fence))
+	 accuracy_score: 0.5384615384615384
+solution 414: ∃imageContains.((Horse) ⊔ (Truck) ⊔ (Fence))
+	 accuracy_score: 0.5384615384615384
+solution 415: ∃imageContains.((Horse) ⊔ (Dam) ⊔ (Fence))
+	 accuracy_score: 0.5384615384615384
+solution 416: ∃imageContains.((Waterfall) ⊔ (Water) ⊔ (Dam))
+	 accuracy_score: 0.5384615384615384
+solution 417: ∃imageContains.((Water) ⊔ (UplandArea) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 418: ∃imageContains.((Water) ⊔ (Dam) ⊔ (Fence))
+	 accuracy_score: 0.5384615384615384
+solution 419: ∃imageContains.((Horse) ⊔ (Shrub) ⊔ (Fence))
+	 accuracy_score: 0.5384615384615384
+solution 420: ∃imageContains.((StationaryArtifact) ⊔ (Lake) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5384615384615384
+solution 421: ∃imageContains.((Horse) ⊔ (UplandArea) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 422: ∃imageContains.((Waterfall) ⊔ (Truck) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 423: ∃imageContains.((Waterfall) ⊔ (Horse) ⊔ (Shrub))
+	 accuracy_score: 0.5384615384615384
+solution 424: ∃imageContains.((Waterfall) ⊔ (Truck) ⊔ (Shrub))
+	 accuracy_score: 0.5384615384615384
+solution 425: ∃imageContains.((Lake) ⊔ (Fence) ⊔ (UplandArea))
+	 accuracy_score: 0.5384615384615384
+solution 426: ∃imageContains.((Waterfall) ⊔ (Dam) ⊔ (Shrub))
+	 accuracy_score: 0.5384615384615384
+solution 427: ∃imageContains.((Water) ⊔ (Truck) ⊔ (Shrub))
+	 accuracy_score: 0.5384615384615384
+solution 428: ∃imageContains.((Lake) ⊔ (FloweringPlant) ⊔ (UplandArea))
+	 accuracy_score: 0.5384615384615384
+solution 429: ∃imageContains.((Dam) ⊔ (UplandArea) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 430: ∃imageContains.((Water) ⊔ (Horse) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 431: ∃imageContains.((Dam) ⊔ (Truck) ⊔ (Fence))
+	 accuracy_score: 0.5384615384615384
+solution 432: ∃imageContains.((Water) ⊔ (Truck) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 433: ∃imageContains.((Water) ⊔ (Dam) ⊔ (Shrub))
+	 accuracy_score: 0.5384615384615384
+solution 434: ∃imageContains.((Lake) ⊔ (SelfPoweredRoadVehicle) ⊔ (UplandArea))
+	 accuracy_score: 0.5384615384615384
+solution 435: ∃imageContains.((Truck) ⊔ (Fence) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 436: ∃imageContains.((Waterfall) ⊔ (Horse) ⊔ (Dam))
+	 accuracy_score: 0.5384615384615384
+solution 437: ∃imageContains.((Horse) ⊔ (Dam) ⊔ (Shrub))
+	 accuracy_score: 0.5384615384615384
+solution 438: ∃imageContains.((Fence) ⊔ (UplandArea) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 439: ∃imageContains.((Waterfall) ⊔ (Shrub) ⊔ (Fence))
+	 accuracy_score: 0.5384615384615384
+solution 440: ∃imageContains.((StationaryArtifact) ⊔ (Lake) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5384615384615384
+solution 441: ∃imageContains.((Shrub) ⊔ (UplandArea) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 442: ∃imageContains.((Water) ⊔ (Truck) ⊔ (Fence))
+	 accuracy_score: 0.5384615384615384
+solution 443: ∃imageContains.((Waterfall) ⊔ (Water) ⊔ (Truck))
+	 accuracy_score: 0.5384615384615384
+solution 444: ∃imageContains.((Dam) ⊔ (Truck) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 445: ∃imageContains.((Horse) ⊔ (Truck) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 446: ∃imageContains.((Horse) ⊔ (Truck) ⊔ (Shrub))
+	 accuracy_score: 0.5384615384615384
+solution 447: ∃imageContains.((Water) ⊔ (Dam) ⊔ (Truck))
+	 accuracy_score: 0.5384615384615384
+solution 448: ∃imageContains.((Waterfall) ⊔ (Dam) ⊔ (Fence))
+	 accuracy_score: 0.5384615384615384
+solution 449: ∃imageContains.((Truck) ⊔ (Shrub) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 450: ∃imageContains.((Dam) ⊔ (Truck) ⊔ (Shrub))
+	 accuracy_score: 0.5384615384615384
+solution 451: ∃imageContains.((Waterfall) ⊔ (Water) ⊔ (Shrub))
+	 accuracy_score: 0.5384615384615384
+solution 452: ∃imageContains.((Waterfall) ⊔ (UplandArea) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 453: ∃imageContains.((StationaryArtifact) ⊔ (Lake) ⊔ (UplandArea))
+	 accuracy_score: 0.5384615384615384
+solution 454: ∃imageContains.((Horse) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 455: ∃imageContains.((Water) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 456: ∃imageContains.((StationaryArtifact) ⊔ (Lake))
+	 accuracy_score: 0.5384615384615384
+solution 457: ∃imageContains.((Waterfall) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 458: ∃imageContains.((Lake) ⊔ (Fence))
+	 accuracy_score: 0.5384615384615384
+solution 459: ∃imageContains.((Dam) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 460: ∃imageContains.((Shrub) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 461: ∃imageContains.((Lake) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5384615384615384
+solution 462: ∃imageContains.((Fence) ⊔ (Bridge))
+	 accuracy_score: 0.5384615384615384
+solution 463: ∃imageContains.((Lake) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5384615384615384
+solution 464: ∃imageContains.((Lake) ⊔ (UplandArea))
+	 accuracy_score: 0.5384615384615384
+solution 465: ∃imageContains.((Lake))
+	 accuracy_score: 0.5384615384615384
+solution 466: ∃imageContains.((Stone) ⊔ (StreamWaterArea) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5340406719717065
+solution 467: ∃imageContains.((Horse) ⊔ (Lake) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5340406719717065
+solution 468: ∃imageContains.((Stone) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5340406719717065
+solution 469: ∃imageContains.((Stone) ⊔ (CompoundSubstance) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5340406719717065
+solution 470: ∃imageContains.((Waterfall) ⊔ (Lake) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5340406719717065
+solution 471: ∃imageContains.((Water) ⊔ (Lake) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5340406719717065
+solution 472: ∃imageContains.((Stone) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (UplandArea))
+	 accuracy_score: 0.5340406719717065
+solution 473: ∃imageContains.((Stone) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5340406719717065
+solution 474: ∃imageContains.((Stone) ⊔ (HoofedMammal) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5340406719717065
+solution 475: ∃imageContains.((Stone) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5340406719717065
+solution 476: ∃imageContains.((Horse) ⊔ (Dam) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 477: ∃imageContains.((Horse) ⊔ (Truck) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5256410256410257
+solution 478: ∃imageContains.((StationaryArtifact) ⊔ (Water) ⊔ (Shrub))
+	 accuracy_score: 0.5256410256410257
+solution 479: ∃imageContains.((Water) ⊔ (Horse) ⊔ (Truck))
+	 accuracy_score: 0.5256410256410257
+solution 480: ∃imageContains.((StationaryArtifact) ⊔ (Waterfall) ⊔ (Shrub))
+	 accuracy_score: 0.5256410256410257
+solution 481: ∃imageContains.((Horse) ⊔ (Truck) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 482: ∃imageContains.((Waterfall) ⊔ (Dam) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 483: ∃imageContains.((Waterfall) ⊔ (Water) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5256410256410257
+solution 484: ∃imageContains.((StationaryArtifact) ⊔ (Waterfall) ⊔ (Water))
+	 accuracy_score: 0.5256410256410257
+solution 485: ∃imageContains.((Water) ⊔ (Dam) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 486: ∃imageContains.((Waterfall) ⊔ (Water) ⊔ (Horse))
+	 accuracy_score: 0.5256410256410257
+solution 487: ∃imageContains.((Truck) ⊔ (Shrub) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 488: ∃imageContains.((Dam) ⊔ (Shrub) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 489: ∃imageContains.((StationaryArtifact) ⊔ (Truck) ⊔ (Shrub))
+	 accuracy_score: 0.5256410256410257
+solution 490: ∃imageContains.((Waterfall) ⊔ (Horse) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5256410256410257
+solution 491: ∃imageContains.((StationaryArtifact) ⊔ (Horse) ⊔ (Shrub))
+	 accuracy_score: 0.5256410256410257
+solution 492: ∃imageContains.((Shrub) ⊔ (Fence) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 493: ∃imageContains.((StationaryArtifact) ⊔ (Waterfall) ⊔ (Truck))
+	 accuracy_score: 0.5256410256410257
+solution 494: ∃imageContains.((HoofedMammal) ⊔ (Waterfall) ⊔ (Water))
+	 accuracy_score: 0.5256410256410257
+solution 495: ∃imageContains.((Water) ⊔ (Truck) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 496: ∃imageContains.((Waterfall) ⊔ (Water) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 497: ∃imageContains.((Dam) ⊔ (Truck) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 498: ∃imageContains.((Water) ⊔ (Truck) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5256410256410257
+solution 499: ∃imageContains.((Waterfall) ⊔ (Water) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5256410256410257
+solution 500: ∃imageContains.((Water) ⊔ (Horse) ⊔ (Dam))
+	 accuracy_score: 0.5256410256410257
+solution 501: ∃imageContains.((Waterfall) ⊔ (Shrub) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 502: ∃imageContains.((Waterfall) ⊔ (Fence) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 503: ∃imageContains.((Water) ⊔ (Shrub) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 504: ∃imageContains.((Truck) ⊔ (UplandArea) ⊔ (Bridge))
+	 accuracy_score: 0.5256410256410257
+solution 505: ∃imageContains.((StationaryArtifact) ⊔ (Horse) ⊔ (Truck))
+	 accuracy_score: 0.5256410256410257
+solution 506: ∃imageContains.((Horse) ⊔ (Shrub) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 507: ∃imageContains.((Waterfall) ⊔ (Horse) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5256410256410257
+solution 508: ∃imageContains.((StationaryArtifact) ⊔ (Water) ⊔ (Truck))
+	 accuracy_score: 0.5256410256410257
+solution 509: ∃imageContains.((Waterfall) ⊔ (Water) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5256410256410257
+solution 510: ∃imageContains.((Water) ⊔ (Horse) ⊔ (Fence))
+	 accuracy_score: 0.5256410256410257
+solution 511: ∃imageContains.((StationaryArtifact) ⊔ (Waterfall) ⊔ (Horse))
+	 accuracy_score: 0.5256410256410257
+solution 512: ∃imageContains.((Truck) ⊔ (Fence) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 513: ∃imageContains.((Horse) ⊔ (Fence) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 514: ∃imageContains.((Waterfall) ⊔ (Truck) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 515: ∃imageContains.((Waterfall) ⊔ (Horse) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5256410256410257
+solution 516: ∃imageContains.((Waterfall) ⊔ (Truck) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5256410256410257
+solution 517: ∃imageContains.((Waterfall) ⊔ (Horse) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 518: ∃imageContains.((Water) ⊔ (Horse) ⊔ (Shrub))
+	 accuracy_score: 0.5256410256410257
+solution 519: ∃imageContains.((Dam) ⊔ (Fence) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 520: ∃imageContains.((Water) ⊔ (Fence) ⊔ (UplandArea))
+	 accuracy_score: 0.5256410256410257
+solution 521: ∃imageContains.((Waterfall) ⊔ (Water))
+	 accuracy_score: 0.5256410256410257
+solution 522: ∃imageContains.((Horse) ⊔ (Shrub))
+	 accuracy_score: 0.5256410256410257
+solution 523: ∃imageContains.((Dam) ⊔ (Shrub))
+	 accuracy_score: 0.5256410256410257
+solution 524: ∃imageContains.((Horse) ⊔ (Dam))
+	 accuracy_score: 0.5256410256410257
+solution 525: ∃imageContains.((Truck) ⊔ (Bridge))
+	 accuracy_score: 0.5256410256410257
+solution 526: ∃imageContains.((Truck) ⊔ (Shrub))
+	 accuracy_score: 0.5256410256410257
+solution 527: ∃imageContains.((Water) ⊔ (Shrub))
+	 accuracy_score: 0.5256410256410257
+solution 528: ∃imageContains.((Waterfall) ⊔ (Truck))
+	 accuracy_score: 0.5256410256410257
+solution 529: ∃imageContains.((Waterfall) ⊔ (Shrub))
+	 accuracy_score: 0.5256410256410257
+solution 530: ∃imageContains.((Water) ⊔ (Dam))
+	 accuracy_score: 0.5256410256410257
+solution 531: ∃imageContains.((Horse) ⊔ (Fence))
+	 accuracy_score: 0.5256410256410257
+solution 532: ∃imageContains.((Truck) ⊔ (Fence))
+	 accuracy_score: 0.5256410256410257
+solution 533: ∃imageContains.((Waterfall) ⊔ (Dam))
+	 accuracy_score: 0.5256410256410257
+solution 534: ∃imageContains.((Dam) ⊔ (Truck))
+	 accuracy_score: 0.5256410256410257
+solution 535: ∃imageContains.((Water) ⊔ (Fence))
+	 accuracy_score: 0.5256410256410257
+solution 536: ∃imageContains.((Horse) ⊔ (Truck))
+	 accuracy_score: 0.5256410256410257
+solution 537: ∃imageContains.((Waterfall) ⊔ (Horse))
+	 accuracy_score: 0.5256410256410257
+solution 538: ∃imageContains.((UplandArea) ⊔ (Bridge))
+	 accuracy_score: 0.5256410256410257
+solution 539: ∃imageContains.((Water) ⊔ (Truck))
+	 accuracy_score: 0.5256410256410257
+solution 540: ∃imageContains.((Shrub) ⊔ (Fence))
+	 accuracy_score: 0.5256410256410257
+solution 541: ∃imageContains.((Dam) ⊔ (Fence))
+	 accuracy_score: 0.5256410256410257
+solution 542: ∃imageContains.((Waterfall) ⊔ (Fence))
+	 accuracy_score: 0.5256410256410257
+solution 543: ∃imageContains.((Bridge))
+	 accuracy_score: 0.5256410256410257
+solution 544: ∃imageContains.((Lake) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (UplandArea))
+	 accuracy_score: 0.5212201591511937
+solution 545: ∃imageContains.((Lake) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5212201591511937
+solution 546: ∃imageContains.((Lake) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5212201591511937
+solution 547: ∃imageContains.((CompoundSubstance) ⊔ (Waterfall) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 548: ∃imageContains.((CompoundSubstance) ⊔ (Waterfall) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 549: ∃imageContains.((Waterfall) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5128205128205128
+solution 550: ∃imageContains.((CompoundSubstance) ⊔ (Waterfall) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5128205128205128
+solution 551: ∃imageContains.((StationaryArtifact) ⊔ (Horse) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5128205128205128
+solution 552: ∃imageContains.((HoofedMammal) ⊔ (Water) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 553: ∃imageContains.((HoofedMammal) ⊔ (Water) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 554: ∃imageContains.((HoofedMammal) ⊔ (Water) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5128205128205128
+solution 555: ∃imageContains.((StationaryArtifact) ⊔ (Water) ⊔ (Horse))
+	 accuracy_score: 0.5128205128205128
+solution 556: ∃imageContains.((HoofedMammal) ⊔ (Waterfall) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5128205128205128
+solution 557: ∃imageContains.((Horse) ⊔ (SelfPoweredRoadVehicle) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 558: ∃imageContains.((Truck) ⊔ (FloweringPlant) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 559: ∃imageContains.((HoofedMammal) ⊔ (Waterfall) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 560: ∃imageContains.((Water) ⊔ (SelfPoweredRoadVehicle) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 561: ∃imageContains.((Horse) ⊔ (SelfPoweredRoadVehicle) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 562: ∃imageContains.((Water) ⊔ (FloweringPlant) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 563: ∃imageContains.((HoofedMammal) ⊔ (Water) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5128205128205128
+solution 564: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact) ⊔ (Water))
+	 accuracy_score: 0.5128205128205128
+solution 565: ∃imageContains.((StationaryArtifact) ⊔ (Water) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 566: ∃imageContains.((Waterfall) ⊔ (FloweringPlant) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 567: ∃imageContains.((HoofedMammal) ⊔ (Waterfall) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5128205128205128
+solution 568: ∃imageContains.((Horse) ⊔ (FloweringPlant) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 569: ∃imageContains.((Water) ⊔ (Horse) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 570: ∃imageContains.((StationaryArtifact) ⊔ (Horse) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 571: ∃imageContains.((Water) ⊔ (Horse) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5128205128205128
+solution 572: ∃imageContains.((StationaryArtifact) ⊔ (Horse) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 573: ∃imageContains.((StationaryArtifact) ⊔ (Truck) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 574: ∃imageContains.((Water) ⊔ (UplandArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 575: ∃imageContains.((Waterfall) ⊔ (UplandArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 576: ∃imageContains.((CompoundSubstance) ⊔ (Waterfall) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5128205128205128
+solution 577: ∃imageContains.((Horse) ⊔ (UplandArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 578: ∃imageContains.((StationaryArtifact) ⊔ (Water) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5128205128205128
+solution 579: ∃imageContains.((Waterfall) ⊔ (FloweringPlant) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 580: ∃imageContains.((Water) ⊔ (Horse) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5128205128205128
+solution 581: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact) ⊔ (Waterfall))
+	 accuracy_score: 0.5128205128205128
+solution 582: ∃imageContains.((StationaryArtifact) ⊔ (Waterfall) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5128205128205128
+solution 583: ∃imageContains.((Waterfall) ⊔ (SelfPoweredRoadVehicle) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 584: ∃imageContains.((Waterfall) ⊔ (SelfPoweredRoadVehicle) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 585: ∃imageContains.((CompoundSubstance) ⊔ (HoofedMammal) ⊔ (Waterfall))
+	 accuracy_score: 0.5128205128205128
+solution 586: ∃imageContains.((StationaryArtifact) ⊔ (Waterfall) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 587: ∃imageContains.((StationaryArtifact) ⊔ (Waterfall) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 588: ∃imageContains.((Water) ⊔ (SelfPoweredRoadVehicle) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 589: ∃imageContains.((StationaryArtifact) ⊔ (Waterfall) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5128205128205128
+solution 590: ∃imageContains.((HoofedMammal) ⊔ (Waterfall) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 591: ∃imageContains.((Water) ⊔ (FloweringPlant) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 592: ∃imageContains.((StationaryArtifact) ⊔ (Shrub) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 593: ∃imageContains.((Horse) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5128205128205128
+solution 594: ∃imageContains.((Water) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5128205128205128
+solution 595: ∃imageContains.((StationaryArtifact) ⊔ (Water) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 596: ∃imageContains.((StationaryArtifact) ⊔ (Water) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5128205128205128
+solution 597: ∃imageContains.((Water) ⊔ (Horse) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 598: ∃imageContains.((StationaryArtifact) ⊔ (Horse) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5128205128205128
+solution 599: ∃imageContains.((StationaryArtifact) ⊔ (Truck) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5128205128205128
+solution 600: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact) ⊔ (Waterfall))
+	 accuracy_score: 0.5128205128205128
+solution 601: ∃imageContains.((Horse) ⊔ (FloweringPlant) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 602: ∃imageContains.((Shrub) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 603: ∃imageContains.((StationaryArtifact) ⊔ (Truck))
+	 accuracy_score: 0.5128205128205128
+solution 604: ∃imageContains.((Waterfall) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 605: ∃imageContains.((Waterfall) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 606: ∃imageContains.((Waterfall) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5128205128205128
+solution 607: ∃imageContains.((HoofedMammal) ⊔ (Water))
+	 accuracy_score: 0.5128205128205128
+solution 608: ∃imageContains.((Water) ⊔ (Horse))
+	 accuracy_score: 0.5128205128205128
+solution 609: ∃imageContains.((Water) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 610: ∃imageContains.((Water) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5128205128205128
+solution 611: ∃imageContains.((Horse) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5128205128205128
+solution 612: ∃imageContains.((StationaryArtifact) ⊔ (Water))
+	 accuracy_score: 0.5128205128205128
+solution 613: ∃imageContains.((Horse) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 614: ∃imageContains.((Fence) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 615: ∃imageContains.((StationaryArtifact) ⊔ (Shrub))
+	 accuracy_score: 0.5128205128205128
+solution 616: ∃imageContains.((StationaryArtifact) ⊔ (Waterfall))
+	 accuracy_score: 0.5128205128205128
+solution 617: ∃imageContains.((StationaryArtifact) ⊔ (Horse))
+	 accuracy_score: 0.5128205128205128
+solution 618: ∃imageContains.((Dam) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 619: ∃imageContains.((Water) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5128205128205128
+solution 620: ∃imageContains.((HoofedMammal) ⊔ (Waterfall))
+	 accuracy_score: 0.5128205128205128
+solution 621: ∃imageContains.((Water) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5128205128205128
+solution 622: ∃imageContains.((Horse) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 623: ∃imageContains.((Truck) ⊔ (UplandArea))
+	 accuracy_score: 0.5128205128205128
+solution 624: ∃imageContains.((Waterfall) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5128205128205128
+solution 625: ∃imageContains.((Truck) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5128205128205128
+solution 626: ∃imageContains.((Horse) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5128205128205128
+solution 627: ∃imageContains.((CompoundSubstance) ⊔ (Waterfall))
+	 accuracy_score: 0.5128205128205128
+solution 628: ∃imageContains.((Horse))
+	 accuracy_score: 0.5128205128205128
+solution 629: ∃imageContains.((Dam))
+	 accuracy_score: 0.5128205128205128
+solution 630: ∃imageContains.((Shrub))
+	 accuracy_score: 0.5128205128205128
+solution 631: ∃imageContains.((Waterfall))
+	 accuracy_score: 0.5128205128205128
+solution 632: ∃imageContains.((Fence))
+	 accuracy_score: 0.5128205128205128
+solution 633: ∃imageContains.((Truck))
+	 accuracy_score: 0.5128205128205128
+solution 634: ∃imageContains.((Water))
+	 accuracy_score: 0.5128205128205128
+solution 635: ∃imageContains.((Waterfall) ⊔ (Water) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5083996463306808
+solution 636: ∃imageContains.((Waterfall) ⊔ (Horse) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.5083996463306808
+solution 637: ∃imageContains.((LandForm) ⊔ (SelfConnectedObject ¬ (DigitAppendageMixtureLimb)) ⊔ (Artifact))
+	 accuracy_score: 0.5
+solution 638: ∃imageContains.((WaterArea) ⊔ (SelfConnectedObject ¬ (DigitAppendageMixtureLimb)) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 639: ∃imageContains.((WaterArea) ⊔ (LandForm) ⊔ (SelfConnectedObject ¬ (DigitAppendageMixtureLimb)))
+	 accuracy_score: 0.5
+solution 640: ∃imageContains.((SelfConnectedObject ¬ (DigitAppendageMixtureLimb)) ⊔ (LandForm) ⊔ (WaterArea))
+	 accuracy_score: 0.5
+solution 641: ∃imageContains.((LandForm) ⊔ (SelfConnectedObject ¬ (DigitAppendageMixtureLimb)) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 642: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (LandForm) ⊔ (SelfConnectedObject ¬ (DigitAppendageMixtureLimb)))
+	 accuracy_score: 0.5
+solution 643: ∃imageContains.((StationaryArtifact) ⊔ (SelfPoweredRoadVehicle) ⊔ (SelfConnectedObject ¬ (DigitAppendageMixtureLimb)))
+	 accuracy_score: 0.5
+solution 644: ∃imageContains.((WaterArea) ⊔ (SelfConnectedObject ¬ (DigitAppendageMixtureLimb)) ⊔ (Artifact))
+	 accuracy_score: 0.5
+solution 645: ∃imageContains.((StationaryArtifact) ⊔ (LandForm) ⊔ (SelfConnectedObject ¬ (DigitAppendageMixtureLimb)))
+	 accuracy_score: 0.5
+solution 646: ∃imageContains.((StationaryArtifact) ⊔ (SelfConnectedObject ¬ (DigitAppendageMixtureLimb)) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 647: ∃imageContains.((StationaryArtifact) ⊔ (WaterArea) ⊔ (SelfConnectedObject ¬ (DigitAppendageMixtureLimb)))
+	 accuracy_score: 0.5
+solution 648: ∃imageContains.((WaterArea) ⊔ (SelfPoweredRoadVehicle) ⊔ (SelfConnectedObject ¬ (DigitAppendageMixtureLimb)))
+	 accuracy_score: 0.5
+solution 649: ∃imageContains.((LandForm) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 650: ∃imageContains.((StationaryArtifact) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 651: ∃imageContains.((WaterArea) ⊔ (SelfPoweredRoadVehicle) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)))
+	 accuracy_score: 0.5
+solution 652: ∃imageContains.((WaterArea) ⊔ (SelfConnectedObject ¬ (DigitAppendageMixtureLimb)))
+	 accuracy_score: 0.5
+solution 653: ∃imageContains.((StationaryArtifact) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 654: ∃imageContains.((LandForm) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)) ⊔ (Artifact))
+	 accuracy_score: 0.5
+solution 655: ∃imageContains.((StationaryArtifact) ⊔ (SelfConnectedObject ¬ (DigitAppendageMixtureLimb)))
+	 accuracy_score: 0.5
+solution 656: ∃imageContains.((SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)) ⊔ (LandForm) ⊔ (WaterArea))
+	 accuracy_score: 0.5
+solution 657: ∃imageContains.((WaterArea) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 658: ∃imageContains.((StationaryArtifact) ⊔ (LandForm) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)))
+	 accuracy_score: 0.5
+solution 659: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (SelfConnectedObject ¬ (DigitAppendageMixtureLimb)))
+	 accuracy_score: 0.5
+solution 660: ∃imageContains.((StationaryArtifact) ⊔ (LandForm) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)))
+	 accuracy_score: 0.5
+solution 661: ∃imageContains.((WaterArea) ⊔ (SelfPoweredRoadVehicle) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)))
+	 accuracy_score: 0.5
+solution 662: ∃imageContains.((WaterArea) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)) ⊔ (Artifact))
+	 accuracy_score: 0.5
+solution 663: ∃imageContains.((LandForm) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)) ⊔ (Artifact))
+	 accuracy_score: 0.5
+solution 664: ∃imageContains.((StationaryArtifact) ⊔ (WaterArea) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)))
+	 accuracy_score: 0.5
+solution 665: ∃imageContains.((SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)) ⊔ (LandForm) ⊔ (WaterArea))
+	 accuracy_score: 0.5
+solution 666: ∃imageContains.((StationaryArtifact) ⊔ (SelfPoweredRoadVehicle) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)))
+	 accuracy_score: 0.5
+solution 667: ∃imageContains.((SelfConnectedObject ¬ (DigitAppendageMixtureLimb)) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 668: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (LandForm) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)))
+	 accuracy_score: 0.5
+solution 669: ∃imageContains.((StationaryArtifact) ⊔ (WaterArea) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)))
+	 accuracy_score: 0.5
+solution 670: ∃imageContains.((WaterArea) ⊔ (LandForm) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)))
+	 accuracy_score: 0.5
+solution 671: ∃imageContains.((WaterArea) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)) ⊔ (Artifact))
+	 accuracy_score: 0.5
+solution 672: ∃imageContains.((WaterArea) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 673: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (LandForm) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)))
+	 accuracy_score: 0.5
+solution 674: ∃imageContains.((LandForm) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 675: ∃imageContains.((LandForm) ⊔ (SelfConnectedObject ¬ (DigitAppendageMixtureLimb)))
+	 accuracy_score: 0.5
+solution 676: ∃imageContains.((WaterArea) ⊔ (LandForm) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)))
+	 accuracy_score: 0.5
+solution 677: ∃imageContains.((StationaryArtifact) ⊔ (SelfPoweredRoadVehicle) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)))
+	 accuracy_score: 0.5
+solution 678: ∃imageContains.((SelfConnectedObject ¬ (DigitAppendageMixtureLimb)) ⊔ (Artifact))
+	 accuracy_score: 0.5
+solution 679: ∃imageContains.((StreamWaterArea) ⊔ (FloweringPlant) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 680: ∃imageContains.((FloweringPlant) ⊔ (Substance ¬ Mixture) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 681: ∃imageContains.((StreamWaterArea) ⊔ (SelfPoweredRoadVehicle) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 682: ∃imageContains.((StationaryArtifact) ⊔ (Substance ¬ Mixture) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 683: ∃imageContains.((StationaryArtifact) ⊔ (Substance ¬ Mixture) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 684: ∃imageContains.((StationaryArtifact) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)))
+	 accuracy_score: 0.5
+solution 685: ∃imageContains.((SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 686: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (Substance ¬ Mixture) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 687: ∃imageContains.((WaterArea) ⊔ (StationaryArtifact) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 688: ∃imageContains.((StationaryArtifact) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)))
+	 accuracy_score: 0.5
+solution 689: ∃imageContains.((StationaryArtifact) ⊔ (Substance ¬ Mixture) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 690: ∃imageContains.((SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)) ⊔ (Artifact))
+	 accuracy_score: 0.5
+solution 691: ∃imageContains.((HoofedMammal) ⊔ (StreamWaterArea) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 692: ∃imageContains.((StationaryArtifact) ⊔ (StreamWaterArea) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 693: ∃imageContains.((HoofedMammal) ⊔ (SelfPoweredRoadVehicle) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 694: ∃imageContains.((HoofedMammal) ⊔ (Substance ¬ Mixture) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 695: ∃imageContains.((Object ¬ (GeographicAreaAnimalAnatomicalStructureSubstance)))
+	 accuracy_score: 0.5
+solution 696: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 697: ∃imageContains.((HoofedMammal) ⊔ (Substance ¬ Mixture) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 698: ∃imageContains.((WaterArea) ⊔ (SelfPoweredRoadVehicle) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 699: ∃imageContains.((FloweringPlant) ⊔ (SelfPoweredRoadVehicle) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 700: ∃imageContains.((LandForm) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)))
+	 accuracy_score: 0.5
+solution 701: ∃imageContains.((StreamWaterArea) ⊔ (Substance ¬ Mixture) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 702: ∃imageContains.((Substance ¬ Mixture) ⊔ (UplandArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 703: ∃imageContains.((LandForm) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)))
+	 accuracy_score: 0.5
+solution 704: ∃imageContains.((StationaryArtifact) ⊔ (HoofedMammal) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 705: ∃imageContains.((FloweringPlant) ⊔ (Substance ¬ Mixture) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 706: ∃imageContains.((SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)) ⊔ (Artifact))
+	 accuracy_score: 0.5
+solution 707: ∃imageContains.((StationaryArtifact) ⊔ (FloweringPlant) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 708: ∃imageContains.((WaterArea) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)))
+	 accuracy_score: 0.5
+solution 709: ∃imageContains.((WaterArea) ⊔ (FloweringPlant) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 710: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)))
+	 accuracy_score: 0.5
+solution 711: ∃imageContains.((HoofedMammal) ⊔ (WaterArea) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 712: ∃imageContains.((StationaryArtifact) ⊔ (SelfPoweredRoadVehicle) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 713: ∃imageContains.((WaterArea) ⊔ (Substance ¬ Mixture) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 714: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)))
+	 accuracy_score: 0.5
+solution 715: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (Substance ¬ Mixture) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 716: ∃imageContains.((WaterArea) ⊔ (Substance ¬ Mixture) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 717: ∃imageContains.((WaterArea) ⊔ (SelfConnectedObject ¬ (AnimalAnatomicalStructureMixture)))
+	 accuracy_score: 0.5
+solution 718: ∃imageContains.((SelfConnectedObject ¬ (AnimalAnatomicalStructureSubstance)) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 719: ∃imageContains.((HoofedMammal) ⊔ (Substance ¬ Mixture) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 720: ∃imageContains.((HoofedMammal) ⊔ (FloweringPlant) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 721: ∃imageContains.((FloweringPlant) ⊔ (Substance ¬ Mixture) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 722: ∃imageContains.((StreamWaterArea) ⊔ (Substance ¬ Mixture) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 723: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (Substance ¬ Mixture) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 724: ∃imageContains.((StationaryArtifact) ⊔ (WaterArea) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 725: ∃imageContains.((CompoundSubstance) ⊔ (FloweringPlant) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 726: ∃imageContains.((WaterArea) ⊔ (StationaryArtifact) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 727: ∃imageContains.((StationaryArtifact) ⊔ (SelfPoweredRoadVehicle) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 728: ∃imageContains.((StreamWaterArea) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 729: ∃imageContains.((Substance ¬ Mixture) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 730: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (StationaryArtifact) ⊔ (WaterArea))
+	 accuracy_score: 0.5
+solution 731: ∃imageContains.((Substance ¬ Mixture) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 732: ∃imageContains.((CompoundSubstance) ⊔ (SelfPoweredRoadVehicle) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 733: ∃imageContains.((WaterArea) ⊔ (SelfPoweredRoadVehicle) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 734: ∃imageContains.((CompoundSubstance) ⊔ (HoofedMammal) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5
+solution 735: ∃imageContains.((FloweringPlant) ⊔ (UplandArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 736: ∃imageContains.((StreamWaterArea) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 737: ∃imageContains.((StationaryArtifact) ⊔ (WaterArea) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 738: ∃imageContains.((HoofedMammal) ⊔ (WaterArea) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 739: ∃imageContains.((StationaryArtifact) ⊔ (SelfPoweredRoadVehicle) ⊔ (SelfConnectedObject))
+	 accuracy_score: 0.5
+solution 740: ∃imageContains.((StationaryArtifact) ⊔ (HoofedMammal) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 741: ∃imageContains.((LandForm) ⊔ (StationaryArtifact) ⊔ (WaterArea))
+	 accuracy_score: 0.5
+solution 742: ∃imageContains.((FloweringPlant) ⊔ (SelfPoweredRoadVehicle) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 743: ∃imageContains.((StationaryArtifact) ⊔ (HoofedMammal) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 744: ∃imageContains.((CompoundSubstance) ⊔ (SelfPoweredRoadVehicle) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 745: ∃imageContains.((CompoundSubstance) ⊔ (UplandArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 746: ∃imageContains.((StationaryArtifact) ⊔ (LandForm) ⊔ (SelfConnectedObject))
+	 accuracy_score: 0.5
+solution 747: ∃imageContains.((WaterArea) ⊔ (FloweringPlant) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 748: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 749: ∃imageContains.((HoofedMammal) ⊔ (WaterArea) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5
+solution 750: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 751: ∃imageContains.((HoofedMammal) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 752: ∃imageContains.((CompoundSubstance) ⊔ (StreamWaterArea) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 753: ∃imageContains.((StationaryArtifact) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 754: ∃imageContains.((HoofedMammal) ⊔ (StreamWaterArea) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 755: ∃imageContains.((StationaryArtifact) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 756: ∃imageContains.((StationaryArtifact) ⊔ (FloweringPlant) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 757: ∃imageContains.((StationaryArtifact) ⊔ (HoofedMammal) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5
+solution 758: ∃imageContains.((Object ¬ (GeographicAreaSelfConnectedObject)))
+	 accuracy_score: 0.5
+solution 759: ∃imageContains.((WaterArea) ⊔ (LandForm) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 760: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (UplandArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 761: ∃imageContains.((StationaryArtifact) ⊔ (StreamWaterArea) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 762: ∃imageContains.((CompoundSubstance) ⊔ (HoofedMammal) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.5
+solution 763: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 764: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.5
+solution 765: ∃imageContains.((CompoundSubstance) ⊔ (HoofedMammal) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 766: ∃imageContains.((HoofedMammal) ⊔ (FloweringPlant) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 767: ∃imageContains.((LandForm) ⊔ (SelfConnectedObject) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 768: ∃imageContains.((WaterArea) ⊔ (StationaryArtifact) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 769: ∃imageContains.((StationaryArtifact) ⊔ (StreamWaterArea) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5
+solution 770: ∃imageContains.((StationaryArtifact) ⊔ (FloweringPlant) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 771: ∃imageContains.((StationaryArtifact) ⊔ (WaterArea) ⊔ (SelfConnectedObject))
+	 accuracy_score: 0.5
+solution 772: ∃imageContains.((HoofedMammal) ⊔ (SelfPoweredRoadVehicle) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 773: ∃imageContains.((StationaryArtifact) ⊔ (SelfConnectedObject) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 774: ∃imageContains.((FloweringPlant) ⊔ (SelfPoweredRoadVehicle) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 775: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 776: ∃imageContains.((StreamWaterArea) ⊔ (SelfPoweredRoadVehicle) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 777: ∃imageContains.((WaterArea) ⊔ (SelfPoweredRoadVehicle) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 778: ∃imageContains.((CompoundSubstance) ⊔ (StreamWaterArea) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 779: ∃imageContains.((StationaryArtifact) ⊔ (HoofedMammal) ⊔ (WaterArea))
+	 accuracy_score: 0.5
+solution 780: ∃imageContains.((HoofedMammal) ⊔ (WaterArea) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 781: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5
+solution 782: ∃imageContains.((WaterArea) ⊔ (StationaryArtifact) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 783: ∃imageContains.((StreamWaterArea) ⊔ (FloweringPlant) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 784: ∃imageContains.((StreamWaterArea) ⊔ (FloweringPlant) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 785: ∃imageContains.((CompoundSubstance) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 786: ∃imageContains.((HoofedMammal) ⊔ (SelfPoweredRoadVehicle) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 787: ∃imageContains.((Substance ¬ Mixture) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 788: ∃imageContains.((StreamWaterArea) ⊔ (UplandArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 789: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 790: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 791: ∃imageContains.((LandForm) ⊔ (WaterArea) ⊔ (Artifact))
+	 accuracy_score: 0.5
+solution 792: ∃imageContains.((StationaryArtifact) ⊔ (HoofedMammal) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 793: ∃imageContains.((CompoundSubstance) ⊔ (StreamWaterArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 794: ∃imageContains.((StationaryArtifact) ⊔ (SelfPoweredRoadVehicle) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 795: ∃imageContains.((HoofedMammal) ⊔ (FloweringPlant) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 796: ∃imageContains.((StationaryArtifact) ⊔ (SelfPoweredRoadVehicle) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 797: ∃imageContains.((HoofedMammal) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 798: ∃imageContains.((WaterArea) ⊔ (LandForm) ⊔ (SelfConnectedObject))
+	 accuracy_score: 0.5
+solution 799: ∃imageContains.((HoofedMammal) ⊔ (UplandArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 800: ∃imageContains.((HoofedMammal) ⊔ (StreamWaterArea) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5
+solution 801: ∃imageContains.((WaterArea) ⊔ (SelfPoweredRoadVehicle) ⊔ (SelfConnectedObject))
+	 accuracy_score: 0.5
+solution 802: ∃imageContains.((HoofedMammal) ⊔ (StreamWaterArea) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 803: ∃imageContains.((WaterArea) ⊔ (StationaryArtifact) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5
+solution 804: ∃imageContains.((FloweringPlant) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 805: ∃imageContains.((HoofedMammal) ⊔ (StreamWaterArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 806: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (LandForm) ⊔ (SelfConnectedObject))
+	 accuracy_score: 0.5
+solution 807: ∃imageContains.((HoofedMammal) ⊔ (FloweringPlant) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 808: ∃imageContains.((WaterArea) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 809: ∃imageContains.((StationaryArtifact) ⊔ (StreamWaterArea) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 810: ∃imageContains.((FloweringPlant) ⊔ (SelfPoweredRoadVehicle) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 811: ∃imageContains.((StationaryArtifact) ⊔ (FloweringPlant) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 812: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5
+solution 813: ∃imageContains.((Object ¬ (RegionSelfConnectedObject)))
+	 accuracy_score: 0.5
+solution 814: ∃imageContains.((CompoundSubstance) ⊔ (HoofedMammal) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 815: ∃imageContains.((HoofedMammal) ⊔ (WaterArea) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 816: ∃imageContains.((WaterArea) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 817: ∃imageContains.((StationaryArtifact) ⊔ (LandForm) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 818: ∃imageContains.((StreamWaterArea) ⊔ (StationaryArtifact) ⊔ (HoofedMammal))
+	 accuracy_score: 0.5
+solution 819: ∃imageContains.((StreamWaterArea) ⊔ (SelfPoweredRoadVehicle) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 820: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (Substance ¬ Mixture))
+	 accuracy_score: 0.5
+solution 821: ∃imageContains.((HoofedMammal) ⊔ (SelfPoweredRoadVehicle) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 822: ∃imageContains.((CompoundSubstance) ⊔ (StreamWaterArea) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5
+solution 823: ∃imageContains.((WaterArea) ⊔ (SelfConnectedObject) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 824: ∃imageContains.((StationaryArtifact) ⊔ (StreamWaterArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 825: ∃imageContains.((CompoundSubstance) ⊔ (HoofedMammal) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 826: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 827: ∃imageContains.((Physical ¬ (RegionSelfConnectedObject)))
+	 accuracy_score: 0.5
+solution 828: ∃imageContains.((CompoundSubstance) ⊔ (HoofedMammal) ⊔ (StationaryArtifact))
+	 accuracy_score: 0.5
+solution 829: ∃imageContains.((WaterArea) ⊔ (FloweringPlant) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 830: ∃imageContains.((CompoundSubstance) ⊔ (FloweringPlant) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 831: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.5
+solution 832: ∃imageContains.((StationaryArtifact) ⊔ (UplandArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 833: ∃imageContains.((UplandArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 834: ∃imageContains.((HoofedMammal) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 835: ∃imageContains.((WaterArea) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 836: ∃imageContains.((SelfConnectedObject) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 837: ∃imageContains.((CompoundSubstance) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.5
+solution 838: ∃imageContains.((Entity ¬ Object))
+	 accuracy_score: 0.5
+solution 839: ∃imageContains.((Entity ¬ Physical))
+	 accuracy_score: 0.5
+solution 840: ∃imageContains.((FloweringPlant) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 841: ∃imageContains.((FloweringPlant) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 842: ∃imageContains.((StationaryArtifact) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 843: ∃imageContains.((LandForm) ⊔ (SelfConnectedObject))
+	 accuracy_score: 0.5
+solution 844: ∃imageContains.((StationaryArtifact) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5
+solution 845: ∃imageContains.((HoofedMammal) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5
+solution 846: ∃imageContains.((StationaryArtifact) ⊔ (HoofedMammal))
+	 accuracy_score: 0.5
+solution 847: ∃imageContains.((StationaryArtifact) ⊔ (WaterArea))
+	 accuracy_score: 0.5
+solution 848: ∃imageContains.((HoofedMammal) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 849: ∃imageContains.((HoofedMammal) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.5
+solution 850: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact))
+	 accuracy_score: 0.5
+solution 851: ∃imageContains.((CompoundSubstance) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5
+solution 852: ∃imageContains.((StreamWaterArea) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5
+solution 853: ∃imageContains.((CompoundSubstance) ⊔ (HoofedMammal))
+	 accuracy_score: 0.5
+solution 854: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 855: ∃imageContains.((CompoundSubstance) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 856: ∃imageContains.((StationaryArtifact) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.5
+solution 857: ∃imageContains.((WaterArea) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 858: ∃imageContains.((WaterArea) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 859: ∃imageContains.((WaterArea) ⊔ (SelfConnectedObject))
+	 accuracy_score: 0.5
+solution 860: ∃imageContains.((LandForm) ⊔ (Artifact))
+	 accuracy_score: 0.5
+solution 861: ∃imageContains.((StreamWaterArea) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 862: ∃imageContains.((FloweringPlant) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 863: ∃imageContains.((FloweringPlant) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 864: ∃imageContains.((StationaryArtifact) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 865: ∃imageContains.((HoofedMammal) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 866: ∃imageContains.((HoofedMammal) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 867: ∃imageContains.((CompoundSubstance) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 868: ∃imageContains.((HoofedMammal) ⊔ (WaterArea))
+	 accuracy_score: 0.5
+solution 869: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact))
+	 accuracy_score: 0.5
+solution 870: ∃imageContains.((LandForm) ⊔ (WaterArea))
+	 accuracy_score: 0.5
+solution 871: ∃imageContains.((WaterArea) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 872: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (SelfConnectedObject))
+	 accuracy_score: 0.5
+solution 873: ∃imageContains.((WaterArea) ⊔ (Artifact))
+	 accuracy_score: 0.5
+solution 874: ∃imageContains.((WaterArea) ⊔ (FloweringPlant))
+	 accuracy_score: 0.5
+solution 875: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 876: ∃imageContains.((CompoundSubstance) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 877: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (UplandArea))
+	 accuracy_score: 0.5
+solution 878: ∃imageContains.((StationaryArtifact) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 879: ∃imageContains.((StreamWaterArea) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 880: ∃imageContains.((LandForm) ⊔ (RoadVehicle))
+	 accuracy_score: 0.5
+solution 881: ∃imageContains.((StationaryArtifact) ⊔ (LandForm))
+	 accuracy_score: 0.5
+solution 882: ∃imageContains.((StreamWaterArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 883: ∃imageContains.((StationaryArtifact) ⊔ (SelfPoweredRoadVehicle))
+	 accuracy_score: 0.5
+solution 884: ∃imageContains.((StationaryArtifact) ⊔ (SelfConnectedObject))
+	 accuracy_score: 0.5
+solution 885: ∃imageContains.((Physical ¬ Object))
+	 accuracy_score: 0.5
+solution 886: ∃imageContains.((Horse) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.495579133510168
+solution 887: ∃imageContains.((Water) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.495579133510168
+solution 888: ∃imageContains.((Water) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (UplandArea))
+	 accuracy_score: 0.495579133510168
+solution 889: ∃imageContains.((HoofedMammal) ⊔ (Waterfall) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.495579133510168
+solution 890: ∃imageContains.((HoofedMammal) ⊔ (Water) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.495579133510168
+solution 891: ∃imageContains.((Horse) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.495579133510168
+solution 892: ∃imageContains.((Water) ⊔ (Horse) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.495579133510168
+solution 893: ∃imageContains.((Waterfall) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (UplandArea))
+	 accuracy_score: 0.495579133510168
+solution 894: ∃imageContains.((CompoundSubstance) ⊔ (Waterfall) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.495579133510168
+solution 895: ∃imageContains.((Waterfall) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.495579133510168
+solution 896: ∃imageContains.((Waterfall) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.495579133510168
+solution 897: ∃imageContains.((Horse) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (UplandArea))
+	 accuracy_score: 0.495579133510168
+solution 898: ∃imageContains.((Water) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.495579133510168
+solution 899: ∃imageContains.((Water) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.495579133510168
+solution 900: ∃imageContains.((Horse) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.495579133510168
+solution 901: ∃imageContains.((Waterfall) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.495579133510168
+solution 902: ∃imageContains.((HoofedMammal) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (UplandArea))
+	 accuracy_score: 0.4827586206896552
+solution 903: ∃imageContains.((HoofedMammal) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.4827586206896552
+solution 904: ∃imageContains.((StreamWaterArea) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (UplandArea))
+	 accuracy_score: 0.4827586206896552
+solution 905: ∃imageContains.((StreamWaterArea) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.4827586206896552
+solution 906: ∃imageContains.((HoofedMammal) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.4827586206896552
+solution 907: ∃imageContains.((CompoundSubstance) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.4827586206896552
+solution 908: ∃imageContains.((StreamWaterArea) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.4827586206896552
+solution 909: ∃imageContains.((SelfPoweredRoadVehicle ¬ Bus) ⊔ (UplandArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.4827586206896552
+solution 910: ∃imageContains.((HoofedMammal) ⊔ (StreamWaterArea) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.4827586206896552
+solution 911: ∃imageContains.((FloweringPlant) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (UplandArea))
+	 accuracy_score: 0.4827586206896552
+solution 912: ∃imageContains.((FloweringPlant) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.4827586206896552
+solution 913: ∃imageContains.((CompoundSubstance) ⊔ (StreamWaterArea) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.4827586206896552
+solution 914: ∃imageContains.((CompoundSubstance) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (UplandArea))
+	 accuracy_score: 0.4827586206896552
+solution 915: ∃imageContains.((CompoundSubstance) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.4827586206896552
+solution 916: ∃imageContains.((CompoundSubstance) ⊔ (HoofedMammal) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.4827586206896552
+solution 917: ∃imageContains.((HoofedMammal) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.4827586206896552
+solution 918: ∃imageContains.((FloweringPlant) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.4827586206896552
+solution 919: ∃imageContains.((SelfPoweredRoadVehicle ¬ Bus) ⊔ (UplandArea))
+	 accuracy_score: 0.4827586206896552
+solution 920: ∃imageContains.((CompoundSubstance) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.4827586206896552
+solution 921: ∃imageContains.((StreamWaterArea) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.4827586206896552
+solution 922: ∃imageContains.((SelfPoweredRoadVehicle ¬ Bus) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.4827586206896552
+solution 923: ∃imageContains.(( ¬ Magazine))
+	 accuracy_score: 0.4827586206896552
+solution 924: ∃imageContains.(( ¬ Candle))
+	 accuracy_score: 0.4827586206896552
+solution 925: ∃imageContains.(( ¬ Bus))
+	 accuracy_score: 0.4827586206896552
+solution 926: ∃imageContains.(( ¬ Finger))
+	 accuracy_score: 0.4827586206896552
+solution 927: ∃imageContains.(( ¬ Apron))
+	 accuracy_score: 0.4827586206896552
+solution 928: ∃imageContains.(( ¬ Toilet))
+	 accuracy_score: 0.4827586206896552
+solution 929: ∃imageContains.(( ¬ Wheel))
+	 accuracy_score: 0.4827586206896552
+solution 930: ∃imageContains.(( ¬ Seat))
+	 accuracy_score: 0.4827586206896552
+solution 931: ∃imageContains.(( ¬ Desk))
+	 accuracy_score: 0.4827586206896552
+solution 932: ∃imageContains.(( ¬ Shelf))
+	 accuracy_score: 0.4827586206896552
+solution 933: ∃imageContains.(( ¬ Island))
+	 accuracy_score: 0.4827586206896552
+solution 934: ∃imageContains.(( ¬ Leg))
+	 accuracy_score: 0.4827586206896552
+solution 935: ∃imageContains.((StationaryArtifact) ⊔ (FloweringPlant) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.46551724137931033
+solution 936: ∃imageContains.((HoofedMammal) ⊔ (StreamWaterArea) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.46551724137931033
+solution 937: ∃imageContains.((StationaryArtifact) ⊔ (SelfPoweredRoadVehicle) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.46551724137931033
+solution 938: ∃imageContains.((StreamWaterArea) ⊔ (Substance ¬ Glass) ⊔ (UplandArea))
+	 accuracy_score: 0.46551724137931033
+solution 939: ∃imageContains.((StationaryArtifact) ⊔ (HoofedMammal) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.46551724137931033
+solution 940: ∃imageContains.((StreamWaterArea) ⊔ (Substance ¬ Glass) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.46551724137931033
+solution 941: ∃imageContains.((HoofedMammal) ⊔ (Substance ¬ Glass) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.46551724137931033
+solution 942: ∃imageContains.((HoofedMammal) ⊔ (Substance ¬ Glass) ⊔ (UplandArea))
+	 accuracy_score: 0.46551724137931033
+solution 943: ∃imageContains.((StreamWaterArea) ⊔ (FloweringPlant) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.46551724137931033
+solution 944: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (Substance ¬ Glass) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.46551724137931033
+solution 945: ∃imageContains.((StationaryArtifact) ⊔ (Substance ¬ Glass) ⊔ (UplandArea))
+	 accuracy_score: 0.46551724137931033
+solution 946: ∃imageContains.((FloweringPlant) ⊔ (SelfPoweredRoadVehicle) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.46551724137931033
+solution 947: ∃imageContains.((StationaryArtifact) ⊔ (StreamWaterArea) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.46551724137931033
+solution 948: ∃imageContains.((FloweringPlant) ⊔ (Substance ¬ Glass) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.46551724137931033
+solution 949: ∃imageContains.((HoofedMammal) ⊔ (SelfPoweredRoadVehicle) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.46551724137931033
+solution 950: ∃imageContains.((FloweringPlant) ⊔ (Substance ¬ Glass) ⊔ (UplandArea))
+	 accuracy_score: 0.46551724137931033
+solution 951: ∃imageContains.((HoofedMammal) ⊔ (FloweringPlant) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.46551724137931033
+solution 952: ∃imageContains.((Substance ¬ Glass) ⊔ (UplandArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.46551724137931033
+solution 953: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (Substance ¬ Glass) ⊔ (UplandArea))
+	 accuracy_score: 0.46551724137931033
+solution 954: ∃imageContains.((StreamWaterArea) ⊔ (SelfPoweredRoadVehicle) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.46551724137931033
+solution 955: ∃imageContains.((StationaryArtifact) ⊔ (Substance ¬ Glass) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.46551724137931033
+solution 956: ∃imageContains.((SelfPoweredRoadVehicle) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.46551724137931033
+solution 957: ∃imageContains.((FloweringPlant) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.46551724137931033
+solution 958: ∃imageContains.((StreamWaterArea) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.46551724137931033
+solution 959: ∃imageContains.((Substance ¬ Glass) ⊔ (UplandArea))
+	 accuracy_score: 0.46551724137931033
+solution 960: ∃imageContains.((StationaryArtifact) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.46551724137931033
+solution 961: ∃imageContains.((HoofedMammal) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.46551724137931033
+solution 962: ∃imageContains.((Substance ¬ Glass) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.46551724137931033
+solution 963: ∃imageContains.(( ¬ Steps))
+	 accuracy_score: 0.46551724137931033
+solution 964: ∃imageContains.(( ¬ Glass))
+	 accuracy_score: 0.46551724137931033
+solution 965: ∃imageContains.(( ¬ Chimney))
+	 accuracy_score: 0.46551724137931033
+solution 966: ∃imageContains.(( ¬ Rug))
+	 accuracy_score: 0.46551724137931033
+solution 967: ∃imageContains.((FloweringPlant) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.4482758620689655
+solution 968: ∃imageContains.((HoofedMammal) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.4482758620689655
+solution 969: ∃imageContains.((SelfPoweredRoadVehicle ¬ Bus) ⊔ (Substance ¬ Glass) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.4482758620689655
+solution 970: ∃imageContains.((StreamWaterArea) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.4482758620689655
+solution 971: ∃imageContains.((SelfPoweredRoadVehicle ¬ Bus) ⊔ (Substance ¬ Glass) ⊔ (UplandArea))
+	 accuracy_score: 0.4482758620689655
+solution 972: ∃imageContains.((SelfPoweredRoadVehicle ¬ Bus) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.4482758620689655
+solution 973: ∃imageContains.(( ¬ Knife))
+	 accuracy_score: 0.4482758620689655
+solution 974: ∃imageContains.(( ¬ Mirror))
+	 accuracy_score: 0.4482758620689655
+solution 975: ∃imageContains.(( ¬ Airplane))
+	 accuracy_score: 0.41379310344827586
+solution 976: ∃imageContains.(( ¬ Table))
+	 accuracy_score: 0.41379310344827586
+solution 977: ∃imageContains.(( ¬ Door))
+	 accuracy_score: 0.41379310344827586
+solution 978: ∃imageContains.(( ¬ Runway))
+	 accuracy_score: 0.41379310344827586
+solution 979: ∃imageContains.(( ¬ Chair))
+	 accuracy_score: 0.41379310344827586
+solution 980: ∃imageContains.(( ¬ Roof))
+	 accuracy_score: 0.39655172413793105
+solution 981: ∃imageContains.(( ¬ Window))
+	 accuracy_score: 0.3620689655172414
+solution 982: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Stone) ⊔ (Rock))
+	 accuracy_score: 0.35234305923961096
+solution 983: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)))
+	 accuracy_score: 0.35234305923961096
+solution 984: ∃imageContains.(( ¬ Ceiling))
+	 accuracy_score: 0.3448275862068966
+solution 985: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Lake))
+	 accuracy_score: 0.3395225464190982
+solution 986: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Truck))
+	 accuracy_score: 0.3138815207780725
+solution 987: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Water))
+	 accuracy_score: 0.3138815207780725
+solution 988: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Horse))
+	 accuracy_score: 0.3138815207780725
+solution 989: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Lake))
+	 accuracy_score: 0.3138815207780725
+solution 990: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Shrub))
+	 accuracy_score: 0.3138815207780725
+solution 991: ∃imageContains.(( ¬ Floor))
+	 accuracy_score: 0.3103448275862069
+solution 992: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (UplandArea))
+	 accuracy_score: 0.3010610079575597
+solution 993: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (FloweringPlant))
+	 accuracy_score: 0.3010610079575597
+solution 994: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.3010610079575597
+solution 995: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Waterfall))
+	 accuracy_score: 0.3010610079575597
+solution 996: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.3010610079575597
+solution 997: ∃imageContains.((Rock) ⊔ (CompoundSubstance) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)))
+	 accuracy_score: 0.3010610079575597
+solution 998: ∃imageContains.((CompoundSubstance) ⊔ (Rock) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)))
+	 accuracy_score: 0.3010610079575597
+solution 999: ∃imageContains.((Rock) ⊔ (HoofedMammal) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)))
+	 accuracy_score: 0.3010610079575597
+solution 1000: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)))
+	 accuracy_score: 0.3010610079575597
+solution 1001: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Waterfall))
+	 accuracy_score: 0.28824049513704686
+solution 1002: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Shrub))
+	 accuracy_score: 0.28824049513704686
+solution 1003: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Water))
+	 accuracy_score: 0.28824049513704686
+solution 1004: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Truck))
+	 accuracy_score: 0.28824049513704686
+solution 1005: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Horse))
+	 accuracy_score: 0.28824049513704686
+solution 1006: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.2838196286472149
+solution 1007: ∃imageContains.(( ¬ Wall))
+	 accuracy_score: 0.27586206896551724
+solution 1008: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Lake) ⊔ (Shrub))
+	 accuracy_score: 0.27541998231653403
+solution 1009: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.27541998231653403
+solution 1010: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.27541998231653403
+solution 1011: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Waterfall) ⊔ (Lake))
+	 accuracy_score: 0.27541998231653403
+solution 1012: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (UplandArea))
+	 accuracy_score: 0.27541998231653403
+solution 1013: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Lake) ⊔ (Truck))
+	 accuracy_score: 0.27541998231653403
+solution 1014: ∃imageContains.((Stone) ⊔ (HoofedMammal) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)))
+	 accuracy_score: 0.27541998231653403
+solution 1015: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (FloweringPlant))
+	 accuracy_score: 0.27541998231653403
+solution 1016: ∃imageContains.((Stone) ⊔ (CompoundSubstance) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)))
+	 accuracy_score: 0.27541998231653403
+solution 1017: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.27541998231653403
+solution 1018: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Horse) ⊔ (Lake))
+	 accuracy_score: 0.27541998231653403
+solution 1019: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)))
+	 accuracy_score: 0.27541998231653403
+solution 1020: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Lake) ⊔ (FloweringPlant))
+	 accuracy_score: 0.2625994694960212
+solution 1021: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Lake) ⊔ (UplandArea))
+	 accuracy_score: 0.2625994694960212
+solution 1022: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Lake))
+	 accuracy_score: 0.2625994694960212
+solution 1023: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.2581786030061892
+solution 1024: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Waterfall) ⊔ (Horse))
+	 accuracy_score: 0.2497789566755084
+solution 1025: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Horse) ⊔ (Truck))
+	 accuracy_score: 0.2497789566755084
+solution 1026: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Water) ⊔ (Truck))
+	 accuracy_score: 0.2497789566755084
+solution 1027: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Waterfall) ⊔ (Shrub))
+	 accuracy_score: 0.2497789566755084
+solution 1028: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Waterfall) ⊔ (Truck))
+	 accuracy_score: 0.2497789566755084
+solution 1029: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Truck) ⊔ (Shrub))
+	 accuracy_score: 0.2497789566755084
+solution 1030: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Horse) ⊔ (Shrub))
+	 accuracy_score: 0.2497789566755084
+solution 1031: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Waterfall) ⊔ (Water))
+	 accuracy_score: 0.2497789566755084
+solution 1032: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Water) ⊔ (Shrub))
+	 accuracy_score: 0.2497789566755084
+solution 1033: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Lake) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.24535809018567642
+solution 1034: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Water) ⊔ (FloweringPlant))
+	 accuracy_score: 0.2369584438549956
+solution 1035: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Water) ⊔ (Horse))
+	 accuracy_score: 0.2369584438549956
+solution 1036: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Waterfall))
+	 accuracy_score: 0.2369584438549956
+solution 1037: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Water) ⊔ (UplandArea))
+	 accuracy_score: 0.2369584438549956
+solution 1038: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Horse) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.2369584438549956
+solution 1039: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Waterfall) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.2369584438549956
+solution 1040: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Shrub) ⊔ (UplandArea))
+	 accuracy_score: 0.2369584438549956
+solution 1041: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Waterfall))
+	 accuracy_score: 0.2369584438549956
+solution 1042: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Waterfall) ⊔ (FloweringPlant))
+	 accuracy_score: 0.2369584438549956
+solution 1043: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Waterfall) ⊔ (UplandArea))
+	 accuracy_score: 0.2369584438549956
+solution 1044: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Water))
+	 accuracy_score: 0.2369584438549956
+solution 1045: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Truck) ⊔ (FloweringPlant))
+	 accuracy_score: 0.2369584438549956
+solution 1046: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Horse) ⊔ (FloweringPlant))
+	 accuracy_score: 0.2369584438549956
+solution 1047: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Water) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.2369584438549956
+solution 1048: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Truck) ⊔ (UplandArea))
+	 accuracy_score: 0.2369584438549956
+solution 1049: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Horse) ⊔ (UplandArea))
+	 accuracy_score: 0.2369584438549956
+solution 1050: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Water))
+	 accuracy_score: 0.2369584438549956
+solution 1051: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Horse))
+	 accuracy_score: 0.2369584438549956
+solution 1052: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Truck))
+	 accuracy_score: 0.2369584438549956
+solution 1053: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Shrub))
+	 accuracy_score: 0.2369584438549956
+solution 1054: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Waterfall))
+	 accuracy_score: 0.2369584438549956
+solution 1055: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (HoofedMammal) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.22413793103448276
+solution 1056: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (StreamWaterArea) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.22413793103448276
+solution 1057: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Substance ¬ Glass) ⊔ (UplandArea))
+	 accuracy_score: 0.22413793103448276
+solution 1058: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (FloweringPlant) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.22413793103448276
+solution 1059: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Substance ¬ Glass) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.22413793103448276
+solution 1060: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (FloweringPlant))
+	 accuracy_score: 0.22413793103448276
+solution 1061: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.22413793103448276
+solution 1062: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.22413793103448276
+solution 1063: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.22413793103448276
+solution 1064: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (UplandArea))
+	 accuracy_score: 0.22413793103448276
+solution 1065: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (FloweringPlant))
+	 accuracy_score: 0.22413793103448276
+solution 1066: ∃imageContains.((StreamWaterArea) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (HoofedMammal))
+	 accuracy_score: 0.22413793103448276
+solution 1067: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.22413793103448276
+solution 1068: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (StreamWaterArea) ⊔ (FloweringPlant))
+	 accuracy_score: 0.22413793103448276
+solution 1069: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (StreamWaterArea) ⊔ (UplandArea))
+	 accuracy_score: 0.22413793103448276
+solution 1070: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (HoofedMammal) ⊔ (FloweringPlant))
+	 accuracy_score: 0.22413793103448276
+solution 1071: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (FloweringPlant) ⊔ (UplandArea))
+	 accuracy_score: 0.22413793103448276
+solution 1072: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (FloweringPlant) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.22413793103448276
+solution 1073: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (HoofedMammal) ⊔ (UplandArea))
+	 accuracy_score: 0.22413793103448276
+solution 1074: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (HoofedMammal) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.22413793103448276
+solution 1075: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (UplandArea))
+	 accuracy_score: 0.22413793103448276
+solution 1076: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (UplandArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.22413793103448276
+solution 1077: ∃imageContains.((CompoundSubstance) ⊔ (HoofedMammal) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)))
+	 accuracy_score: 0.22413793103448276
+solution 1078: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (StreamWaterArea) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.22413793103448276
+solution 1079: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.22413793103448276
+solution 1080: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (StreamWaterArea))
+	 accuracy_score: 0.22413793103448276
+solution 1081: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (UplandArea))
+	 accuracy_score: 0.22413793103448276
+solution 1082: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (FloweringPlant))
+	 accuracy_score: 0.22413793103448276
+solution 1083: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (HoofedMammal))
+	 accuracy_score: 0.22413793103448276
+solution 1084: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)))
+	 accuracy_score: 0.22413793103448276
+solution 1085: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.22413793103448276
+solution 1086: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)))
+	 accuracy_score: 0.22413793103448276
+solution 1087: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Horse) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.2197170645446508
+solution 1088: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Waterfall) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.2197170645446508
+solution 1089: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (Water) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.2197170645446508
+solution 1090: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (Substance ¬ Glass))
+	 accuracy_score: 0.20689655172413796
+solution 1091: ∃imageContains.((HoofedMammal) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.20689655172413796
+solution 1092: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (FloweringPlant) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.20689655172413796
+solution 1093: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (UplandArea))
+	 accuracy_score: 0.20689655172413796
+solution 1094: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (HoofedMammal) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.20689655172413796
+solution 1095: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (StreamWaterArea) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.20689655172413796
+solution 1096: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (SelfPoweredRoadVehicle ¬ Bus) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.20689655172413796
+solution 1097: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.20689655172413796
+solution 1098: ∃imageContains.((StationaryArtifact ¬ (CeilingFloorRoof)) ⊔ (SelfPoweredRoadVehicle ¬ Bus))
+	 accuracy_score: 0.20689655172413796
+Total solutions found: 1098
+
+Program finished.
+End Time: 2018/06/07 16:20:59
+Duration: 116 sec

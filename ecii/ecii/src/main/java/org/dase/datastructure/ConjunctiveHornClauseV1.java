@@ -142,7 +142,7 @@ public class ConjunctiveHornClauseV1 {
         this.negObjectTypes = new ArrayList<>();
         this.owlObjectProperty = anotherSolutionPart.owlObjectProperty;
         this.posObjectTypes = anotherSolutionPart.posObjectTypes;
-        this.negObjectTypes.addAll(anotherSolutionPart.negObjectTypes);
+        this.negObjectTypes = anotherSolutionPart.negObjectTypes;
         this.reasoner = anotherSolutionPart.reasoner;
         this.ontology = _ontology;
         this.owlOntologyManager = this.ontology.getOWLOntologyManager();
@@ -172,10 +172,10 @@ public class ConjunctiveHornClauseV1 {
     /**
      * posObjectTypes getter
      *
-     * @param negObjectTypes
+     * @param posObjectTypes
      */
-    public void setPosObjectTypes(ArrayList<OWLClassExpression> negObjectTypes) {
-        this.negObjectTypes = negObjectTypes;
+    public void setPosObjectTypes(ArrayList<OWLClassExpression> posObjectTypes) {
+        this.posObjectTypes = posObjectTypes;
         solutionChanged = true;
     }
 
@@ -336,7 +336,7 @@ public class ConjunctiveHornClauseV1 {
                         sb.append(Utility.getShortName((OWLClass) this.getPosObjectTypes().get(0)));
                         for (int i = 1; i < this.getPosObjectTypes().size(); i++) {
                             sb.append(" " + AND.toString());
-                            sb.append(Utility.getShortName((OWLClass) this.getPosObjectTypes().get(i)));
+                            sb.append(" " +Utility.getShortName((OWLClass) this.getPosObjectTypes().get(i)));
                         }
                     }
                 }
@@ -409,6 +409,54 @@ public class ConjunctiveHornClauseV1 {
 
 
     /**
+     * This will return all individuals covered by this complex concept from the ontology using reasoner, by taking consideration of only the positive and negative individuals.
+     * large number of individuals may be returned.
+     *  todo(zaman): not implemented yet.
+     * @return
+     */
+    public HashSet<OWLNamedIndividual> individualsCoveredByThisHornClauseByReasonerInstanceCheck() {
+
+        logger.info("calculating covered individuals by hornClause " + this.getHornClauseAsString() + " by reasoner InstanceCheck.........");
+        HashSet<OWLNamedIndividual> coveredIndividuals = new HashSet<>();
+        OWLClassExpression owlClassExpression = this.getConjunctiveHornClauseAsOWLClassExpression();
+
+        if (!this.owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
+            owlClassExpression = owlDataFactory.getOWLObjectSomeValuesFrom(owlObjectProperty, owlClassExpression);
+        }
+
+        // if we have calculated previously then just retrieve it from cache and return it.
+        if (null != SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner) {
+            if (SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.containsKey(owlClassExpression)) {
+
+                coveredIndividuals = SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.get(owlClassExpression);
+                logger.info("calculating covered individuals by candidateSolution " + this.getConjunctiveHornClauseAsOWLClassExpression() + " found in cache.");
+                logger.info("\t size: " + coveredIndividuals.size());
+                return coveredIndividuals;
+            }
+        }
+
+        HashSet<OWLNamedIndividual> allPosNegIndivs = new HashSet<>();
+        allPosNegIndivs.addAll(SharedDataHolder.posIndivs);
+        allPosNegIndivs.addAll(SharedDataHolder.negIndivs);
+
+        allPosNegIndivs.forEach(owlNamedIndividual -> {
+            // not found by reasoner, whether an indivs is covered by this concept or not.
+           // todo(zaman): not implemented yet.
+        });
+        // not found in cache, now expensive reasoner calls.
+        coveredIndividuals = (HashSet<OWLNamedIndividual>) reasoner.getInstances(owlClassExpression, false).getFlattened();
+
+        // save it to cache
+        SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.put(owlClassExpression, coveredIndividuals);
+
+        logger.info("calculating covered individuals by hornClause " + this.getHornClauseAsString() + " by reasoner InstanceCheck finished");
+        logger.info("\t size: " + coveredIndividuals.size());
+
+        return coveredIndividuals;
+    }
+
+
+    /**
      * This will return all individuals covered by this complex concept from the ontology using ECII system,
      * large number of individuals may be returned.
      * todo(zaman): Not yet implemented.
@@ -426,12 +474,12 @@ public class ConjunctiveHornClauseV1 {
 
     /**
      * Determine whether this owlnamedIndividual contained within  this hornclause.
-     * Our v1 hornclause is of this formula: B1 ⊓ B2 ⊓ B3 …. ⊓  ¬(D1 ⊔...⊔Djk))
+     * Our v1 hornclause is of this formula: R1.(B1 ⊓ B2 ⊓ B3 …. ⊓  ¬(D1 ⊔...⊔Djk)), where R1 can be empty
      * So, to satisfy, this individual must be in
      * 1. all posTypes and
      * 2. not on the negativeSide.
-     * verified/unit tested for single posType without negTypes -- this function is totally okay.
      *
+     * this is implemented using ecii system, not using reasoner.
      * @param owlNamedIndividual
      * @return
      */
@@ -519,7 +567,7 @@ public class ConjunctiveHornClauseV1 {
      * Check whether this individual contained within any of the class expressions.
      * This is used to check positive type exclusions in negative part.
      * classes: ¬(D1⊔···⊔Dk)
-     *
+     * this is implemented using ecii system, not using reasoner.
      * @param classExpressions
      * @param owlNamedIndividual
      * @param owlObjectProperty

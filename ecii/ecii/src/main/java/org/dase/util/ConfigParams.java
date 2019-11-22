@@ -130,10 +130,10 @@ public final class ConfigParams {
             objPropsCombinationLimit = Integer.valueOf(prop.getProperty("objPropsCombinationLimit", "3"));
             hornClausesListMaxSize = Integer.valueOf(prop.getProperty("hornClausesListMaxSize", "50"));
             candidateClassesListMaxSize = Integer.valueOf(prop.getProperty("candidateClassesListMaxSize", "50"));
-            removeCommonTypes = Boolean.getBoolean(prop.getProperty("removeCommonTypes", "true"));
+            removeCommonTypes = Boolean.parseBoolean(prop.getProperty("removeCommonTypes", "true"));
 
             confFileDir = Paths.get(confFilePath).getParent().toString();
-            String replacement = "_ecii_v1_results_e8_ade20val.txt";
+            String replacement = "_ecii_v1_results_e9_ade20val.txt";
             String resultFileName = Paths.get(confFilePath).getFileName().toString().replace(".config", replacement);
             outputResultPath = confFileDir + "/" + resultFileName;
 
@@ -165,6 +165,7 @@ public final class ConfigParams {
         logger.info("\tobjPropsCombinationLimit: " + objPropsCombinationLimit);
         logger.info("\thornClausesListMaxSize: " + hornClausesListMaxSize);
         logger.info("\tcandidateClassesListMaxSize: " + candidateClassesListMaxSize);
+        logger.info("\tremoveCommonTypes: "+ removeCommonTypes);
     }
 
     /**

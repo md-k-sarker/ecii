@@ -1,0 +1,495 @@
+Program started.............
+Start Time: 2018/06/07 17:55:11
+working with confFile: sumo_with_ade_validation_r.owl
+
+posIndivs from conf
+	River_ADE_val_00000732
+	River_ADE_val_00001730
+	River_ADE_val_00000731
+	River_ADE_val_00001731
+	River_ADE_val_00000989
+
+negIndivs from conf
+	Runway_ADE_val_00000738
+	Runway_ADE_val_00000739
+	Raceway_ADE_val_00001720
+	Restaurant_ADE_val_00000728
+	Ramp_ADE_val_00000721
+	Restaurant_ADE_val_00001727
+	Roof_ADE_val_00001733
+	Resort_ADE_val_00000727
+	Ranch_ADE_val_00001721
+	Ruin_ADE_val_00000738
+	Restroom_ADE_val_00001729
+
+####################Solutions####################:
+solution 1: ∃imageContains.((Rock) ⊔ (Water) ⊔ (Bridge) ⊔ (Lake))
+	 accuracy_score: 0.9
+solution 2: ∃imageContains.((Stone) ⊔ (Water) ⊔ (Lake) ⊔ (Tunnel))
+	 accuracy_score: 0.9
+solution 3: ∃imageContains.((Stone) ⊔ (Water) ⊔ (Bridge) ⊔ (Lake))
+	 accuracy_score: 0.9
+solution 4: ∃imageContains.((House) ⊔ (Stone) ⊔ (Lake) ⊔ (Tunnel))
+	 accuracy_score: 0.9
+solution 5: ∃imageContains.((Rock) ⊔ (House) ⊔ (Bridge) ⊔ (Lake))
+	 accuracy_score: 0.9
+solution 6: ∃imageContains.((Rock) ⊔ (Stone) ⊔ (Lake) ⊔ (Tunnel))
+	 accuracy_score: 0.9
+solution 7: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.9
+solution 8: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (House) ⊔ (Tunnel))
+	 accuracy_score: 0.9
+solution 9: ∃imageContains.((Rock) ⊔ (Stone) ⊔ (Water) ⊔ (Bridge))
+	 accuracy_score: 0.9
+solution 10: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (House) ⊔ (Lake))
+	 accuracy_score: 0.9
+solution 11: ∃imageContains.((Rock) ⊔ (Stone) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.9
+solution 12: ∃imageContains.((Rock) ⊔ (Stone) ⊔ (Water) ⊔ (Tunnel))
+	 accuracy_score: 0.9
+solution 13: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (House) ⊔ (Bridge))
+	 accuracy_score: 0.9
+solution 14: ∃imageContains.((Rock) ⊔ (House) ⊔ (Lake) ⊔ (Tunnel))
+	 accuracy_score: 0.9
+solution 15: ∃imageContains.((Rock) ⊔ (Stone) ⊔ (Bridge) ⊔ (Lake))
+	 accuracy_score: 0.9
+solution 16: ∃imageContains.((House) ⊔ (Stone) ⊔ (Bridge) ⊔ (Lake))
+	 accuracy_score: 0.9
+solution 17: ∃imageContains.((Rock) ⊔ (Water) ⊔ (Lake) ⊔ (Tunnel))
+	 accuracy_score: 0.9
+solution 18: ∃imageContains.((Rock) ⊔ (StationaryArtifact) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.8
+solution 19: ∃imageContains.((Stone) ⊔ (Bridge) ⊔ (Lake) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 20: ∃imageContains.((Water) ⊔ (Bridge) ⊔ (Lake) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 21: ∃imageContains.((House) ⊔ (Water) ⊔ (Bridge) ⊔ (Lake))
+	 accuracy_score: 0.8
+solution 22: ∃imageContains.((Rock) ⊔ (Bridge) ⊔ (Lake) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 23: ∃imageContains.((Water) ⊔ (StationaryArtifact) ⊔ (Stone) ⊔ (Rock))
+	 accuracy_score: 0.8
+solution 24: ∃imageContains.((Rock) ⊔ (House) ⊔ (Water) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 25: ∃imageContains.((Rock) ⊔ (House) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.8
+solution 26: ∃imageContains.((Rock) ⊔ (Stone) ⊔ (Bridge) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 27: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (Water) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.8
+solution 28: ∃imageContains.((House) ⊔ (Stone) ⊔ (Bridge) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 29: ∃imageContains.((Stone) ⊔ (StationaryArtifact) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.8
+solution 30: ∃imageContains.((Stone) ⊔ (Water) ⊔ (Bridge) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 31: ∃imageContains.((House) ⊔ (Stone) ⊔ (Water) ⊔ (Bridge))
+	 accuracy_score: 0.8
+solution 32: ∃imageContains.((Rock) ⊔ (Water) ⊔ (Bridge) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 33: ∃imageContains.((Water) ⊔ (Stone) ⊔ (Rock) ⊔ (House))
+	 accuracy_score: 0.8
+solution 34: ∃imageContains.((House) ⊔ (Stone) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.8
+solution 35: ∃imageContains.((House) ⊔ (Bridge) ⊔ (Lake) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 36: ∃imageContains.((StationaryArtifact) ⊔ (Stone) ⊔ (Rock) ⊔ (Lake))
+	 accuracy_score: 0.8
+solution 37: ∃imageContains.((House) ⊔ (Water) ⊔ (Lake) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 38: ∃imageContains.((House) ⊔ (Stone) ⊔ (Water) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 39: ∃imageContains.((Rock) ⊔ (House) ⊔ (Bridge) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 40: ∃imageContains.((Rock) ⊔ (House) ⊔ (Water) ⊔ (Bridge))
+	 accuracy_score: 0.8
+solution 41: ∃imageContains.((Rock) ⊔ (Lake) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 42: ∃imageContains.((Rock) ⊔ (Bridge) ⊔ (Lake))
+	 accuracy_score: 0.8
+solution 43: ∃imageContains.((House) ⊔ (Stone) ⊔ (Bridge))
+	 accuracy_score: 0.8
+solution 44: ∃imageContains.((Rock) ⊔ (House) ⊔ (Bridge))
+	 accuracy_score: 0.8
+solution 45: ∃imageContains.((Stone) ⊔ (Bridge) ⊔ (Lake))
+	 accuracy_score: 0.8
+solution 46: ∃imageContains.((Rock) ⊔ (Stone) ⊔ (Bridge))
+	 accuracy_score: 0.8
+solution 47: ∃imageContains.((House) ⊔ (Lake) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 48: ∃imageContains.((Rock) ⊔ (Stone) ⊔ (Water))
+	 accuracy_score: 0.8
+solution 49: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (Water))
+	 accuracy_score: 0.8
+solution 50: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (House))
+	 accuracy_score: 0.8
+solution 51: ∃imageContains.((Stone) ⊔ (Water) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 52: ∃imageContains.((Water) ⊔ (Lake) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 53: ∃imageContains.((House) ⊔ (Stone) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 54: ∃imageContains.((Rock) ⊔ (Stone) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 55: ∃imageContains.((Rock) ⊔ (House) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 56: ∃imageContains.((House) ⊔ (Stone) ⊔ (Lake))
+	 accuracy_score: 0.8
+solution 57: ∃imageContains.((Rock) ⊔ (Water) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 58: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (Lake))
+	 accuracy_score: 0.8
+solution 59: ∃imageContains.((Stone) ⊔ (Lake) ⊔ (Tunnel))
+	 accuracy_score: 0.8
+solution 60: ∃imageContains.((Rock) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.8
+solution 61: ∃imageContains.((Stone) ⊔ (Water) ⊔ (Bridge))
+	 accuracy_score: 0.8
+solution 62: ∃imageContains.((Rock) ⊔ (Water) ⊔ (Bridge))
+	 accuracy_score: 0.8
+solution 63: ∃imageContains.((Rock) ⊔ (House) ⊔ (Lake))
+	 accuracy_score: 0.8
+solution 64: ∃imageContains.((Water) ⊔ (Bridge) ⊔ (Lake))
+	 accuracy_score: 0.8
+solution 65: ∃imageContains.((House) ⊔ (Bridge) ⊔ (Lake))
+	 accuracy_score: 0.8
+solution 66: ∃imageContains.((Rock) ⊔ (Stone) ⊔ (Lake))
+	 accuracy_score: 0.8
+solution 67: ∃imageContains.((Stone) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.8
+solution 68: ∃imageContains.((CompoundSubstance) ⊔ (Stone) ⊔ (Rock) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.7
+solution 69: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (StationaryArtifact) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.7
+solution 70: ∃imageContains.((StationaryArtifact) ⊔ (Stone) ⊔ (Rock) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.7
+solution 71: ∃imageContains.((Rock) ⊔ (StationaryArtifact) ⊔ (Water) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.7
+solution 72: ∃imageContains.((StationaryArtifact) ⊔ (CompoundSubstance) ⊔ (Stone) ⊔ (Rock))
+	 accuracy_score: 0.7
+solution 73: ∃imageContains.((House) ⊔ (Water) ⊔ (Bridge) ⊔ (Tunnel))
+	 accuracy_score: 0.7
+solution 74: ∃imageContains.((Stone) ⊔ (StationaryArtifact) ⊔ (Water) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.7
+solution 75: ∃imageContains.((Rock) ⊔ (Water) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.7
+solution 76: ∃imageContains.((Stone) ⊔ (Water) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.7
+solution 77: ∃imageContains.((CompoundSubstance) ⊔ (Stone) ⊔ (Rock))
+	 accuracy_score: 0.7
+solution 78: ∃imageContains.((Stone) ⊔ (StationaryArtifact) ⊔ (Water))
+	 accuracy_score: 0.7
+solution 79: ∃imageContains.((Rock) ⊔ (StationaryArtifact) ⊔ (Lake))
+	 accuracy_score: 0.7
+solution 80: ∃imageContains.((House) ⊔ (Stone) ⊔ (Water))
+	 accuracy_score: 0.7
+solution 81: ∃imageContains.((Rock) ⊔ (House) ⊔ (Water))
+	 accuracy_score: 0.7
+solution 82: ∃imageContains.((StationaryArtifact) ⊔ (Stone) ⊔ (Rock))
+	 accuracy_score: 0.7
+solution 83: ∃imageContains.((Stone) ⊔ (StationaryArtifact) ⊔ (Lake))
+	 accuracy_score: 0.7
+solution 84: ∃imageContains.((StationaryArtifact) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.7
+solution 85: ∃imageContains.((Rock) ⊔ (Bridge) ⊔ (Tunnel))
+	 accuracy_score: 0.7
+solution 86: ∃imageContains.((House) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.7
+solution 87: ∃imageContains.((Water) ⊔ (Bridge) ⊔ (Tunnel))
+	 accuracy_score: 0.7
+solution 88: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.7
+solution 89: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (StationaryArtifact))
+	 accuracy_score: 0.7
+solution 90: ∃imageContains.((Stone) ⊔ (Bridge) ⊔ (Tunnel))
+	 accuracy_score: 0.7
+solution 91: ∃imageContains.((House) ⊔ (Water) ⊔ (Bridge))
+	 accuracy_score: 0.7
+solution 92: ∃imageContains.((House) ⊔ (Bridge) ⊔ (Tunnel))
+	 accuracy_score: 0.7
+solution 93: ∃imageContains.((Rock) ⊔ (StationaryArtifact) ⊔ (Water))
+	 accuracy_score: 0.7
+solution 94: ∃imageContains.((House) ⊔ (Water) ⊔ (Tunnel))
+	 accuracy_score: 0.7
+solution 95: ∃imageContains.((Bridge) ⊔ (Lake) ⊔ (Tunnel))
+	 accuracy_score: 0.7
+solution 96: ∃imageContains.((Bridge) ⊔ (Lake))
+	 accuracy_score: 0.7
+solution 97: ∃imageContains.((Lake) ⊔ (Tunnel))
+	 accuracy_score: 0.7
+solution 98: ∃imageContains.((House) ⊔ (Bridge))
+	 accuracy_score: 0.7
+solution 99: ∃imageContains.((Rock) ⊔ (Lake))
+	 accuracy_score: 0.7
+solution 100: ∃imageContains.((Water) ⊔ (Tunnel))
+	 accuracy_score: 0.7
+solution 101: ∃imageContains.((Stone) ⊔ (Lake))
+	 accuracy_score: 0.7
+solution 102: ∃imageContains.((Stone) ⊔ (Water))
+	 accuracy_score: 0.7
+solution 103: ∃imageContains.((Rock) ⊔ (Bridge))
+	 accuracy_score: 0.7
+solution 104: ∃imageContains.((Rock) ⊔ (House))
+	 accuracy_score: 0.7
+solution 105: ∃imageContains.((House) ⊔ (Lake))
+	 accuracy_score: 0.7
+solution 106: ∃imageContains.((Rock) ⊔ (Water))
+	 accuracy_score: 0.7
+solution 107: ∃imageContains.((Rock) ⊔ (Tunnel))
+	 accuracy_score: 0.7
+solution 108: ∃imageContains.((Water) ⊔ (Lake))
+	 accuracy_score: 0.7
+solution 109: ∃imageContains.((Stone) ⊔ (Rock))
+	 accuracy_score: 0.7
+solution 110: ∃imageContains.((Water) ⊔ (Bridge))
+	 accuracy_score: 0.7
+solution 111: ∃imageContains.((Stone) ⊔ (Tunnel))
+	 accuracy_score: 0.7
+solution 112: ∃imageContains.((House) ⊔ (Tunnel))
+	 accuracy_score: 0.7
+solution 113: ∃imageContains.((Stone) ⊔ (Bridge))
+	 accuracy_score: 0.7
+solution 114: ∃imageContains.((StaticWaterArea) ⊔ (StationaryArtifact) ⊔ (CompoundSubstance) ⊔ (Rock))
+	 accuracy_score: 0.6
+solution 115: ∃imageContains.((Stone) ⊔ (CompoundSubstance) ⊔ (StationaryArtifact) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.6
+solution 116: ∃imageContains.((Rock) ⊔ (CompoundSubstance) ⊔ (StationaryArtifact) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.6
+solution 117: ∃imageContains.((Rock) ⊔ (CompoundSubstance) ⊔ (StationaryArtifact))
+	 accuracy_score: 0.6
+solution 118: ∃imageContains.((Stone) ⊔ (CompoundSubstance) ⊔ (StationaryArtifact))
+	 accuracy_score: 0.6
+solution 119: ∃imageContains.((Rock) ⊔ (CompoundSubstance) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.6
+solution 120: ∃imageContains.((StationaryArtifact) ⊔ (CompoundSubstance) ⊔ (Rock))
+	 accuracy_score: 0.6
+solution 121: ∃imageContains.((StationaryArtifact) ⊔ (Water) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.6
+solution 122: ∃imageContains.((Stone) ⊔ (CompoundSubstance) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.6
+solution 123: ∃imageContains.((Stone) ⊔ (StationaryArtifact) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.6
+solution 124: ∃imageContains.((Rock) ⊔ (StationaryArtifact) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.6
+solution 125: ∃imageContains.((CompoundSubstance) ⊔ (Rock) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.6
+solution 126: ∃imageContains.((CompoundSubstance) ⊔ (Rock))
+	 accuracy_score: 0.6
+solution 127: ∃imageContains.((StationaryArtifact) ⊔ (Lake))
+	 accuracy_score: 0.6
+solution 128: ∃imageContains.((Water) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.6
+solution 129: ∃imageContains.((House) ⊔ (Water))
+	 accuracy_score: 0.6
+solution 130: ∃imageContains.((Rock) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.6
+solution 131: ∃imageContains.((StationaryArtifact) ⊔ (Water))
+	 accuracy_score: 0.6
+solution 132: ∃imageContains.((Rock) ⊔ (StationaryArtifact))
+	 accuracy_score: 0.6
+solution 133: ∃imageContains.((Stone) ⊔ (StationaryArtifact))
+	 accuracy_score: 0.6
+solution 134: ∃imageContains.((Stone) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.6
+solution 135: ∃imageContains.((Bridge) ⊔ (Tunnel))
+	 accuracy_score: 0.6
+solution 136: ∃imageContains.((Tunnel))
+	 accuracy_score: 0.6
+solution 137: ∃imageContains.((Stone))
+	 accuracy_score: 0.6
+solution 138: ∃imageContains.((House))
+	 accuracy_score: 0.6
+solution 139: ∃imageContains.((Lake))
+	 accuracy_score: 0.6
+solution 140: ∃imageContains.((Water))
+	 accuracy_score: 0.6
+solution 141: ∃imageContains.((Rock))
+	 accuracy_score: 0.6
+solution 142: ∃imageContains.((Bridge))
+	 accuracy_score: 0.6
+solution 143: ∃imageContains.((Object ¬ (LandAreaLandForm)))
+	 accuracy_score: 0.5
+solution 144: ∃imageContains.((StationaryArtifact) ⊔ (WaterArea) ⊔ (Substance))
+	 accuracy_score: 0.5
+solution 145: ∃imageContains.((StaticWaterArea) ⊔ (StationaryArtifact) ⊔ (Substance))
+	 accuracy_score: 0.5
+solution 146: ∃imageContains.((Artifact) ⊔ (WaterArea) ⊔ (Substance))
+	 accuracy_score: 0.5
+solution 147: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 148: ∃imageContains.((Artifact) ⊔ (SelfConnectedObject) ⊔ (WaterArea))
+	 accuracy_score: 0.5
+solution 149: ∃imageContains.((WaterArea) ⊔ (Substance))
+	 accuracy_score: 0.5
+solution 150: ∃imageContains.((CompoundSubstance) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 151: ∃imageContains.((StationaryArtifact) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.5
+solution 152: ∃imageContains.((Physical ¬ Region))
+	 accuracy_score: 0.5
+solution 153: ∃imageContains.((Entity ¬ Object))
+	 accuracy_score: 0.5
+solution 154: ∃imageContains.((Physical ¬ GeographicArea))
+	 accuracy_score: 0.5
+solution 155: ∃imageContains.((Object ¬ GeographicArea))
+	 accuracy_score: 0.5
+solution 156: ∃imageContains.((SelfConnectedObject) ⊔ (WaterArea))
+	 accuracy_score: 0.5
+solution 157: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact))
+	 accuracy_score: 0.5
+solution 158: ∃imageContains.((Entity ¬ Region))
+	 accuracy_score: 0.5
+solution 159: ∃imageContains.((StationaryArtifact) ⊔ (Substance))
+	 accuracy_score: 0.5
+solution 160: ∃imageContains.((Object))
+	 accuracy_score: 0.5
+solution 161: ∃imageContains.((Physical))
+	 accuracy_score: 0.5
+solution 162: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.4818181818181818
+solution 163: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.4818181818181818
+solution 164: ∃imageContains.((Water) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Stone) ⊔ (Rock))
+	 accuracy_score: 0.4818181818181818
+solution 165: ∃imageContains.((StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Stone) ⊔ (Rock) ⊔ (Lake))
+	 accuracy_score: 0.4818181818181818
+solution 166: ∃imageContains.(( ¬ Hill))
+	 accuracy_score: 0.45454545454545453
+solution 167: ∃imageContains.(( ¬ Wheel))
+	 accuracy_score: 0.45454545454545453
+solution 168: ∃imageContains.(( ¬ Rug))
+	 accuracy_score: 0.45454545454545453
+solution 169: ∃imageContains.(( ¬ Ramp))
+	 accuracy_score: 0.45454545454545453
+solution 170: ∃imageContains.(( ¬ Curtain))
+	 accuracy_score: 0.45454545454545453
+solution 171: ∃imageContains.(( ¬ Seat))
+	 accuracy_score: 0.45454545454545453
+solution 172: ∃imageContains.(( ¬ Field))
+	 accuracy_score: 0.45454545454545453
+solution 173: ∃imageContains.(( ¬ Windshield))
+	 accuracy_score: 0.45454545454545453
+solution 174: ∃imageContains.(( ¬ Animal))
+	 accuracy_score: 0.45454545454545453
+solution 175: ∃imageContains.(( ¬ Camera))
+	 accuracy_score: 0.45454545454545453
+solution 176: ∃imageContains.(( ¬ Runway))
+	 accuracy_score: 0.45454545454545453
+solution 177: ∃imageContains.(( ¬ Airplane))
+	 accuracy_score: 0.45454545454545453
+solution 178: ∃imageContains.(( ¬ Roof))
+	 accuracy_score: 0.45454545454545453
+solution 179: ∃imageContains.(( ¬ Apron))
+	 accuracy_score: 0.45454545454545453
+solution 180: ∃imageContains.(( ¬ Road))
+	 accuracy_score: 0.45454545454545453
+solution 181: ∃imageContains.(( ¬ Toilet))
+	 accuracy_score: 0.45454545454545453
+solution 182: ∃imageContains.(( ¬ Headlight))
+	 accuracy_score: 0.45454545454545453
+solution 183: ∃imageContains.(( ¬ Fence))
+	 accuracy_score: 0.45454545454545453
+solution 184: ∃imageContains.(( ¬ Leg))
+	 accuracy_score: 0.45454545454545453
+solution 185: ∃imageContains.(( ¬ Mountain))
+	 accuracy_score: 0.40909090909090906
+solution 186: ∃imageContains.(( ¬ Mirror))
+	 accuracy_score: 0.40909090909090906
+solution 187: ∃imageContains.(( ¬ Table))
+	 accuracy_score: 0.40909090909090906
+solution 188: ∃imageContains.(( ¬ Chair))
+	 accuracy_score: 0.40909090909090906
+solution 189: ∃imageContains.((StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (CompoundSubstance) ⊔ (Stone) ⊔ (Rock))
+	 accuracy_score: 0.38181818181818183
+solution 190: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.38181818181818183
+solution 191: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Water) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.38181818181818183
+solution 192: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Water) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.38181818181818183
+solution 193: ∃imageContains.((StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Stone) ⊔ (Rock) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.38181818181818183
+solution 194: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Lake))
+	 accuracy_score: 0.38181818181818183
+solution 195: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Lake))
+	 accuracy_score: 0.38181818181818183
+solution 196: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Water))
+	 accuracy_score: 0.38181818181818183
+solution 197: ∃imageContains.((StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Water) ⊔ (Lake))
+	 accuracy_score: 0.38181818181818183
+solution 198: ∃imageContains.((Stone) ⊔ (Rock) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)))
+	 accuracy_score: 0.38181818181818183
+solution 199: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Water))
+	 accuracy_score: 0.38181818181818183
+solution 200: ∃imageContains.((StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Stone) ⊔ (Rock))
+	 accuracy_score: 0.38181818181818183
+solution 201: ∃imageContains.((Artifact ¬ (HeadlightMirrorAirplane)) ⊔ (WaterArea) ⊔ (Substance))
+	 accuracy_score: 0.36363636363636365
+solution 202: ∃imageContains.(( ¬ Building))
+	 accuracy_score: 0.36363636363636365
+solution 203: ∃imageContains.(( ¬ Ceiling))
+	 accuracy_score: 0.36363636363636365
+solution 204: ∃imageContains.(( ¬ Head))
+	 accuracy_score: 0.36363636363636365
+solution 205: ∃imageContains.(( ¬ Floor))
+	 accuracy_score: 0.36363636363636365
+solution 206: ∃imageContains.((SelfConnectedObject ¬ (RoadHeadLeg)) ⊔ (WaterArea))
+	 accuracy_score: 0.3181818181818182
+solution 207: ∃imageContains.((Physical ¬ (MountainHeadlightMirror)))
+	 accuracy_score: 0.3181818181818182
+solution 208: ∃imageContains.((Entity ¬ (MountainHeadlightMirror)))
+	 accuracy_score: 0.3181818181818182
+solution 209: ∃imageContains.((Object ¬ (MountainHeadlightMirror)))
+	 accuracy_score: 0.3181818181818182
+solution 210: ∃imageContains.(( ¬ Window))
+	 accuracy_score: 0.3181818181818182
+solution 211: ∃imageContains.(( ¬ Wall))
+	 accuracy_score: 0.3181818181818182
+solution 212: ∃imageContains.((Rock) ⊔ (CompoundSubstance) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.28181818181818186
+solution 213: ∃imageContains.((Stone) ⊔ (CompoundSubstance) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.28181818181818186
+solution 214: ∃imageContains.((StaticWaterArea) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (CompoundSubstance) ⊔ (Rock))
+	 accuracy_score: 0.28181818181818186
+solution 215: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.28181818181818186
+solution 216: ∃imageContains.((Rock) ⊔ (CompoundSubstance) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)))
+	 accuracy_score: 0.28181818181818186
+solution 217: ∃imageContains.((Stone) ⊔ (CompoundSubstance) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)))
+	 accuracy_score: 0.28181818181818186
+solution 218: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.28181818181818186
+solution 219: ∃imageContains.((StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (CompoundSubstance) ⊔ (Rock))
+	 accuracy_score: 0.28181818181818186
+solution 220: ∃imageContains.((StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Water) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.28181818181818186
+solution 221: ∃imageContains.((Rock) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)))
+	 accuracy_score: 0.28181818181818186
+solution 222: ∃imageContains.((StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Lake))
+	 accuracy_score: 0.28181818181818186
+solution 223: ∃imageContains.((Stone) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)))
+	 accuracy_score: 0.28181818181818186
+solution 224: ∃imageContains.((StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Water))
+	 accuracy_score: 0.28181818181818186
+solution 225: ∃imageContains.((Artifact ¬ (HeadlightMirrorAirplane)) ⊔ (SelfConnectedObject ¬ (RoadHeadLeg)) ⊔ (WaterArea))
+	 accuracy_score: 0.2272727272727273
+solution 226: ∃imageContains.((StaticWaterArea) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Substance))
+	 accuracy_score: 0.18181818181818182
+solution 227: ∃imageContains.((StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (WaterArea) ⊔ (Substance))
+	 accuracy_score: 0.18181818181818182
+solution 228: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.18181818181818182
+solution 229: ∃imageContains.((StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (Substance))
+	 accuracy_score: 0.18181818181818182
+solution 230: ∃imageContains.((CompoundSubstance) ⊔ (StationaryArtifact ¬ (CeilingBuildingFence)))
+	 accuracy_score: 0.18181818181818182
+solution 231: ∃imageContains.((StationaryArtifact ¬ (CeilingBuildingFence)) ⊔ (StaticWaterArea))
+	 accuracy_score: 0.18181818181818182
+solution 232: ∃imageContains.(( ¬ Door))
+	 accuracy_score: 0.18181818181818182
+
+Total solutions found: 232
+
+Program finished.
+End Time: 2018/06/07 17:56:03
+Duration: 51 sec
