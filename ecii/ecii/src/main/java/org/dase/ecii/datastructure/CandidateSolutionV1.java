@@ -7,8 +7,11 @@ Written at 8/20/18.
 
 import org.dase.ecii.core.Score;
 import org.dase.ecii.core.SharedDataHolder;
+import org.dase.ecii.util.ConfigParams;
+import org.dase.ecii.util.Heuristics;
 import org.dase.ecii.util.Utility;
 import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.model.parameters.ChangeApplied;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,6 +108,14 @@ public class CandidateSolutionV1 {
     // Score associated with this solution
     private Score score;
 
+    // use double to ensure when dividing we are getting double result not integer.
+    transient volatile protected double nrOfPositiveClassifiedAsPositive;
+    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
+    transient volatile protected double nrOfPositiveClassifiedAsNegative;
+    transient volatile protected double nrOfNegativeClassifiedAsNegative;
+    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
+    transient volatile protected double nrOfNegativeClassifiedAsPositive;
+
     /**
      * Bad design should fix it
      */
@@ -164,7 +175,7 @@ public class CandidateSolutionV1 {
     /**
      * setter
      *
-     * @param ArrayList<CandidateClassV1>
+     * @param ArrayList<CandidateClassV1> candidateClasses
      */
     public void setCandidateClasses(ArrayList<CandidateClassV1> candidateClasses) {
         solutionChanged = true;
@@ -214,22 +225,23 @@ public class CandidateSolutionV1 {
 
     /**
      * Adder to support interactive ecii
+     *
      * @param owlObjectProperty
      * @param candidateClassV1s
      * @return
      */
-    public boolean addGroupedCandidateClass(OWLObjectProperty owlObjectProperty, ArrayList<CandidateClassV1> candidateClassV1s){
-        if(null == owlObjectProperty || null == candidateClassV1s)
+    public boolean addGroupedCandidateClass(OWLObjectProperty owlObjectProperty, ArrayList<CandidateClassV1> candidateClassV1s) {
+        if (null == owlObjectProperty || null == candidateClassV1s)
             return false;
 
         boolean added = false;
-        if(null == groupedCandidateClasses){
+        if (null == groupedCandidateClasses) {
             groupedCandidateClasses = new HashMap<>();
         }
 
-        if(groupedCandidateClasses.containsKey(owlObjectProperty)){
+        if (groupedCandidateClasses.containsKey(owlObjectProperty)) {
             groupedCandidateClasses.get(owlObjectProperty).addAll(candidateClassV1s);
-        }else {
+        } else {
             groupedCandidateClasses.put(owlObjectProperty, candidateClassV1s);
         }
         solutionChanged = true;
@@ -412,7 +424,7 @@ public class CandidateSolutionV1 {
                         if (bareTypeSize > 0 || rFilledSize > 1) {
                             sb.append(" " + AND.toString() + " ");
                         }
-                        sb.append(EXISTS + Utility.getShortName(owlObjectProperty) + ".");
+                        sb.append(EXISTS +" "+ Utility.getShortName(owlObjectProperty) + ".");
                         if (candidateClasses.size() == 1) {
                             sb.append(candidateClasses.get(0).getCandidateClassAsString());
                         } else {
@@ -454,7 +466,7 @@ public class CandidateSolutionV1 {
             if (SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.containsKey(owlClassExpression)) {
                 coveredIndividuals = SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.get(owlClassExpression);
                 logger.info("calculating covered individuals by candidateSolution " + this.getSolutionAsOWLClassExpression() + " found in cache.");
-                logger.info("\t size: " + coveredIndividuals.size());
+                logger.info("\t covered all individuals size: " + coveredIndividuals.size());
                 return coveredIndividuals;
             }
         }
@@ -501,9 +513,180 @@ public class CandidateSolutionV1 {
         SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.put(owlClassExpression, coveredIndividuals);
 
         logger.info("calculating covered individuals by candidateSolution " + this.getSolutionAsOWLClassExpression() + " by reasoner finished");
-        logger.info("\t size: " + coveredIndividuals.size());
+        logger.info("\t covered all individuals size:  " + coveredIndividuals.size());
 
         return coveredIndividuals;
+
+    }
+
+
+    /**
+     * Calculate accuracy of a solution, according to the new method.
+     * TODO(Zaman) : need to fix the accuracy calculation for v1
+     *
+     * @return
+     */
+    public Score calculateAccuracyComplexCustom() {
+
+        /**
+         * Individuals covered by this solution
+         */
+        HashMap<OWLIndividual, Integer> coveredPosIndividualsMap = new HashMap<>();
+        /**
+         * Individuals excluded by this solution
+         */
+        HashMap<OWLIndividual, Integer> excludedNegIndividualsMap = new HashMap<>();
+
+        HashSet<OWLNamedIndividual> allCoveredIndividuals = this.individualsCoveredByThisCandidateSolutionByReasoner();
+        // calculate how many positive individuals covered.
+        int posCoveredCounter = 0;
+        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
+            if (allCoveredIndividuals.contains(thisOwlNamedIndividual)) {
+                posCoveredCounter++;
+                HashMapUtility.insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
+            }
+        }
+
+        nrOfPositiveClassifiedAsPositive = posCoveredCounter;
+        /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
+        nrOfPositiveClassifiedAsNegative = SharedDataHolder.posIndivs.size() - nrOfPositiveClassifiedAsPositive;
+
+        // calculate how many negative individuals covered.
+        int negCoveredCounter = 0;
+        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
+            if (allCoveredIndividuals.contains(thisOwlNamedIndividual))
+                negCoveredCounter++;
+            else {
+                HashMapUtility.insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
+            }
+        }
+
+        /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
+        nrOfNegativeClassifiedAsNegative = SharedDataHolder.negIndivs.size() - negCoveredCounter;
+        nrOfNegativeClassifiedAsPositive = negCoveredCounter;
+
+//        logger.info("Calculating accuracy of candidateSolution: "+ candidateSolutionV1.getSolutionAsString());
+//        logger.info("Excluded negative Indivs:");
+
+        // TODO(zaman): it should be logger.debug instead of logger.info
+        logger.info("solution: " + this.getSolutionAsString());
+        logger.info("\tcoveredPosIndividuals_by_ecii: " + coveredPosIndividualsMap.keySet());
+        logger.info("\tcoveredPosIndividuals_by_ecii size: " + coveredPosIndividualsMap.size());
+        logger.info("\texcludedNegIndividuals_by_ecii: " + excludedNegIndividualsMap.keySet());
+        logger.info("\texcludedNegIndividuals_by_ecii size: " + excludedNegIndividualsMap.size());
+
+
+//        assert 2 == 1;
+        assert excludedNegIndividualsMap.size() == nrOfNegativeClassifiedAsNegative;
+        assert coveredPosIndividualsMap.size() == nrOfPositiveClassifiedAsPositive;
+
+        double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
+        double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);
+        double f_measure = Heuristics.getFScore(recall, precision);
+        double coverage = Heuristics.getCoverage(nrOfPositiveClassifiedAsPositive, SharedDataHolder.posIndivs.size(),
+                nrOfNegativeClassifiedAsNegative, SharedDataHolder.negIndivs.size());
+
+        Score accScore = new Score();
+        accScore.setPrecision(precision);
+        accScore.setRecall(recall);
+        accScore.setF_measure(f_measure);
+        accScore.setCoverage(coverage);
+
+
+        return accScore;
+    }
+
+
+    /**
+     * Calculate accuracy of a solution.
+     *
+     * @return
+     */
+    public void calculateAccuracyByReasoner() {
+
+        // add this class expression to ontology and reinitiate reasoner.
+        OWLClassExpression owlClassExpression = this.getSolutionAsOWLClassExpression();
+        // create a unique name
+        OWLClass owlClass = SharedDataHolder.owlDataFactory.getOWLClass(Utility.getUniqueIRI());
+        OWLAxiom eqAxiom = SharedDataHolder.owlDataFactory.getOWLEquivalentClassesAxiom(owlClass, owlClassExpression);
+        ChangeApplied ca = SharedDataHolder.owlOntologyManager.addAxiom(SharedDataHolder.owlOntology, eqAxiom);
+        logger.info("Adding candidateSolution.getSolutionAsOWLClassExpression to ontology Status: " + ca.toString());
+        reasoner = Utility.initReasoner(ConfigParams.reasonerName, SharedDataHolder.owlOntology, null);
+
+        /**
+         * Individuals covered by all parts of solution
+         */
+        HashMap<OWLIndividual, Integer> coveredPosIndividualsMap = new HashMap<>();
+        /**
+         * Individuals excluded by all parts of solution
+         */
+        HashMap<OWLIndividual, Integer> excludedNegIndividualsMap = new HashMap<>();
+
+        /**
+         * For positive individuals, a individual must be contained within each AND section to be added as a coveredIndividuals.
+         * I.e. each
+         */
+        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
+
+            Set<OWLNamedIndividual> posIndivsByReasoner = reasoner.getInstances(owlClassExpression, false).getFlattened();
+
+            if (posIndivsByReasoner.contains(thisOwlNamedIndividual)) {
+                HashMapUtility.insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
+//                logger.info("Good");
+            } else {
+//                logger.info("not found. size: " + posIndivsByReasoner.size());
+            }
+        }
+
+        /**
+         * For negative individuals, a individual must be contained within each AND section to be added as a excludedInvdividuals.
+         * I.e. each
+         */
+        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
+
+            Set<OWLNamedIndividual> negIndivsByReasoner = reasoner.getInstances(owlClassExpression, false).getFlattened();
+
+            if (negIndivsByReasoner.contains(thisOwlNamedIndividual)) {
+                HashMapUtility.insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
+                logger.info("\t" + Utility.getShortName(thisOwlNamedIndividual) + " is contained by this concept using reasoner: " + owlClassExpression);
+            } else {
+//                logger.info("not found. size: " + negIndivsByReasoner.size());
+            }
+        }
+
+        logger.info("solution: " + this.getSolutionAsString());
+        logger.info("coveredPosIndividuals_by_reasoner: " + coveredPosIndividualsMap.keySet());
+        logger.info("coveredPosIndividuals_by_reasoner size: " + coveredPosIndividualsMap.size());
+        logger.info("coveredNegIndividuals_by_reasoner: " + excludedNegIndividualsMap.keySet());
+        logger.info("coveredNegIndividuals_by_reasoner size: " + excludedNegIndividualsMap.size());
+
+        nrOfPositiveClassifiedAsPositive = coveredPosIndividualsMap.size();
+        /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
+        nrOfPositiveClassifiedAsNegative = SharedDataHolder.posIndivs.size() - nrOfPositiveClassifiedAsPositive;
+        // TODO(zaman): need to verify this one, most probably the excludedNegIndividuals are the covered ones' by this concept, so we need to make inverse of it. for now use the exact one it, but later we have to fix it or verify it.
+        nrOfNegativeClassifiedAsNegative = SharedDataHolder.negIndivs.size() - excludedNegIndividualsMap.size();
+        /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
+        nrOfNegativeClassifiedAsPositive = excludedNegIndividualsMap.size();
+
+        logger.info("nrOfPositiveClassifiedAsPositive size by reasoner: " + nrOfPositiveClassifiedAsPositive);
+        logger.info("nrOfNegativeClassifiedAsNegative size by reasoner: " + nrOfNegativeClassifiedAsNegative);
+
+        double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
+        double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);
+        double f_measure = Heuristics.getFScore(recall, precision);
+        double coverage = Heuristics.getCoverage(nrOfPositiveClassifiedAsPositive, SharedDataHolder.posIndivs.size(),
+                nrOfNegativeClassifiedAsNegative, SharedDataHolder.negIndivs.size());
+
+        logger.info("precision size by reasoner: " + precision);
+        logger.info("recall size by reasoner: " + recall);
+
+        //Score accScore = new Score();
+        //candidateSolution.getScore()
+        this.getScore().setPrecision_by_reasoner(precision);
+        this.getScore().setRecall_by_reasoner(recall);
+        this.getScore().setF_measure_by_reasoner(f_measure);
+        this.getScore().setCoverage_by_reasoner(coverage);
+
 
     }
 

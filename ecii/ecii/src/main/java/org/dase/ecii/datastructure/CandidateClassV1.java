@@ -6,6 +6,7 @@ Written at 8/20/18.
 
 import org.dase.ecii.core.Score;
 import org.dase.ecii.core.SharedDataHolder;
+import org.dase.ecii.util.Heuristics;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
 
@@ -65,6 +67,14 @@ public class CandidateClassV1 {
      * Score associated with this CandidateClass. This score is used to select best n candidateClass (limit K6), which will be used on combination.
      */
     private Score score;
+
+    // use double to ensure when dividing we are getting double result not integer.
+    transient volatile protected double nrOfPositiveClassifiedAsPositive;
+    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
+    transient volatile protected double nrOfPositiveClassifiedAsNegative;
+    transient volatile protected double nrOfNegativeClassifiedAsNegative;
+    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
+    transient volatile protected double nrOfNegativeClassifiedAsPositive;
 
     private OWLClassExpression candidateClassAsOWLClassEXpression;
 
@@ -292,7 +302,7 @@ public class CandidateClassV1 {
             if (SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.containsKey(owlClassExpression)) {
                 coveredIndividuals = SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.get(owlClassExpression);
                 logger.info("calculating covered individuals by candidateSolution " + this.getCandidateClassAsOWLClassExpression() + " found in cache.");
-                logger.info("\t size: " + coveredIndividuals.size());
+                logger.info("\t covered all individuals size: " + coveredIndividuals.size());
                 return coveredIndividuals;
             }
         }
@@ -318,11 +328,82 @@ public class CandidateClassV1 {
         SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.put(owlClassExpression, coveredIndividuals);
 
         logger.info("calculating covered individuals by candidateClass " + this.getCandidateClassAsOWLClassExpression() + " by reasoner finished");
-        logger.info("\t size: " + coveredIndividuals.size());
+        logger.info("\t covered all individuals size: " + coveredIndividuals.size());
 
         return coveredIndividuals;
 
     }
+
+
+    /**
+     * Calculate accuracy of a candidateClass.
+     *
+     * @return
+     */
+    public Score calculateAccuracyComplexCustom() {
+
+        /**
+         * Individuals covered by all parts of solution
+         */
+        HashMap<OWLIndividual, Integer> coveredPosIndividualsMap = new HashMap<>();
+        /**
+         * Individuals excluded by all parts of solution
+         */
+        HashMap<OWLIndividual, Integer> excludedNegIndividualsMap = new HashMap<>();
+
+        HashSet<OWLNamedIndividual> allCoveredIndividuals = this.individualsCoveredByThisCandidateClassByReasoner();
+        // calculate how many positive individuals covered.
+        int posCoveredCounter = 0;
+        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
+            if (allCoveredIndividuals.contains(thisOwlNamedIndividual)) {
+                posCoveredCounter++;
+                HashMapUtility.insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
+            }
+        }
+        nrOfPositiveClassifiedAsPositive = posCoveredCounter;
+        /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
+        nrOfPositiveClassifiedAsNegative = SharedDataHolder.posIndivs.size() - nrOfPositiveClassifiedAsPositive;
+
+        // calculate how many negative individuals covered.
+        int negCoveredCounter = 0;
+        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
+            if (allCoveredIndividuals.contains(thisOwlNamedIndividual))
+                negCoveredCounter++;
+            else {
+                HashMapUtility.insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
+            }
+        }
+        /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
+        nrOfNegativeClassifiedAsNegative = SharedDataHolder.negIndivs.size() - negCoveredCounter;
+        nrOfNegativeClassifiedAsPositive = negCoveredCounter;
+
+
+        assert excludedNegIndividualsMap.size() == nrOfNegativeClassifiedAsNegative;
+        assert coveredPosIndividualsMap.size() == nrOfPositiveClassifiedAsPositive;
+
+        // TODO(zaman): it should be logger.debug instead of logger.info
+        logger.info("candidateClass: " + this.getCandidateClassAsString());
+        logger.info("\tcoveredPosIndividuals_by_ecii: " + coveredPosIndividualsMap.keySet());
+        logger.info("\tcoveredPosIndividuals_by_ecii size: " + coveredPosIndividualsMap.size());
+        logger.info("\texcludedNegIndividuals_by_ecii: " + excludedNegIndividualsMap.keySet());
+        logger.info("\texcludedNegIndividuals_by_ecii size: " + excludedNegIndividualsMap.size());
+
+        double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
+        double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);
+        double f_measure = Heuristics.getFScore(recall, precision);
+        double coverage = Heuristics.getCoverage(nrOfPositiveClassifiedAsPositive, SharedDataHolder.posIndivs.size(),
+                nrOfNegativeClassifiedAsNegative, SharedDataHolder.negIndivs.size());
+
+        Score accScore = new Score();
+        accScore.setPrecision(precision);
+        accScore.setRecall(recall);
+        accScore.setF_measure(f_measure);
+        accScore.setCoverage(coverage);
+
+        this.score = accScore;
+        return this.score;
+    }
+
 
     @Override
     public boolean equals(Object o) {

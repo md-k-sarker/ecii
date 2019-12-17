@@ -34,8 +34,10 @@ public final class ConfigParams {
     // all prefix:suffix map
     public static HashMap<String, String> prefixes;
 
+    /**
+     * This is also called as K?? probably k7
+     */
     public static boolean removeCommonTypes;
-
 
     /**
      * This is also called as K1

@@ -15,6 +15,7 @@ public class SharedDataHolder {
 
     public static String programStartingDir;
     public static Map<String, String> prefixmap;
+    public static OWLDocumentFormat owlDocumentFormat;
 
     public static OWLDataFactory owlDataFactory;
     public static OWLOntologyManager owlOntologyManager;
@@ -125,5 +126,9 @@ public class SharedDataHolder {
     // cache all accuracy call, by ecii
     public static HashMap<OWLClassExpression,HashSet<OWLNamedIndividual>> IndividualsOfThisOWLClassExpressionByECII = new HashMap<>();
 
+    /**
+     * To be used to calculate accuracy by reasoner, where we need to create new IRI using this function getUniqueIRI()
+     */
+    public static int newIRICounter = 0;
 
 }

@@ -87,7 +87,6 @@ public class Main {
         SharedDataHolder.typeOfObjectsInPosIndivs = new HashMap<>();
         SharedDataHolder.typeOfObjectsInNegIndivs = new HashMap<>();
 
-
         SharedDataHolder.individualHasObjectTypes = new HashMap<>();
 
         // public static OWLConceptHierarchy owlConceptHierarchy;
@@ -173,6 +172,7 @@ public class Main {
         monitor.writeMessage("K4/posExprTypeLimit: " + ConfigParams.conceptLimitInPosExpr);
         monitor.writeMessage("K5/hornClausesListMaxSize: " + ConfigParams.hornClausesListMaxSize);
         monitor.writeMessage("K6/candidateClassesListMaxSize: " + ConfigParams.candidateClassesListMaxSize);
+        monitor.writeMessage("K7/removeCommonTypes: " + ConfigParams.removeCommonTypes);
         monitor.writeMessage("ReasonerName: " + ConfigParams.reasonerName);
 
         logger.info("posIndivs from conf:");

@@ -141,7 +141,7 @@ public class CandidateSolutionFinderV1 {
 
         if (!SharedDataHolder.CandidateSolutionSetV1.contains(candidateSolutionV1)) {
             // calculate score
-            Score accScore = calculateAccuracyComplexCustom(candidateSolutionV1);
+            Score accScore = candidateSolutionV1.calculateAccuracyComplexCustom();
             if (accScore.getCoverage() > 0) {
                 candidateSolutionV1.setScore(accScore);
                 // save to shared data holder
@@ -289,13 +289,13 @@ public class CandidateSolutionFinderV1 {
                 boolean added = addToSolutions(candidateSolutionV1);
                 if (added) {
                     // save temporarily for combination
-                    Score hornClauseScore = calculateAccuracyComplexCustom(conjunctiveHornClauseV1);
+                    Score hornClauseScore = conjunctiveHornClauseV1.calculateAccuracyComplexCustom();
                     conjunctiveHornClauseV1.setScore(hornClauseScore);
-                    insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1);
+                    HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1);
 
-                    Score candidateClassScore = calculateAccuracyComplexCustom(candidateClassV1);
+                    Score candidateClassScore = candidateClassV1.calculateAccuracyComplexCustom();
                     candidateClassV1.setScore(candidateClassScore);
-                    insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClassV1);
+                    HashMapUtility.insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClassV1);
                 }
             });
         });
@@ -365,13 +365,13 @@ public class CandidateSolutionFinderV1 {
                             boolean added = addToSolutions(candidateSolution);
                             if (added) {
                                 // save temporarily for combination
-                                Score hornClauseScore = calculateAccuracyComplexCustom(conjunctiveHornClause);
+                                Score hornClauseScore = conjunctiveHornClause.calculateAccuracyComplexCustom();
                                 conjunctiveHornClause.setScore(hornClauseScore);
-                                insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClause);
+                                HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClause);
 
-                                Score candidateClassScore = calculateAccuracyComplexCustom(candidateClass);
+                                Score candidateClassScore = candidateClass.calculateAccuracyComplexCustom();
                                 candidateClass.setScore(candidateClassScore);
-                                insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClass);
+                                HashMapUtility.insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClass);
                             }
                         }
                     }
@@ -555,13 +555,13 @@ public class CandidateSolutionFinderV1 {
                     boolean added = addToSolutions(candidateSolutionV1);
                     if (added) {
                         // save temporarily for combination
-                        Score hornClauseScore = calculateAccuracyComplexCustom(conjunctiveHornClauseV1);
+                        Score hornClauseScore = conjunctiveHornClauseV1.calculateAccuracyComplexCustom();
                         conjunctiveHornClauseV1.setScore(hornClauseScore);
-                        insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1);
+                        HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1);
 
-                        Score candidateClassScore = calculateAccuracyComplexCustom(candidateClassV1);
+                        Score candidateClassScore = candidateClassV1.calculateAccuracyComplexCustom();
                         candidateClassV1.setScore(candidateClassScore);
-                        insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClassV1);
+                        HashMapUtility.insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClassV1);
                     }
                 });
 
@@ -624,9 +624,9 @@ public class CandidateSolutionFinderV1 {
                 boolean added = addToSolutions(candidateSolutionV1);
                 if (added) {
                     // save temporarily for combination
-                    Score candidateClassScore = calculateAccuracyComplexCustom(candidateClass);
+                    Score candidateClassScore = candidateClass.calculateAccuracyComplexCustom();
                     candidateClass.setScore(candidateClassScore);
-                    insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClass);
+                    HashMapUtility.insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClass);
                 }
             });
             logger.info("\tcombination of horn clause using object property " + Utility.getShortName(owlObjectProperty) + " finished. Total solutions: " + SharedDataHolder.CandidateSolutionSetV1.size());
@@ -669,128 +669,7 @@ public class CandidateSolutionFinderV1 {
     }
 
 
-    //@formatter:off
-    /**
-     * Utility/Helper method to insert entry into HashMap.
-     * Will be used to modify data of the:
-     *  1. SharedDataHolder.objectsInPosIndivs or
-     *  2. SharedDataHolder.objectsInNegIndivs or
-     *  3. SharedDataHolder.typeOfObjectsInPosIndivs or
-     *  4. SharedDataHolder.typeOfObjectsInNegIndivs
-     * @param hashMap : HashMap<OWLObjectProperty, HashMap<T, Integer>>
-     * @param objProp
-     * @param data
-     * @param <T>
-     */
-    //@formatter:on
-    private <T> void modifyHashMap(HashMap<OWLObjectProperty, HashMap<T, Integer>> hashMap, OWLObjectProperty objProp, T data) {
-        if (hashMap.containsKey(objProp)) {
-            if (hashMap.get(objProp).containsKey(data)) {
-                hashMap.get(objProp).put(data, hashMap.get(objProp).get(data) + 1);
-            } else {
-                hashMap.get(objProp).put(data, 1);
-            }
-        } else {
-            HashMap<T, Integer> tmpHashMap = new HashMap<>();
-            tmpHashMap.put(data, 1);
-            hashMap.put(objProp, tmpHashMap);
-        }
-    }
 
-
-    //@formatter:off
-    /**
-     * Utility/Helper method to insert entry into HashMap.
-     * Will be used to enter data into:
-     *  1. SharedDataHolder.objectsInPosIndivs or
-     *  2. SharedDataHolder.objectsInNegIndivs or
-     *  3. SharedDataHolder.typeOfObjectsInPosIndivs or
-     *  4. SharedDataHolder.typeOfObjectsInNegIndivs
-     * @param hashMap : HashMap<OWLObjectProperty, HashMap<T, Integer>>
-     * @param objProp
-     * @param data
-     * @param <T>
-     */
-    //@formatter:on
-    private <T> void insertIntoHashMap(HashMap<OWLObjectProperty, HashMap<T, Integer>> hashMap, OWLObjectProperty objProp, T data) {
-        if (hashMap.containsKey(objProp)) {
-            if (hashMap.get(objProp).containsKey(data)) {
-                hashMap.get(objProp).put(data, hashMap.get(objProp).get(data) + 1);
-            } else {
-                hashMap.get(objProp).put(data, 1);
-            }
-        } else {
-            HashMap<T, Integer> tmpHashMap = new HashMap<>();
-            tmpHashMap.put(data, 1);
-            hashMap.put(objProp, tmpHashMap);
-        }
-    }
-
-
-    //@formatter:off
-    /**
-     * Utility/Helper method to insert entry into HashMap.
-     * Will be used to insert data into:
-     *  SharedDataHolder.individualHasObjectTypes
-     * @param hashMap : HashMap<OWLNamedIndividual, HashMap<OWLObjectProperty, HashSet<OWLClassExpression>>>
-     * @param individual
-     * @param owlObjectProperty
-     * @param owlClassExpression
-     */
-    //@formatter:on
-    private void insertIntoHashMap(HashMap<OWLNamedIndividual, HashMap<OWLObjectProperty, HashSet<OWLClassExpression>>> hashMap,
-                                   OWLNamedIndividual individual, OWLObjectProperty owlObjectProperty, OWLClassExpression owlClassExpression) {
-        if (hashMap.containsKey(individual)) {
-            if (hashMap.get(individual).containsKey(owlObjectProperty)) {
-                hashMap.get(individual).get(owlObjectProperty).add(owlClassExpression);
-            } else {
-                HashSet<OWLClassExpression> tmpHashSet = new HashSet<>();
-                tmpHashSet.add(owlClassExpression);
-                hashMap.get(individual).put(owlObjectProperty, tmpHashSet);
-            }
-        } else {
-            HashMap<OWLObjectProperty, HashSet<OWLClassExpression>> tmpHashMap = new HashMap<>();
-            HashSet<OWLClassExpression> tmpHashSet = new HashSet<>();
-            tmpHashSet.add(owlClassExpression);
-            tmpHashMap.put(owlObjectProperty, tmpHashSet);
-            hashMap.put(individual, tmpHashMap);
-        }
-    }
-
-
-    /**
-     * Utility/Helper method to insert entry into HashMap
-     * Used for coveredPosIndividualsMap/excludedNegIndividualsMap
-     *
-     * @param hashMap
-     * @param data
-     */
-    private <T> void insertIntoHashMap(HashMap<T, Integer> hashMap, T data) {
-        if (hashMap.containsKey(data)) {
-            hashMap.put(data, hashMap.get(data) + 1);
-        } else {
-            hashMap.put(data, 1);
-        }
-    }
-
-
-    /**
-     * Utility/Helper method to insert entry into HashSet
-     * Used for hornClauseHashMap
-     *
-     * @param hashMap
-     * @param <T1>
-     * @param <T2>
-     */
-    private <T1, T2> void insertIntoHashMap(HashMap<T1, HashSet<T2>> hashMap, T1 key, T2 data) {
-        if (hashMap.containsKey(key)) {
-            hashMap.get(key).add(data);
-        } else {
-            HashSet<T2> tmpHashSet = new HashSet<>();
-            tmpHashSet.add(data);
-            hashMap.put(key, tmpHashSet);
-        }
-    }
 
     /**
      * extract all objects contains in the images and find their types.
@@ -817,10 +696,10 @@ public class CandidateSolutionFinderV1 {
                     logger.info("posType: " + posType.toString());
                     if (!posType.equals(owlDataFactory.getOWLThing()) && !posType.equals(owlDataFactory.getOWLNothing())) {
                         // insert into individualObject's type count
-                        insertIntoHashMap(SharedDataHolder.typeOfObjectsInPosIndivs, owlObjectProperty, posType);
+                        HashMapUtility.insertIntoHashMap(SharedDataHolder.typeOfObjectsInPosIndivs, owlObjectProperty, posType);
 
                         //insert into individualObject to individualObject type mapping
-                        insertIntoHashMap(SharedDataHolder.individualHasObjectTypes, posIndiv, owlObjectProperty, posType);
+                        HashMapUtility.insertIntoHashMap(SharedDataHolder.individualHasObjectTypes, posIndiv, owlObjectProperty, posType);
                     }
                 });
             } else {
@@ -831,16 +710,16 @@ public class CandidateSolutionFinderV1 {
                     logger.debug("\tindi: " + eachIndi.getIRI());
 
                     // insert into individuals count
-                    insertIntoHashMap(SharedDataHolder.objectsInPosIndivs, owlObjectProperty, eachIndi);
+                    HashMapUtility.insertIntoHashMap(SharedDataHolder.objectsInPosIndivs, owlObjectProperty, eachIndi);
 
                     reasoner.getTypes(eachIndi, false).getFlattened().forEach(posType -> {
                         logger.info("posType: " + posType.toString());
                         if (!posType.equals(owlDataFactory.getOWLThing()) && !posType.equals(owlDataFactory.getOWLNothing())) {
                             // insert into individualObject's type count
-                            insertIntoHashMap(SharedDataHolder.typeOfObjectsInPosIndivs, owlObjectProperty, posType);
+                            HashMapUtility.insertIntoHashMap(SharedDataHolder.typeOfObjectsInPosIndivs, owlObjectProperty, posType);
 
                             //insert into individualObject to individualObject type mapping
-                            insertIntoHashMap(SharedDataHolder.individualHasObjectTypes, posIndiv, owlObjectProperty, posType);
+                            HashMapUtility.insertIntoHashMap(SharedDataHolder.individualHasObjectTypes, posIndiv, owlObjectProperty, posType);
                         }
                     });
                 });
@@ -858,10 +737,10 @@ public class CandidateSolutionFinderV1 {
                     logger.info("negType: " + negType.toString());
                     if (!negType.equals(owlDataFactory.getOWLThing()) && !negType.equals(owlDataFactory.getOWLNothing())) {
                         // insert into individualObject's type count
-                        insertIntoHashMap(SharedDataHolder.typeOfObjectsInNegIndivs, owlObjectProperty, negType);
+                        HashMapUtility.insertIntoHashMap(SharedDataHolder.typeOfObjectsInNegIndivs, owlObjectProperty, negType);
 
                         //insert into individualObject to individualObject type mapping
-                        insertIntoHashMap(SharedDataHolder.individualHasObjectTypes, negIndiv, owlObjectProperty, negType);
+                        HashMapUtility.insertIntoHashMap(SharedDataHolder.individualHasObjectTypes, negIndiv, owlObjectProperty, negType);
                     }
                 });
             } else {
@@ -870,16 +749,16 @@ public class CandidateSolutionFinderV1 {
                 reasoner.getObjectPropertyValues(negIndiv, owlObjectProperty).getFlattened().forEach(eachIndi -> {
 
                     // insert into individualObject count
-                    insertIntoHashMap(SharedDataHolder.objectsInNegIndivs, owlObjectProperty, eachIndi);
+                    HashMapUtility.insertIntoHashMap(SharedDataHolder.objectsInNegIndivs, owlObjectProperty, eachIndi);
 
                     reasoner.getTypes(eachIndi, false).getFlattened().forEach(negType -> {
                         logger.info("negType: " + negType.toString());
                         if (!negType.equals(owlDataFactory.getOWLThing()) && !negType.equals(owlDataFactory.getOWLNothing())) {
                             //insert into individualObject's type count
-                            insertIntoHashMap(SharedDataHolder.typeOfObjectsInNegIndivs, owlObjectProperty, negType);
+                            HashMapUtility.insertIntoHashMap(SharedDataHolder.typeOfObjectsInNegIndivs, owlObjectProperty, negType);
 
                             // individualObject to individualObject type mapping
-                            insertIntoHashMap(SharedDataHolder.individualHasObjectTypes, negIndiv, owlObjectProperty, negType);
+                            HashMapUtility.insertIntoHashMap(SharedDataHolder.individualHasObjectTypes, negIndiv, owlObjectProperty, negType);
                         }
                     });
                 });
@@ -1049,6 +928,7 @@ public class CandidateSolutionFinderV1 {
      * @param owlNamedIndividual
      * @return boolean
      */
+    @Deprecated
     private boolean isContainedInCandidateClasses(ArrayList<CandidateClassV1> candidateClassesV1, OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
         boolean contained = false;
 
@@ -1106,6 +986,7 @@ public class CandidateSolutionFinderV1 {
      * @param owlNamedIndividual
      * @return
      */
+    @Deprecated
     private boolean isContainedInCandidateClass(CandidateClassV1 candidateClassV1, OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
         return isContainedInHornClauses(candidateClassV1.getConjunctiveHornClauses(), owlNamedIndividual, isPosIndiv);
     }
@@ -1118,11 +999,13 @@ public class CandidateSolutionFinderV1 {
      * if **all** of the horn clauses contain this individual then this individual is covered by this list.
      * For, proper owlObjectProperty,
      * if **any** one horn clause of the horn clauses contain this individual then this individual is covered by this list.
-     *
+     * we have implemented new method inside of the hornClause class, use that, instead of this one.
      * @param hornClauses
      * @param owlNamedIndividual
      * @return
+     *
      */
+    @Deprecated
     private boolean isContainedInHornClauses(ArrayList<ConjunctiveHornClauseV1> hornClauses, OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
 
         boolean contained = false;
@@ -1205,330 +1088,6 @@ public class CandidateSolutionFinderV1 {
     }
 
 
-    /**
-     * Calculate accuracy of a hornClause.
-     * TODO(zaman): need to fix to make compatible with v1
-     *
-     * @param conjunctiveHornClauseV1
-     * @return
-     */
-    private Score calculateAccuracyComplexCustom(ConjunctiveHornClauseV1 conjunctiveHornClauseV1) {
-
-        /**
-         * Individuals covered by all parts of solution
-         */
-        HashMap<OWLIndividual, Integer> coveredPosIndividualsMap = new HashMap<>();
-        /**
-         * Individuals excluded by all parts of solution
-         */
-        HashMap<OWLIndividual, Integer> excludedNegIndividualsMap = new HashMap<>();
-
-        HashSet<OWLNamedIndividual> allCoveredIndividuals = conjunctiveHornClauseV1.individualsCoveredByThisHornClauseByReasoner();
-        // calculate how many positive individuals covered.
-        int posCoveredCounter = 0;
-        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
-            if (allCoveredIndividuals.contains(thisOwlNamedIndividual)) {
-                posCoveredCounter++;
-                insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
-            }
-        }
-        nrOfPositiveClassifiedAsPositive = posCoveredCounter;
-        /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-        nrOfPositiveClassifiedAsNegative = SharedDataHolder.posIndivs.size() - nrOfPositiveClassifiedAsPositive;
-
-        // calculate how many negative individuals covered.
-        int negCoveredCounter = 0;
-        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
-            if (allCoveredIndividuals.contains(thisOwlNamedIndividual))
-                negCoveredCounter++;
-            else {
-                insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
-            }
-        }
-        /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-        nrOfNegativeClassifiedAsNegative = SharedDataHolder.negIndivs.size() - negCoveredCounter;
-        nrOfNegativeClassifiedAsPositive = negCoveredCounter;
-
-//        assert 2 == 1;
-        assert excludedNegIndividualsMap.size() == nrOfNegativeClassifiedAsNegative;
-        assert coveredPosIndividualsMap.size() == nrOfPositiveClassifiedAsPositive;
-
-        // TODO(zaman): it should be logger.debug instead of logger.info
-        logger.info("candidateClass: " + conjunctiveHornClauseV1.getHornClauseAsString());
-        logger.info("\tcoveredPosIndividuals_by_ecii: " + coveredPosIndividualsMap.keySet());
-        logger.info("\tcoveredPosIndividuals_by_ecii size: " + coveredPosIndividualsMap.size());
-        logger.info("\texcludedNegIndividuals_by_ecii: " + excludedNegIndividualsMap.keySet());
-        logger.info("\texcludedNegIndividuals_by_ecii size: " + excludedNegIndividualsMap.size());
-
-        double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
-        double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);
-        double f_measure = Heuristics.getFScore(recall, precision);
-        double coverage = Heuristics.getCoverage(nrOfPositiveClassifiedAsPositive, SharedDataHolder.posIndivs.size(),
-                nrOfNegativeClassifiedAsNegative, SharedDataHolder.negIndivs.size());
-
-        Score accScore = new Score();
-        accScore.setPrecision(precision);
-        accScore.setRecall(recall);
-        accScore.setF_measure(f_measure);
-        accScore.setCoverage(coverage);
-
-
-        return accScore;
-    }
-
-    /**
-     * Calculate accuracy of a candidateClass.
-     *
-     * @param candidateClassV1
-     * @return
-     */
-    private Score calculateAccuracyComplexCustom(CandidateClassV1 candidateClassV1) {
-
-        /**
-         * Individuals covered by all parts of solution
-         */
-        HashMap<OWLIndividual, Integer> coveredPosIndividualsMap = new HashMap<>();
-        /**
-         * Individuals excluded by all parts of solution
-         */
-        HashMap<OWLIndividual, Integer> excludedNegIndividualsMap = new HashMap<>();
-
-        HashSet<OWLNamedIndividual> allCoveredIndividuals = candidateClassV1.individualsCoveredByThisCandidateClassByReasoner();
-        // calculate how many positive individuals covered.
-        int posCoveredCounter = 0;
-        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
-            if (allCoveredIndividuals.contains(thisOwlNamedIndividual)) {
-                posCoveredCounter++;
-                insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
-            }
-        }
-        nrOfPositiveClassifiedAsPositive = posCoveredCounter;
-        /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-        nrOfPositiveClassifiedAsNegative = SharedDataHolder.posIndivs.size() - nrOfPositiveClassifiedAsPositive;
-
-        // calculate how many negative individuals covered.
-        int negCoveredCounter = 0;
-        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
-            if (allCoveredIndividuals.contains(thisOwlNamedIndividual))
-                negCoveredCounter++;
-            else {
-                insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
-            }
-        }
-        /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-        nrOfNegativeClassifiedAsNegative = SharedDataHolder.negIndivs.size() - negCoveredCounter;
-        nrOfNegativeClassifiedAsPositive = negCoveredCounter;
-
-
-        assert excludedNegIndividualsMap.size() == nrOfNegativeClassifiedAsNegative;
-        assert coveredPosIndividualsMap.size() == nrOfPositiveClassifiedAsPositive;
-
-        // TODO(zaman): it should be logger.debug instead of logger.info
-        logger.info("candidateClass: " + candidateClassV1.getCandidateClassAsString());
-        logger.info("\tcoveredPosIndividuals_by_ecii: " + coveredPosIndividualsMap.keySet());
-        logger.info("\tcoveredPosIndividuals_by_ecii size: " + coveredPosIndividualsMap.size());
-        logger.info("\texcludedNegIndividuals_by_ecii: " + excludedNegIndividualsMap.keySet());
-        logger.info("\texcludedNegIndividuals_by_ecii size: " + excludedNegIndividualsMap.size());
-
-        double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
-        double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);
-        double f_measure = Heuristics.getFScore(recall, precision);
-        double coverage = Heuristics.getCoverage(nrOfPositiveClassifiedAsPositive, SharedDataHolder.posIndivs.size(),
-                nrOfNegativeClassifiedAsNegative, SharedDataHolder.negIndivs.size());
-
-        Score accScore = new Score();
-        accScore.setPrecision(precision);
-        accScore.setRecall(recall);
-        accScore.setF_measure(f_measure);
-        accScore.setCoverage(coverage);
-
-        return accScore;
-    }
-
-    /**
-     * Calculate accuracy of a solution, according to the new method.
-     * TODO(Zaman) : need to fix the accuracy calculation for v1
-     *
-     * @param candidateSolutionV1
-     * @return
-     */
-    private Score calculateAccuracyComplexCustom(CandidateSolutionV1 candidateSolutionV1) {
-
-        /**
-         * Individuals covered by this solution
-         */
-        HashMap<OWLIndividual, Integer> coveredPosIndividualsMap = new HashMap<>();
-        /**
-         * Individuals excluded by this solution
-         */
-        HashMap<OWLIndividual, Integer> excludedNegIndividualsMap = new HashMap<>();
-
-        HashSet<OWLNamedIndividual> allCoveredIndividuals = candidateSolutionV1.individualsCoveredByThisCandidateSolutionByReasoner();
-        // calculate how many positive individuals covered.
-        int posCoveredCounter = 0;
-        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
-            if (allCoveredIndividuals.contains(thisOwlNamedIndividual)) {
-                posCoveredCounter++;
-                insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
-            }
-        }
-
-        nrOfPositiveClassifiedAsPositive = posCoveredCounter;
-        /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-        nrOfPositiveClassifiedAsNegative = SharedDataHolder.posIndivs.size() - nrOfPositiveClassifiedAsPositive;
-
-        // calculate how many negative individuals covered.
-        int negCoveredCounter = 0;
-        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
-            if (allCoveredIndividuals.contains(thisOwlNamedIndividual))
-                negCoveredCounter++;
-            else {
-                insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
-            }
-        }
-
-        /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-        nrOfNegativeClassifiedAsNegative = SharedDataHolder.negIndivs.size() - negCoveredCounter;
-        nrOfNegativeClassifiedAsPositive = negCoveredCounter;
-
-//        logger.info("Calculating accuracy of candidateSolution: "+ candidateSolutionV1.getSolutionAsString());
-//        logger.info("Excluded negative Indivs:");
-
-        // TODO(zaman): it should be logger.debug instead of logger.info
-        logger.info("solution: " + candidateSolutionV1.getSolutionAsString());
-        logger.info("\tcoveredPosIndividuals_by_ecii: " + coveredPosIndividualsMap.keySet());
-        logger.info("\tcoveredPosIndividuals_by_ecii size: " + coveredPosIndividualsMap.size());
-        logger.info("\texcludedNegIndividuals_by_ecii: " + excludedNegIndividualsMap.keySet());
-        logger.info("\texcludedNegIndividuals_by_ecii size: " + excludedNegIndividualsMap.size());
-
-
-//        assert 2 == 1;
-        assert excludedNegIndividualsMap.size() == nrOfNegativeClassifiedAsNegative;
-        assert coveredPosIndividualsMap.size() == nrOfPositiveClassifiedAsPositive;
-
-        double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
-        double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);
-        double f_measure = Heuristics.getFScore(recall, precision);
-        double coverage = Heuristics.getCoverage(nrOfPositiveClassifiedAsPositive, SharedDataHolder.posIndivs.size(),
-                nrOfNegativeClassifiedAsNegative, SharedDataHolder.negIndivs.size());
-
-        Score accScore = new Score();
-        accScore.setPrecision(precision);
-        accScore.setRecall(recall);
-        accScore.setF_measure(f_measure);
-        accScore.setCoverage(coverage);
-
-
-        return accScore;
-    }
-
-    private int newIRICounter = 0;
-
-    private IRI getUniqueIRI() {
-        ++newIRICounter;
-        String str = ":_Dracula__Dragon_Z" + newIRICounter;
-        try {
-
-            return Utility.createEntityIRI(str);
-        } catch (MalFormedIRIException ex) {
-            return IRI.create(str);
-        }
-
-    }
-
-    /**
-     * Calculate accuracy of a solution.
-     *
-     * @param candidateSolution
-     * @return
-     */
-    private void calculateAccuracyByReasoner(CandidateSolutionV1 candidateSolution) {
-
-        // add this class expression to ontology and reinitiate reasoner.
-        OWLClassExpression owlClassExpression = candidateSolution.getSolutionAsOWLClassExpression();
-        // create a unique name
-        OWLClass owlClass = SharedDataHolder.owlDataFactory.getOWLClass(getUniqueIRI());
-        OWLAxiom eqAxiom = SharedDataHolder.owlDataFactory.getOWLEquivalentClassesAxiom(owlClass, owlClassExpression);
-        ChangeApplied ca = SharedDataHolder.owlOntologyManager.addAxiom(SharedDataHolder.owlOntology, eqAxiom);
-        logger.info("Adding candidateSolution.getSolutionAsOWLClassExpression to ontology Status: " + ca.toString());
-        reasoner = Utility.initReasoner(ConfigParams.reasonerName, SharedDataHolder.owlOntology, monitor);
-
-        /**
-         * Individuals covered by all parts of solution
-         */
-        HashMap<OWLIndividual, Integer> coveredPosIndividualsMap = new HashMap<>();
-        /**
-         * Individuals excluded by all parts of solution
-         */
-        HashMap<OWLIndividual, Integer> excludedNegIndividualsMap = new HashMap<>();
-
-        /**
-         * For positive individuals, a individual must be contained within each AND section to be added as a coveredIndividuals.
-         * I.e. each
-         */
-        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
-
-            Set<OWLNamedIndividual> posIndivsByReasoner = reasoner.getInstances(owlClassExpression, false).getFlattened();
-
-            if (posIndivsByReasoner.contains(thisOwlNamedIndividual)) {
-                insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
-//                logger.info("Good");
-            } else {
-//                logger.info("not found. size: " + posIndivsByReasoner.size());
-            }
-        }
-
-        /**
-         * For negative individuals, a individual must be contained within each AND section to be added as a excludedInvdividuals.
-         * I.e. each
-         */
-        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
-
-            Set<OWLNamedIndividual> negIndivsByReasoner = reasoner.getInstances(owlClassExpression, false).getFlattened();
-
-            if (negIndivsByReasoner.contains(thisOwlNamedIndividual)) {
-                insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
-                logger.info("\t" + Utility.getShortName(thisOwlNamedIndividual) + " is contained by this concept using reasoner: " + owlClassExpression);
-            } else {
-//                logger.info("not found. size: " + negIndivsByReasoner.size());
-            }
-        }
-
-        logger.info("solution: " + candidateSolution.getSolutionAsString());
-        logger.info("coveredPosIndividuals_by_reasoner: " + coveredPosIndividualsMap.keySet());
-        logger.info("coveredPosIndividuals_by_reasoner size: " + coveredPosIndividualsMap.size());
-        logger.info("coveredNegIndividuals_by_reasoner: " + excludedNegIndividualsMap.keySet());
-        logger.info("coveredNegIndividuals_by_reasoner size: " + excludedNegIndividualsMap.size());
-
-        nrOfPositiveClassifiedAsPositive = coveredPosIndividualsMap.size();
-        /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-        nrOfPositiveClassifiedAsNegative = SharedDataHolder.posIndivs.size() - nrOfPositiveClassifiedAsPositive;
-        // TODO(zaman): need to verify this one, most probably the excludedNegIndividuals are the covered ones' by this concept, so we need to make inverse of it. for now use the exact one it, but later we have to fix it or verify it.
-        nrOfNegativeClassifiedAsNegative = SharedDataHolder.negIndivs.size() - excludedNegIndividualsMap.size();
-        /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-        nrOfNegativeClassifiedAsPositive = excludedNegIndividualsMap.size();
-
-        logger.info("nrOfPositiveClassifiedAsPositive size by reasoner: " + nrOfPositiveClassifiedAsPositive);
-        logger.info("nrOfNegativeClassifiedAsNegative size by reasoner: " + nrOfNegativeClassifiedAsNegative);
-
-        double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
-        double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);
-        double f_measure = Heuristics.getFScore(recall, precision);
-        double coverage = Heuristics.getCoverage(nrOfPositiveClassifiedAsPositive, SharedDataHolder.posIndivs.size(),
-                nrOfNegativeClassifiedAsNegative, SharedDataHolder.negIndivs.size());
-
-        logger.info("precision size by reasoner: " + precision);
-        logger.info("recall size by reasoner: " + recall);
-
-        //Score accScore = new Score();
-        //candidateSolution.getScore()
-        candidateSolution.getScore().setPrecision_by_reasoner(precision);
-        candidateSolution.getScore().setRecall_by_reasoner(recall);
-        candidateSolution.getScore().setF_measure_by_reasoner(f_measure);
-        candidateSolution.getScore().setCoverage_by_reasoner(coverage);
-
-
-    }
 
     /**
      * @param K6
@@ -1536,11 +1095,11 @@ public class CandidateSolutionFinderV1 {
     public void calculateAccuracyOfTopK6ByReasoner(int K6) {
         if (SharedDataHolder.SortedCandidateSolutionSetV1.size() < K6) {
             SharedDataHolder.SortedCandidateSolutionSetV1.forEach(candidateSolution -> {
-                calculateAccuracyByReasoner(candidateSolution);
+                candidateSolution.calculateAccuracyByReasoner();
             });
         } else {
             for (int i = 0; i < K6; i++) {
-                calculateAccuracyByReasoner(SharedDataHolder.SortedCandidateSolutionSetV1.get(i));
+                SharedDataHolder.SortedCandidateSolutionSetV1.get(i).calculateAccuracyByReasoner();
             }
         }
     }
@@ -1616,7 +1175,7 @@ public class CandidateSolutionFinderV1 {
             // make group again.
             hornClausesMap.clear();
             conjunctiveHornClausesList.forEach(conjunctiveHornClause -> {
-                insertIntoHashMap(hornClausesMap, conjunctiveHornClause.getOwlObjectProperty(), conjunctiveHornClause);
+                HashMapUtility.insertIntoHashMap(hornClausesMap, conjunctiveHornClause.getOwlObjectProperty(), conjunctiveHornClause);
             });
 
             // make sure cconjunctivehornclausemap size is upto limit.
@@ -1695,7 +1254,7 @@ public class CandidateSolutionFinderV1 {
             // make group again.
             candidateClassesMap.clear();
             candidateClassesList.forEach(conjunctiveHornClause -> {
-                insertIntoHashMap(candidateClassesMap, conjunctiveHornClause.getOwlObjectProperty(), conjunctiveHornClause);
+                HashMapUtility.insertIntoHashMap(candidateClassesMap, conjunctiveHornClause.getOwlObjectProperty(), conjunctiveHornClause);
             });
 
             // make sure cconjunctivehornclausemap size is upto limit.

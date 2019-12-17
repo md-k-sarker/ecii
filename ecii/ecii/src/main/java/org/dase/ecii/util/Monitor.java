@@ -41,7 +41,9 @@ public class Monitor {
     public Monitor(PrintStream _printStream, JTextPane textPane) {
         this.out = _printStream;
         this.dateFormat = Utility.getDateTimeFormat();
-        this.jTextPane = textPane;
+        if (null != textPane) {
+            this.jTextPane = textPane;
+        }
     }
 
     /*
@@ -66,13 +68,13 @@ public class Monitor {
         }
         String txt = "";
 
-        if(null != jTextPane){
+        if (null != jTextPane) {
             txt = jTextPane.getText();
         }
         if (txt == null) {
             txt = "";
         }
-        if(null != jTextPane)
+        if (null != jTextPane)
             jTextPane.setText(txt + "\n" + message);
     }
 

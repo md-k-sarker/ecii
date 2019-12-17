@@ -6,6 +6,7 @@ Written at 5/18/18.
 
 import org.dase.ecii.core.Score;
 import org.dase.ecii.core.SharedDataHolder;
+import org.dase.ecii.util.Heuristics;
 import org.dase.ecii.util.Utility;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
@@ -89,11 +90,6 @@ public class ConjunctiveHornClauseV1 {
     //@formatter:on
 
     /**
-     * Score associated with this CandidateClass. This score is used to select best n hornClause (limit K5), which will be used on combination.
-     */
-    private Score score;
-
-    /**
      * OWLClassExpression
      */
     private OWLClassExpression conjunctiveHornClauseAsOWLClass;
@@ -104,6 +100,19 @@ public class ConjunctiveHornClauseV1 {
     private String conjunctiveHornClauseAsString;
 
     private boolean solutionChanged = false;
+
+    /**
+     * Score associated with this hornclause. This score is used to select best n hornClause (limit K5), which will be used on combination.
+     */
+    private Score score;
+    // use double to ensure when dividing we are getting double result not integer.
+    transient volatile protected double nrOfPositiveClassifiedAsPositive;
+    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
+    transient volatile protected double nrOfPositiveClassifiedAsNegative;
+    transient volatile protected double nrOfNegativeClassifiedAsNegative;
+    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
+    transient volatile protected double nrOfNegativeClassifiedAsPositive;
+
 
     /**
      * Bad design should fix it
@@ -135,15 +144,18 @@ public class ConjunctiveHornClauseV1 {
     /**
      * copy constructor
      *
-     * @param anotherSolutionPart
+     * @param anotherConjunctiveHornClause
      */
-    public ConjunctiveHornClauseV1(ConjunctiveHornClauseV1 anotherSolutionPart, OWLOntology _ontology) {
+    public ConjunctiveHornClauseV1(ConjunctiveHornClauseV1 anotherConjunctiveHornClause, OWLOntology _ontology) {
         this.posObjectTypes = new ArrayList<>();
         this.negObjectTypes = new ArrayList<>();
-        this.owlObjectProperty = anotherSolutionPart.owlObjectProperty;
-        this.posObjectTypes = anotherSolutionPart.posObjectTypes;
-        this.negObjectTypes = anotherSolutionPart.negObjectTypes;
-        this.reasoner = anotherSolutionPart.reasoner;
+        this.owlObjectProperty = anotherConjunctiveHornClause.owlObjectProperty;
+        this.posObjectTypes = anotherConjunctiveHornClause.posObjectTypes;
+        this.negObjectTypes = anotherConjunctiveHornClause.negObjectTypes;
+        if (null != anotherConjunctiveHornClause.getScore()) {
+            this.score = anotherConjunctiveHornClause.getScore();
+        }
+        this.reasoner = anotherConjunctiveHornClause.reasoner;
         this.ontology = _ontology;
         this.owlOntologyManager = this.ontology.getOWLOntologyManager();
         this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
@@ -336,7 +348,7 @@ public class ConjunctiveHornClauseV1 {
                         sb.append(Utility.getShortName((OWLClass) this.getPosObjectTypes().get(0)));
                         for (int i = 1; i < this.getPosObjectTypes().size(); i++) {
                             sb.append(" " + AND.toString());
-                            sb.append(" " +Utility.getShortName((OWLClass) this.getPosObjectTypes().get(i)));
+                            sb.append(" " + Utility.getShortName((OWLClass) this.getPosObjectTypes().get(i)));
                         }
                     }
                 }
@@ -376,7 +388,7 @@ public class ConjunctiveHornClauseV1 {
      */
     public HashSet<OWLNamedIndividual> individualsCoveredByThisHornClauseByReasoner() {
 
-        logger.info("calculating covered individuals by hornClause " + this.getHornClauseAsString() + " by reasoner.........");
+        logger.info("calculating covered individuals by hornClause " + this.getConjunctiveHornClauseAsOWLClassExpression() + " by reasoner.........");
         HashSet<OWLNamedIndividual> coveredIndividuals = new HashSet<>();
         OWLClassExpression owlClassExpression = this.getConjunctiveHornClauseAsOWLClassExpression();
 
@@ -398,11 +410,13 @@ public class ConjunctiveHornClauseV1 {
         // not found in cache, now expensive reasoner calls.
         coveredIndividuals = (HashSet<OWLNamedIndividual>) reasoner.getInstances(owlClassExpression, false).getFlattened();
 
+
         // save it to cache
         SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.put(owlClassExpression, coveredIndividuals);
 
-        logger.info("calculating covered individuals by hornClause " + this.getHornClauseAsString() + " by reasoner finished");
-        logger.info("\t size: " + coveredIndividuals.size());
+        logger.info("calculating covered individuals by hornClause " + this.getConjunctiveHornClauseAsOWLClassExpression() + " by reasoner finished");
+
+        logger.info("\t covered all individuals size: " + coveredIndividuals.size());
 
         return coveredIndividuals;
     }
@@ -411,7 +425,8 @@ public class ConjunctiveHornClauseV1 {
     /**
      * This will return all individuals covered by this complex concept from the ontology using reasoner, by taking consideration of only the positive and negative individuals.
      * large number of individuals may be returned.
-     *  todo(zaman): not implemented yet.
+     * todo(zaman): not implemented yet.
+     *
      * @return
      */
     public HashSet<OWLNamedIndividual> individualsCoveredByThisHornClauseByReasonerInstanceCheck() {
@@ -441,7 +456,7 @@ public class ConjunctiveHornClauseV1 {
 
         allPosNegIndivs.forEach(owlNamedIndividual -> {
             // not found by reasoner, whether an indivs is covered by this concept or not.
-           // todo(zaman): not implemented yet.
+            // todo(zaman): not implemented yet.
         });
         // not found in cache, now expensive reasoner calls.
         coveredIndividuals = (HashSet<OWLNamedIndividual>) reasoner.getInstances(owlClassExpression, false).getFlattened();
@@ -459,10 +474,11 @@ public class ConjunctiveHornClauseV1 {
     /**
      * This will return all individuals covered by this complex concept from the ontology using ECII system,
      * large number of individuals may be returned.
-     * todo(zaman): Not yet implemented.
+     * todo(zaman):
      *
      * @return
      */
+    @Deprecated
     private HashSet<OWLNamedIndividual> individualsCoveredByThisHornClauseByECII() {
 
         //
@@ -478,11 +494,13 @@ public class ConjunctiveHornClauseV1 {
      * So, to satisfy, this individual must be in
      * 1. all posTypes and
      * 2. not on the negativeSide.
-     *
+     * <p>
      * this is implemented using ecii system, not using reasoner.
+     *
      * @param owlNamedIndividual
      * @return
      */
+    @Deprecated
     public boolean isContainedInHornClause(OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
 
 
@@ -568,11 +586,13 @@ public class ConjunctiveHornClauseV1 {
      * This is used to check positive type exclusions in negative part.
      * classes: ¬(D1⊔···⊔Dk)
      * this is implemented using ecii system, not using reasoner.
+     *
      * @param classExpressions
      * @param owlNamedIndividual
      * @param owlObjectProperty
      * @return
      */
+    @Deprecated
     private boolean isContainedInAnyClassExpressions(ArrayList<OWLClassExpression> classExpressions,
                                                      OWLNamedIndividual owlNamedIndividual,
                                                      OWLObjectProperty owlObjectProperty) {
@@ -594,6 +614,77 @@ public class ConjunctiveHornClauseV1 {
 
 
         return contained;
+    }
+
+
+    /**
+     * Calculate accuracy of a hornClause.
+     * TODO(zaman): need to fix to make compatible with v1
+     *
+     * @return
+     */
+    public Score calculateAccuracyComplexCustom() {
+
+        /**
+         * Individuals covered by all parts of solution
+         */
+        HashMap<OWLIndividual, Integer> coveredPosIndividualsMap = new HashMap<>();
+        /**
+         * Individuals excluded by all parts of solution
+         */
+        HashMap<OWLIndividual, Integer> excludedNegIndividualsMap = new HashMap<>();
+
+        HashSet<OWLNamedIndividual> allCoveredIndividuals = this.individualsCoveredByThisHornClauseByReasoner();
+        // calculate how many positive individuals covered.
+        int posCoveredCounter = 0;
+        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
+            if (allCoveredIndividuals.contains(thisOwlNamedIndividual)) {
+                posCoveredCounter++;
+                HashMapUtility.insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
+            }
+        }
+        nrOfPositiveClassifiedAsPositive = posCoveredCounter;
+        /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
+        nrOfPositiveClassifiedAsNegative = SharedDataHolder.posIndivs.size() - nrOfPositiveClassifiedAsPositive;
+
+        // calculate how many negative individuals covered.
+        int negCoveredCounter = 0;
+        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
+            if (allCoveredIndividuals.contains(thisOwlNamedIndividual))
+                negCoveredCounter++;
+            else {
+                HashMapUtility.insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
+            }
+        }
+        /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
+        nrOfNegativeClassifiedAsNegative = SharedDataHolder.negIndivs.size() - negCoveredCounter;
+        nrOfNegativeClassifiedAsPositive = negCoveredCounter;
+
+//        assert 2 == 1;
+        assert excludedNegIndividualsMap.size() == nrOfNegativeClassifiedAsNegative;
+        assert coveredPosIndividualsMap.size() == nrOfPositiveClassifiedAsPositive;
+
+        // TODO(zaman): it should be logger.debug instead of logger.info
+        logger.info("candidateClass: " + this.getHornClauseAsString());
+        logger.info("\tcoveredPosIndividuals_by_ecii: " + coveredPosIndividualsMap.keySet());
+        logger.info("\tcoveredPosIndividuals_by_ecii size: " + coveredPosIndividualsMap.size());
+        logger.info("\texcludedNegIndividuals_by_ecii: " + excludedNegIndividualsMap.keySet());
+        logger.info("\texcludedNegIndividuals_by_ecii size: " + excludedNegIndividualsMap.size());
+
+        double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
+        double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);
+        double f_measure = Heuristics.getFScore(recall, precision);
+        double coverage = Heuristics.getCoverage(nrOfPositiveClassifiedAsPositive, SharedDataHolder.posIndivs.size(),
+                nrOfNegativeClassifiedAsNegative, SharedDataHolder.negIndivs.size());
+
+        Score accScore = new Score();
+        accScore.setPrecision(precision);
+        accScore.setRecall(recall);
+        accScore.setF_measure(f_measure);
+        accScore.setCoverage(coverage);
+
+        this.score = accScore;
+        return this.score;
     }
 
 

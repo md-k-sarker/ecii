@@ -79,7 +79,7 @@ public class Utility {
         }
     }
 
-    public static void saveOntology(OWLOntology ontology,  OWLDocumentFormat owlDocumentFormat, String path) throws OWLOntologyStorageException {
+    public static void saveOntology(OWLOntology ontology, OWLDocumentFormat owlDocumentFormat, String path) throws OWLOntologyStorageException {
 
 
         String encodedPath = "";
@@ -180,10 +180,9 @@ public class Utility {
         logger.info("Format : " + owlOntologyManager.getOntologyFormat(owlOntology));
 
         // save the prefixes
-        OWLDocumentFormat format = owlOntologyManager.getOntologyFormat(owlOntology);
+        SharedDataHolder.owlDocumentFormat = owlOntologyManager.getOntologyFormat(owlOntology);
+        SharedDataHolder.prefixmap = SharedDataHolder.owlDocumentFormat.asPrefixOWLOntologyFormat().getPrefixName2PrefixMap();
         logger.info("Format : " + owlOntologyManager.getOntologyFormat(owlOntology));
-
-        SharedDataHolder.prefixmap = format.asPrefixOWLOntologyFormat().getPrefixName2PrefixMap();
 
         return owlOntology;
     }
@@ -262,6 +261,26 @@ public class Utility {
         return shortName;
     }
 
+
+    /**
+     * Return the shortform of the owlentity. if shortname is empty then return empty string "".
+     *
+     * @param owlEntity
+     * @return String : shortname of the entity
+     */
+    public static String getShortNameWithPrefix(OWLEntity owlEntity) {
+        if (null == owlEntity)
+            return null;
+        if (owlEntity.equals(SharedDataHolder.noneOWLObjProp))
+            return SharedDataHolder.noneObjPropStr;
+
+        String prefixedName = SharedDataHolder.owlDocumentFormat.asPrefixOWLOntologyFormat().
+                getPrefixName2PrefixMap().entrySet().stream().filter(e -> owlEntity.getIRI().toString().startsWith(e.getValue())).
+                map(e -> e.getKey() + owlEntity.getIRI().getShortForm()).findFirst().orElse("empty");
+
+        return prefixedName;
+    }
+
     /**
      * Get short form of each class.
      *
@@ -299,14 +318,13 @@ public class Utility {
     Parse csv files using apache comons
     http://commons.apache.org/proper/commons-csv/user-guide.html
      */
-    public  static CSVParser parseCSV(String csvPath, boolean withHeader){
+    public static CSVParser parseCSV(String csvPath, boolean withHeader) {
         CSVParser csvRecords = null;
         try {
             Reader in = new FileReader(csvPath);
-            if(withHeader){
+            if (withHeader) {
                 csvRecords = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(in);
-            }
-            else csvRecords =  CSVFormat.EXCEL.parse(in);
+            } else csvRecords = CSVFormat.EXCEL.parse(in);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -445,7 +463,12 @@ public class Utility {
             owlReasoner = reasonerFactory.createNonBufferingReasoner(ontology, reasonerConfig);
         } else {
             logger.error("reasonerFacotry is null. Program exiting");
-            monitor.stopSystem("reasonerFacotry is null. Program exiting", true);
+            if (null != monitor) {
+                monitor.stopSystem("reasonerFacotry is null. Program exiting", true);
+            } else {
+                System.out.println("owl reasoner is null. Program exiting");
+                System.exit(1);
+            }
         }
 
         if (null != owlReasoner) {
@@ -454,7 +477,12 @@ public class Utility {
             logger.info("reasoner name: " + owlReasoner.getReasonerName());
         } else {
             logger.error("owl reasoner is null. Program exiting");
-            monitor.stopSystem("owl reasoner is null. Program exiting", true);
+            if (null != monitor) {
+                monitor.stopSystem("owl reasoner is null. Program exiting", true);
+            } else {
+                System.out.println("owl reasoner is null. Program exiting");
+                System.exit(1);
+            }
         }
 
         return owlReasoner;
@@ -465,7 +493,7 @@ public class Utility {
      * extract prefixes from the conf file content. if the prefixes don't include new line then java properties
      * can extract this but it may have new line. so need regular expression.
      *
-     * @return HashMap<String                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               String>
+     * @return HashMap<String, String>
      */
     public static HashMap<String, String> extractPrefixesFromConf(String confFileFullContent) throws IOException {
 
@@ -518,7 +546,7 @@ public class Utility {
      * must be seperated by comma or new line.
      *
      * @param confFileFullContent : confFile content
-     * @return HashMap<OWLObjectProperty                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               Double>
+     * @return HashMap<OWLObjectProperty, Double>
      */
     public static HashMap<OWLObjectProperty, Double> readObjectPropsFromConf(String confFileFullContent) throws IOException, MalFormedIRIException {
 
@@ -657,6 +685,16 @@ public class Utility {
         }
     }
 
+
+    public static IRI getUniqueIRI() {
+        ++SharedDataHolder.newIRICounter;
+        String str = ":_Dracula__Dragon_Z" + SharedDataHolder.newIRICounter;
+        try {
+            return Utility.createEntityIRI(str);
+        } catch (MalFormedIRIException ex) {
+            return IRI.create(str);
+        }
+    }
 
     /**
      * Read pos examples from the conf confFile
@@ -951,7 +989,7 @@ public class Utility {
      *
      * @param list
      * @param K1
-     * @return ArrayList<ArrayList                                                                                                                                                                                                                                                               <                                                                                                                                                                                                                                                               OWLClassExpression>>
+     * @return ArrayList<ArrayList < OWLClassExpression>>
      */
     public static <T> ArrayList<ArrayList<T>> combinationHelper(ArrayList<T> list, int K1) {
 
