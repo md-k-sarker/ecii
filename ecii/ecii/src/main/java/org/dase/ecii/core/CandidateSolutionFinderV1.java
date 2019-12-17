@@ -459,7 +459,11 @@ public class CandidateSolutionFinderV1 {
         //
 
         logger.info("solution using multiple positive and multiple negative type started...............");
-        SharedDataHolder.typeOfObjectsInPosIndivs.forEach((owlObjectProperty, hashMap) -> {
+        SharedDataHolder.typeOfObjectsInPosIndivs.entrySet().stream().filter(owlObjectPropertyHashMapEntry -> owlObjectPropertyHashMapEntry.getValue().entrySet().size() > 0).forEach(owlObjectPropertyHashMapEntry -> {
+
+            OWLObjectProperty owlObjectProperty = owlObjectPropertyHashMapEntry.getKey();
+            HashMap<OWLClassExpression, Integer> hashMap = owlObjectPropertyHashMapEntry.getValue();
+            // ).forEach((owlObjectProperty, hashMap) ->
             ArrayList<OWLClassExpression> allPosTypes = new ArrayList<>(hashMap.keySet());
 
             ArrayList<ArrayList<OWLClassExpression>> listCombinationOfPosClassesForPosPortion;
@@ -476,6 +480,7 @@ public class CandidateSolutionFinderV1 {
             // TODO: check with pascal. --- Okay
             ArrayList<ArrayList<OWLClassExpression>> validListCombinationOfPosClassesForPosPortion = new ArrayList<>();
             listCombinationOfPosClassesForPosPortion.forEach(classExpressions -> {
+//                logger.info("debug: classExpressions.size(): " + classExpressions.size());
                 if (isValidCombinationOfSubClasses(classExpressions)) {
                     validListCombinationOfPosClassesForPosPortion.add(classExpressions);
                 }
@@ -532,6 +537,8 @@ public class CandidateSolutionFinderV1 {
                 logger.info("validListCombinationOfSubClassesForNegPortion size: " + validListCombinationOfSubClassesForNegPortion.size());
 
                 // now combine the postypes and negtypes
+                // null pointer because in the soutions the postypes is empty or 0
+//                logger.info("debug: posOwlClassExpressions: " + posOwlClassExpressions.size());
                 validListCombinationOfSubClassesForNegPortion.forEach(subClasses -> {
 
                     // if every class of this combination is in negative types then include this combination otherwise skip this.

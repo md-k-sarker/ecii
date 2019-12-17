@@ -491,6 +491,13 @@ public class CandidateSolutionV1 {
                     }
                 } else {
                     if (owlObjectPropertyArrayListHashMap.getValue().size() > 0) {
+//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getKey());
+//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue());
+//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getCandidateClassAsString());
+//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().size());
+//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().get(0).getPosObjectTypes().size());
+//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().get(0).getPosObjectTypes().get(0));
+                        // null pointer exception is here
                         coveredIndividualsInThisGroup = owlObjectPropertyArrayListHashMap.getValue().get(0).individualsCoveredByThisCandidateClassByReasoner();
                         // each candidateclass are unioned
                         for (int i = 1; i < owlObjectPropertyArrayListHashMap.getValue().size(); i++) {

@@ -7,11 +7,16 @@ Written at 12/13/19.
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.lang.invoke.MethodHandles;
 import java.util.HashMap;
 import java.util.HashSet;
 
 public class HashMapUtility {
+
+    final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     //@formatter:off
     /**
@@ -28,6 +33,10 @@ public class HashMapUtility {
      */
     //@formatter:on
     public static <T> void insertIntoHashMap(HashMap<OWLObjectProperty, HashMap<T, Integer>> hashMap, OWLObjectProperty objProp, T data) {
+        if (null == hashMap || null == objProp || null == data ) {
+            logger.error("Null key or value is now allowed in hashMap in insertIntoHashMap(HashMap<OWLObjectProperty, HashMap<T, Integer>> hashMap, OWLObjectProperty objProp, T data)");
+            return;
+        }
         if (hashMap.containsKey(objProp)) {
             if (hashMap.get(objProp).containsKey(data)) {
                 hashMap.get(objProp).put(data, hashMap.get(objProp).get(data) + 1);
@@ -54,7 +63,11 @@ public class HashMapUtility {
      */
     //@formatter:on
     public static void insertIntoHashMap(HashMap<OWLNamedIndividual, HashMap<OWLObjectProperty, HashSet<OWLClassExpression>>> hashMap,
-                                   OWLNamedIndividual individual, OWLObjectProperty owlObjectProperty, OWLClassExpression owlClassExpression) {
+                                         OWLNamedIndividual individual, OWLObjectProperty owlObjectProperty, OWLClassExpression owlClassExpression) {
+        if (null == hashMap || null == individual || null == owlObjectProperty || null == owlClassExpression) {
+            logger.error("Null key or value is now allowed in hashMap in insertIntoHashMap(HashMap<OWLNamedIndividual, HashMap<OWLObjectProperty, HashSet<OWLClassExpression>>> hashMap, OWLNamedIndividual individual, OWLObjectProperty owlObjectProperty, OWLClassExpression owlClassExpression)");
+            return;
+        }
         if (hashMap.containsKey(individual)) {
             if (hashMap.get(individual).containsKey(owlObjectProperty)) {
                 hashMap.get(individual).get(owlObjectProperty).add(owlClassExpression);
@@ -81,6 +94,10 @@ public class HashMapUtility {
      * @param data
      */
     public static <T> void insertIntoHashMap(HashMap<T, Integer> hashMap, T data) {
+        if (null == hashMap || null == data) {
+            logger.error("Null key or value is now allowed in hashMap in insertIntoHashMap(HashMap<T, Integer> hashMap, T data)");
+            return;
+        }
         if (hashMap.containsKey(data)) {
             hashMap.put(data, hashMap.get(data) + 1);
         } else {
@@ -97,6 +114,10 @@ public class HashMapUtility {
      * @param <T2>
      */
     public static <T1, T2> void insertIntoHashMap(HashMap<T1, HashSet<T2>> hashMap, T1 key, T2 data) {
+        if (null == hashMap || null == key || null == data) {
+            logger.error("Null key or value is now allowed in hashMap in insertIntoHashMap(HashMap<T1, HashSet<T2>> hashMap, T1 key, T2 data)");
+            return;
+        }
         if (hashMap.containsKey(key)) {
             hashMap.get(key).add(data);
         } else {
@@ -121,7 +142,11 @@ public class HashMapUtility {
      * @param <T>
      */
     //@formatter:on
-    public static  <T> void modifyHashMap(HashMap<OWLObjectProperty, HashMap<T, Integer>> hashMap, OWLObjectProperty objProp, T data) {
+    public static <T> void modifyHashMap(HashMap<OWLObjectProperty, HashMap<T, Integer>> hashMap, OWLObjectProperty objProp, T data) {
+        if (null == hashMap || null == objProp || null == data ) {
+            logger.error("Null key or value is now allowed in hashmap in modifyHashMap(HashMap<OWLObjectProperty, HashMap<T, Integer>> hashMap, OWLObjectProperty objProp, T data)");
+            return;
+        }
         if (hashMap.containsKey(objProp)) {
             if (hashMap.get(objProp).containsKey(data)) {
                 hashMap.get(objProp).put(data, hashMap.get(objProp).get(data) + 1);

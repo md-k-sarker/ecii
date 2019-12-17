@@ -135,7 +135,7 @@ public final class ConfigParams {
             removeCommonTypes = Boolean.parseBoolean(prop.getProperty("removeCommonTypes", "true"));
 
             confFileDir = Paths.get(confFilePath).getParent().toString();
-            String replacement = "_results_ecii_v1.txt";
+            String replacement = "_results_ecii_v1_test_10.txt";
             String resultFileName = Paths.get(confFilePath).getFileName().toString().replace(".config", replacement);
             outputResultPath = confFileDir + "/" + resultFileName;
 

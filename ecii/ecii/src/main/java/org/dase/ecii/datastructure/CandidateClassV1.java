@@ -293,6 +293,7 @@ public class CandidateClassV1 {
         OWLClassExpression owlClassExpression = this.getCandidateClassAsOWLClassExpression();
 
         if (!this.owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
+            // null pointer exception owlClassExpression is being null
             owlClassExpression = owlDataFactory.getOWLObjectSomeValuesFrom(owlObjectProperty, owlClassExpression);
         }
 

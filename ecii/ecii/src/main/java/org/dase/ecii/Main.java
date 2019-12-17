@@ -336,7 +336,7 @@ public class Main {
 
         } else if (args.length == 2) {
             /**
-             * args[0] = -d
+             * args[0] = -b
              * args[1] = directory
              */
             if (args[0].trim().toLowerCase().equals("-b") && !args[1].trim().endsWith(".config")) {
