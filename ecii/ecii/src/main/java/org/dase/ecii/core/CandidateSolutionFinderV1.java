@@ -70,7 +70,6 @@ public class CandidateSolutionFinderV1 {
         this.candidateClassesMap = new HashMap<>();
     }
 
-
     //@formatter:off
     /**
      *
@@ -121,7 +120,6 @@ public class CandidateSolutionFinderV1 {
 
     }
 
-
     /**
      * Init the variables
      */
@@ -152,7 +150,6 @@ public class CandidateSolutionFinderV1 {
         }
         return false;
     }
-
 
     /**
      * a combination is valid if and only if it doesn't have self subClass.
@@ -668,9 +665,6 @@ public class CandidateSolutionFinderV1 {
         logger.info("solution using combination of object proeprties/candidateClass finished. Total solutions: " + SharedDataHolder.CandidateSolutionSetV1.size());
     }
 
-
-
-
     /**
      * extract all objects contains in the images and find their types.
      * <p>
@@ -766,7 +760,6 @@ public class CandidateSolutionFinderV1 {
 
         }
     }
-
 
     /**
      * Remove common types which appeared both in positive types and negative types.
@@ -869,7 +862,6 @@ public class CandidateSolutionFinderV1 {
         });
     }
 
-
     /**
      * Create combination of object properties. this is done just one time.
      */
@@ -910,183 +902,13 @@ public class CandidateSolutionFinderV1 {
     transient volatile protected int nrOfPositiveIndividuals;
     transient volatile protected int nrOfNegativeIndividuals;
 
-    // use double to ensure when dividing we are getting double result not integer.
-    transient volatile protected double nrOfPositiveClassifiedAsPositive;
-    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-    transient volatile protected double nrOfPositiveClassifiedAsNegative;
-    transient volatile protected double nrOfNegativeClassifiedAsNegative;
-    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-    transient volatile protected double nrOfNegativeClassifiedAsPositive;
-
-
-    /**
-     * Determine whether this owlnamedIndividual contained within the candidate classes of this array of candidateClasses.
-     * precondition: all object property of this candidateclasses must be same.
-     * for none
-     *
-     * @param candidateClassesV1
-     * @param owlNamedIndividual
-     * @return boolean
-     */
-    @Deprecated
-    private boolean isContainedInCandidateClasses(ArrayList<CandidateClassV1> candidateClassesV1, OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
-        boolean contained = false;
-
-        OWLObjectProperty owlObjectProperty = candidateClassesV1.get(0).getOwlObjectProperty();
-
-        // for none type object properties it must be contained in each of the candidate classes.
-        int containedInTotalCandidateClasses = 0;
-
-        HashMap<OWLObjectProperty, HashSet<OWLClassExpression>> objPropsMap = SharedDataHolder.
-                individualHasObjectTypes.get(owlNamedIndividual);
-
-        if (null != objPropsMap && objPropsMap.containsKey(owlObjectProperty)) {
-            if (owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
-                // todo(zaman): need to implement logic.
-                //  if **all** candidate class of this group contains this individual then the full group contains this individual.
-                for (CandidateClassV1 candidateClass : candidateClassesV1) {
-                    if (owlObjectProperty.equals(candidateClass.getOwlObjectProperty())) {
-                        if (candidateClass.getConjunctiveHornClauses().size() > 0) {
-                            if (isContainedInCandidateClass(candidateClass, owlNamedIndividual, isPosIndiv)) {
-                                containedInTotalCandidateClasses++;
-                            }
-                        }
-                    }
-                }
-                if (candidateClassesV1.size() == containedInTotalCandidateClasses) {
-                    contained = true;
-                    return contained;
-                }
-            } else {
-                // if **any** candidate class of this group contains this individual then the full group contains this individual.
-                for (CandidateClassV1 candidateClass : candidateClassesV1) {
-                    if (owlObjectProperty.equals(candidateClass.getOwlObjectProperty())) {
-                        if (candidateClass.getConjunctiveHornClauses().size() > 0) {
-                            if (isContainedInCandidateClass(candidateClass, owlNamedIndividual, isPosIndiv)) {
-                                contained = true;
-                                return contained;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return contained;
-    }
-
-    /**
-     * Determine whether this owlnamedIndividual contained within this candidate class.
-     * This means that,
-     * For, none owlObjectProperty,
-     * if **all** of the horn clauses (connected to this cnadidate class) contain this individual then this candidate class contain this individual.
-     * For, proper owlObjectProperty,
-     * if **any** one horn clause of the horn clauses (connected to this cnadidate class) contain this individual then this candidate class contain this individual.
-     *
-     * @param candidateClassV1
-     * @param owlNamedIndividual
-     * @return
-     */
-    @Deprecated
-    private boolean isContainedInCandidateClass(CandidateClassV1 candidateClassV1, OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
-        return isContainedInHornClauses(candidateClassV1.getConjunctiveHornClauses(), owlNamedIndividual, isPosIndiv);
-    }
-
-
-    /**
-     * Determine whether this owlnamedIndividual contained within the hornclause of this hornClauses.
-     * This means that,
-     * For, none owlObjectProperty,
-     * if **all** of the horn clauses contain this individual then this individual is covered by this list.
-     * For, proper owlObjectProperty,
-     * if **any** one horn clause of the horn clauses contain this individual then this individual is covered by this list.
-     * we have implemented new method inside of the hornClause class, use that, instead of this one.
-     * @param hornClauses
-     * @param owlNamedIndividual
-     * @return
-     *
-     */
-    @Deprecated
-    private boolean isContainedInHornClauses(ArrayList<ConjunctiveHornClauseV1> hornClauses, OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
-
-        boolean contained = false;
-
-        // all horclause have same objectProperty, so it doesn't matter which one we take. we can obvioulsy make sure here.
-        OWLObjectProperty owlObjectProperty = hornClauses.get(0).getOwlObjectProperty();
-
-        HashMap<OWLObjectProperty, HashSet<OWLClassExpression>> objPropsMap = SharedDataHolder.
-                individualHasObjectTypes.get(owlNamedIndividual);
-
-        if (null != objPropsMap && objPropsMap.containsKey(owlObjectProperty)) {
-            if (isPosIndiv) {
-                if (owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
-                    // for postypes and none object property: if all horn clause of this group contains this individual then the full arraylist<hornclauses> contains this individual.
-                    int includedCounter = 0;
-                    for (ConjunctiveHornClauseV1 hornClause : hornClauses) {
-                        if (owlObjectProperty.equals(hornClause.getOwlObjectProperty())) {
-                            if (hornClause.isContainedInHornClause(owlNamedIndividual, isPosIndiv)) {
-                                includedCounter++;
-                            }
-                        }
-                    }
-                    if (hornClauses.size() == includedCounter) {
-                        contained = true;
-                    }
-                } else {
-                    // for postypes and proper object property: if any horn clause of this group contains this individual then the full arraylist<hornclauses> contains this individual.
-                    for (ConjunctiveHornClauseV1 hornClause : hornClauses) {
-                        if (owlObjectProperty.equals(hornClause.getOwlObjectProperty())) {
-                            if (hornClause.isContainedInHornClause(owlNamedIndividual, isPosIndiv)) {
-                                contained = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-            } else {
-                if (owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
-                    // for negtypes and proper object property: it just need to be excluded by **any** part , as the hornclauses come like this: C1 ⊓ ... ⊓ Cn
-                    for (ConjunctiveHornClauseV1 hornClause : hornClauses) {
-                        if (owlObjectProperty.equals(hornClause.getOwlObjectProperty())) {
-                            if (hornClause.isContainedInHornClause(owlNamedIndividual, isPosIndiv)) {
-                                contained = true;
-                                break;
-                            }
-                        }
-                    }
-                } else {
-                    // for negtypes and proper object property: it must be excluded by each part , as the hornclauses come like this: R1(C1 ⊔ C2 ⊔ C3 ⊔ C4 ⊔ C5 ⊔ C6 ….)
-                    int excludedCounter = 0;
-                    for (ConjunctiveHornClauseV1 hornClause : hornClauses) {
-                        if (owlObjectProperty.equals(hornClause.getOwlObjectProperty())) {
-                            if (hornClause.isContainedInHornClause(owlNamedIndividual, isPosIndiv)) {
-                                excludedCounter++;
-                            }
-                        }
-                    }
-                    if (hornClauses.size() == excludedCounter) {
-                        contained = true;
-                    } else {
-                        // this means, this individual is included in both pos portion and neg portion of this list of conjunctive hornClauses, so our solution should be excluded, or need another method to calculates this.
-                        logger.info("this means, this individual is included in both pos portion and neg portion of this list of conjunctive hornClauses, " +
-                                "so our solution should be excluded, or need another method to calculates this.. CandidateSolutionFinderV1.isContainedInHornClauses()");
-                        logger.info("\tindividual: " + Utility.getShortName(owlNamedIndividual));
-                        for (ConjunctiveHornClauseV1 hornClause : hornClauses) {
-                            logger.info("\t\thornClause: " + hornClause.getHornClauseAsString());
-                        }
-                        monitor.writeMessage("this means, this individual is included in both pos portion and neg portion of this list of conjunctive hornClauses," +
-                                " so our solution should be excluded, or need another method to calculates this.. CandidateSolutionFinderV1.isContainedInHornClauses()");
-                        monitor.writeMessage("\tindividual: " + Utility.getShortName(owlNamedIndividual));
-                        for (ConjunctiveHornClauseV1 hornClause : hornClauses) {
-                            monitor.writeMessage("\t\thornClause: " + hornClause.getHornClauseAsString());
-                        }
-                    }
-                }
-            }
-        }
-
-        return contained;
-    }
-
+//    // use double to ensure when dividing we are getting double result not integer.
+//    transient volatile protected double nrOfPositiveClassifiedAsPositive;
+//    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
+//    transient volatile protected double nrOfPositiveClassifiedAsNegative;
+//    transient volatile protected double nrOfNegativeClassifiedAsNegative;
+//    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
+//    transient volatile protected double nrOfNegativeClassifiedAsPositive;
 
 
     /**
