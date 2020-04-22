@@ -61,6 +61,17 @@ public final class ConfigParams {
     public static int conceptLimitInPosExpr;
 
     /**
+     * k9/ maximum posclasses (top scoring) to do the combination.
+     */
+    public static int posClassListMaxSize;
+
+    /**
+     * k10/ maximum negclasses (top scoring) to do the combination.
+     */
+    public static int negClassListMaxSize;
+
+
+    /**
      * K5 select upto k5 hornClauses to make combination
      */
     public static int hornClausesListMaxSize;
@@ -150,9 +161,11 @@ public final class ConfigParams {
             candidateClassesListMaxSize = Integer.valueOf(prop.getProperty("candidateClassesListMaxSize", "10"));
             removeCommonTypes = Boolean.parseBoolean(prop.getProperty("removeCommonTypes", "true"));
             validateByReasonerSize = Integer.valueOf(prop.getProperty("validateByReasonerSize", "0"));
+            posClassListMaxSize = Integer.valueOf(prop.getProperty("posClassListMaxSize", "20"));
+            negClassListMaxSize = Integer.valueOf(prop.getProperty("negClassListMaxSize", "20"));
 
             confFileDir = Paths.get(confFilePath).getParent().toString();
-            String replacement = "_results_ecii_v1.txt";
+            String replacement = "_results_ecii_v2.txt";
             String resultFileName = Paths.get(confFilePath).getFileName().toString().replace(".config", replacement);
             outputResultPath = confFileDir + "/" + resultFileName;
 
@@ -217,6 +230,8 @@ public final class ConfigParams {
         logger.info("\tnamespace: " + namespace);
         logger.info("\tconceptLimitInPosExpr: " + conceptLimitInPosExpr);
         logger.info("\tconceptLimitInNegExpr: " + conceptLimitInNegExpr);
+        logger.info("\tposClassListMaxSize: " + posClassListMaxSize);
+        logger.info("\tnegClassListMaxSize: " + negClassListMaxSize);
         logger.info("\thornClauseLimit: " + hornClauseLimit);
         logger.info("\tobjPropsCombinationLimit: " + objPropsCombinationLimit);
         logger.info("\thornClausesListMaxSize: " + hornClausesListMaxSize);

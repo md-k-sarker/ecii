@@ -158,11 +158,11 @@ public class StripDownOntology {
                         String indivName = strings.get(indivColumnName);
                         String classNames = strings.get(typeColumnName);
 
-                        if (null != indivName && indivName.length() > 0 && null != indivName && classNames.length() > 0) {
+                        if (null != indivName && indivName.length() > 0 && null != classNames && classNames.length() > 0) {
                             logger.info("indivName: " + indivName);
                             if (!hashSetHashMap.containsKey(indivName)) {
-                                HashSet<String> owlClassHashSet = new HashSet<>();
-                                hashSetHashMap.put(indivName, owlClassHashSet);
+                                HashSet<String> owlClassNameHashSet = new HashSet<>();
+                                hashSetHashMap.put(indivName, owlClassNameHashSet);
                             }
 
                             logger.info("classNames: " + classNames);
@@ -279,7 +279,7 @@ public class StripDownOntology {
                         for (String eachClassName : eachIndivAndTypesName.getValue()) {
                             if (null != eachClassName) {
 
-                                IRI iriClass = IRI.create(eachIndivAndTypesName.getKey());
+                                IRI iriClass = IRI.create(eachClassName);
                                 logger.debug("iriClass: " + iriClass);
                                 OWLClass owlClass = ontoDataFacotry.getOWLClass(iriClass);
                                 logger.debug("owlClass: " + owlClass);
@@ -464,9 +464,9 @@ public class StripDownOntology {
     private void findSuperTypesRecursive(OWLClass owlClass, HashSet<OWLAxiom> owlAxiomsToKeep) {
 
         reccounter++;
-        if (reccounter > 100000) {
-            System.exit(-1);
-        }
+//        if (reccounter > 100000) {
+//            System.exit(-1);
+//        }
         logger.info("indirectIndiCounter: " + indirectIndiCounter + " \t reccounter: " + reccounter);
         logger.info("Counter " + reccounter + " ### findSuperTypesRecursive started with: " + owlClass);
 

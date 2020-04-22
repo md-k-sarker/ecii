@@ -23,8 +23,8 @@ public class TestStripDownOntology {
     final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static String inputOntoPath = "/Users/sarker/Workspaces/Jetbrains/residue/data/KGS/automated_wiki/wiki_cats_v1_non_cyclic.owl";
-    private static String outputOntoPath = "/Users/sarker/Workspaces/Jetbrains/residue/data/KGS/automated_wiki/wiki_cats_v1_non_cyclic_stripped_V1.owl";
-    private static String entityCsvFilePath = "/Users/sarker/Workspaces/Jetbrains/residue/data/7_IFPs/Entities/Entities_types_to_strip_down_onto.csv";
+    private static String outputOntoPath = "/Users/sarker/Workspaces/Jetbrains/residue/data/KGS/automated_wiki/wiki_cats_v1_non_cyclic_stripped_for_7_IFP.owl";
+    private static String entityCsvFilePath = "/Users/sarker/Workspaces/Jetbrains/residue/experiments/7_IFP/Entities_With_Ontology/Entities_types_to_strip_down_onto.csv";
 
 
     //constructor

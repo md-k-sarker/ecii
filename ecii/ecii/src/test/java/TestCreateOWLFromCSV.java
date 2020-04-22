@@ -23,7 +23,7 @@ public class TestCreateOWLFromCSV {
 
         try {
 
-            Files.walk(Paths.get("/Users/sarker/Workspaces/Jetbrains/residue/data/7_IFPs/Entities/"))
+            Files.walk(Paths.get("/Users/sarker/Workspaces/Jetbrains/residue/experiments/7_IFP/Entities_With_Ontology/tmp"))
                     .filter(path -> path.toFile().isFile() && path.toString().endsWith(".csv"))
                     .forEach(path -> {
                         CreateOWLFromCSV createOWLFromCSV = null;

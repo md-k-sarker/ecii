@@ -1,18 +1,23 @@
-package org.dase.test;
 /*
 Written by sarker.
 Written at 8/10/18.
 */
 
+import org.dase.ecii.util.Utility;
 import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.search.EntitySearcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.*;
 
 public class RawTest {
 
+
+    final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     // Utility function to insert <key, value> into the Multimap
     private static <K, V> void insert(Map<K, List<V>> hashMap, K key, V value) {
@@ -66,33 +71,32 @@ public class RawTest {
     public static final String noneObjPropStr = "__%!dop%!__";
     public static final OWLObjectProperty noneOWLObjProp = OWLManager.getOWLDataFactory().getOWLObjectProperty(IRI.create(noneObjPropStr));
 
+
+    public void testEntitySearcher() {
+        try {
+            OWLOntology owlOntology = Utility.loadOntology(
+                    "/Users/sarker/Workspaces/Jetbrains/residue/data/KGS/automated_wiki/wiki_cats_v1_non_cyclic.owl");
+            OWLDataFactory owlDataFactory = owlOntology.getOWLOntologyManager().getOWLDataFactory();
+            OWLClass owlClass = owlDataFactory.getOWLClass(IRI.create("http://www.daselab.com/residue/analysis#155_births"));
+
+            logger.info("Searching super class of: " + owlClass);
+
+            EntitySearcher.getSuperClasses(owlClass, owlOntology).forEach(owlClassExpression -> {
+                logger.info("Super class: " + owlClassExpression);
+            });
+
+        } catch (OWLOntologyCreationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     // main function
     public static void main(String[] args) {
-//        int[] A = {1, 0, 5, -5, -1, 5};
-//        // 3, 4, -7, 3, 1, 3, 1, -4, -2, -2
-//        //printallSubarrays(A);
-//
-//        String str = "";
-//        System.out.println("lenght: " + str.length());
-//
-//        System.out.println("noneOWLObjProp: " + noneOWLObjProp);
-//
-//        OWLClassExpression owlClassExpression = null;
-        //owlClassExpression.getClassExpressionType()
-
-        HashSet<String> hashSet1 = new HashSet<>();
-        hashSet1.add("1");
-        hashSet1.add("2");
-
-        HashSet<String> hashSet2 = new HashSet<>();
-//        hashSet2.add("2");
-        hashSet2.add("3");
-
-        hashSet2.retainAll(hashSet1);
-
-        hashSet1.forEach(s -> {
-            System.out.println(s);
-        });
+        RawTest rawTest = new RawTest();
+        rawTest.testEntitySearcher();
     }
 
 }

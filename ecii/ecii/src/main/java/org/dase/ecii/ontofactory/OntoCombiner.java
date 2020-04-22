@@ -374,8 +374,8 @@ public class OntoCombiner {
 //        test1(p1, p2, ontoIRIString);
         OntoCombiner ontoCombiner = new OntoCombiner("http://www.daselab.com/residue/analysis");
         ontoCombiner.combineOntologies(
-                "/Users/sarker/Workspaces/Jetbrains/residue/data/7_IFPs/Entities/7_ifp_combined_with_wiki_V0.owl",
-                "/Users/sarker/Workspaces/Jetbrains/residue/data/7_IFPs/Entities");
+                "/Users/sarker/Workspaces/Jetbrains/residue/experiments/7_IFP/Entities_With_Ontology/tmp/7_ifp_combined_with_wiki_V3.owl",
+                "/Users/sarker/Workspaces/Jetbrains/residue/experiments/7_IFP/Entities_With_Ontology/tmp");
 
 
     }

@@ -2,6 +2,7 @@ package org.dase.ecii.core;
 
 import org.dase.ecii.datastructure.CandidateSolution;
 import org.dase.ecii.datastructure.CandidateSolutionV1;
+import org.dase.ecii.datastructure.CandidateSolutionV2;
 import org.dase.ecii.ontofactory.DLSyntaxRendererExt;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
@@ -112,19 +113,23 @@ public class SharedDataHolder {
     public static HashSet<CandidateSolution> CandidateSolutionSet = new HashSet<>();
     // to support both v0 and v1
     public static HashSet<CandidateSolutionV1> CandidateSolutionSetV1 = new HashSet<>();
+    // to support both v0 and v1
+    public static HashSet<CandidateSolutionV2> CandidateSolutionSetV2 = new HashSet<>();
 
     public static ArrayList<CandidateSolution> SortedCandidateSolutionSet = new ArrayList<>();
-    // to support both v0 and v1
+    // to support both v0 and v1 and v2
     public static ArrayList<CandidateSolutionV1> SortedCandidateSolutionSetV1 = new ArrayList<>();
+    // to support both v0 and v1 and v2
+    public static ArrayList<CandidateSolutionV2> SortedCandidateSolutionSetV2 = new ArrayList<>();
 
     public static ArrayList<CandidateSolution> SortedByReasonerCandidateSolutionSet = new ArrayList<>();
 
 
     // cache all reasoner calls, specifically finding individuals of an owlClassExpression must be cached.
-    public static HashMap<OWLClassExpression,HashSet<OWLNamedIndividual>> IndividualsOfThisOWLClassExpressionByReasoner = new HashMap<>();
+    public static HashMap<OWLClassExpression, HashSet<OWLNamedIndividual>> IndividualsOfThisOWLClassExpressionByReasoner = new HashMap<>();
 
     // cache all accuracy call, by ecii
-    public static HashMap<OWLClassExpression,HashSet<OWLNamedIndividual>> IndividualsOfThisOWLClassExpressionByECII = new HashMap<>();
+    public static HashMap<OWLClassExpression, HashSet<OWLNamedIndividual>> IndividualsOfThisOWLClassExpressionByECII = new HashMap<>();
 
     /**
      * To be used to calculate accuracy by reasoner, where we need to create new IRI using this function getUniqueIRI()

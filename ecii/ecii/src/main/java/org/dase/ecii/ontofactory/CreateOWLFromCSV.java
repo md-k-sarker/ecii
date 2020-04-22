@@ -44,15 +44,24 @@ public class CreateOWLFromCSV {
     }
 
     private OWLObjectProperty createObjProp(String objPropName) {
-        return owlDataFactory.getOWLObjectProperty(IRI.create(ontoIRI + "#" + objPropName));
+        if (objPropName.contains("#"))
+            return owlDataFactory.getOWLObjectProperty(IRI.create(objPropName));
+        else
+            return owlDataFactory.getOWLObjectProperty(IRI.create(ontoIRI + "#" + objPropName));
     }
 
     private OWLClass createOWLClass(String className) {
-        return owlDataFactory.getOWLClass(IRI.create(ontoIRI + "#" + className));
+        if (className.contains("#"))
+            return owlDataFactory.getOWLClass(IRI.create(className));
+        else
+            return owlDataFactory.getOWLClass(IRI.create(ontoIRI + "#" + className));
     }
 
     private OWLNamedIndividual createOWLNamedIndividual(String indivName) {
-        return owlDataFactory.getOWLNamedIndividual(IRI.create(ontoIRI + "#" + indivName));
+        if (indivName.contains("#"))
+            return owlDataFactory.getOWLNamedIndividual(IRI.create(indivName));
+        else
+            return owlDataFactory.getOWLNamedIndividual(IRI.create(ontoIRI + "#" + indivName));
     }
 
     private OWLAxiom createTypeRelation(OWLNamedIndividual owlNamedIndividual, OWLClass owlClass) {

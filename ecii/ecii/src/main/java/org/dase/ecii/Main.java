@@ -2,10 +2,7 @@ package org.dase.ecii;
 
 
 import org.apache.log4j.PropertyConfigurator;
-import org.dase.ecii.core.CandidateSolutionFinderV0;
-import org.dase.ecii.core.CandidateSolutionFinderV1;
-import org.dase.ecii.core.Score;
-import org.dase.ecii.core.SharedDataHolder;
+import org.dase.ecii.core.*;
 import org.dase.ecii.ontofactory.DLSyntaxRendererExt;
 import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Monitor;
@@ -179,7 +176,9 @@ public class Main {
         monitor.writeMessage("K7/removeCommonTypes: " + ConfigParams.removeCommonTypes);
         monitor.writeMessage("DefaultScoreType: " + Score.defaultScoreType);
         monitor.writeMessage("ReasonerName: " + ConfigParams.reasonerName);
-        monitor.writeMessage("ValidateByReasonerSize: "+ ConfigParams.validateByReasonerSize);
+        monitor.writeMessage("k8/ValidateByReasonerSize: " + ConfigParams.validateByReasonerSize);
+        monitor.writeMessage("k9/posClassListMaxSize: " + ConfigParams.posClassListMaxSize);
+        monitor.writeMessage("k10/negClassListMaxSize: " + ConfigParams.negClassListMaxSize);
 
         logger.info("posIndivs from conf:");
         monitor.writeMessage("posIndivs from conf:");
@@ -196,7 +195,7 @@ public class Main {
         });
 
         // Create a new ConceptFinder object with the given reasoner.
-        CandidateSolutionFinderV1 findConceptsObj = new CandidateSolutionFinderV1(owlReasoner, ontology, outPutStream, monitor);
+        CandidateSolutionFinderV2 findConceptsObj = new CandidateSolutionFinderV2(owlReasoner, ontology, outPutStream, monitor);
         //ConceptFinderComplex findConceptsObj = new ConceptFinderComplex(owlReasoner, ontology, outPutStream, monitor);
 
         logger.info("finding solutions started...............");
