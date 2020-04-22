@@ -4,7 +4,65 @@ Written by sarker.
 Written at 6/2/18.
 */
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.invoke.MethodHandles;
+
+
 public class Score {
+
+
+    final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    /**
+     * Default Score type. Over the runtime of a single execution this score type must be same.
+     */
+    public static ScoreType defaultScoreType;
+
+
+    /**
+     * default is -1
+     *
+     * @return
+     */
+    public double getDefaultScoreValue() {
+        if (null == defaultScoreType) {
+            logger.error("defaultScoreType is null!!!!!!!!!!!!. Need to set defaultScoreType first.");
+            return -1;
+        }
+        double value;
+        logger.debug("Default Score type: " + defaultScoreType);
+        switch (defaultScoreType) {
+            case PRECISION:
+                value = precision;
+                break;
+            case RECALL:
+                value = recall;
+                break;
+            case F_MEASURE:
+                value = f_measure;
+                break;
+            case COVERAGE:
+                value = coverage;
+                break;
+            case PRECISION_by_REASONER:
+                value = precision_by_reasoner;
+                break;
+            case RECALL_by_REASONER:
+                value = recall_by_reasoner;
+                break;
+            case F_MEASURE_by_REASONER:
+                value = f_measure_by_reasoner;
+                break;
+            case COVERAGE_by_REASONER:
+                value = coverage_by_reasoner;
+                break;
+            default:
+                value = -1;
+        }
+        return value;
+    }
 
     double precision;
     double recall;
@@ -20,9 +78,6 @@ public class Score {
 
     double coverage_by_reasoner;
 
-    public Score() {
-
-    }
 
     public double getPrecision() {
         return precision;

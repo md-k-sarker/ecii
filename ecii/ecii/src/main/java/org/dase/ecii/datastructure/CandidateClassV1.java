@@ -227,10 +227,10 @@ public class CandidateClassV1 {
      *
      * @return String
      */
-    public String getCandidateClassAsString() {
+    public String getCandidateClassAsString(boolean includePrefix) {
 
-        if (!solutionChanged && null != candidateClassAsString)
-            return candidateClassAsString;
+//        if (!solutionChanged && null != candidateClassAsString)
+//            return candidateClassAsString;
 
         solutionChanged = false;
 
@@ -249,14 +249,14 @@ public class CandidateClassV1 {
 
                 if (this.getConjunctiveHornClauses().size() == 1) {
                     sb.append("(");
-                    sb.append(this.getConjunctiveHornClauses().get(0).getHornClauseAsString());
+                    sb.append(this.getConjunctiveHornClauses().get(0).getHornClauseAsString(includePrefix));
                     sb.append(")");
                 } else {
 
                     sb.append("(");
 
                     sb.append("(");
-                    sb.append(this.getConjunctiveHornClauses().get(0).getHornClauseAsString());
+                    sb.append(this.getConjunctiveHornClauses().get(0).getHornClauseAsString(includePrefix));
                     sb.append(")");
 
                     for (int i = 1; i < this.getConjunctiveHornClauses().size(); i++) {
@@ -266,7 +266,7 @@ public class CandidateClassV1 {
                         // TODO:  check with Pascal.
                         sb.append(" " + ANDOR + " ");
                         sb.append("(");
-                        sb.append(this.getConjunctiveHornClauses().get(i).getHornClauseAsString());
+                        sb.append(this.getConjunctiveHornClauses().get(i).getHornClauseAsString(includePrefix));
                         sb.append(")");
                     }
                     sb.append(")");
@@ -383,7 +383,7 @@ public class CandidateClassV1 {
         assert coveredPosIndividualsMap.size() == nrOfPositiveClassifiedAsPositive;
 
         // TODO(zaman): it should be logger.debug instead of logger.info
-        logger.info("candidateClass: " + this.getCandidateClassAsString());
+        logger.info("candidateClass: " + this.getCandidateClassAsString(true));
         logger.info("\tcoveredPosIndividuals_by_ecii: " + coveredPosIndividualsMap.keySet());
         logger.info("\tcoveredPosIndividuals_by_ecii size: " + coveredPosIndividualsMap.size());
         logger.info("\texcludedNegIndividuals_by_ecii: " + excludedNegIndividualsMap.keySet());

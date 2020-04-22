@@ -324,10 +324,10 @@ public class ConjunctiveHornClauseV1 {
      *
      * @return
      */
-    public String getHornClauseAsString() {
+    public String getHornClauseAsString(boolean includePrefix) {
 
-        if (!solutionChanged && null != conjunctiveHornClauseAsString)
-            return conjunctiveHornClauseAsString;
+//        if (!solutionChanged && null != conjunctiveHornClauseAsString)
+//            return conjunctiveHornClauseAsString;
 
         solutionChanged = false;
 
@@ -342,13 +342,19 @@ public class ConjunctiveHornClauseV1 {
                 if (this.getPosObjectTypes().size() > 0) {
                     hasPositive = true;
                     if (this.getPosObjectTypes().size() == 1) {
-                        sb.append(Utility.getShortName((OWLClass) this.getPosObjectTypes().get(0)));
+                        if (includePrefix)
+                            sb.append(Utility.getShortNameWithPrefix((OWLClass) this.getPosObjectTypes().get(0)));
+                        else sb.append(Utility.getShortName((OWLClass) this.getPosObjectTypes().get(0)));
                     } else {
                         // not using parenthesis for multiple positive types.
-                        sb.append(Utility.getShortName((OWLClass) this.getPosObjectTypes().get(0)));
+                        if (includePrefix)
+                            sb.append(Utility.getShortNameWithPrefix((OWLClass) this.getPosObjectTypes().get(0)));
+                        else sb.append(Utility.getShortName((OWLClass) this.getPosObjectTypes().get(0)));
                         for (int i = 1; i < this.getPosObjectTypes().size(); i++) {
                             sb.append(" " + AND.toString());
-                            sb.append(" " + Utility.getShortName((OWLClass) this.getPosObjectTypes().get(i)));
+                            if (includePrefix)
+                                sb.append(" " + Utility.getShortNameWithPrefix((OWLClass) this.getPosObjectTypes().get(i)));
+                            else sb.append(" " + Utility.getShortName((OWLClass) this.getPosObjectTypes().get(i)));
                         }
                     }
                 }
@@ -362,13 +368,19 @@ public class ConjunctiveHornClauseV1 {
                     }
                     sb.append(" " + NOT.toString());
                     if (this.getNegObjectTypes().size() == 1) {
-                        sb.append(" " + Utility.getShortName((OWLClass) this.getNegObjectTypes().get(0)));
+                        if (includePrefix)
+                            sb.append(" " + Utility.getShortNameWithPrefix((OWLClass) this.getNegObjectTypes().get(0)));
+                        else sb.append(" " + Utility.getShortName((OWLClass) this.getNegObjectTypes().get(0)));
                     } else {
                         sb.append(" (");
-                        sb.append(Utility.getShortName((OWLClass) this.getNegObjectTypes().get(0)));
+                        if (includePrefix)
+                            sb.append(Utility.getShortNameWithPrefix((OWLClass) this.getNegObjectTypes().get(0)));
+                        else sb.append(Utility.getShortName((OWLClass) this.getNegObjectTypes().get(0)));
                         for (int i = 1; i < this.getNegObjectTypes().size(); i++) {
                             sb.append(" " + OR.toString());
-                            sb.append(" " + Utility.getShortName((OWLClass) this.getNegObjectTypes().get(i)));
+                            if (includePrefix)
+                                sb.append(" " + Utility.getShortNameWithPrefix((OWLClass) this.getNegObjectTypes().get(i)));
+                            else sb.append(" " + Utility.getShortName((OWLClass) this.getNegObjectTypes().get(i)));
                         }
                         sb.append(")");
                     }
@@ -422,8 +434,6 @@ public class ConjunctiveHornClauseV1 {
     }
 
 
-
-
     /**
      * Calculate accuracy of a hornClause.
      * TODO(zaman): need to fix to make compatible with v1
@@ -472,7 +482,7 @@ public class ConjunctiveHornClauseV1 {
         assert coveredPosIndividualsMap.size() == nrOfPositiveClassifiedAsPositive;
 
         // TODO(zaman): it should be logger.debug instead of logger.info
-        logger.info("candidateClass: " + this.getHornClauseAsString());
+        logger.info("candidateClass: " + this.getHornClauseAsString(true));
         logger.info("\tcoveredPosIndividuals_by_ecii: " + coveredPosIndividualsMap.keySet());
         logger.info("\tcoveredPosIndividuals_by_ecii size: " + coveredPosIndividualsMap.size());
         logger.info("\texcludedNegIndividuals_by_ecii: " + excludedNegIndividualsMap.keySet());

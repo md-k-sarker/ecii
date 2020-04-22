@@ -1,5 +1,7 @@
 package org.dase.ecii.util;
 
+import org.dase.ecii.core.Score;
+import org.dase.ecii.core.ScoreType;
 import org.dase.ecii.core.SharedDataHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,7 @@ public final class ConfigParams {
     public static String confFilePath;
     public static String confFileDir;
     public static String reasonerName;
+    public static String scoreTypeNameRaw;
     public static String ontoPath;
     //outputResultPath will always be at the same directory of the confFile.
     public static String outputResultPath;
@@ -35,7 +38,7 @@ public final class ConfigParams {
     public static HashMap<String, String> prefixes;
 
     /**
-     * This is also called as K?? probably k7
+     * K7/atomic types both appeared in positive and negative
      */
     public static boolean removeCommonTypes;
 
@@ -66,6 +69,11 @@ public final class ConfigParams {
      * K6 select upto k6 candidate classes to make combination
      */
     public static int candidateClassesListMaxSize;
+
+    /**
+     * K8/Validate the accuracy of top solutions by reasoner upto this number of solutions
+     */
+    public static int validateByReasonerSize;
 
     //public static double combinationThreshold;
     public static boolean batch;
@@ -116,26 +124,35 @@ public final class ConfigParams {
             namespace = prop.getProperty("namespace");
             prefixes.put("", namespace);
 
+            // score type
+            // allowable names: coverage,precision,recall,f_measure,coverage_by_reasoner,
+            // precision_by_reasoner,recall_by_reasoner,f_measure_by_reasoner
+            // beware that properties are case sensitive
+            scoreTypeNameRaw = prop.getProperty("scoreType", "precision");
+            parseScoreTypes(scoreTypeNameRaw);
+
+            // reasoner
             reasonerName = prop.getProperty("reasoner.reasonerImplementation", "pellet");
 
+            // obj property
             SharedDataHolder.objProperties = Utility.readObjectPropsFromConf(SharedDataHolder.confFileFullContent);
             // add none object property
             SharedDataHolder.objProperties.put(SharedDataHolder.noneOWLObjProp, 1.0);
 
-            logger.info("indivs---------");
+            logger.info("pos indivs---------");
             logger.info(prop.get("lp.positiveExamples").toString());
-            logger.info("indivs---------");
 
-            conceptLimitInPosExpr = Integer.valueOf(prop.getProperty("conceptLimitInPosExpr", "3"));
-            conceptLimitInNegExpr = Integer.valueOf(prop.getProperty("conceptLimitInNegExpr", "3"));
-            hornClauseLimit = Integer.valueOf(prop.getProperty("hornClauseLimit", "3"));
-            objPropsCombinationLimit = Integer.valueOf(prop.getProperty("objPropsCombinationLimit", "3"));
-            hornClausesListMaxSize = Integer.valueOf(prop.getProperty("hornClausesListMaxSize", "50"));
-            candidateClassesListMaxSize = Integer.valueOf(prop.getProperty("candidateClassesListMaxSize", "50"));
+            conceptLimitInPosExpr = Integer.valueOf(prop.getProperty("conceptLimitInPosExpr", "2"));
+            conceptLimitInNegExpr = Integer.valueOf(prop.getProperty("conceptLimitInNegExpr", "2"));
+            hornClauseLimit = Integer.valueOf(prop.getProperty("hornClauseLimit", "2"));
+            objPropsCombinationLimit = Integer.valueOf(prop.getProperty("objPropsCombinationLimit", "2"));
+            hornClausesListMaxSize = Integer.valueOf(prop.getProperty("hornClausesListMaxSize", "10"));
+            candidateClassesListMaxSize = Integer.valueOf(prop.getProperty("candidateClassesListMaxSize", "10"));
             removeCommonTypes = Boolean.parseBoolean(prop.getProperty("removeCommonTypes", "true"));
+            validateByReasonerSize = Integer.valueOf(prop.getProperty("validateByReasonerSize", "0"));
 
             confFileDir = Paths.get(confFilePath).getParent().toString();
-            String replacement = "_results_ecii_v1_test_10.txt";
+            String replacement = "_results_ecii_v1.txt";
             String resultFileName = Paths.get(confFilePath).getFileName().toString().replace(".config", replacement);
             outputResultPath = confFileDir + "/" + resultFileName;
 
@@ -153,6 +170,43 @@ public final class ConfigParams {
         }
     }
 
+    private static boolean parseScoreTypes(String scoreTypeNameRaw) {
+        try {
+            switch (scoreTypeNameRaw) {
+                case "precision":
+                    Score.defaultScoreType = ScoreType.PRECISION;
+                    break;
+                case "recall":
+                    Score.defaultScoreType = ScoreType.RECALL;
+                    break;
+                case "f_measure":
+                    Score.defaultScoreType = ScoreType.F_MEASURE;
+                    break;
+                case "coverage":
+                    Score.defaultScoreType = ScoreType.COVERAGE;
+                    break;
+                case "precision_by_reasoner":
+                    Score.defaultScoreType = ScoreType.PRECISION_by_REASONER;
+                    break;
+                case "recall_by_reasoner":
+                    Score.defaultScoreType = ScoreType.RECALL_by_REASONER;
+                    break;
+                case "f_measure_by_reasoner":
+                    Score.defaultScoreType = ScoreType.F_MEASURE_by_REASONER;
+                    break;
+                case "coverage_by_reasoner":
+                    Score.defaultScoreType = ScoreType.COVERAGE_by_REASONER;
+                    break;
+                default:
+                    Score.defaultScoreType = ScoreType.PRECISION;
+            }
+            return true;
+        } catch (Exception ex) {
+            logger.error(Utility.getStackTraceAsString(ex));
+            return false;
+        }
+    }
+
     /**
      * Utility method to print configparams
      */
@@ -167,7 +221,9 @@ public final class ConfigParams {
         logger.info("\tobjPropsCombinationLimit: " + objPropsCombinationLimit);
         logger.info("\thornClausesListMaxSize: " + hornClausesListMaxSize);
         logger.info("\tcandidateClassesListMaxSize: " + candidateClassesListMaxSize);
-        logger.info("\tremoveCommonTypes: "+ removeCommonTypes);
+        logger.info("\tremoveCommonTypes: " + removeCommonTypes);
+        logger.info("\tscoreTypeNameRaw: " + scoreTypeNameRaw);
+        logger.info("\tvalidateByReasonerSize: " + validateByReasonerSize);
     }
 
     /**

@@ -54,7 +54,7 @@ public class TestCandidateSolutionV1 {
             candidateSolutionV1.addCandidateClass(candidateClassV1);
 
             // print solution
-            logger.info("Concept by ecii "+ candidateSolutionV1.getSolutionAsString());
+            logger.info("Concept by ecii "+ candidateSolutionV1.getSolutionAsString(true));
             logger.info("Concept by resoner "+ candidateSolutionV1.getSolutionAsOWLClassExpression().toString());
             // calculate accuracy
            Score accScore = candidateSolutionV1.calculateAccuracyComplexCustom();

@@ -365,14 +365,23 @@ public class CandidateSolutionV1 {
     }
 
     /**
+     * solutionStringTypIsSame: with prefix or without prefix
+     * Will measure whether the subsequent call to this getSolutionAsString() method are calling with includePrefix or not.
+     * This means it can cache the only 1 version of the solution string, can not cache both without prefix and with prefix.
+     */
+//    public boolean cachedSolutionStringTypIsSame = true;
+
+    /**
      * Get the solution as String
      *
      * @return String
      */
-    public String getSolutionAsString() {
+    public String getSolutionAsString(boolean includePrefix) {
 
-        if (!solutionChanged && null != candidateSolutionAsString)
-            return candidateSolutionAsString;
+//        cachedSolutionStringTypIsSame = cachedSolutionStringTypIsSame && includePrefix ? false : true;
+//
+//        if (!solutionChanged && null != candidateSolutionAsString && !cachedSolutionStringTypIsSame)
+//            return candidateSolutionAsString;
 
         solutionChanged = false;
 
@@ -392,15 +401,15 @@ public class CandidateSolutionV1 {
                     // we expect atomic class size will be one but it is not the case always.
                     bareTypeSize = candidateClasses.size();
                     if (candidateClasses.size() == 1) {
-                        sb.append(candidateClasses.get(0).getCandidateClassAsString());
+                        sb.append(candidateClasses.get(0).getCandidateClassAsString(includePrefix));
                     } else {
                         sb.append("(");
-                        sb.append(candidateClasses.get(0).getCandidateClassAsString());
+                        sb.append(candidateClasses.get(0).getCandidateClassAsString(includePrefix));
 
                         for (int i = 1; i < candidateClasses.size(); i++) {
                             // ecii extension-- making it AND instead of OR, same as the getASOWLClassExpression
                             sb.append(" " + AND.toString() + " ");
-                            sb.append(candidateClasses.get(i).getCandidateClassAsString());
+                            sb.append(candidateClasses.get(i).getCandidateClassAsString(includePrefix));
                         }
                         sb.append(")");
                     }
@@ -424,16 +433,18 @@ public class CandidateSolutionV1 {
                         if (bareTypeSize > 0 || rFilledSize > 1) {
                             sb.append(" " + AND.toString() + " ");
                         }
-                        sb.append(EXISTS +" "+ Utility.getShortName(owlObjectProperty) + ".");
+                        if (includePrefix)
+                            sb.append(EXISTS + " " + Utility.getShortNameWithPrefix(owlObjectProperty) + ".");
+                        else sb.append(EXISTS + " " + Utility.getShortName(owlObjectProperty) + ".");
                         if (candidateClasses.size() == 1) {
-                            sb.append(candidateClasses.get(0).getCandidateClassAsString());
+                            sb.append(candidateClasses.get(0).getCandidateClassAsString(includePrefix));
                         } else {
                             sb.append("(");
-                            sb.append(candidateClasses.get(0).getCandidateClassAsString());
+                            sb.append(candidateClasses.get(0).getCandidateClassAsString(includePrefix));
 
                             for (int i = 1; i < candidateClasses.size(); i++) {
                                 sb.append(" " + OR.toString() + " ");
-                                sb.append(candidateClasses.get(i).getCandidateClassAsString());
+                                sb.append(candidateClasses.get(i).getCandidateClassAsString(includePrefix));
                             }
                             sb.append(")");
                         }
@@ -576,7 +587,7 @@ public class CandidateSolutionV1 {
 //        logger.info("Excluded negative Indivs:");
 
         // TODO(zaman): it should be logger.debug instead of logger.info
-        logger.info("solution: " + this.getSolutionAsString());
+        logger.info("solution: " + this.getSolutionAsString(true));
         logger.info("\tcoveredPosIndividuals_by_ecii: " + coveredPosIndividualsMap.keySet());
         logger.info("\tcoveredPosIndividuals_by_ecii size: " + coveredPosIndividualsMap.size());
         logger.info("\texcludedNegIndividuals_by_ecii: " + excludedNegIndividualsMap.keySet());
@@ -661,7 +672,7 @@ public class CandidateSolutionV1 {
             }
         }
 
-        logger.info("solution: " + this.getSolutionAsString());
+        logger.info("solution: " + this.getSolutionAsString(true));
         logger.info("coveredPosIndividuals_by_reasoner: " + coveredPosIndividualsMap.keySet());
         logger.info("coveredPosIndividuals_by_reasoner size: " + coveredPosIndividualsMap.size());
         logger.info("coveredNegIndividuals_by_reasoner: " + excludedNegIndividualsMap.keySet());

@@ -5,9 +5,11 @@ Written at 8/12/18.
 */
 
 import org.dase.ecii.util.Utility;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -62,9 +64,27 @@ public class TestUtility {
         });
     }
 
+    public void testLoadOntology(){
+
+        Long startTime = System.currentTimeMillis();
+
+        try {
+            Utility.loadOntology("/Users/sarker/Workspaces/Jetbrains/residue/data/KGS/automated_wiki/wiki_full_cats_with_pages_v1_non_cyclic_jan_20_32808131_fixed_non_unicode.rdf");
+        } catch (OWLOntologyCreationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Long endTime = System.currentTimeMillis();
+        Long loadTime = endTime - startTime;
+
+        System.out.println("Ontology load time:  "+ loadTime/1000 + " seconds");
+    }
+
     public static void main(String[] args) {
         TestUtility tu = new TestUtility();
-        tu.testRestrictedPermutations();
+        tu.testLoadOntology();
 
     }
 }

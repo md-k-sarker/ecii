@@ -1,0 +1,5 @@
+package org.dase.ecii.core;
+
+public enum ScoreType {
+    PRECISION, RECALL, F_MEASURE, COVERAGE, PRECISION_by_REASONER, RECALL_by_REASONER, F_MEASURE_by_REASONER, COVERAGE_by_REASONER
+}

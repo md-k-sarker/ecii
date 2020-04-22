@@ -83,7 +83,7 @@ public class CandidateSolutionFinderV1 {
         // find Object Types for each of the object property
         logger.info("extractObjectTypes started...............");
         for (Map.Entry<OWLObjectProperty, Double> entry : SharedDataHolder.objProperties.entrySet()) {
-            logger.debug("Extracting objectTypes using objectProperty: " + Utility.getShortName(entry.getKey()));
+            logger.info("Extracting objectTypes using objectProperty: " + Utility.getShortName(entry.getKey()));
             extractObjectTypes(tolerance, entry.getKey());
         }
         logger.info("extractObjectTypes finished.");
@@ -140,7 +140,7 @@ public class CandidateSolutionFinderV1 {
         if (!SharedDataHolder.CandidateSolutionSetV1.contains(candidateSolutionV1)) {
             // calculate score
             Score accScore = candidateSolutionV1.calculateAccuracyComplexCustom();
-            if (accScore.getCoverage() > 0) {
+            if (accScore.getDefaultScoreValue() > 0) {
                 candidateSolutionV1.setScore(accScore);
                 // save to shared data holder
                 SharedDataHolder.CandidateSolutionSetV1.add(candidateSolutionV1);
@@ -268,7 +268,7 @@ public class CandidateSolutionFinderV1 {
         // create solution using just one class expression.
 
         // solution using only a single positive type
-        logger.info("solution using only a single positive type started...............");
+        logger.info("\nSolution using only a single positive type started...............");
         SharedDataHolder.typeOfObjectsInPosIndivs.forEach((owlObjectProperty, hashMap) -> {
             hashMap.forEach((posOwlClassExpression, integer) -> {
 
@@ -494,7 +494,9 @@ public class CandidateSolutionFinderV1 {
                 HashSet<OWLClassExpression> posTypeOwlSubClassExpressions = new HashSet<>();
 
                 for (OWLClassExpression posOwlClassExpression : posOwlClassExpressions) {
-                    posTypeOwlSubClassExpressions.addAll(reasoner.getSubClasses(posOwlClassExpression, false).getFlattened().stream().collect(Collectors.toList()));
+                    posTypeOwlSubClassExpressions.addAll(
+                            reasoner.getSubClasses(posOwlClassExpression, false)
+                                    .getFlattened().stream().collect(Collectors.toList()));
                 }
 
                 ArrayList<OWLClassExpression> posTypeOwlSubClassExpressionsForCombination = new ArrayList<>();
@@ -504,7 +506,8 @@ public class CandidateSolutionFinderV1 {
                 posTypeOwlSubClassExpressions.forEach(subClassOwlClassExpression -> {
                     if (SharedDataHolder.typeOfObjectsInNegIndivs.containsKey(owlObjectProperty)) {
                         // if subclass of this class is included in the negative type
-                        if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).containsKey(subClassOwlClassExpression)) {
+                        if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty)
+                                .containsKey(subClassOwlClassExpression)) {
                             posTypeOwlSubClassExpressionsForCombination.add(subClassOwlClassExpression);
                         }
                     }
@@ -515,7 +518,8 @@ public class CandidateSolutionFinderV1 {
 
                 ArrayList<ArrayList<OWLClassExpression>> listCombinationOfSubClassesForNegPortion;
                 // combination of 1, starting from 1 for negtypes. posTypes are at-least 2 here.
-                listCombinationOfSubClassesForNegPortion = Utility.combinationHelper(posTypeOwlSubClassExpressionsForCombination, 1);
+                listCombinationOfSubClassesForNegPortion = Utility
+                        .combinationHelper(posTypeOwlSubClassExpressionsForCombination, 1);
                 // combination from 2 to upto ccombinationLimit
                 for (int combinationCounter = 2; combinationCounter <= ConfigParams.conceptLimitInNegExpr; combinationCounter++) {
                     // combination of combinationCounter
@@ -571,7 +575,8 @@ public class CandidateSolutionFinderV1 {
 
             });
         });
-        logger.info("solution using multiple positive and multiple negative type finished. Total Solutions: " + SharedDataHolder.CandidateSolutionSetV1.size());
+        logger.info("solution using multiple positive and multiple negative type finished. Total Solutions: "
+                + SharedDataHolder.CandidateSolutionSetV1.size());
 
         /**
          * Select top k5 hornClauses to make combination. This function reduces the hornClauseMap size.
@@ -594,7 +599,8 @@ public class CandidateSolutionFinderV1 {
          */
         logger.info("solution using combination of horn clause started...............");
         hornClausesMap.forEach((owlObjectProperty, conjunctiveHornClauses) -> {
-            logger.info("\tcombination of horn clause using object property " + Utility.getShortName(owlObjectProperty) + " started...............");
+            logger.info("\tcombination of horn clause using object property " +
+                    Utility.getShortName(owlObjectProperty) + " started...............");
             ArrayList<ConjunctiveHornClauseV1> hornClauseArrayList = new ArrayList<>(conjunctiveHornClauses);
             logger.info("\thorn clause size: " + hornClauseArrayList.size());
 
@@ -682,19 +688,20 @@ public class CandidateSolutionFinderV1 {
      * @param owlObjectProperty
      */
     private void extractObjectTypes(double tolerance, OWLObjectProperty owlObjectProperty) {
-        logger.info("Given obj property: " + Utility.getShortName(owlObjectProperty));
+        logger.info("\tGiven obj property: " + Utility.getShortName(owlObjectProperty));
 
 
-        // find the indivs and corresponding types of indivs which appeared in the positive images
-        logger.info("size: " + SharedDataHolder.posIndivs.size());
+        // find the indivs and corresponding types of indivs which appeared in the positive individuals
+        logger.info("\tSharedDataHolder.posIndivs.size(): " + SharedDataHolder.posIndivs.size());
         for (OWLNamedIndividual posIndiv : SharedDataHolder.posIndivs) {
-            //bare type/direct type
+            //bare type/direct type --------- indiv type using obj-prop
             if (owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
                 //for no object property or direct types we used SharedDataHolder.noneOWLObjProp
                 logger.info("Below concepts are type/supertype of positive " + posIndiv.getIRI().toString() + " individual.");
-                logger.info("object count: " + reasoner.getTypes(posIndiv, false).getFlattened().size());
-                reasoner.getTypes(posIndiv, false).getFlattened().forEach(posType -> {
-                    logger.info("posType: " + posType.toString());
+                HashSet<OWLClass> classHashSet = new HashSet<>(reasoner.getTypes(posIndiv, false).getFlattened());
+                logger.debug("object count: " + classHashSet.size());
+                classHashSet.forEach(posType -> {
+                    logger.debug("posType: " + posType.toString());
                     if (!posType.equals(owlDataFactory.getOWLThing()) && !posType.equals(owlDataFactory.getOWLNothing())) {
                         // insert into individualObject's type count
                         HashMapUtility.insertIntoHashMap(SharedDataHolder.typeOfObjectsInPosIndivs, owlObjectProperty, posType);
@@ -705,16 +712,17 @@ public class CandidateSolutionFinderV1 {
                 });
             } else {
 
-                logger.info("Below concepts are type/supertype of positive " + posIndiv.getIRI().toString() + " individual through objProp " + owlObjectProperty.getIRI().getShortForm());
-                logger.info("object count: " + reasoner.getObjectPropertyValues(posIndiv, owlObjectProperty).getFlattened().size());
-                reasoner.getObjectPropertyValues(posIndiv, owlObjectProperty).getFlattened().forEach(eachIndi -> {
+                logger.info("Below concepts are type/supertype of positive " + posIndiv.getIRI().toString() + " individual through objProp " + owlObjectProperty.getIRI());
+                HashSet<OWLNamedIndividual> objectsHashSet = new HashSet<>(reasoner.getObjectPropertyValues(posIndiv, owlObjectProperty).getFlattened());
+                logger.debug("object count: " + objectsHashSet.size());
+                objectsHashSet.forEach(eachIndi -> {
                     logger.debug("\tindi: " + eachIndi.getIRI());
 
                     // insert into individuals count
                     HashMapUtility.insertIntoHashMap(SharedDataHolder.objectsInPosIndivs, owlObjectProperty, eachIndi);
 
                     reasoner.getTypes(eachIndi, false).getFlattened().forEach(posType -> {
-                        logger.info("posType: " + posType.toString());
+                        logger.debug("\t\tposType: " + posType.toString());
                         if (!posType.equals(owlDataFactory.getOWLThing()) && !posType.equals(owlDataFactory.getOWLNothing())) {
                             // insert into individualObject's type count
                             HashMapUtility.insertIntoHashMap(SharedDataHolder.typeOfObjectsInPosIndivs, owlObjectProperty, posType);
@@ -733,9 +741,10 @@ public class CandidateSolutionFinderV1 {
             if (owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
                 //for no object property or direct types we used SharedDataHolder.noneOWLObjProp
                 logger.info("Below concepts are type/supertype of negative " + negIndiv.getIRI().toString() + " individual.");
-                logger.info("object count: " + reasoner.getTypes(negIndiv, false).getFlattened().size());
-                reasoner.getTypes(negIndiv, false).getFlattened().forEach(negType -> {
-                    logger.info("negType: " + negType.toString());
+                HashSet<OWLClass> classHashSet = new HashSet<>(reasoner.getTypes(negIndiv, false).getFlattened());
+                logger.debug("object count: " + classHashSet.size());
+                classHashSet.forEach(negType -> {
+                    logger.debug("\t\tnegType: " + negType.toString());
                     if (!negType.equals(owlDataFactory.getOWLThing()) && !negType.equals(owlDataFactory.getOWLNothing())) {
                         // insert into individualObject's type count
                         HashMapUtility.insertIntoHashMap(SharedDataHolder.typeOfObjectsInNegIndivs, owlObjectProperty, negType);
@@ -745,15 +754,18 @@ public class CandidateSolutionFinderV1 {
                     }
                 });
             } else {
-                logger.info("Below concepts are type/supertype of negative " + negIndiv.getIRI().toString() + " individual through objProp " + owlObjectProperty.getIRI().getShortForm());
-                logger.info("object count: " + reasoner.getObjectPropertyValues(negIndiv, owlObjectProperty).getFlattened().size());
-                reasoner.getObjectPropertyValues(negIndiv, owlObjectProperty).getFlattened().forEach(eachIndi -> {
+                logger.info("Below concepts are type/supertype of negative " +
+                        negIndiv.getIRI().toString() + " individual through objProp " + owlObjectProperty.getIRI());
+                HashSet<OWLNamedIndividual> objectsHashSet = new HashSet<>
+                        (reasoner.getObjectPropertyValues(negIndiv, owlObjectProperty).getFlattened());
+                logger.debug("object count: " + objectsHashSet.size());
+                objectsHashSet.forEach(eachIndi -> {
 
                     // insert into individualObject count
                     HashMapUtility.insertIntoHashMap(SharedDataHolder.objectsInNegIndivs, owlObjectProperty, eachIndi);
 
                     reasoner.getTypes(eachIndi, false).getFlattened().forEach(negType -> {
-                        logger.info("negType: " + negType.toString());
+                        logger.debug("\t\tnegType: " + negType.toString());
                         if (!negType.equals(owlDataFactory.getOWLThing()) && !negType.equals(owlDataFactory.getOWLNothing())) {
                             //insert into individualObject's type count
                             HashMapUtility.insertIntoHashMap(SharedDataHolder.typeOfObjectsInNegIndivs, owlObjectProperty, negType);
@@ -803,8 +815,10 @@ public class CandidateSolutionFinderV1 {
                     if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).containsKey(owlClassExpr)) {
 
                         // remove from that which have less individuals
-                        double posRatio = SharedDataHolder.typeOfObjectsInPosIndivs.get(owlObjectProperty).get(owlClassExpr) / SharedDataHolder.posIndivs.size();
-                        double negRatio = SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).get(owlClassExpr) / SharedDataHolder.negIndivs.size();
+                        double posRatio = SharedDataHolder.typeOfObjectsInPosIndivs.get(owlObjectProperty).
+                                get(owlClassExpr) / SharedDataHolder.posIndivs.size();
+                        double negRatio = SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).
+                                get(owlClassExpr) / SharedDataHolder.negIndivs.size();
 
                         if (posRatio >= negRatio) {
                             // remove from negative
@@ -961,9 +975,9 @@ public class CandidateSolutionFinderV1 {
             // sort the list
             logger.info("horn clauses map  will be filtered initial size: " + conjunctiveHornClausesList.size());
             conjunctiveHornClausesList.sort((o1, o2) -> {
-                if (o1.getScore().getCoverage() - o2.getScore().getCoverage() > 0) {
+                if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
                     return -1;
-                } else if (o1.getScore().getCoverage() == o2.getScore().getCoverage()) {
+                } else if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
                     // compare length
                     o1Length = 0;
                     o2Length = 0;
@@ -993,8 +1007,8 @@ public class CandidateSolutionFinderV1 {
 
             // todo(zaman): there is significant error in coverage score of a conjunctivehornclause. for china vs syria experiment developedAsia(China) shows coverage score of 0.5, but it must be 1.0 -- fixed
             // test sorting
-            logger.info("Score of first hornClause:  " + conjunctiveHornClausesList.get(0).getScore().getCoverage());
-            logger.info("Score of last hornClause:  " + conjunctiveHornClausesList.get(conjunctiveHornClausesList.size() - 1).getScore().getCoverage());
+            logger.info("Score of first hornClause:  " + conjunctiveHornClausesList.get(0).getScore().getDefaultScoreValue());
+            logger.info("Score of last hornClause:  " + conjunctiveHornClausesList.get(conjunctiveHornClausesList.size() - 1).getScore().getDefaultScoreValue());
 
             // filter/select top n (upto limit)
             if (conjunctiveHornClausesList.size() > limit + 1) {
@@ -1037,9 +1051,9 @@ public class CandidateSolutionFinderV1 {
             // sort the list
             logger.info("candidate classes map  will be filtered. initial size: " + candidateClassesList.size());
             candidateClassesList.sort((o1, o2) -> {
-                if (o1.getScore().getCoverage() - o2.getScore().getCoverage() > 0) {
+                if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
                     return -1;
-                } else if (o1.getScore().getCoverage() == o2.getScore().getCoverage()) {
+                } else if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
                     // compare length
                     o1Length = 0;
                     o2Length = 0;
@@ -1072,8 +1086,8 @@ public class CandidateSolutionFinderV1 {
             });
 
             // test sorting
-            logger.info("Score of first candidate class:  " + candidateClassesList.get(0).getScore().getCoverage());
-            logger.info("Score of last candidate class:  " + candidateClassesList.get(candidateClassesList.size() - 1).getScore().getCoverage());
+            logger.info("Score of first candidate class:  " + candidateClassesList.get(0).getScore().getDefaultScoreValue());
+            logger.info("Score of last candidate class:  " + candidateClassesList.get(candidateClassesList.size() - 1).getScore().getDefaultScoreValue());
 
             // filter/select top n (upto limit)
             if (candidateClassesList.size() > limit + 1) {
@@ -1116,10 +1130,10 @@ public class CandidateSolutionFinderV1 {
             solutionList.sort(new Comparator<CandidateSolutionV1>() {
                 @Override
                 public int compare(CandidateSolutionV1 o1, CandidateSolutionV1 o2) {
-                    if (o1.getScore().getCoverage() - o2.getScore().getCoverage() > 0) {
+                    if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
                         return 1;
                     }
-                    if (o1.getScore().getCoverage() == o2.getScore().getCoverage()) {
+                    if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
                         // compare length, shorter length will be chosen first
                         o1Length = 0;
                         o2Length = 0;
@@ -1159,10 +1173,10 @@ public class CandidateSolutionFinderV1 {
             solutionList.sort(new Comparator<CandidateSolutionV1>() {
                 @Override
                 public int compare(CandidateSolutionV1 o1, CandidateSolutionV1 o2) {
-                    if (o1.getScore().getCoverage() - o2.getScore().getCoverage() > 0) {
+                    if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
                         return -1;
                     }
-                    if (o1.getScore().getCoverage() == o2.getScore().getCoverage()) {
+                    if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
                         // compare length
                         o1Length = 0;
                         o2Length = 0;
@@ -1222,13 +1236,14 @@ public class CandidateSolutionFinderV1 {
             if (solution.getGroupedCandidateClasses().size() > 0) {
                 solutionCounter++;
 
-                String solutionAsString = solution.getSolutionAsString();
+                String solutionAsString = solution.getSolutionAsString(true);
 
                 if (solutionAsString.length() > 0 && null != solution.getScore()) {
                     //logger.info("solution " + solutionCounter + ": " + solutionAsString);
                     monitor.writeMessage("solution " + solutionCounter + ": " + solutionAsString);
-                    DLSyntaxRendererExt dlRenderer = new DLSyntaxRendererExt();
-                    monitor.writeMessage("\tsolution pretty-printed by reasoner: " + dlRenderer.render(solution.getSolutionAsOWLClassExpression()));
+//                    DLSyntaxRendererExt dlRenderer = new DLSyntaxRendererExt();
+//                    monitor.writeMessage("\tsolution pretty-printed by reasoner: " +
+//                            dlRenderer.render(solution.getSolutionAsOWLClassExpression()));
 
                     if (solutionCounter < K6) {
                         //logger.info("\t coverage_score: " + solution.getScore().getCoverage());

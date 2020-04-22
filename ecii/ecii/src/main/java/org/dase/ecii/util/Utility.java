@@ -274,11 +274,12 @@ public class Utility {
         if (owlEntity.equals(SharedDataHolder.noneOWLObjProp))
             return SharedDataHolder.noneObjPropStr;
 
-        String prefixedName = SharedDataHolder.owlDocumentFormat.asPrefixOWLOntologyFormat().
+        Optional<String> prefixedName = SharedDataHolder.owlDocumentFormat.asPrefixOWLOntologyFormat().
                 getPrefixName2PrefixMap().entrySet().stream().filter(e -> owlEntity.getIRI().toString().startsWith(e.getValue())).
-                map(e -> e.getKey() + owlEntity.getIRI().getShortForm()).findFirst().orElse("empty");
-
-        return prefixedName;
+                map(e -> e.getKey() + owlEntity.getIRI().getShortForm()).findFirst();
+        if (prefixedName.isPresent())
+            return prefixedName.get();
+        else return null;
     }
 
     /**
@@ -704,6 +705,7 @@ public class Utility {
      * @throws IOException
      */
     public static HashSet<OWLNamedIndividual> readPosExamplesFromConf(String confFileFullContent) throws IOException, MalFormedIRIException {
+
         //logger.debug("Reading posExamples from full content: " + confFileFullContent);
         HashSet<OWLNamedIndividual> posIndivs = new HashSet<OWLNamedIndividual>();
 
@@ -713,8 +715,8 @@ public class Utility {
         Pattern pattern = Pattern.compile(regexText);
         Matcher matcher = pattern.matcher(inputText);
 
-        //logger.debug("inputText: " + inputText);
-        //logger.debug("regexText: " + regexText);
+//        logger.info("inputText: " + inputText);
+//        logger.info("regexText: " + regexText);
 
         String posExamplesPortion = "";
         if (matcher.find()) {
@@ -757,10 +759,14 @@ public class Utility {
         //logger.debug("regexText: " + regexText);
 
         String negExamplesPortion = "";
+        logger.info("negExamplesPortion1: "+ negExamplesPortion);
+
         if (matcher.find()) {
             negExamplesPortion = matcher.group();
             //logger.debug("negExamplesPortion: " + negExamplesPortion);
         }
+
+        logger.info("negExamplesPortion2: "+ negExamplesPortion);
 
         String regexEachEntity = "\"{1}([^\"])*\"{1}";
         ArrayList<IRI> negExamplesIRI = extractEachEntityIRIFromTextPortion(negExamplesPortion, regexEachEntity);
@@ -1009,6 +1015,7 @@ public class Utility {
 
                 for (ArrayList<T> alist : combinationHelper(sublist, K1 - 1)) {
                     ArrayList<T> thelist = new ArrayList<>(alist);
+
                     thelist.add(list.get(0));
                     result.add(thelist);
                 }

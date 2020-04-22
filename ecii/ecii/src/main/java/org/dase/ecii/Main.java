@@ -2,7 +2,9 @@ package org.dase.ecii;
 
 
 import org.apache.log4j.PropertyConfigurator;
+import org.dase.ecii.core.CandidateSolutionFinderV0;
 import org.dase.ecii.core.CandidateSolutionFinderV1;
+import org.dase.ecii.core.Score;
 import org.dase.ecii.core.SharedDataHolder;
 import org.dase.ecii.ontofactory.DLSyntaxRendererExt;
 import org.dase.ecii.util.ConfigParams;
@@ -161,8 +163,10 @@ public class Main {
 
         logger.info("reading pos and neg indivs from conf file started........");
         SharedDataHolder.posIndivs = Utility.readPosExamplesFromConf(SharedDataHolder.confFileFullContent);
+        logger.info("reading pos indivs from conf file finished successfully. SharedDataHolder.posIndivs.size: " + SharedDataHolder.posIndivs.size());
+        logger.info("reading neg indivs from conf file started........");
         SharedDataHolder.negIndivs = Utility.readNegExamplesFromConf(SharedDataHolder.confFileFullContent);
-        logger.info("reading pos and neg indivs from conf file finished successfully");
+        logger.info("reading neg indivs from conf file finished successfully SharedDataHolder.negIndivs.size: " + SharedDataHolder.negIndivs.size());
 
         // write user defined values to resultFile
         monitor.writeMessage("\nUser defined parameters:");
@@ -173,7 +177,9 @@ public class Main {
         monitor.writeMessage("K5/hornClausesListMaxSize: " + ConfigParams.hornClausesListMaxSize);
         monitor.writeMessage("K6/candidateClassesListMaxSize: " + ConfigParams.candidateClassesListMaxSize);
         monitor.writeMessage("K7/removeCommonTypes: " + ConfigParams.removeCommonTypes);
+        monitor.writeMessage("DefaultScoreType: " + Score.defaultScoreType);
         monitor.writeMessage("ReasonerName: " + ConfigParams.reasonerName);
+        monitor.writeMessage("ValidateByReasonerSize: "+ ConfigParams.validateByReasonerSize);
 
         logger.info("posIndivs from conf:");
         monitor.writeMessage("posIndivs from conf:");
@@ -205,7 +211,7 @@ public class Main {
         logger.info("sorting solutions finished.");
 
         logger.info("calculating accuracy using reasoner for top k6 solutions................");
-        findConceptsObj.calculateAccuracyOfTopK6ByReasoner(5);
+        findConceptsObj.calculateAccuracyOfTopK6ByReasoner(ConfigParams.validateByReasonerSize);
         logger.info("calculating accuracy using reasoner for top k6 solutions................");
 
         Long algoEndTime = System.currentTimeMillis();
@@ -215,7 +221,7 @@ public class Main {
         logger.info("Algorithm duration: " + (algoEndTime - algoStartTime) / 1000.0 + " sec", true);
 
         logger.info("printing solutions started...............");
-        findConceptsObj.printSolutions(5);
+        findConceptsObj.printSolutions(ConfigParams.validateByReasonerSize);
         logger.info("printing solutions finished.");
     }
 
@@ -232,19 +238,21 @@ public class Main {
 
         try {
             // iterate over the files of a the folder
-            Files.walk(dirPath).filter(f -> f.toFile().isFile()).filter(f -> f.toFile().getAbsolutePath().endsWith(".config")).forEach(f -> {
-                // will get each file
-                if (alreadyGotResult.contains(f.toFile().getName())) {
-                    logger.info(f.toString() + " already has result, not running it.");
-                } else {
-                    logger.info(" Program running for config file: " + f.toString());
+            Files.walk(dirPath).filter(f -> f.toFile().isFile())
+                    .filter(f -> f.toFile().getAbsolutePath().endsWith(".config"))
+                    .forEach(f -> {
+                        // will get each file
+                        if (alreadyGotResult.contains(f.toFile().getName())) {
+                            logger.info(f.toString() + " already has result, not running it.");
+                        } else {
+                            logger.info(" Program running for config file: " + f.toString());
 
-                    // parse the config file
-                    cleanSharedDataHolder();
-                    ConfigParams.parseConfigParams(f.toString());
-                    initiateSingleDoOps(ConfigParams.outputResultPath);
-                }
-            });
+                            // parse the config file
+                            cleanSharedDataHolder();
+                            ConfigParams.parseConfigParams(f.toString());
+                            initiateSingleDoOps(ConfigParams.outputResultPath);
+                        }
+                    });
         } catch (Exception e) {
             logger.error("\n\n!!!!!!!Fatal error!!!!!!!\n" + Utility.getStackTraceAsString(e));
             if (null != monitor) {
