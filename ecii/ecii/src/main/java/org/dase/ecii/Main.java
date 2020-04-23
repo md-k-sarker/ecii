@@ -86,14 +86,27 @@ public class Main {
         SharedDataHolder.typeOfObjectsInPosIndivs = new HashMap<>();
         SharedDataHolder.typeOfObjectsInNegIndivs = new HashMap<>();
 
+        SharedDataHolder.sortedTypeOfObjectsInNegIndivs = new HashMap<>();
+        SharedDataHolder.sortedTypeOfObjectsInNegIndivs = new HashMap<>();
+
         SharedDataHolder.individualHasObjectTypes = new HashMap<>();
 
-        // public static OWLConceptHierarchy owlConceptHierarchy;
-        // owlClassExpressionTrees;
+        SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.clear();
+        SharedDataHolder.IndividualsOfThisOWLClassExpressionByECII.clear();
+
+        SharedDataHolder.SortedByReasonerCandidateSolutionList.clear();
 
         SharedDataHolder.CandidateSolutionSet.clear();
         // HashMap<Solution:solution,Boolean:shouldTraverse> SolutionsMap
-        SharedDataHolder.SortedCandidateSolutionSet.clear();
+        SharedDataHolder.SortedCandidateSolutionList.clear();
+
+        SharedDataHolder.CandidateSolutionSetV1.clear();
+        SharedDataHolder.SortedCandidateSolutionListV1.clear();
+
+        SharedDataHolder.CandidateSolutionSetV2.clear();
+        SharedDataHolder.SortedCandidateSolutionListV2.clear();
+
+        SharedDataHolder.newIRICounter = 0;
     }
 
 
@@ -219,9 +232,18 @@ public class Main {
         monitor.displayMessage("\nAlgorithm duration: " + (algoEndTime - algoStartTime) / 1000.0 + " sec", true);
         logger.info("Algorithm duration: " + (algoEndTime - algoStartTime) / 1000.0 + " sec", true);
 
-        logger.info("printing solutions started...............");
-        findConceptsObj.printSolutions(ConfigParams.validateByReasonerSize);
-        logger.info("printing solutions finished.");
+//        logger.info("printing solutions started...............");
+//        findConceptsObj.printSolutions(ConfigParams.validateByReasonerSize);
+//        logger.info("printing solutions finished.");
+        monitor.writeMessage("\nTotal solutions found: " + SharedDataHolder.SortedCandidateSolutionListV2.size());
+
+        logger.info("\nFinding similarity started...............");
+        Similarity similarity = new Similarity(monitor, 0, owlReasoner);
+        for (OWLNamedIndividual owlNamedIndividual : SharedDataHolder.posIndivs) {
+            similarity.findSimilarityIFPWithAnotherIFP(owlNamedIndividual);
+        }
+        logger.info("Finding similarity finished");
+
     }
 
     private static void processBatchRunning(String dirPath) {
@@ -241,7 +263,9 @@ public class Main {
                     .filter(f -> f.toFile().getAbsolutePath().endsWith(".config"))
                     .forEach(f -> {
                         // will get each file
-                        if (alreadyGotResult.contains(f.toFile().getName())) {
+                        String resultantFilePath = f.toString().replace(".config", "_results_ecii_v2.txt");
+                        File resultFilePath = new File(resultantFilePath);
+                        if (resultFilePath.exists() && !resultFilePath.isDirectory()) {
                             logger.info(f.toString() + " already has result, not running it.");
                         } else {
                             logger.info(" Program running for config file: " + f.toString());
@@ -307,6 +331,12 @@ public class Main {
     public static void main(String[] args) throws OWLOntologyCreationException, IOException, MalFormedIRIException {
 
         PropertyConfigurator.configure("/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/main/resources/log4j.properties");
+
+
+//        Files.walk(Paths.get("/Users/sarker/Workspaces/Jetbrains/residue/experiments/7_IFP/Entities_With_Ontology/raw_expr/"))
+//                .filter(Files::isRegularFile)
+//                .forEach(System.out::println);
+
 
         StringBuilder sb = new StringBuilder();
         for (String arg : args) {

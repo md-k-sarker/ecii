@@ -1355,13 +1355,13 @@ public class CandidateSolutionFinderV0 {
      * @param K6
      */
     public void calculateAccuracyOfTopK6ByReasoner(int K6) {
-        if (SharedDataHolder.SortedCandidateSolutionSet.size() < K6) {
-            SharedDataHolder.SortedCandidateSolutionSet.forEach(candidateSolution -> {
+        if (SharedDataHolder.SortedCandidateSolutionList.size() < K6) {
+            SharedDataHolder.SortedCandidateSolutionList.forEach(candidateSolution -> {
                 calculateAccuracyByReasoner(candidateSolution);
             });
         } else {
             for (int i = 0; i < K6; i++) {
-                calculateAccuracyByReasoner(SharedDataHolder.SortedCandidateSolutionSet.get(i));
+                calculateAccuracyByReasoner(SharedDataHolder.SortedCandidateSolutionList.get(i));
             }
         }
     }
@@ -1624,7 +1624,7 @@ public class CandidateSolutionFinderV0 {
         }
 
         // save in shared data holder
-        SharedDataHolder.SortedCandidateSolutionSet = solutionList;
+        SharedDataHolder.SortedCandidateSolutionList = solutionList;
 
         return true;
     }
@@ -1639,7 +1639,7 @@ public class CandidateSolutionFinderV0 {
         monitor.writeMessage("\n####################Solutions####################:");
         solutionCounter = 0;
 
-        SharedDataHolder.SortedCandidateSolutionSet.forEach((solution) -> {
+        SharedDataHolder.SortedCandidateSolutionList.forEach((solution) -> {
 
             if (solution.getGroupedCandidateClasses().size() > 0) {
                 solutionCounter++;
@@ -1676,7 +1676,7 @@ public class CandidateSolutionFinderV0 {
             }
         });
 
-        logger.info("Total solutions found using raw list: " + SharedDataHolder.SortedCandidateSolutionSet.size());
+        logger.info("Total solutions found using raw list: " + SharedDataHolder.SortedCandidateSolutionList.size());
         logger.info("Total solutions found after removing empty solution: " + solutionCounter);
         monitor.writeMessage("\nTotal solutions found: " + solutionCounter);
 

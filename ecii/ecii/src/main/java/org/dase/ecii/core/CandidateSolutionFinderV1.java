@@ -4,14 +4,10 @@ import org.dase.ecii.datastructure.*;
 import org.dase.ecii.datastructure.CandidateClassV1;
 import org.dase.ecii.datastructure.CandidateSolutionV1;
 import org.dase.ecii.datastructure.ConjunctiveHornClauseV1;
-import org.dase.ecii.ontofactory.DLSyntaxRendererExt;
-import org.dase.ecii.util.Heuristics;
 import org.dase.ecii.util.Monitor;
 import org.dase.ecii.util.Utility;
-import org.dase.ecii.exceptions.MalFormedIRIException;
 import org.dase.ecii.util.ConfigParams;
 import org.semanticweb.owlapi.model.*;
-import org.semanticweb.owlapi.model.parameters.ChangeApplied;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -936,13 +932,13 @@ public class CandidateSolutionFinderV1 {
      * @param K6
      */
     public void calculateAccuracyOfTopK6ByReasoner(int K6) {
-        if (SharedDataHolder.SortedCandidateSolutionSetV1.size() < K6) {
-            SharedDataHolder.SortedCandidateSolutionSetV1.forEach(candidateSolution -> {
+        if (SharedDataHolder.SortedCandidateSolutionListV1.size() < K6) {
+            SharedDataHolder.SortedCandidateSolutionListV1.forEach(candidateSolution -> {
                 candidateSolution.calculateAccuracyByReasoner();
             });
         } else {
             for (int i = 0; i < K6; i++) {
-                SharedDataHolder.SortedCandidateSolutionSetV1.get(i).calculateAccuracyByReasoner();
+                SharedDataHolder.SortedCandidateSolutionListV1.get(i).calculateAccuracyByReasoner();
             }
         }
     }
@@ -1216,7 +1212,7 @@ public class CandidateSolutionFinderV1 {
         }
 
         // save in shared data holder
-        SharedDataHolder.SortedCandidateSolutionSetV1 = solutionList;
+        SharedDataHolder.SortedCandidateSolutionListV1 = solutionList;
 
         return true;
     }
@@ -1231,7 +1227,7 @@ public class CandidateSolutionFinderV1 {
         monitor.writeMessage("\n####################Solutions####################:");
         solutionCounter = 0;
 
-        SharedDataHolder.SortedCandidateSolutionSetV1.forEach((solution) -> {
+        SharedDataHolder.SortedCandidateSolutionListV1.forEach((solution) -> {
 
             if (solution.getGroupedCandidateClasses().size() > 0) {
                 solutionCounter++;
@@ -1271,7 +1267,7 @@ public class CandidateSolutionFinderV1 {
             }
         });
 
-        logger.info("Total solutions found using raw list: " + SharedDataHolder.SortedCandidateSolutionSetV1.size());
+        logger.info("Total solutions found using raw list: " + SharedDataHolder.SortedCandidateSolutionListV1.size());
         logger.info("Total solutions found after removing empty solution: " + solutionCounter);
         monitor.writeMessage("\nTotal solutions found: " + solutionCounter);
 

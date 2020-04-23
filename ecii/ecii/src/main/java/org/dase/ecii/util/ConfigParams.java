@@ -64,6 +64,10 @@ public final class ConfigParams {
      * k9/ maximum posclasses (top scoring) to do the combination.
      */
     public static int posClassListMaxSize;
+    /**
+     * Experimental: instead of typeOfObjectsInPosIndivsMaxSize, posClassListMaxSize is multiplied by multiplicationConstant in limiting the positive types list.
+     */
+    public static int multiplicationConstant = 3;
 
     /**
      * k10/ maximum negclasses (top scoring) to do the combination.
@@ -92,6 +96,28 @@ public final class ConfigParams {
 
     // used in CreateOWLFromADE20k.java class
     public static final String ontologyIRI = "http://www.daselab.org/ontologies/ADE20K/hcbdwsu/";
+
+    //@formatter:off
+    /**
+     * Experimental, maximum positive individuals (positive objects connected through some property) size, it was used to limit
+     *
+     *             if (hashMap.size() > ConfigParams.typeOfObjectsInPosIndivsMaxSize) {
+     *                 hashMap = new HashMap<>(hashMap.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+     *                         .limit(ConfigParams.typeOfObjectsInPosIndivsMaxSize)
+     *                         .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
+     */
+//    public static int typeOfObjectsInPosIndivsMaxSize = 100;
+
+    /**
+     * Experimental
+     */
+    public static int typeOfObjectsInPosIndivsMinSize = 3;
+
+    /**
+     * Experimental
+     */
+    public static int typeOfObjectsInNegIndivsMinSize = 3;
+    //@formatter:on
 
     /**
      * Parse the default config.properties
@@ -165,7 +191,7 @@ public final class ConfigParams {
             negClassListMaxSize = Integer.valueOf(prop.getProperty("negClassListMaxSize", "20"));
 
             confFileDir = Paths.get(confFilePath).getParent().toString();
-            String replacement = "_results_ecii_v2.txt";
+            String replacement = "_similarity_results_ecii_v2.txt";
             String resultFileName = Paths.get(confFilePath).getFileName().toString().replace(".config", replacement);
             outputResultPath = confFileDir + "/" + resultFileName;
 

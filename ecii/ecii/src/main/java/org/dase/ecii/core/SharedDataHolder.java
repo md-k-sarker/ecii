@@ -60,11 +60,25 @@ public class SharedDataHolder {
      * This is used to create the solution or to refine the solution.
      */
     public static HashMap<OWLObjectProperty, HashMap<OWLClassExpression, Integer>> typeOfObjectsInPosIndivs = new HashMap<>();
+
+
+    /**
+     * Sorted by integer
+     * This is used to create the solution or to refine the solution.
+     */
+    public static HashMap<OWLObjectProperty, HashMap<OWLClassExpression, Integer>> sortedTypeOfObjectsInPosIndivs = new HashMap<>();
+
     /**
      * Types of those objects which are mentioned in the negative individuals using some object property.
      * This is used to create the solution or to refine the solution.
      */
     public static HashMap<OWLObjectProperty, HashMap<OWLClassExpression, Integer>> typeOfObjectsInNegIndivs = new HashMap<>();
+
+    /**
+     * Sorted by integer
+     * This is used to create the solution or to refine the solution.
+     */
+    public static HashMap<OWLObjectProperty, HashMap<OWLClassExpression, Integer>> sortedTypeOfObjectsInNegIndivs = new HashMap<>();
 
 
     //@formatter:off
@@ -116,13 +130,13 @@ public class SharedDataHolder {
     // to support both v0 and v1
     public static HashSet<CandidateSolutionV2> CandidateSolutionSetV2 = new HashSet<>();
 
-    public static ArrayList<CandidateSolution> SortedCandidateSolutionSet = new ArrayList<>();
+    public static ArrayList<CandidateSolution> SortedCandidateSolutionList = new ArrayList<>();
     // to support both v0 and v1 and v2
-    public static ArrayList<CandidateSolutionV1> SortedCandidateSolutionSetV1 = new ArrayList<>();
+    public static ArrayList<CandidateSolutionV1> SortedCandidateSolutionListV1 = new ArrayList<>();
     // to support both v0 and v1 and v2
-    public static ArrayList<CandidateSolutionV2> SortedCandidateSolutionSetV2 = new ArrayList<>();
+    public static ArrayList<CandidateSolutionV2> SortedCandidateSolutionListV2 = new ArrayList<>();
 
-    public static ArrayList<CandidateSolution> SortedByReasonerCandidateSolutionSet = new ArrayList<>();
+    public static ArrayList<CandidateSolution> SortedByReasonerCandidateSolutionList = new ArrayList<>();
 
 
     // cache all reasoner calls, specifically finding individuals of an owlClassExpression must be cached.

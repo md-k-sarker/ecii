@@ -279,7 +279,7 @@ public class CandidateClassV2 {
      */
     public HashSet<OWLNamedIndividual> individualsCoveredByThisCandidateClassByReasoner() {
 
-        logger.info("calculating covered individuals by candidateClass " + this.getCandidateClassAsOWLClassExpression() + " by reasoner.........");
+        logger.debug("calculating covered individuals by candidateClass " + this.getCandidateClassAsOWLClassExpression() + " by reasoner.........");
 
         HashSet<OWLNamedIndividual> coveredIndividuals = new HashSet<>();
         OWLClassExpression owlClassExpression = this.getCandidateClassAsOWLClassExpression();
@@ -295,8 +295,8 @@ public class CandidateClassV2 {
         if (null != SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner) {
             if (SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.containsKey(owlClassExpression)) {
                 coveredIndividuals = SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.get(owlClassExpression);
-                logger.info("calculating covered individuals by candidateSolution " + this.getCandidateClassAsOWLClassExpression() + " found in cache.");
-                logger.info("\t covered all individuals size: " + coveredIndividuals.size());
+                logger.debug("calculating covered individuals by candidateSolution " + this.getCandidateClassAsOWLClassExpression() + " found in cache.");
+                logger.debug("\t covered all individuals size: " + coveredIndividuals.size());
                 return coveredIndividuals;
             }
         }
@@ -322,8 +322,8 @@ public class CandidateClassV2 {
         // save it to cache
         SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.put(owlClassExpression, coveredIndividuals);
 
-        logger.info("calculating covered individuals by candidateClass " + this.getCandidateClassAsOWLClassExpression() + " by reasoner finished");
-        logger.info("\t covered all individuals size: " + coveredIndividuals.size());
+        logger.debug("calculating covered individuals by candidateClass " + this.getCandidateClassAsOWLClassExpression() + " by reasoner finished");
+        logger.debug("\t covered all individuals size: " + coveredIndividuals.size());
 
         return coveredIndividuals;
 

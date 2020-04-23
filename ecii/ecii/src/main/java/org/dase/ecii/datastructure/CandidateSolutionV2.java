@@ -281,7 +281,7 @@ public class CandidateSolutionV2 {
                             // TODO(zaman): this is conflicting, need to verify, why we are using union for multiple bare types.
                             //  the thing is we should not have multiple candidate class for bare types. --- because for single objectproperty there will be a single candidate class, no no, no
                             //  becuase we may create multiple candidate class with same objectproperty. so if this happens for bare type we need to make it intersected.
-                            logger.info("This code must not be executed!!!!, need to check CandidateSolutionV2.getSolutionAsOWLClassExpression() ");
+                            logger.debug("This code must not be executed!!!!, need to check CandidateSolutionV2.getSolutionAsOWLClassExpression() ");
                             directTypePortion = SharedDataHolder.owlDataFactory.getOWLObjectIntersectionOf(directCandidateClassesAsOWLClassExpression);
                         }
                     }
@@ -464,7 +464,7 @@ public class CandidateSolutionV2 {
      */
     public HashSet<OWLNamedIndividual> individualsCoveredByThisCandidateSolutionByReasoner() {
 
-        logger.info("calculating covered individuals by candidateSolution " + this.getSolutionAsOWLClassExpression() + " by reasoner.........");
+        logger.debug("calculating covered individuals by candidateSolution " + this.getSolutionAsOWLClassExpression() + " by reasoner.........");
 
         HashSet<OWLNamedIndividual> coveredIndividuals = new HashSet<>();
         // this solution is already r filled, so we dont need to r fill again.
@@ -474,8 +474,8 @@ public class CandidateSolutionV2 {
         if (null != SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner) {
             if (SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.containsKey(owlClassExpression)) {
                 coveredIndividuals = SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.get(owlClassExpression);
-                logger.info("calculating covered individuals by candidateSolution " + this.getSolutionAsOWLClassExpression() + " found in cache.");
-                logger.info("\t covered all individuals size: " + coveredIndividuals.size());
+                logger.debug("calculating covered individuals by candidateSolution " + this.getSolutionAsOWLClassExpression() + " found in cache.");
+                logger.debug("\t covered all individuals size: " + coveredIndividuals.size());
                 return coveredIndividuals;
             }
         }
@@ -528,8 +528,8 @@ public class CandidateSolutionV2 {
         // save it to cache
         SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.put(owlClassExpression, coveredIndividuals);
 
-        logger.info("calculating covered individuals by candidateSolution " + this.getSolutionAsOWLClassExpression() + " by reasoner finished");
-        logger.info("\t covered all individuals size:  " + coveredIndividuals.size());
+        logger.debug("calculating covered individuals by candidateSolution " + this.getSolutionAsOWLClassExpression() + " by reasoner finished");
+        logger.debug("\t covered all individuals size:  " + coveredIndividuals.size());
 
         return coveredIndividuals;
 
@@ -585,11 +585,11 @@ public class CandidateSolutionV2 {
 //        logger.info("Excluded negative Indivs:");
 
         // TODO(zaman): it should be logger.debug instead of logger.info
-        logger.info("solution: " + this.getSolutionAsString(true));
-        logger.info("\tcoveredPosIndividuals_by_ecii: " + coveredPosIndividualsMap.keySet());
-        logger.info("\tcoveredPosIndividuals_by_ecii size: " + coveredPosIndividualsMap.size());
-        logger.info("\texcludedNegIndividuals_by_ecii: " + excludedNegIndividualsMap.keySet());
-        logger.info("\texcludedNegIndividuals_by_ecii size: " + excludedNegIndividualsMap.size());
+        logger.debug("solution: " + this.getSolutionAsString(true));
+        logger.debug("\tcoveredPosIndividuals_by_ecii: " + coveredPosIndividualsMap.keySet());
+        logger.debug("\tcoveredPosIndividuals_by_ecii size: " + coveredPosIndividualsMap.size());
+        logger.debug("\texcludedNegIndividuals_by_ecii: " + excludedNegIndividualsMap.keySet());
+        logger.debug("\texcludedNegIndividuals_by_ecii size: " + excludedNegIndividualsMap.size());
 
 
 //        assert 2 == 1;
@@ -626,7 +626,7 @@ public class CandidateSolutionV2 {
         OWLClass owlClass = SharedDataHolder.owlDataFactory.getOWLClass(Utility.getUniqueIRI());
         OWLAxiom eqAxiom = SharedDataHolder.owlDataFactory.getOWLEquivalentClassesAxiom(owlClass, owlClassExpression);
         ChangeApplied ca = SharedDataHolder.owlOntologyManager.addAxiom(SharedDataHolder.owlOntology, eqAxiom);
-        logger.info("Adding candidateSolution.getSolutionAsOWLClassExpression to ontology Status: " + ca.toString());
+        logger.debug("Adding candidateSolution.getSolutionAsOWLClassExpression to ontology Status: " + ca.toString());
         reasoner = Utility.initReasoner(ConfigParams.reasonerName, SharedDataHolder.owlOntology, null);
 
         /**
@@ -664,17 +664,17 @@ public class CandidateSolutionV2 {
 
             if (negIndivsByReasoner.contains(thisOwlNamedIndividual)) {
                 HashMapUtility.insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
-                logger.info("\t" + Utility.getShortName(thisOwlNamedIndividual) + " is contained by this concept using reasoner: " + owlClassExpression);
+                logger.debug("\t" + Utility.getShortName(thisOwlNamedIndividual) + " is contained by this concept using reasoner: " + owlClassExpression);
             } else {
 //                logger.info("not found. size: " + negIndivsByReasoner.size());
             }
         }
 
-        logger.info("solution: " + this.getSolutionAsString(true));
-        logger.info("coveredPosIndividuals_by_reasoner: " + coveredPosIndividualsMap.keySet());
-        logger.info("coveredPosIndividuals_by_reasoner size: " + coveredPosIndividualsMap.size());
-        logger.info("coveredNegIndividuals_by_reasoner: " + excludedNegIndividualsMap.keySet());
-        logger.info("coveredNegIndividuals_by_reasoner size: " + excludedNegIndividualsMap.size());
+        logger.debug("solution: " + this.getSolutionAsString(true));
+        logger.debug("coveredPosIndividuals_by_reasoner: " + coveredPosIndividualsMap.keySet());
+        logger.debug("coveredPosIndividuals_by_reasoner size: " + coveredPosIndividualsMap.size());
+        logger.debug("coveredNegIndividuals_by_reasoner: " + excludedNegIndividualsMap.keySet());
+        logger.debug("coveredNegIndividuals_by_reasoner size: " + excludedNegIndividualsMap.size());
 
         nrOfPositiveClassifiedAsPositive = coveredPosIndividualsMap.size();
         /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
@@ -684,8 +684,8 @@ public class CandidateSolutionV2 {
         /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
         nrOfNegativeClassifiedAsPositive = excludedNegIndividualsMap.size();
 
-        logger.info("nrOfPositiveClassifiedAsPositive size by reasoner: " + nrOfPositiveClassifiedAsPositive);
-        logger.info("nrOfNegativeClassifiedAsNegative size by reasoner: " + nrOfNegativeClassifiedAsNegative);
+        logger.debug("nrOfPositiveClassifiedAsPositive size by reasoner: " + nrOfPositiveClassifiedAsPositive);
+        logger.debug("nrOfNegativeClassifiedAsNegative size by reasoner: " + nrOfNegativeClassifiedAsNegative);
 
         double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
         double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);
@@ -693,8 +693,8 @@ public class CandidateSolutionV2 {
         double coverage = Heuristics.getCoverage(nrOfPositiveClassifiedAsPositive, SharedDataHolder.posIndivs.size(),
                 nrOfNegativeClassifiedAsNegative, SharedDataHolder.negIndivs.size());
 
-        logger.info("precision size by reasoner: " + precision);
-        logger.info("recall size by reasoner: " + recall);
+        logger.debug("precision size by reasoner: " + precision);
+        logger.debug("recall size by reasoner: " + recall);
 
         //Score accScore = new Score();
         //candidateSolution.getScore()

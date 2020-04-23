@@ -400,7 +400,7 @@ public class ConjunctiveHornClauseV1 {
      */
     public HashSet<OWLNamedIndividual> individualsCoveredByThisHornClauseByReasoner() {
 
-        logger.info("calculating covered individuals by hornClause " + this.getConjunctiveHornClauseAsOWLClassExpression() + " by reasoner.........");
+        logger.debug("calculating covered individuals by hornClause " + this.getConjunctiveHornClauseAsOWLClassExpression() + " by reasoner.........");
         HashSet<OWLNamedIndividual> coveredIndividuals = new HashSet<>();
         OWLClassExpression owlClassExpression = this.getConjunctiveHornClauseAsOWLClassExpression();
 
@@ -413,8 +413,8 @@ public class ConjunctiveHornClauseV1 {
             if (SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.containsKey(owlClassExpression)) {
 
                 coveredIndividuals = SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.get(owlClassExpression);
-                logger.info("calculating covered individuals by candidateSolution " + this.getConjunctiveHornClauseAsOWLClassExpression() + " found in cache.");
-                logger.info("\t size: " + coveredIndividuals.size());
+                logger.debug("calculating covered individuals by candidateSolution " + this.getConjunctiveHornClauseAsOWLClassExpression() + " found in cache.");
+                logger.debug("\t size: " + coveredIndividuals.size());
                 return coveredIndividuals;
             }
         }
@@ -426,9 +426,9 @@ public class ConjunctiveHornClauseV1 {
         // save it to cache
         SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.put(owlClassExpression, coveredIndividuals);
 
-        logger.info("calculating covered individuals by hornClause " + this.getConjunctiveHornClauseAsOWLClassExpression() + " by reasoner finished");
+        logger.debug("calculating covered individuals by hornClause " + this.getConjunctiveHornClauseAsOWLClassExpression() + " by reasoner finished");
 
-        logger.info("\t covered all individuals size: " + coveredIndividuals.size());
+        logger.debug("\t covered all individuals size: " + coveredIndividuals.size());
 
         return coveredIndividuals;
     }
@@ -482,11 +482,11 @@ public class ConjunctiveHornClauseV1 {
         assert coveredPosIndividualsMap.size() == nrOfPositiveClassifiedAsPositive;
 
         // TODO(zaman): it should be logger.debug instead of logger.info
-        logger.info("candidateClass: " + this.getHornClauseAsString(true));
-        logger.info("\tcoveredPosIndividuals_by_ecii: " + coveredPosIndividualsMap.keySet());
-        logger.info("\tcoveredPosIndividuals_by_ecii size: " + coveredPosIndividualsMap.size());
-        logger.info("\texcludedNegIndividuals_by_ecii: " + excludedNegIndividualsMap.keySet());
-        logger.info("\texcludedNegIndividuals_by_ecii size: " + excludedNegIndividualsMap.size());
+        logger.debug("candidateClass: " + this.getHornClauseAsString(true));
+        logger.debug("\tcoveredPosIndividuals_by_ecii: " + coveredPosIndividualsMap.keySet());
+        logger.debug("\tcoveredPosIndividuals_by_ecii size: " + coveredPosIndividualsMap.size());
+        logger.debug("\texcludedNegIndividuals_by_ecii: " + excludedNegIndividualsMap.keySet());
+        logger.debug("\texcludedNegIndividuals_by_ecii size: " + excludedNegIndividualsMap.size());
 
         double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
         double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);

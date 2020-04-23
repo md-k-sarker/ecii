@@ -17,6 +17,8 @@ import java.lang.invoke.MethodHandles;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toMap;
+
 @SuppressWarnings("Duplicates")
 
 
@@ -261,11 +263,18 @@ public class CandidateSolutionFinderV2 {
 
         // for rfilled types and for bare types. for no object property/direct/bare types we used SharedDataHolder.noneOWLObjProp
 
-        // create solution using just one class expression.
-
         // solution using only a single positive type
         logger.info("\nSolution using only a single positive type started...............");
         SharedDataHolder.typeOfObjectsInPosIndivs.forEach((owlObjectProperty, hashMap) -> {
+
+            logger.info(" \t size of typeOfObjectsInPosIndivs hashMap: " + hashMap.size());
+            if (hashMap.size() > ConfigParams.posClassListMaxSize) {
+                hashMap = new HashMap<>(hashMap.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                        .limit(ConfigParams.posClassListMaxSize * ConfigParams.multiplicationConstant)
+                        .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
+                logger.info(" \t size of typeOfObjectsInPosIndivs hashMap after limiting: " + hashMap.size());
+            }
+
             hashMap.forEach((posOwlClassExpression, integer) -> {
 
                 //create conjunctive horn clause and add positive part and no negative part initially
@@ -299,15 +308,27 @@ public class CandidateSolutionFinderV2 {
         // single positive and single negative.
         logger.info("solution using only a single positive and single negative type started...............");
         SharedDataHolder.typeOfObjectsInPosIndivs.forEach((owlObjectProperty, hashMap) -> {
+
+            logger.info(" \t size of typeOfObjectsInPosIndivs hashMap: " + hashMap.size());
+            if (hashMap.size() > ConfigParams.posClassListMaxSize) {
+                hashMap = new HashMap<>(hashMap.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                        .limit(ConfigParams.posClassListMaxSize * ConfigParams.multiplicationConstant)
+                        .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
+                logger.info(" \t size of typeOfObjectsInPosIndivs hashMap after limiting: " + hashMap.size());
+            }
+
             hashMap.forEach((posOwlClassExpression, integer) -> {
 
                 ArrayList<OWLClassExpression> posTypeOwlSubClassExpressions = new ArrayList<>(
                         reasoner.getSubClasses(posOwlClassExpression, false).getFlattened().stream().collect(Collectors.toList()));
 
                 posTypeOwlSubClassExpressions.forEach(subClassOwlClassExpression -> {
+
+
                     if (SharedDataHolder.typeOfObjectsInNegIndivs.containsKey(owlObjectProperty)) {
                         // if subclass of this class is included in the negative type
-                        if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).containsKey(subClassOwlClassExpression)) {
+                        if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).containsKey(subClassOwlClassExpression)
+                                && SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).get(subClassOwlClassExpression) > ConfigParams.typeOfObjectsInNegIndivsMinSize) {
 
                             //create conjunctive horn clause and add positive part and negative part too
                             ConjunctiveHornClauseV1 conjunctiveHornClause = new ConjunctiveHornClauseV1(owlObjectProperty, reasoner, ontology);
@@ -342,129 +363,138 @@ public class CandidateSolutionFinderV2 {
 
 
         logger.info("solution using multiple positive and multiple negative type started...............");
-        SharedDataHolder.typeOfObjectsInPosIndivs.entrySet().stream().filter(owlObjectPropertyHashMapEntry -> owlObjectPropertyHashMapEntry.getValue().entrySet().size() > 0).forEach(owlObjectPropertyHashMapEntry -> {
-
-            OWLObjectProperty owlObjectProperty = owlObjectPropertyHashMapEntry.getKey();
-            HashMap<OWLClassExpression, Integer> hashMap = owlObjectPropertyHashMapEntry.getValue();
-
-            ArrayList<OWLClassExpression> allPosTypes = new ArrayList<>(hashMap.entrySet()
-                    .stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).limit(ConfigParams.posClassListMaxSize)
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)).keySet());
+        SharedDataHolder.typeOfObjectsInPosIndivs.entrySet().stream()
+                .filter(owlObjectPropertyHashMapEntry ->
+                        owlObjectPropertyHashMapEntry.getValue().entrySet().size() > 0)
+                .forEach(owlObjectPropertyHashMapEntry -> {
 
 
-//            ArrayList<OWLClassExpression> allPosTypes = new ArrayList<>(hashMap.keySet());
+                    OWLObjectProperty owlObjectProperty = owlObjectPropertyHashMapEntry.getKey();
+                    HashMap<OWLClassExpression, Integer> hashMap = new HashMap<>(
+                            owlObjectPropertyHashMapEntry.getValue().entrySet()
+                                    .stream().filter(e -> e.getValue() > ConfigParams.typeOfObjectsInPosIndivsMinSize)
+                                    .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
 
-            ArrayList<ArrayList<OWLClassExpression>> listCombinationOfPosClassesForPosPortion;
-            // making a list of 2 item means it will consist of single item, this is to reduce the code from uppper portions.
-            listCombinationOfPosClassesForPosPortion = Utility.combinationHelper(allPosTypes, 2);
-            // combination of 3 to the limit
-            for (int combinationCounter = 3; combinationCounter < ConfigParams.conceptLimitInPosExpr; combinationCounter++) {
-                listCombinationOfPosClassesForPosPortion.addAll(Utility.combinationHelper(allPosTypes, combinationCounter));
-            }
-            logger.info("listCombinationOfPosClassesForPosPortion size: " + listCombinationOfPosClassesForPosPortion.size());
+                    logger.info("\t HashMap<OWLClassExpression, Integer> size before limiting:  " + hashMap.size());
+                    ArrayList<OWLClassExpression> limitedPosTypes = new ArrayList<>(hashMap.entrySet()
+                            .stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                            .limit(ConfigParams.posClassListMaxSize * ConfigParams.multiplicationConstant)
+                            .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)).keySet());
 
-            // keep only valid listCombinationOfPosClassesForPosPortion.
-            // a combination is valid if and only if it doesn't have self subClass.
-            // TODO: check with pascal. --- Okay
-            ArrayList<ArrayList<OWLClassExpression>> validListCombinationOfPosClassesForPosPortion = new ArrayList<>();
-            listCombinationOfPosClassesForPosPortion.forEach(classExpressions -> {
+                    logger.info("\t HashMap<OWLClassExpression, Integer> size after limiting:  " + limitedPosTypes.size());
+
+                    // positive portion
+                    ArrayList<ArrayList<OWLClassExpression>> listCombinationOfPosClassesForPosPortion;
+                    // making a list of 2 item means it will consist of single item, this is to reduce the code from uppper portions.
+                    listCombinationOfPosClassesForPosPortion = Utility.combinationHelper(limitedPosTypes, 2);
+                    // combination of 3 to the limit
+                    for (int combinationCounter = 3; combinationCounter < ConfigParams.conceptLimitInPosExpr; combinationCounter++) {
+                        listCombinationOfPosClassesForPosPortion.addAll(Utility.combinationHelper(limitedPosTypes, combinationCounter));
+                    }
+                    logger.info("listCombinationOfPosClassesForPosPortion size: " + listCombinationOfPosClassesForPosPortion.size());
+
+                    // keep only valid listCombinationOfPosClassesForPosPortion.
+                    // a combination is valid if and only if it doesn't have self subClass.
+                    ArrayList<ArrayList<OWLClassExpression>> validListCombinationOfPosClassesForPosPortion = new ArrayList<>();
+                    listCombinationOfPosClassesForPosPortion.forEach(classExpressions -> {
 //                logger.info("debug: classExpressions.size(): " + classExpressions.size());
-                if (isValidCombinationOfSubClasses(classExpressions)) {
-                    validListCombinationOfPosClassesForPosPortion.add(classExpressions);
-                }
-            });
-            // recover memory
-            listCombinationOfPosClassesForPosPortion = null;
-            logger.info("validListCombinationOfPosClassesForPosPortion size: " + validListCombinationOfPosClassesForPosPortion.size());
-
-            validListCombinationOfPosClassesForPosPortion.forEach(posOwlClassExpressions -> {
-
-                HashSet<OWLClassExpression> posTypeOwlSubClassExpressions = new HashSet<>();
-
-                for (OWLClassExpression posOwlClassExpression : posOwlClassExpressions) {
-                    posTypeOwlSubClassExpressions.addAll(
-                            reasoner.getSubClasses(posOwlClassExpression, false)
-                                    .getFlattened().stream().collect(Collectors.toList()));
-                }
-
-                ArrayList<OWLClassExpression> posTypeOwlSubClassExpressionsForCombination = new ArrayList<>();
-
-                // create combination only those which are contained in the negative type.
-                // TODO(zaman): Can we remove this restriction?
-                //  Probably we can allow all concept without the superclasses of postype. reasoner.getsuperclasses()
-                posTypeOwlSubClassExpressions.forEach(subClassOwlClassExpression -> {
-                    if (SharedDataHolder.typeOfObjectsInNegIndivs.containsKey(owlObjectProperty)) {
-                        // if subclass of this class is included in the negative type
-                        if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty)
-                                .containsKey(subClassOwlClassExpression)) {
-                            posTypeOwlSubClassExpressionsForCombination.add(subClassOwlClassExpression);
+                        if (isValidCombinationOfSubClasses(classExpressions)) {
+                            validListCombinationOfPosClassesForPosPortion.add(classExpressions);
                         }
-                    }
-                });
-                // recover memory
-                posTypeOwlSubClassExpressions = null;
+                    });
+                    // recover memory
+                    listCombinationOfPosClassesForPosPortion = null;
+                    logger.info("validListCombinationOfPosClassesForPosPortion size: " + validListCombinationOfPosClassesForPosPortion.size());
 
-                // todo-zaman: way to improve: we can use the top performing negative types instead of the subclass of pisitive types
-                ArrayList<ArrayList<OWLClassExpression>> listCombinationOfSubClassesForNegPortion;
-                // combination of 1, starting from 1 for negtypes. posTypes are at-least 2 here.
-                listCombinationOfSubClassesForNegPortion = Utility
-                        .combinationHelper(posTypeOwlSubClassExpressionsForCombination, 1);
-                // combination from 2 to upto ccombinationLimit
-                for (int combinationCounter = 2; combinationCounter <= ConfigParams.conceptLimitInNegExpr; combinationCounter++) {
-                    // combination of combinationCounter
-                    listCombinationOfSubClassesForNegPortion.
-                            addAll(Utility.combinationHelper(posTypeOwlSubClassExpressionsForCombination, combinationCounter));
-                }
-                logger.info("listCombinationOfSubClassesForNegPortion size: " + listCombinationOfSubClassesForNegPortion.size());
+                    // negated portion
+                    validListCombinationOfPosClassesForPosPortion.forEach(posOwlClassExpressions -> {
 
-                // keep only valid listCombinationOfSubClassesForNegPortion.
-                // a combination is valid if and only if it doesn't have self subClass.
-                // TODO: check with pascal. --- Okay
-                ArrayList<ArrayList<OWLClassExpression>> validListCombinationOfSubClassesForNegPortion = new ArrayList<>();
-                listCombinationOfSubClassesForNegPortion.forEach(classExpressions -> {
-                    if (isValidCombinationOfSubClasses(classExpressions)) {
-                        validListCombinationOfSubClassesForNegPortion.add(classExpressions);
-                    }
-                });
-                // recover memory
-                listCombinationOfSubClassesForNegPortion = null;
-                logger.info("validListCombinationOfSubClassesForNegPortion size: " + validListCombinationOfSubClassesForNegPortion.size());
+                        HashSet<OWLClassExpression> posTypeOwlSubClassExpressions = new HashSet<>();
 
-                // now combine the postypes and negtypes
-                // null pointer because in the soutions the postypes is empty or 0
+                        for (OWLClassExpression posOwlClassExpression : posOwlClassExpressions) {
+                            posTypeOwlSubClassExpressions.addAll(
+                                    reasoner.getSubClasses(posOwlClassExpression, false)
+                                            .getFlattened().stream().collect(Collectors.toList()));
+                        }
+
+                        ArrayList<OWLClassExpression> posTypeOwlSubClassExpressionsForCombination = new ArrayList<>();
+
+                        // create combination only those which are contained in the negative type.
+                        // TODO(zaman): Can we remove this restriction?
+                        //  Probably we can allow all concept without the superclasses of postype. reasoner.getsuperclasses()
+                        posTypeOwlSubClassExpressions.forEach(subClassOwlClassExpression -> {
+                            if (SharedDataHolder.typeOfObjectsInNegIndivs.containsKey(owlObjectProperty)) {
+                                // if subclass of this class is included in the negative type
+                                if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).containsKey(subClassOwlClassExpression)
+                                        && SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty)
+                                        .get(subClassOwlClassExpression) > ConfigParams.typeOfObjectsInNegIndivsMinSize) {
+                                    posTypeOwlSubClassExpressionsForCombination.add(subClassOwlClassExpression);
+                                }
+                            }
+                        });
+                        // recover memory
+                        posTypeOwlSubClassExpressions = null;
+
+                        // todo-zaman: way to improve: we can use the top performing negative types instead of the subclass of pisitive types
+                        ArrayList<ArrayList<OWLClassExpression>> listCombinationOfSubClassesForNegPortion;
+                        // combination of 1, starting from 1 for negtypes. posTypes are at-least 2 here.
+                        listCombinationOfSubClassesForNegPortion = Utility
+                                .combinationHelper(posTypeOwlSubClassExpressionsForCombination, 1);
+                        // combination from 2 to upto ccombinationLimit
+                        for (int combinationCounter = 2; combinationCounter <= ConfigParams.conceptLimitInNegExpr; combinationCounter++) {
+                            // combination of combinationCounter
+                            listCombinationOfSubClassesForNegPortion.
+                                    addAll(Utility.combinationHelper(posTypeOwlSubClassExpressionsForCombination, combinationCounter));
+                        }
+                        logger.info("listCombinationOfSubClassesForNegPortion size: " + listCombinationOfSubClassesForNegPortion.size());
+
+                        // keep only valid listCombinationOfSubClassesForNegPortion.
+                        // a combination is valid if and only if it doesn't have self subClass.
+                        // TODO: check with pascal. --- Okay
+                        ArrayList<ArrayList<OWLClassExpression>> validListCombinationOfSubClassesForNegPortion = new ArrayList<>();
+                        listCombinationOfSubClassesForNegPortion.forEach(classExpressions -> {
+                            if (isValidCombinationOfSubClasses(classExpressions)) {
+                                validListCombinationOfSubClassesForNegPortion.add(classExpressions);
+                            }
+                        });
+                        // recover memory
+                        listCombinationOfSubClassesForNegPortion = null;
+                        logger.info("validListCombinationOfSubClassesForNegPortion size: " + validListCombinationOfSubClassesForNegPortion.size());
+
+                        // now combine the postypes and negtypes
+                        // null pointer because in the soutions the postypes is empty or 0
 //                logger.info("debug: posOwlClassExpressions: " + posOwlClassExpressions.size());
-                validListCombinationOfSubClassesForNegPortion.forEach(subClasses -> {
+                        validListCombinationOfSubClassesForNegPortion.forEach(subClasses -> {
 
-                    // if every class of this combination is in negative types then include this combination otherwise skip this.
-                    // this is trivially true as we are creating combination of those subclasses which are also contained in the negTypes.
+                            // if every class of this combination is in negative types then include this combination otherwise skip this.
+                            // this is trivially true as we are creating combination of those subclasses which are also contained in the negTypes.
 
-                    //create conjunctive horn clause and add positive part and negative part too
-                    ConjunctiveHornClauseV1 conjunctiveHornClauseV1 = new ConjunctiveHornClauseV1(owlObjectProperty, reasoner, ontology);
-                    conjunctiveHornClauseV1.setPosObjectTypes(posOwlClassExpressions);
-                    conjunctiveHornClauseV1.setNegObjectTypes(subClasses);
+                            //create conjunctive horn clause and add positive part and negative part too
+                            ConjunctiveHornClauseV1 conjunctiveHornClauseV1 = new ConjunctiveHornClauseV1(owlObjectProperty, reasoner, ontology);
+                            conjunctiveHornClauseV1.setPosObjectTypes(posOwlClassExpressions);
+                            conjunctiveHornClauseV1.setNegObjectTypes(subClasses);
 
-                    // create candidate class
-                    CandidateClassV2 CandidateClassV2 = new CandidateClassV2(owlObjectProperty, reasoner, ontology);
-                    CandidateClassV2.addConjunctiveHornClauses(conjunctiveHornClauseV1);
+                            // create candidate class
+                            CandidateClassV2 CandidateClassV2 = new CandidateClassV2(owlObjectProperty, reasoner, ontology);
+                            CandidateClassV2.addConjunctiveHornClauses(conjunctiveHornClauseV1);
 
-                    // create candidate solution
-                    CandidateSolutionV2 CandidateSolutionV2 = new CandidateSolutionV2(reasoner, ontology);
-                    CandidateSolutionV2.addCandidateClass(CandidateClassV2);
-                    boolean added = addToSolutions(CandidateSolutionV2);
-                    if (added) {
-                        // save temporarily for combination
-                        Score hornClauseScore = conjunctiveHornClauseV1.calculateAccuracyComplexCustom();
-                        conjunctiveHornClauseV1.setScore(hornClauseScore);
-                        HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1);
+                            // create candidate solution
+                            CandidateSolutionV2 CandidateSolutionV2 = new CandidateSolutionV2(reasoner, ontology);
+                            CandidateSolutionV2.addCandidateClass(CandidateClassV2);
+                            boolean added = addToSolutions(CandidateSolutionV2);
+                            if (added) {
+                                // save temporarily for combination
+                                Score hornClauseScore = conjunctiveHornClauseV1.calculateAccuracyComplexCustom();
+                                conjunctiveHornClauseV1.setScore(hornClauseScore);
+                                HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1);
 
-                        Score candidateClassScore = CandidateClassV2.calculateAccuracyComplexCustom();
-                        CandidateClassV2.setScore(candidateClassScore);
-                        HashMapUtility.insertIntoHashMap(candidateClassesMap, owlObjectProperty, CandidateClassV2);
-                    }
+                                Score candidateClassScore = CandidateClassV2.calculateAccuracyComplexCustom();
+                                CandidateClassV2.setScore(candidateClassScore);
+                                HashMapUtility.insertIntoHashMap(candidateClassesMap, owlObjectProperty, CandidateClassV2);
+                            }
+                        });
+                    });
                 });
-
-            });
-        });
         logger.info("solution using multiple positive and multiple negative type finished. Total Solutions: "
                 + SharedDataHolder.CandidateSolutionSetV2.size());
 
@@ -832,13 +862,13 @@ public class CandidateSolutionFinderV2 {
      * @param K6
      */
     public void calculateAccuracyOfTopK6ByReasoner(int K6) {
-        if (SharedDataHolder.SortedCandidateSolutionSetV2.size() < K6) {
-            SharedDataHolder.SortedCandidateSolutionSetV2.forEach(candidateSolution -> {
+        if (SharedDataHolder.SortedCandidateSolutionListV2.size() < K6) {
+            SharedDataHolder.SortedCandidateSolutionListV2.forEach(candidateSolution -> {
                 candidateSolution.calculateAccuracyByReasoner();
             });
         } else {
             for (int i = 0; i < K6; i++) {
-                SharedDataHolder.SortedCandidateSolutionSetV2.get(i).calculateAccuracyByReasoner();
+                SharedDataHolder.SortedCandidateSolutionListV2.get(i).calculateAccuracyByReasoner();
             }
         }
     }
@@ -1112,7 +1142,7 @@ public class CandidateSolutionFinderV2 {
         }
 
         // save in shared data holder
-        SharedDataHolder.SortedCandidateSolutionSetV2 = solutionList;
+        SharedDataHolder.SortedCandidateSolutionListV2 = solutionList;
 
         return true;
     }
@@ -1127,7 +1157,7 @@ public class CandidateSolutionFinderV2 {
         monitor.writeMessage("\n####################Solutions####################:");
         solutionCounter = 0;
 
-        SharedDataHolder.SortedCandidateSolutionSetV2.forEach((solution) -> {
+        SharedDataHolder.SortedCandidateSolutionListV2.forEach((solution) -> {
 
             if (solution.getGroupedCandidateClasses().size() > 0) {
                 solutionCounter++;
@@ -1167,8 +1197,9 @@ public class CandidateSolutionFinderV2 {
             }
         });
 
-        logger.info("Total solutions found using raw list: " + SharedDataHolder.SortedCandidateSolutionSetV2.size());
+        logger.info("Total solutions found using raw list: " + SharedDataHolder.SortedCandidateSolutionListV2.size());
         logger.info("Total solutions found after removing empty solution: " + solutionCounter);
+
         monitor.writeMessage("\nTotal solutions found: " + solutionCounter);
 
     }
