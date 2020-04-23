@@ -243,7 +243,6 @@ public class Main {
             similarity.findSimilarityIFPWithAnotherIFP(owlNamedIndividual);
         }
         logger.info("Finding similarity finished");
-
     }
 
     private static void processBatchRunning(String dirPath) {
@@ -391,7 +390,6 @@ public class Main {
                         System.exit(0);
                     }
                 }
-
             } else {
                 System.out.println(argErrorStr1 + sb.toString() + argErrorStr2);
                 printHelp();

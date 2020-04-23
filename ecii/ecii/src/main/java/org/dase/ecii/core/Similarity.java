@@ -76,7 +76,7 @@ public class Similarity {
                         CandidateSolutionV2 -> CandidateSolutionV2.getScore().getDefaultScoreValue() == defaultAccuracyInitialMax)
                         .collect(Collectors.toList()));
         monitor.displayMessage("\nTotal solutions with accuracy (" + ConfigParams.scoreTypeNameRaw + ") "
-                + defaultAccuracyInitialMax + " is " + solutions_with_max_accuracy.size(), true);
+                + defaultAccuracyInitialMax + " are " + solutions_with_max_accuracy.size(), true);
 
 
         logger.debug("Looking subsumed for individual: " + posOwlNamedIndividual.getIRI() + " started...............");
@@ -161,7 +161,7 @@ public class Similarity {
                         CandidateSolutionV2 -> CandidateSolutionV2.getScore().getDefaultScoreValue() == defaultAccuracyInitialMax)
                         .collect(Collectors.toList()));
         monitor.displayMessage("\nTotal solutions with accuracy (" + ConfigParams.scoreTypeNameRaw + ") "
-                + defaultAccuracyInitialMax + " is " + solutions_with_max_accuracy.size(), true);
+                + defaultAccuracyInitialMax + " are " + solutions_with_max_accuracy.size(), true);
 
         double accuracy_total_for_all_indiv = 0;
         double accuracy_avg_for_all_indiv = 0;

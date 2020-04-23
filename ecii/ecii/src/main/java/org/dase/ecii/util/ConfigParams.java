@@ -67,7 +67,7 @@ public final class ConfigParams {
     /**
      * Experimental: instead of typeOfObjectsInPosIndivsMaxSize, posClassListMaxSize is multiplied by multiplicationConstant in limiting the positive types list.
      */
-    public static int multiplicationConstant = 3;
+    public static int multiplicationConstant = 1;
 
     /**
      * k10/ maximum negclasses (top scoring) to do the combination.
@@ -111,12 +111,12 @@ public final class ConfigParams {
     /**
      * Experimental
      */
-    public static int typeOfObjectsInPosIndivsMinSize = 3;
+    public static int typeOfObjectsInPosIndivsMinSize = 5;
 
     /**
      * Experimental
      */
-    public static int typeOfObjectsInNegIndivsMinSize = 3;
+    public static int typeOfObjectsInNegIndivsMinSize = 5;
     //@formatter:on
 
     /**
