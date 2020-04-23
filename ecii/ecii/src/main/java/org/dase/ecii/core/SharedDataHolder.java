@@ -1,6 +1,6 @@
 package org.dase.ecii.core;
 
-import org.dase.ecii.datastructure.CandidateSolution;
+import org.dase.ecii.datastructure.CandidateSolutionV0;
 import org.dase.ecii.datastructure.CandidateSolutionV1;
 import org.dase.ecii.datastructure.CandidateSolutionV2;
 import org.dase.ecii.ontofactory.DLSyntaxRendererExt;
@@ -124,19 +124,19 @@ public class SharedDataHolder {
 
     // score is inside of a solution
     // i.e. solution class contains the score also.
-    public static HashSet<CandidateSolution> CandidateSolutionSet = new HashSet<>();
+    public static HashSet<CandidateSolutionV0> candidateSolutionV0Set = new HashSet<>();
     // to support both v0 and v1
     public static HashSet<CandidateSolutionV1> CandidateSolutionSetV1 = new HashSet<>();
     // to support both v0 and v1
     public static HashSet<CandidateSolutionV2> CandidateSolutionSetV2 = new HashSet<>();
 
-    public static ArrayList<CandidateSolution> SortedCandidateSolutionList = new ArrayList<>();
+    public static ArrayList<CandidateSolutionV0> sortedCandidateSolutionV0List = new ArrayList<>();
     // to support both v0 and v1 and v2
     public static ArrayList<CandidateSolutionV1> SortedCandidateSolutionListV1 = new ArrayList<>();
     // to support both v0 and v1 and v2
     public static ArrayList<CandidateSolutionV2> SortedCandidateSolutionListV2 = new ArrayList<>();
 
-    public static ArrayList<CandidateSolution> SortedByReasonerCandidateSolutionList = new ArrayList<>();
+    public static ArrayList<CandidateSolutionV0> sortedByReasonerCandidateSolutionV0List = new ArrayList<>();
 
 
     // cache all reasoner calls, specifically finding individuals of an owlClassExpression must be cached.

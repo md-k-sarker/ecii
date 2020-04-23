@@ -59,7 +59,7 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
  *  *   Inside of a group, we have multiple candidateClass
  *  *       multiple candidateClass are conjuncted.
  *
- *  *       Inside of CandidateClass:
+ *  *       Inside of CandidateClassV0:
  *  *           multiple horclauses are conjuncted
  *
  * * Implementation note:
@@ -503,9 +503,9 @@ public class CandidateSolutionV2 {
 //                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getKey());
 //                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue());
 //                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getCandidateClassAsString());
-//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().size());
-//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().get(0).getPosObjectTypes().size());
-//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().get(0).getPosObjectTypes().get(0));
+//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauseV0s().size());
+//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauseV0s().get(0).getPosObjectTypes().size());
+//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauseV0s().get(0).getPosObjectTypes().get(0));
                         // null pointer exception is here
                         coveredIndividualsInThisGroup = owlObjectPropertyArrayListHashMap.getValue().get(0).individualsCoveredByThisCandidateClassByReasoner();
                         // each candidateclass are unioned

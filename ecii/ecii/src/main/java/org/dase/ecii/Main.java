@@ -1,13 +1,22 @@
 package org.dase.ecii;
 
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.PropertyConfigurator;
 import org.dase.ecii.core.*;
+import org.dase.ecii.ontofactory.CreateOWLFromCSV;
 import org.dase.ecii.ontofactory.DLSyntaxRendererExt;
+import org.dase.ecii.ontofactory.OntoCombiner;
+import org.dase.ecii.ontofactory.StripDownOntology;
+import org.dase.ecii.ontofactory.strip.ListofObjPropAndIndiv;
+import org.dase.ecii.ontofactory.strip.ListofObjPropAndIndivTextualName;
 import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Monitor;
 import org.dase.ecii.util.Utility;
 import org.dase.ecii.exceptions.MalFormedIRIException;
+import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
@@ -94,11 +103,11 @@ public class Main {
         SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.clear();
         SharedDataHolder.IndividualsOfThisOWLClassExpressionByECII.clear();
 
-        SharedDataHolder.SortedByReasonerCandidateSolutionList.clear();
+        SharedDataHolder.sortedByReasonerCandidateSolutionV0List.clear();
 
-        SharedDataHolder.CandidateSolutionSet.clear();
+        SharedDataHolder.candidateSolutionV0Set.clear();
         // HashMap<Solution:solution,Boolean:shouldTraverse> SolutionsMap
-        SharedDataHolder.SortedCandidateSolutionList.clear();
+        SharedDataHolder.sortedCandidateSolutionV0List.clear();
 
         SharedDataHolder.CandidateSolutionSetV1.clear();
         SharedDataHolder.SortedCandidateSolutionListV1.clear();
@@ -232,18 +241,36 @@ public class Main {
         monitor.displayMessage("\nAlgorithm duration: " + (algoEndTime - algoStartTime) / 1000.0 + " sec", true);
         logger.info("Algorithm duration: " + (algoEndTime - algoStartTime) / 1000.0 + " sec", true);
 
-//        logger.info("printing solutions started...............");
-//        findConceptsObj.printSolutions(ConfigParams.validateByReasonerSize);
-//        logger.info("printing solutions finished.");
+        logger.info("printing solutions started...............");
+        findConceptsObj.printSolutions(ConfigParams.validateByReasonerSize);
+        logger.info("printing solutions finished.");
         monitor.writeMessage("\nTotal solutions found: " + SharedDataHolder.SortedCandidateSolutionListV2.size());
 
-        logger.info("\nFinding similarity started...............");
-        Similarity similarity = new Similarity(monitor, 0, owlReasoner);
-        for (OWLNamedIndividual owlNamedIndividual : SharedDataHolder.posIndivs) {
-            similarity.findSimilarityIFPWithAnotherIFP(owlNamedIndividual);
+        if (ConfigParams.runPairwiseSimilarity) {
+            logger.info("\nFinding similarity started...............");
+            measurePairwiseSimilarity();
+            logger.info("Finding similarity finished");
         }
-        logger.info("Finding similarity finished");
     }
+
+    public static void measurePairwiseSimilarity() {
+        if (SharedDataHolder.posIndivs.size() != SharedDataHolder.negIndivs.size()) {
+            logger.error("Pairwise similarity cant be done as positive and negative size is not equal");
+            return;
+        }
+
+        ArrayList<OWLNamedIndividual> posIndivsList = new ArrayList<>(SharedDataHolder.posIndivs);
+        ArrayList<OWLNamedIndividual> negIndivsList = new ArrayList<>(SharedDataHolder.negIndivs);
+
+        Similarity similarity = new Similarity(monitor, 0, owlReasoner);
+
+        if (posIndivsList.size() == negIndivsList.size()) {
+            for (int i = 0; i < posIndivsList.size(); i++) {
+                double similarity_score = similarity.findSimilarityIFPWithAnotherIFP(posIndivsList.get(i), negIndivsList.get(i));
+            }
+        }
+    }
+
 
     private static void processBatchRunning(String dirPath) {
         processBatchRunning(Paths.get(dirPath));
@@ -262,7 +289,7 @@ public class Main {
                     .filter(f -> f.toFile().getAbsolutePath().endsWith(".config"))
                     .forEach(f -> {
                         // will get each file
-                        String resultantFilePath = f.toString().replace(".config", "_results_ecii_v2.txt");
+                        String resultantFilePath = f.toString().replace(".config", ConfigParams.resultFileExtension);
                         File resultFilePath = new File(resultantFilePath);
                         if (resultFilePath.exists() && !resultFilePath.isDirectory()) {
                             logger.info(f.toString() + " already has result, not running it.");
@@ -287,26 +314,148 @@ public class Main {
     }
 
 
+    /**
+     * @param inputOntoPath
+     * @param entityCsvFilePath
+     * @param indivColumnName
+     * @param typeColumnName
+     * @param outputOntoIRI
+     */
+    public static void stripDownOntoIndivsTypes(String inputOntoPath, String entityCsvFilePath, String indivColumnName, String typeColumnName, String outputOntoIRI) {
+
+        StripDownOntology stripDownOntology = new StripDownOntology(inputOntoPath);
+
+        HashMap<String, HashSet<String>> namesHashMap = stripDownOntology.readIndivTypesFromCSVFile(entityCsvFilePath, "indivs", "indivtypes");
+
+        HashMap<OWLNamedIndividual, HashSet<OWLClass>> entityHashMap = stripDownOntology.convertToOntologyEntity(namesHashMap);
+
+        HashSet<OWLAxiom> axiomsToKeep = new HashSet<>();
+
+        for (Map.Entry<OWLNamedIndividual, HashSet<OWLClass>> indivTypesHashMap : entityHashMap.entrySet()) {
+            axiomsToKeep.addAll(stripDownOntology.extractAxiomsRelatedToOWLClasses(indivTypesHashMap.getValue()));
+        }
+
+        OWLOntologyManager outputOntoManager = OWLManager.createOWLOntologyManager();
+
+        OWLOntology outputOntology = null;
+        try {
+            outputOntology = outputOntoManager.createOntology(IRI.create("http://www.daselab.com/residue/analysis"));
+        } catch (OWLOntologyCreationException e) {
+            e.printStackTrace();
+        }
+        outputOntoManager.addAxioms(outputOntology, axiomsToKeep);
+
+        try {
+            String extension = FilenameUtils.getExtension(inputOntoPath);
+            String outputOntoPath = inputOntoPath.replace("." + extension, "stripped." + extension);
+            Utility.saveOntology(outputOntology, outputOntoPath);
+        } catch (OWLOntologyStorageException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *
+     */
+    public static void stripDownOntoIndivsObjProps(String inputOntoPath, String entityCsvFilePath, String indivColumnName, String objPropColumnName, String outputOntoIRI) {
+        StripDownOntology stripDownOntology = new StripDownOntology(inputOntoPath);
+
+        ListofObjPropAndIndivTextualName listofObjPropAndIndivTextualName = stripDownOntology.
+                readEntityFromCSVFile(entityCsvFilePath, objPropColumnName, indivColumnName);
+
+        ListofObjPropAndIndiv listofObjPropAndIndiv = stripDownOntology.
+                convertToOntologyEntity(listofObjPropAndIndivTextualName);
+
+        listofObjPropAndIndiv = stripDownOntology.processIndirectIndivsUsingObjProps(listofObjPropAndIndiv);
+
+        HashSet<OWLAxiom> axiomsToKeep = stripDownOntology.extractAxiomsRelatedToIndivs(listofObjPropAndIndiv.directIndivs, listofObjPropAndIndiv.inDirectIndivs);
+
+        OWLOntologyManager outputOntoManager = OWLManager.createOWLOntologyManager();
+
+        OWLOntology outputOntology = null;
+        try {
+            outputOntology = outputOntoManager.createOntology(IRI.create(outputOntoIRI));
+        } catch (OWLOntologyCreationException e) {
+            e.printStackTrace();
+        }
+        outputOntoManager.addAxioms(outputOntology, axiomsToKeep);
+
+        try {
+            String extension = FilenameUtils.getExtension(inputOntoPath);
+            String outputOntoPath = inputOntoPath.replace("." + extension, "stripped." + extension);
+            Utility.saveOntology(outputOntology, outputOntoPath);
+
+            monitor.displayMessage("File stripped successfully and saved at: " + outputOntoPath, true);
+
+        } catch (OWLOntologyStorageException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @param inputOntologiesDirectory
+     * @param outputOntologyIRI
+     */
+    public static void combineOntologies(String inputOntologiesDirectory, String outputOntologyIRI) {
+        OntoCombiner ontoCombiner = new OntoCombiner(outputOntologyIRI);
+        ontoCombiner.combineOntologies(null, inputOntologiesDirectory);
+    }
+
+    /**
+     * @param csvPath
+     * @param objPropColumnName
+     * @param indivColumnName
+     * @param typeColumnName
+     */
+    public static void createOntologyFromCSV(String csvPath, String objPropColumnName, String indivColumnName, String typeColumnName) {
+        CreateOWLFromCSV createOWLFromCSV = null;
+        try {
+            logger.info("processing csv file: " + csvPath);
+            createOWLFromCSV = new CreateOWLFromCSV(csvPath.toString(), "talksAbout",
+                    "http://www.daselab.com/residue/analysis");
+        } catch (OWLOntologyCreationException e) {
+            e.printStackTrace();
+        }
+
+        createOWLFromCSV.parseCSVToCreateIndivAndTheirTypes(indivColumnName, typeColumnName);
+    }
+
     public static void printHelp() {
-        String helpCommand = "Program runs in two mode. " +
+        String helpCommand = "\n\nProgram options:" +
+                "\n1. Measure similarity between ontology entities" +
+                "\n2. Perform concept induction" +
+                "\n3. Strip down ontology or keeping entities of interest while discarding others" +
+                "\n4. Create ontology from CSV file" +
+                "\n5. Combine multiple ontology" +
+                "\n\n" +
+                "To measure similarity between ontology entities..... and " +
+                "\nTo perform concept induction....." +
+                "\nProgram runs in two mode. " +
                 "\n\tBatch mode and " +
                 "\n\tsingle mode. " +
-                "\nIn single mode it will take a config file as input parameter and run the program as mentioned by the parameters in config file.\n" +
-                "    \n" +
-                "    In Batch mode it take directory as parameter and will run all the config files within that directory.\n" +
-                "Command: \n" +
-                "    For single mode: [config_file_path]\n" +
+                "\nIn single mode it will take a config file as input parameter and run the program as mentioned by the parameters in config file." +
+                "\nIn Batch mode it take directory as parameter and will run all the config files within that directory." +
+                "\nCommand:" +
+                "\n\tFor single mode: [options] [config_file_path]" +
+                "\n\tFor Batch mode:  [options] [-b directory_path]" +
                 "\n" +
-                "    For Batch mode:  [-b directory_path]" +
-                "\n" +
-                "    For Help: [-h]" +
+                "\tFor Help: [-h]" +
+                "\n\tOptions:" +
+                "\n\t\t-m : Measure similarity between ontology entity" +
+                "\n\t\t-e : Concept Induction by ecii algorithm" +
+                "\n\t\t-c : Combine ontology" +
+                "\n\t\t-s : Strip down ontology" +
+                "\n\t\t-o : Ontology Create from CSV" +
                 "\n\n" +
-                "Example:\n" +
-                "    For single mode:\n" +
-                "        java -jar ecii.jar config_file\n" +
-                "\n" +
-                "    For Batch mode:\n" +
-                "        java -jar ecii.jar -b directory";
+                "Parameters for different options:" +
+                "\n\t-c [inputOntologiesDirectory, outputOntologyIRI]" +
+                "\n\t-s [-obj/type] [inputOntoPath, entityCsvFilePath, indivColumnName, objPropColumnName/typeColumnName, outputOntoIRI] " +
+                "\n\t-o [entityCsvFilePath, objPropColumnName, indivColumnName, typeColumnName, outputOntoIRI]" +
+                "\n\tExample of Concept Induction command:" +
+                "\n\tFor single mode:" +
+                "\n\t\t\tjava -jar ecii.jar config_file" +
+                "\n\tFor Batch mode:" +
+                "\n\t\t\tjava -jar ecii.jar -b directory";
 
         String helpCommandParameter = "";
 
@@ -322,74 +471,87 @@ public class Main {
 
     }
 
-    /**
-     * @param args
-     * @throws OWLOntologyCreationException
-     * @throws IOException
-     */
-    public static void main(String[] args) throws OWLOntologyCreationException, IOException, MalFormedIRIException {
 
-        PropertyConfigurator.configure("/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/main/resources/log4j.properties");
-
-
-//        Files.walk(Paths.get("/Users/sarker/Workspaces/Jetbrains/residue/experiments/7_IFP/Entities_With_Ontology/raw_expr/"))
-//                .filter(Files::isRegularFile)
-//                .forEach(System.out::println);
-
+    private static boolean decideOp(String[] args) {
 
         StringBuilder sb = new StringBuilder();
         for (String arg : args) {
             sb.append(arg);
         }
+
         String argErrorStr1 = "Given parameter: ";
         String argErrorStr2 = " is not in correct format.";
 
-        SharedDataHolder.programStartingDir = System.getProperty("user.dir");
-        logger.info("Working directory/Program starting directory = " + SharedDataHolder.programStartingDir);
-
-        logger.debug("args.length: " + args.length);
-
-        if (args.length == 1) {
-
-            if (args[0].equals("-h")) {
-                printHelp();
-                return;
-            }
+        if (args[0].equals("-m") || args[0].equals("-e")) {
             /**
              * args[0] = confFilePath
              */
-            logger.debug("given program argument: " + args[0]);
-            if (args[0].endsWith(".config")) {
+            logger.debug("given program argument: " + args[1]);
+            if (args.length == 1) {
+                if (args[1].endsWith(".config")) {
 
-                // parse the config file
-                ConfigParams.batch = false;
-                ConfigParams.parseConfigParams(args[0]);
-                initiateSingleDoOps(ConfigParams.outputResultPath);
+                    // parse the config file
+                    ConfigParams.batch = false;
+                    ConfigParams.parseConfigParams(args[1]);
+                    initiateSingleDoOps(ConfigParams.outputResultPath);
+                } else {
+                    System.out.println("Config file must ends with .config");
+                    printHelp();
+                }
+            } else if (args.length >= 2) {
+                /**
+                 * args[0] = -e
+                 * args[1] = -b
+                 * args[2] = directory
+                 */
+                if (args[1].trim().toLowerCase().equals("-b") && !args[2].trim().endsWith(".config")) {
+                    ConfigParams.batch = true;
+                    ConfigParams.batchStartingPath = args[2];
+                    // start with args[1])
+                    try {
+                        logger.info("Running on folder: " + args[2]);
+                        processBatchRunning(args[2]);
+                    } catch (Exception e) {
+                        logger.info("\n\n!!!!!!!Fatal error!!!!!!!\n" + Utility.getStackTraceAsString(e));
+                        if (null != monitor) {
+                            monitor.stopSystem("\n\n!!!!!!!Fatal error!!!!!!!\n" + Utility.getStackTraceAsString(e), true);
+                        } else {
+                            System.exit(0);
+                        }
+                    }
+                } else {
+                    System.out.println(argErrorStr1 + sb.toString() + argErrorStr2);
+                    printHelp();
+                }
+            }
+        } else if (args[0].equals("-c")) {
+            if (args.length == 3) {
+                combineOntologies(args[1], args[2]);
             } else {
-                System.out.println("Config file must ends with .config");
+                System.out.println(argErrorStr1 + sb.toString() + argErrorStr2);
                 printHelp();
             }
-
-        } else if (args.length == 2) {
-            /**
-             * args[0] = -b
-             * args[1] = directory
-             */
-            if (args[0].trim().toLowerCase().equals("-b") && !args[1].trim().endsWith(".config")) {
-                ConfigParams.batch = true;
-                ConfigParams.batchStartingPath = args[1];
-                // start with args[1])
-                try {
-                    logger.info("Running on folder: " + args[1]);
-                    processBatchRunning(args[1]);
-                } catch (Exception e) {
-                    logger.info("\n\n!!!!!!!Fatal error!!!!!!!\n" + Utility.getStackTraceAsString(e));
-                    if (null != monitor) {
-                        monitor.stopSystem("\n\n!!!!!!!Fatal error!!!!!!!\n" + Utility.getStackTraceAsString(e), true);
+        } else if (args[0].equals("-s")) {
+            // -s [-obj/type] [inputOntoPath, entityCsvFilePath, indivColumnName, objPropColumnName/typeColumnName, outputOntoIRI]
+            if (args.length == 7) {
+                if (args[1].equals("obj") || args[1].equals("type")) {
+                    if (args[1].equals("obj")) {
+                        stripDownOntoIndivsObjProps(args[2], args[3], args[4], args[5], args[6]);
                     } else {
-                        System.exit(0);
+                        stripDownOntoIndivsTypes(args[2], args[3], args[4], args[5], args[6]);
                     }
+                } else {
+                    System.out.println(argErrorStr1 + sb.toString() + argErrorStr2);
+                    printHelp();
                 }
+            } else {
+                System.out.println(argErrorStr1 + sb.toString() + argErrorStr2);
+                printHelp();
+            }
+        } else if (args[0].equals("-o")) {
+            // -o [entityCsvFilePath, objPropColumnName, indivColumnName, typeColumnName, outputOntoIRI]"
+            if (args.length == 6) {
+                createOntologyFromCSV(args[1], args[2], args[3], args[4]);
             } else {
                 System.out.println(argErrorStr1 + sb.toString() + argErrorStr2);
                 printHelp();
@@ -397,6 +559,43 @@ public class Main {
         } else {
             System.out.println(argErrorStr1 + sb.toString() + argErrorStr2);
             printHelp();
+            return false;
         }
+        return true;
+    }
+
+    /**
+     * @param args
+     * @throws OWLOntologyCreationException
+     * @throws IOException
+     */
+    public static void main(String[] args) throws OWLOntologyCreationException, IOException, MalFormedIRIException {
+
+//        PropertyConfigurator.configure("/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/main/resources/log4j.properties");
+
+
+//        Files.walk(Paths.get("/Users/sarker/Workspaces/Jetbrains/residue/experiments/7_IFP/Entities_With_Ontology/raw_expr/"))
+//                .filter(Files::isRegularFile)
+//                .forEach(System.out::println);
+
+
+        SharedDataHolder.programStartingDir = System.getProperty("user.dir");
+        logger.info("Working directory/Program starting directory = " + SharedDataHolder.programStartingDir);
+
+        logger.debug("args.length: " + args.length);
+
+        if (args.length > 0) {
+            if (args.length == 1) {
+                printHelp();
+            } else {
+                decideOp(args);
+            }
+        }
+
+//        if (args[0].equals("-h")) {
+        printHelp();
+//        }
+
+
     }
 }

@@ -34,7 +34,7 @@ import java.util.Objects;
  * For conjunctive horn clause at_most 1 positive atomic class (here B) can exist and
  * any number of negative class can exist.
  */
-public class ConjunctiveHornClause {
+public class ConjunctiveHornClauseV0 {
 
     final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -79,14 +79,14 @@ public class ConjunctiveHornClause {
     //@formatter:on
 
     /**
-     * Score associated with this CandidateClass. This score is used to select best n hornClause (limit K5), which will be used on combination.
+     * Score associated with this CandidateClassV0. This score is used to select best n hornClause (limit K5), which will be used on combination.
      */
     private Score score;
 
     /**
      * Public constructor
      */
-    public ConjunctiveHornClause(OWLObjectProperty owlObjectProperty) {
+    public ConjunctiveHornClauseV0(OWLObjectProperty owlObjectProperty) {
         if (null == owlObjectProperty) {
             this.owlObjectProperty = SharedDataHolder.noneOWLObjProp;
         } else {
@@ -100,7 +100,7 @@ public class ConjunctiveHornClause {
      *
      * @param anotherSolutionPart
      */
-    public ConjunctiveHornClause(ConjunctiveHornClause anotherSolutionPart) {
+    public ConjunctiveHornClauseV0(ConjunctiveHornClauseV0 anotherSolutionPart) {
         this.negObjectTypes = new ArrayList<>();
         this.owlObjectProperty = anotherSolutionPart.owlObjectProperty;
         this.posObjectType = anotherSolutionPart.posObjectType;
@@ -211,7 +211,7 @@ public class ConjunctiveHornClause {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ConjunctiveHornClause that = (ConjunctiveHornClause) o;
+        ConjunctiveHornClauseV0 that = (ConjunctiveHornClauseV0) o;
         return Objects.equals(owlObjectProperty, that.owlObjectProperty) &&
                 Objects.equals(posObjectType, that.posObjectType) &&
                 Objects.equals(new HashSet<>(negObjectTypes), new HashSet<>(that.negObjectTypes));

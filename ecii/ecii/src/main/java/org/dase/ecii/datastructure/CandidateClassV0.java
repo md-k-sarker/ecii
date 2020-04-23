@@ -27,7 +27,7 @@ import java.util.Objects;
  * k2 = limit of horn clauses. = ConfigParams.hornClauseLimit.
  * </pre>
  */
-public class CandidateClass {
+public class CandidateClassV0 {
 
     /**
      * If the object property is empty = SharedDataHolder.noneOWLObjProp then related classes are atomic class.
@@ -36,21 +36,21 @@ public class CandidateClass {
     /**
      * Multiple conjunctive horn clause.
      */
-    private ArrayList<ConjunctiveHornClause> conjunctiveHornClauses;
+    private ArrayList<ConjunctiveHornClauseV0> conjunctiveHornClauseV0s;
 
     /**
-     * Score associated with this CandidateClass. This score is used to select best n candidateClass (limit K6), which will be used on combination.
+     * Score associated with this CandidateClassV0. This score is used to select best n candidateClass (limit K6), which will be used on combination.
      */
     private Score score;
 
-    public CandidateClass(OWLObjectProperty owlObjectProperty) {
+    public CandidateClassV0(OWLObjectProperty owlObjectProperty) {
         this.owlObjectProperty = owlObjectProperty;
-        this.conjunctiveHornClauses = new ArrayList<>();
+        this.conjunctiveHornClauseV0s = new ArrayList<>();
     }
 
-    public CandidateClass(CandidateClass anotherCandidateClass) {
-        this.owlObjectProperty = anotherCandidateClass.owlObjectProperty;
-        this.conjunctiveHornClauses = new ArrayList<>(anotherCandidateClass.conjunctiveHornClauses);
+    public CandidateClassV0(CandidateClassV0 anotherCandidateClassV0) {
+        this.owlObjectProperty = anotherCandidateClassV0.owlObjectProperty;
+        this.conjunctiveHornClauseV0s = new ArrayList<>(anotherCandidateClassV0.conjunctiveHornClauseV0s);
     }
 
     public OWLObjectProperty getOwlObjectProperty() {
@@ -61,16 +61,16 @@ public class CandidateClass {
         this.owlObjectProperty = owlObjectProperty;
     }
 
-    public ArrayList<ConjunctiveHornClause> getConjunctiveHornClauses() {
-        return conjunctiveHornClauses;
+    public ArrayList<ConjunctiveHornClauseV0> getConjunctiveHornClauseV0s() {
+        return conjunctiveHornClauseV0s;
     }
 
-    public void setConjunctiveHornClauses(ArrayList<ConjunctiveHornClause> conjunctiveHornClauses) {
-        this.conjunctiveHornClauses = conjunctiveHornClauses;
+    public void setConjunctiveHornClauseV0s(ArrayList<ConjunctiveHornClauseV0> conjunctiveHornClauseV0s) {
+        this.conjunctiveHornClauseV0s = conjunctiveHornClauseV0s;
     }
 
-    public void addConjunctiveHornClauses(ConjunctiveHornClause conjunctiveHornClause) {
-        this.conjunctiveHornClauses.add(conjunctiveHornClause);
+    public void addConjunctiveHornClauses(ConjunctiveHornClauseV0 conjunctiveHornClauseV0) {
+        this.conjunctiveHornClauseV0s.add(conjunctiveHornClauseV0);
     }
 
     public Score getScore() {
@@ -90,10 +90,10 @@ public class CandidateClass {
 
         HashSet<OWLClassExpression> conjunctiveHornClausesClassExpression = new HashSet<>();
 
-        if (null != this.conjunctiveHornClauses) {
+        if (null != this.conjunctiveHornClauseV0s) {
             // get all hornclause as class expression and make a hashset.
-            for (ConjunctiveHornClause conjunctiveHornClause : this.conjunctiveHornClauses) {
-                conjunctiveHornClausesClassExpression.add(conjunctiveHornClause.getConjunctiveHornClauseAsOWLClassExpression());
+            for (ConjunctiveHornClauseV0 conjunctiveHornClauseV0 : this.conjunctiveHornClauseV0s) {
+                conjunctiveHornClausesClassExpression.add(conjunctiveHornClauseV0.getConjunctiveHornClauseAsOWLClassExpression());
             }
             ArrayList<OWLClassExpression> conjunctiveHornClausesClassExpressionAList = new ArrayList<>(conjunctiveHornClausesClassExpression);
 
@@ -114,14 +114,14 @@ public class CandidateClass {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CandidateClass that = (CandidateClass) o;
+        CandidateClassV0 that = (CandidateClassV0) o;
         return Objects.equals(owlObjectProperty, that.owlObjectProperty) &&
-                Objects.equals(new HashSet<>(conjunctiveHornClauses), new HashSet<>(that.conjunctiveHornClauses));
+                Objects.equals(new HashSet<>(conjunctiveHornClauseV0s), new HashSet<>(that.conjunctiveHornClauseV0s));
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(owlObjectProperty, new HashSet<>(conjunctiveHornClauses));
+        return Objects.hash(owlObjectProperty, new HashSet<>(conjunctiveHornClauseV0s));
     }
 }

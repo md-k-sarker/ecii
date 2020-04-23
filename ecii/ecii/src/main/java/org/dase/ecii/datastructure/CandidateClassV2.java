@@ -19,7 +19,6 @@ import java.util.HashSet;
 import java.util.Objects;
 
 import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.AND;
-import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.OR;
 
 
 /**
@@ -64,10 +63,10 @@ public class CandidateClassV2 {
     /**
      * Multiple conjunctive horn clause.
      */
-    private ArrayList<ConjunctiveHornClauseV1> conjunctiveHornClauses;
+    private ArrayList<ConjunctiveHornClauseV1V2> conjunctiveHornClauses;
 
     /**
-     * Score associated with this CandidateClass. This score is used to select best n candidateClass (limit K6), which will be used on combination.
+     * Score associated with this CandidateClassV0. This score is used to select best n candidateClass (limit K6), which will be used on combination.
      */
     private Score score;
 
@@ -142,16 +141,16 @@ public class CandidateClassV2 {
 
 
     /**
-     * @return ArrayList<ConjunctiveHornClauseV1>
+     * @return ArrayList<ConjunctiveHornClauseV1V2>
      */
-    public ArrayList<ConjunctiveHornClauseV1> getConjunctiveHornClauses() {
+    public ArrayList<ConjunctiveHornClauseV1V2> getConjunctiveHornClauses() {
         return conjunctiveHornClauses;
     }
 
     /**
      * @param conjunctiveHornClauses
      */
-    public void setConjunctiveHornClauses(ArrayList<ConjunctiveHornClauseV1> conjunctiveHornClauses) {
+    public void setConjunctiveHornClauses(ArrayList<ConjunctiveHornClauseV1V2> conjunctiveHornClauses) {
         this.conjunctiveHornClauses = conjunctiveHornClauses;
         solutionChanged = true;
     }
@@ -159,7 +158,7 @@ public class CandidateClassV2 {
     /**
      * @param conjunctiveHornClause
      */
-    public void addConjunctiveHornClauses(ConjunctiveHornClauseV1 conjunctiveHornClause) {
+    public void addConjunctiveHornClauses(ConjunctiveHornClauseV1V2 conjunctiveHornClause) {
         this.conjunctiveHornClauses.add(conjunctiveHornClause);
         solutionChanged = true;
     }
@@ -198,7 +197,7 @@ public class CandidateClassV2 {
 
         if (null != this.conjunctiveHornClauses) {
             // get all hornclause as class expression and make a hashset.
-            for (ConjunctiveHornClauseV1 conjunctiveHornClause : this.conjunctiveHornClauses) {
+            for (ConjunctiveHornClauseV1V2 conjunctiveHornClause : this.conjunctiveHornClauses) {
                 conjunctiveHornClausesClassExpression.add(conjunctiveHornClause.getConjunctiveHornClauseAsOWLClassExpression());
             }
             ArrayList<OWLClassExpression> conjunctiveHornClausesClassExpressionAList = new ArrayList<>(conjunctiveHornClausesClassExpression);

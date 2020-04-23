@@ -56,7 +56,7 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
  *  *   Inside of a group, we have multiple candidateClass
  *  *       multiple candidateClass are conjuncted when we have hare object property, and
  *                                      unioned when we have proper object property.
- *  *       Inside of CandidateClass:
+ *  *       Inside of CandidateClassV0:
  *  *           multiple horclauses are conjuncted when we have hare object property, and
  *                                      unioned when we have proper object property.  ?????
  *                  -------------------------
@@ -71,7 +71,7 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
  *  * We will have a single group for a single objectProperty.
  *
  * OLD-stuff:
- * CandidateSolution consists of atomic classes and candidate classes.
+ * CandidateSolutionV0 consists of atomic classes and candidate classes.
  * Atomic Class and candidate class will be concatenated by AND/Conjunction.
  * Atomic Class must be printed first.
  *  </pre>
@@ -507,9 +507,9 @@ public class CandidateSolutionV1 {
 //                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getKey());
 //                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue());
 //                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getCandidateClassAsString());
-//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().size());
-//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().get(0).getPosObjectTypes().size());
-//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().get(0).getPosObjectTypes().get(0));
+//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauseV0s().size());
+//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauseV0s().get(0).getPosObjectTypes().size());
+//                        logger.info("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauseV0s().get(0).getPosObjectTypes().get(0));
                         // null pointer exception is here
                         coveredIndividualsInThisGroup = owlObjectPropertyArrayListHashMap.getValue().get(0).individualsCoveredByThisCandidateClassByReasoner();
                         // each candidateclass are unioned

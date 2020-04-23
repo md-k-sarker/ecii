@@ -7,11 +7,10 @@ import org.dase.ecii.core.Score;
 import org.dase.ecii.core.SharedDataHolder;
 import org.dase.ecii.datastructure.CandidateClassV1;
 import org.dase.ecii.datastructure.CandidateSolutionV1;
-import org.dase.ecii.datastructure.ConjunctiveHornClauseV1;
+import org.dase.ecii.datastructure.ConjunctiveHornClauseV1V2;
 import org.dase.ecii.util.Utility;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
@@ -35,7 +34,7 @@ public class TestCandidateSolutionV1 {
 
             CandidateClassV1 candidateClassV1 = new CandidateClassV1(SharedDataHolder.noneOWLObjProp, owlReasoner, SharedDataHolder.owlOntology);
 
-            ConjunctiveHornClauseV1 conjunctiveHornClauseV1 = new ConjunctiveHornClauseV1(SharedDataHolder.noneOWLObjProp, owlReasoner, SharedDataHolder.owlOntology);
+            ConjunctiveHornClauseV1V2 conjunctiveHornClauseV1V2 = new ConjunctiveHornClauseV1V2(SharedDataHolder.noneOWLObjProp, owlReasoner, SharedDataHolder.owlOntology);
 
             OWLClass classHuman = SharedDataHolder.owlDataFactory.getOWLClass(IRI.create("http://www.daselab.com/sarker/mock#Human"));
 
@@ -49,8 +48,8 @@ public class TestCandidateSolutionV1 {
             SharedDataHolder.posIndivs.add(indivZaman);
             SharedDataHolder.negIndivs.add(indivChina);
 
-            conjunctiveHornClauseV1.addPosObjectType(classHuman);
-            candidateClassV1.addConjunctiveHornClauses(conjunctiveHornClauseV1);
+            conjunctiveHornClauseV1V2.addPosObjectType(classHuman);
+            candidateClassV1.addConjunctiveHornClauses(conjunctiveHornClauseV1V2);
             candidateSolutionV1.addCandidateClass(candidateClassV1);
 
             // print solution

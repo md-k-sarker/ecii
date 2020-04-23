@@ -38,6 +38,10 @@ public final class ConfigParams {
     public static HashMap<String, String> prefixes;
 
     /**
+     *
+     */
+    public static String resultFileExtension = "_solutions_results_ecii_v2.txt";
+    /**
      * K7/atomic types both appeared in positive and negative
      */
     public static boolean removeCommonTypes;
@@ -96,6 +100,8 @@ public final class ConfigParams {
 
     // used in CreateOWLFromADE20k.java class
     public static final String ontologyIRI = "http://www.daselab.org/ontologies/ADE20K/hcbdwsu/";
+
+    public static boolean runPairwiseSimilarity = false;
 
     //@formatter:off
     /**
@@ -189,9 +195,10 @@ public final class ConfigParams {
             validateByReasonerSize = Integer.valueOf(prop.getProperty("validateByReasonerSize", "0"));
             posClassListMaxSize = Integer.valueOf(prop.getProperty("posClassListMaxSize", "20"));
             negClassListMaxSize = Integer.valueOf(prop.getProperty("negClassListMaxSize", "20"));
+            runPairwiseSimilarity = Boolean.parseBoolean(prop.getProperty("removeCommonTypes", "false"));
 
             confFileDir = Paths.get(confFilePath).getParent().toString();
-            String replacement = "_similarity_results_ecii_v2.txt";
+            String replacement = ConfigParams.resultFileExtension;
             String resultFileName = Paths.get(confFilePath).getFileName().toString().replace(".config", replacement);
             outputResultPath = confFileDir + "/" + resultFileName;
 

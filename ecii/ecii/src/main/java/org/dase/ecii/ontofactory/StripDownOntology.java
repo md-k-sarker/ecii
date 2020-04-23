@@ -45,7 +45,7 @@ public class StripDownOntology {
     /**
      * Ontology manipulator
      */
-    private static OWLOntology inputOntology;
+    public static OWLOntology inputOntology;
     private static OWLOntologyManager inputOntoManager;
     //    private static OWLOntologyManager outputOntoManager;
     private static OWLDataFactory ontoDataFacotry;

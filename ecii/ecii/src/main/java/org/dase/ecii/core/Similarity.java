@@ -9,6 +9,7 @@ import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Monitor;
 import org.dase.ecii.util.Utility;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
@@ -57,15 +58,15 @@ public class Similarity {
      * <p>
      * option 2 is implemented
      */
-    public void findSimilarityIFPWithAnotherIFP(OWLNamedIndividual posOwlNamedIndividual) throws IOException {
+    public double findSimilarityIFPWithAnotherIFP(OWLNamedIndividual posOwlNamedIndividual, OWLNamedIndividual negOwlNamedIndividual)  {
 
-        if (null == posOwlNamedIndividual)
-            return;
+        if (null == posOwlNamedIndividual || null == negOwlNamedIndividual)
+            return -1;
 
         logger.info("Finding similarity of ifp: " + posOwlNamedIndividual + " started...............");
         monitor.displayMessage("\nFinding similarity of IFP: " + posOwlNamedIndividual + " started............", true);
 
-
+        int nullClassCounter = 0;
         if (SharedDataHolder.SortedCandidateSolutionListV2.size() > 0) {
             defaultAccuracyInitialMax = SharedDataHolder.SortedCandidateSolutionListV2.get(0).getScore().getDefaultScoreValue();
         }
@@ -80,36 +81,63 @@ public class Similarity {
 
 
         logger.debug("Looking subsumed for individual: " + posOwlNamedIndividual.getIRI() + " started...............");
-        double accuracy_total_for_single_indiv = 0;
-        double accuracy_avg_for_single_indiv = 0;
+        double accuracy_total_for_pos_indiv = 0;
+        double accuracy_total_for_neg_indiv = 0;
+        double accuracy_probability_for_pos_indiv = 0;
+        double accuracy_probability_for_neg_indiv = 0;
 
         for (CandidateSolutionV2 CandidateSolutionV2 : solutions_with_max_accuracy) {
-            logger.debug("started looking subsumed by candidate solution: " + CandidateSolutionV2.getSolutionAsString(true));
 
-            if (owlReasoner.getInstances(CandidateSolutionV2.getSolutionAsOWLClassExpression(), false).getFlattened().contains(posOwlNamedIndividual)) {
-                logger.debug(Utility.getShortNameWithPrefix(posOwlNamedIndividual) +
-                        " is subsumed by solution " + CandidateSolutionV2.getSolutionAsString(true));
-                accuracy_total_for_single_indiv += CandidateSolutionV2.getScore().getDefaultScoreValue();
+            if (null != CandidateSolutionV2.getSolutionAsOWLClassExpression()) {
+                logger.debug("started looking subsumed by candidate solution: " + CandidateSolutionV2.getSolutionAsString(true));
+
+                HashSet<OWLNamedIndividual> namedIndividualHashSet = new HashSet<>(owlReasoner.getInstances(
+                        CandidateSolutionV2.getSolutionAsOWLClassExpression(), false).getFlattened());
+
+                if (namedIndividualHashSet.contains(posOwlNamedIndividual)) {
+                    logger.debug(Utility.getShortNameWithPrefix(posOwlNamedIndividual) +
+                            " is subsumed by solution " + CandidateSolutionV2.getSolutionAsString(true));
+                    accuracy_total_for_pos_indiv += CandidateSolutionV2.getScore().getDefaultScoreValue();
+                }
+                if (namedIndividualHashSet.contains(negOwlNamedIndividual)) {
+                    logger.debug(Utility.getShortNameWithPrefix(posOwlNamedIndividual) +
+                            " is subsumed by solution " + CandidateSolutionV2.getSolutionAsString(true));
+                    accuracy_total_for_neg_indiv += CandidateSolutionV2.getScore().getDefaultScoreValue();
+                }
+            } else {
+                nullClassCounter++;
             }
         }
 
 
-        logger.debug("Subsumed total sum of accuracy for ifp: " + posOwlNamedIndividual + ": " + accuracy_total_for_single_indiv);
+        logger.debug("Subsumed total sum of accuracy for ifp: " + posOwlNamedIndividual + ": " + accuracy_total_for_pos_indiv);
         monitor.displayMessage("Subsumed sum of accuracy  (" + ConfigParams.scoreTypeNameRaw + ") for ifp: "
-                + posOwlNamedIndividual + ": " + accuracy_total_for_single_indiv, true);
-        accuracy_avg_for_single_indiv = accuracy_total_for_single_indiv / SharedDataHolder.SortedCandidateSolutionListV2.size();
-        logger.debug("Subsumed avg of accuracy for ifp: " + posOwlNamedIndividual + ": " + accuracy_avg_for_single_indiv);
-        monitor.displayMessage("Subsumed average sum of accuracy (" + ConfigParams.scoreTypeNameRaw + ") for ifp: "
-                + posOwlNamedIndividual + ": " + accuracy_avg_for_single_indiv, true);
+                + posOwlNamedIndividual + ": " + accuracy_total_for_pos_indiv, true);
 
-        logger.debug("Looking subsumed for individual " + posOwlNamedIndividual.getIRI() + " finished ");
+        if (SharedDataHolder.SortedCandidateSolutionListV2.size() - nullClassCounter != 0) {
+            accuracy_probability_for_pos_indiv = accuracy_total_for_pos_indiv / SharedDataHolder.SortedCandidateSolutionListV2.size() - nullClassCounter;
+            accuracy_probability_for_neg_indiv = accuracy_total_for_neg_indiv / SharedDataHolder.SortedCandidateSolutionListV2.size() - nullClassCounter;
+        } else {
+            accuracy_probability_for_pos_indiv = 0;
+            accuracy_probability_for_neg_indiv = 0;
+        }
+
+        double similarity = 1 - Math.abs((accuracy_probability_for_pos_indiv - accuracy_probability_for_neg_indiv));
+//        logger.debug("Subsumed avg of accuracy for ifp: " + posOwlNamedIndividual + ": " + accuracy_probability_for_pos_indiv);
+//        monitor.displayMessage("Subsumed average sum of accuracy (" + ConfigParams.scoreTypeNameRaw + ") for ifp: "
+//                + posOwlNamedIndividual + ": " + accuracy_probability_for_pos_indiv, true);
+//
+//        logger.debug("Looking subsumed for individual " + posOwlNamedIndividual.getIRI() + " finished ");
 
         monitor.displayMessage("\n\n##################################", true);
-        monitor.displayMessage("Similarity score of IFP " + posOwlNamedIndividual + ": " + accuracy_avg_for_single_indiv , true);
+        monitor.displayMessage("Similarity score of IFP " + Utility.getShortName(posOwlNamedIndividual) + " with IFP : " + Utility.getShortName(posOwlNamedIndividual) + ": "+ similarity, true);
         monitor.displayMessage("##################################\n\n", true);
 
-        logger.info("Finding similarity of ifp: " + posOwlNamedIndividual + " finished");
+        logger.info("Finding similarity of ifp: " + Utility.getShortName(posOwlNamedIndividual) + " finished");
         monitor.displayMessage("Finding similarity finished. ", false);
+
+
+        return similarity;
     }
 
 

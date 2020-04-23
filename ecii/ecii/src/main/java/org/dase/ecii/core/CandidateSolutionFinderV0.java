@@ -1,8 +1,8 @@
 package org.dase.ecii.core;
 
-import org.dase.ecii.datastructure.CandidateClass;
-import org.dase.ecii.datastructure.CandidateSolution;
-import org.dase.ecii.datastructure.ConjunctiveHornClause;
+import org.dase.ecii.datastructure.CandidateClassV0;
+import org.dase.ecii.datastructure.CandidateSolutionV0;
+import org.dase.ecii.datastructure.ConjunctiveHornClauseV0;
 import org.dase.ecii.ontofactory.DLSyntaxRendererExt;
 import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Heuristics;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 /**
  * Find solution using the algorithm mentioned in the paper. This solves the problem of creating combination of disjunctions..
- * Algorithm version: V4
+ * Algorithm version: V0
  *
  */
 public class CandidateSolutionFinderV0 {
@@ -44,12 +44,12 @@ public class CandidateSolutionFinderV0 {
     /**
      * This is temporary hashMap used for creating combination of hornClause.
      */
-    private HashMap<OWLObjectProperty, HashSet<ConjunctiveHornClause>> hornClausesMap;
+    private HashMap<OWLObjectProperty, HashSet<ConjunctiveHornClauseV0>> hornClausesMap;
 
     /**
      * This is temporary hashSet used for creating combination of hornClause.
      */
-    private HashMap<OWLObjectProperty, HashSet<CandidateClass>> candidateClassesMap;
+    private HashMap<OWLObjectProperty, HashSet<CandidateClassV0>> candidateClassesMap;
 
     /**
      * Constructor
@@ -110,13 +110,6 @@ public class CandidateSolutionFinderV0 {
         saveInitialSolutionsCustom();
         logger.info("saveInitialSolutions finished");
 
-        // using candidatesolutionfinder.saveInitialSolutionsCustom() we are creating all initial combination.
-        // as we have used psoitive type and it's super classes and negative types and it's super classes, we are only left with refining with subClass.
-        // For negative type no need to refine with subClass.
-        // For positive type we can refine with subClass. TODO.
-
-        // refining with subclass may be helpful especially for residue project.
-
     }
 
 
@@ -133,17 +126,17 @@ public class CandidateSolutionFinderV0 {
     /**
      * Utility/Helper method to add solution to solutionsSet.
      *
-     * @param candidateSolution
+     * @param candidateSolutionV0
      */
-    private boolean addToSolutions(CandidateSolution candidateSolution) {
+    private boolean addToSolutions(CandidateSolutionV0 candidateSolutionV0) {
 
-        if (!SharedDataHolder.CandidateSolutionSet.contains(candidateSolution)) {
+        if (!SharedDataHolder.candidateSolutionV0Set.contains(candidateSolutionV0)) {
             // calculate score
-            Score accScore = calculateAccuracy(candidateSolution);
+            Score accScore = calculateAccuracy(candidateSolutionV0);
             if (accScore.getCoverage() > 0) {
-                candidateSolution.setScore(accScore);
+                candidateSolutionV0.setScore(accScore);
                 // save to shared data holder
-                SharedDataHolder.CandidateSolutionSet.add(candidateSolution);
+                SharedDataHolder.candidateSolutionV0Set.add(candidateSolutionV0);
                 return true;
             }
             return false;
@@ -188,7 +181,7 @@ public class CandidateSolutionFinderV0 {
     }
 
     /**
-     * save the initial solutions into SharedDataHolder.CandidateSolutionSet object.
+     * save the initial solutions into SharedDataHolder.candidateSolutionV0Set object.
      */
     public void saveInitialSolutionsCustom() {
 
@@ -202,30 +195,30 @@ public class CandidateSolutionFinderV0 {
             hashMap.forEach((posOwlClassExpression, integer) -> {
 
                 //create conjunctive horn clause and add positive part and no negative part initially
-                ConjunctiveHornClause conjunctiveHornClause = new ConjunctiveHornClause(owlObjectProperty);
-                conjunctiveHornClause.setPosObjectType(posOwlClassExpression);
+                ConjunctiveHornClauseV0 conjunctiveHornClauseV0 = new ConjunctiveHornClauseV0(owlObjectProperty);
+                conjunctiveHornClauseV0.setPosObjectType(posOwlClassExpression);
 
                 // create candidate class
-                CandidateClass candidateClass = new CandidateClass(owlObjectProperty);
-                candidateClass.addConjunctiveHornClauses(conjunctiveHornClause);
+                CandidateClassV0 candidateClassV0 = new CandidateClassV0(owlObjectProperty);
+                candidateClassV0.addConjunctiveHornClauses(conjunctiveHornClauseV0);
 
                 // create candidate solution
-                CandidateSolution candidateSolution = new CandidateSolution();
-                candidateSolution.addCandidateClass(candidateClass);
-                boolean added = addToSolutions(candidateSolution);
+                CandidateSolutionV0 candidateSolutionV0 = new CandidateSolutionV0();
+                candidateSolutionV0.addCandidateClass(candidateClassV0);
+                boolean added = addToSolutions(candidateSolutionV0);
                 if (added) {
                     // save temporarily for combination
-                    Score hornClauseScore = calculateAccuracyComplexCustom(conjunctiveHornClause);
-                    conjunctiveHornClause.setScore(hornClauseScore);
-                    insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClause);
+                    Score hornClauseScore = calculateAccuracyComplexCustom(conjunctiveHornClauseV0);
+                    conjunctiveHornClauseV0.setScore(hornClauseScore);
+                    insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV0);
 
-                    Score candidateClassScore = calculateAccuracyComplexCustom(candidateClass);
-                    candidateClass.setScore(candidateClassScore);
-                    insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClass);
+                    Score candidateClassScore = calculateAccuracyComplexCustom(candidateClassV0);
+                    candidateClassV0.setScore(candidateClassScore);
+                    insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClassV0);
                 }
             });
         });
-        logger.info("solution using only a single positive type finished. Total solutions: " + SharedDataHolder.CandidateSolutionSet.size());
+        logger.info("solution using only a single positive type finished. Total solutions: " + SharedDataHolder.candidateSolutionV0Set.size());
 
         // should we use only negative type without a single positive type in Conjunctive Horn Clauses?
         // ref: https://en.wikipedia.org/wiki/Horn_clause
@@ -235,30 +228,30 @@ public class CandidateSolutionFinderV0 {
             hashMap.forEach((negOwlClassExpression, integer) -> {
 
                 // create conjunctive horn clause and add negative part and no positive part initially
-                ConjunctiveHornClause conjunctiveHornClause = new ConjunctiveHornClause(owlObjectProperty);
-                conjunctiveHornClause.addNegObjectType(negOwlClassExpression);
+                ConjunctiveHornClauseV0 conjunctiveHornClauseV0 = new ConjunctiveHornClauseV0(owlObjectProperty);
+                conjunctiveHornClauseV0.addNegObjectType(negOwlClassExpression);
 
                 // create candidate class
-                CandidateClass candidateClass = new CandidateClass(owlObjectProperty);
-                candidateClass.addConjunctiveHornClauses(conjunctiveHornClause);
+                CandidateClassV0 candidateClassV0 = new CandidateClassV0(owlObjectProperty);
+                candidateClassV0.addConjunctiveHornClauses(conjunctiveHornClauseV0);
 
                 // create candidate solution
-                CandidateSolution candidateSolution = new CandidateSolution();
-                candidateSolution.addCandidateClass(candidateClass);
-                boolean added = addToSolutions(candidateSolution);
+                CandidateSolutionV0 candidateSolutionV0 = new CandidateSolutionV0();
+                candidateSolutionV0.addCandidateClass(candidateClassV0);
+                boolean added = addToSolutions(candidateSolutionV0);
                 if (added) {
                     // save temporarily for combination
-                    Score hornClauseScore = calculateAccuracyComplexCustom(conjunctiveHornClause);
-                    conjunctiveHornClause.setScore(hornClauseScore);
-                    insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClause);
+                    Score hornClauseScore = calculateAccuracyComplexCustom(conjunctiveHornClauseV0);
+                    conjunctiveHornClauseV0.setScore(hornClauseScore);
+                    insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV0);
 
-                    Score candidateClassScore = calculateAccuracyComplexCustom(candidateClass);
-                    candidateClass.setScore(candidateClassScore);
-                    insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClass);
+                    Score candidateClassScore = calculateAccuracyComplexCustom(candidateClassV0);
+                    candidateClassV0.setScore(candidateClassScore);
+                    insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClassV0);
                 }
             });
         });
-        logger.info("solution using only a single negative type finished. Total solutions: " + SharedDataHolder.CandidateSolutionSet.size());
+        logger.info("solution using only a single negative type finished. Total solutions: " + SharedDataHolder.candidateSolutionV0Set.size());
 
         // create solution using both positive and negative of class expressions.
         // single positive and single negative.
@@ -274,27 +267,27 @@ public class CandidateSolutionFinderV0 {
                         if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).containsKey(subClassOwlClassExpression)) {
 
                             //create conjunctive horn clause and add positive part and negative part too
-                            ConjunctiveHornClause conjunctiveHornClause = new ConjunctiveHornClause(owlObjectProperty);
-                            conjunctiveHornClause.setPosObjectType(posOwlClassExpression);
-                            conjunctiveHornClause.addNegObjectType(subClassOwlClassExpression);
+                            ConjunctiveHornClauseV0 conjunctiveHornClauseV0 = new ConjunctiveHornClauseV0(owlObjectProperty);
+                            conjunctiveHornClauseV0.setPosObjectType(posOwlClassExpression);
+                            conjunctiveHornClauseV0.addNegObjectType(subClassOwlClassExpression);
 
                             // create candidate class
-                            CandidateClass candidateClass = new CandidateClass(owlObjectProperty);
-                            candidateClass.addConjunctiveHornClauses(conjunctiveHornClause);
+                            CandidateClassV0 candidateClassV0 = new CandidateClassV0(owlObjectProperty);
+                            candidateClassV0.addConjunctiveHornClauses(conjunctiveHornClauseV0);
 
                             // create candidate solution
-                            CandidateSolution candidateSolution = new CandidateSolution();
-                            candidateSolution.addCandidateClass(candidateClass);
-                            boolean added = addToSolutions(candidateSolution);
+                            CandidateSolutionV0 candidateSolutionV0 = new CandidateSolutionV0();
+                            candidateSolutionV0.addCandidateClass(candidateClassV0);
+                            boolean added = addToSolutions(candidateSolutionV0);
                             if (added) {
                                 // save temporarily for combination
-                                Score hornClauseScore = calculateAccuracyComplexCustom(conjunctiveHornClause);
-                                conjunctiveHornClause.setScore(hornClauseScore);
-                                insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClause);
+                                Score hornClauseScore = calculateAccuracyComplexCustom(conjunctiveHornClauseV0);
+                                conjunctiveHornClauseV0.setScore(hornClauseScore);
+                                insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV0);
 
-                                Score candidateClassScore = calculateAccuracyComplexCustom(candidateClass);
-                                candidateClass.setScore(candidateClassScore);
-                                insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClass);
+                                Score candidateClassScore = calculateAccuracyComplexCustom(candidateClassV0);
+                                candidateClassV0.setScore(candidateClassScore);
+                                insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClassV0);
                             }
                         }
                     }
@@ -351,32 +344,32 @@ public class CandidateSolutionFinderV0 {
                     // this is trivially true as we are creating combination of those subclasses which are also contained in the negTypes.
 
                     //create conjunctive horn clause and add positive part and negative part too
-                    ConjunctiveHornClause conjunctiveHornClause = new ConjunctiveHornClause(owlObjectProperty);
-                    conjunctiveHornClause.setPosObjectType(posOwlClassExpression);
-                    conjunctiveHornClause.setNegObjectTypes(subClasses);
+                    ConjunctiveHornClauseV0 conjunctiveHornClauseV0 = new ConjunctiveHornClauseV0(owlObjectProperty);
+                    conjunctiveHornClauseV0.setPosObjectType(posOwlClassExpression);
+                    conjunctiveHornClauseV0.setNegObjectTypes(subClasses);
 
                     // create candidate class
-                    CandidateClass candidateClass = new CandidateClass(owlObjectProperty);
-                    candidateClass.addConjunctiveHornClauses(conjunctiveHornClause);
+                    CandidateClassV0 candidateClassV0 = new CandidateClassV0(owlObjectProperty);
+                    candidateClassV0.addConjunctiveHornClauses(conjunctiveHornClauseV0);
 
                     // create candidate solution
-                    CandidateSolution candidateSolution = new CandidateSolution();
-                    candidateSolution.addCandidateClass(candidateClass);
-                    boolean added = addToSolutions(candidateSolution);
+                    CandidateSolutionV0 candidateSolutionV0 = new CandidateSolutionV0();
+                    candidateSolutionV0.addCandidateClass(candidateClassV0);
+                    boolean added = addToSolutions(candidateSolutionV0);
                     if (added) {
                         // save temporarily for combination
-                        Score hornClauseScore = calculateAccuracyComplexCustom(conjunctiveHornClause);
-                        conjunctiveHornClause.setScore(hornClauseScore);
-                        insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClause);
+                        Score hornClauseScore = calculateAccuracyComplexCustom(conjunctiveHornClauseV0);
+                        conjunctiveHornClauseV0.setScore(hornClauseScore);
+                        insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV0);
 
-                        Score candidateClassScore = calculateAccuracyComplexCustom(candidateClass);
-                        candidateClass.setScore(candidateClassScore);
-                        insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClass);
+                        Score candidateClassScore = calculateAccuracyComplexCustom(candidateClassV0);
+                        candidateClassV0.setScore(candidateClassScore);
+                        insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClassV0);
                     }
                 });
             });
         });
-        logger.info("solution using only a single positive and multiple negative type finished. Total Solutions: " + SharedDataHolder.CandidateSolutionSet.size());
+        logger.info("solution using only a single positive and multiple negative type finished. Total Solutions: " + SharedDataHolder.candidateSolutionV0Set.size());
 
         /**
          * Select top k5 hornClauses to make combination. This function reduces the hornClauseMap size.
@@ -390,10 +383,10 @@ public class CandidateSolutionFinderV0 {
         logger.info("solution using combination of horn clause started...............");
         hornClausesMap.forEach((owlObjectProperty, conjunctiveHornClauses) -> {
             logger.info("\tcombination of horn clause using object property " + Utility.getShortName(owlObjectProperty) + " started...............");
-            ArrayList<ConjunctiveHornClause> hornClauseArrayList = new ArrayList<>(conjunctiveHornClauses);
+            ArrayList<ConjunctiveHornClauseV0> hornClauseArrayList = new ArrayList<>(conjunctiveHornClauses);
             logger.info("\thorn clause size: " + hornClauseArrayList.size());
 
-            ArrayList<ArrayList<ConjunctiveHornClause>> listCombinationOfHornClauses;
+            ArrayList<ArrayList<ConjunctiveHornClauseV0>> listCombinationOfHornClauses;
             // combination of 2
             listCombinationOfHornClauses = Utility.combinationHelper(hornClauseArrayList, 2);
             // combination from 3 to upto ccombinationLimit
@@ -407,24 +400,24 @@ public class CandidateSolutionFinderV0 {
             listCombinationOfHornClauses.forEach(conjunctiveHornClausesCombination -> {
 
                 //create candidate class
-                CandidateClass candidateClass = new CandidateClass(owlObjectProperty);
-                candidateClass.setConjunctiveHornClauses(conjunctiveHornClausesCombination);
+                CandidateClassV0 candidateClassV0 = new CandidateClassV0(owlObjectProperty);
+                candidateClassV0.setConjunctiveHornClauseV0s(conjunctiveHornClausesCombination);
 
                 // create candidate solution
-                CandidateSolution candidateSolution = new CandidateSolution();
-                candidateSolution.addCandidateClass(candidateClass);
-                boolean added = addToSolutions(candidateSolution);
+                CandidateSolutionV0 candidateSolutionV0 = new CandidateSolutionV0();
+                candidateSolutionV0.addCandidateClass(candidateClassV0);
+                boolean added = addToSolutions(candidateSolutionV0);
                 if (added) {
                     // save temporarily for combination
-                    Score candidateClassScore = calculateAccuracyComplexCustom(candidateClass);
-                    candidateClass.setScore(candidateClassScore);
-                    insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClass);
+                    Score candidateClassScore = calculateAccuracyComplexCustom(candidateClassV0);
+                    candidateClassV0.setScore(candidateClassScore);
+                    insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClassV0);
                 }
             });
-            logger.info("\tcombination of horn clause using object property " + Utility.getShortName(owlObjectProperty) + " finished. Total solutions: " + SharedDataHolder.CandidateSolutionSet.size());
+            logger.info("\tcombination of horn clause using object property " + Utility.getShortName(owlObjectProperty) + " finished. Total solutions: " + SharedDataHolder.candidateSolutionV0Set.size());
 
         });
-        logger.info("solution using combination of horn clause finished. Total solutions: " + SharedDataHolder.CandidateSolutionSet.size());
+        logger.info("solution using combination of horn clause finished. Total solutions: " + SharedDataHolder.candidateSolutionV0Set.size());
 
 
         /**
@@ -439,25 +432,25 @@ public class CandidateSolutionFinderV0 {
         logger.info("solution using combination of object proeprties started...............");
         SharedDataHolder.objPropertiesCombination.forEach(owlObjectProperties -> {
 
-            List<Collection<CandidateClass>> origList = new ArrayList<>();
+            List<Collection<CandidateClassV0>> origList = new ArrayList<>();
             candidateClassesMap.forEach((owlObjectProperty, candidateClasses) -> {
                 if (owlObjectProperties.contains(owlObjectProperty)) {
                     origList.add(candidateClasses);
                 }
             });
-            Collection<List<CandidateClass>> objPropsCombination = Utility.restrictedCombinationHelper(origList);
+            Collection<List<CandidateClassV0>> objPropsCombination = Utility.restrictedCombinationHelper(origList);
 
             //  Valid combination of ObjectProperties.
             //  TODO: check with pascal. -- Okay.
             objPropsCombination.forEach(candidateClasses -> {
 
                 // create candidate solution
-                CandidateSolution candidateSolution = new CandidateSolution();
-                candidateSolution.setCandidateClasses(new ArrayList<>(candidateClasses));
-                addToSolutions(candidateSolution);
+                CandidateSolutionV0 candidateSolutionV0 = new CandidateSolutionV0();
+                candidateSolutionV0.setCandidateClassV0s(new ArrayList<>(candidateClasses));
+                addToSolutions(candidateSolutionV0);
             });
         });
-        logger.info("solution using combination of object proeprties finished. Total solutions: " + SharedDataHolder.CandidateSolutionSet.size());
+        logger.info("solution using combination of object proeprties finished. Total solutions: " + SharedDataHolder.candidateSolutionV0Set.size());
     }
 
 
@@ -833,29 +826,17 @@ public class CandidateSolutionFinderV0 {
 
 
     /**
-     * Determine whether this owlnamedIndividual contained within any of the candidate class of this candidateClasses.
+     * Determine whether this owlnamedIndividual contained within any of the candidate class of this candidateClassV0s.
      * precondition: all object property of this candidateclasses must be same.
      *
-     * @param candidateClasses
+     * @param candidateClassV0s
      * @param owlNamedIndividual
      * @return boolean
      */
-    private boolean isContainedInCandidateClasses(ArrayList<CandidateClass> candidateClasses, OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
+    private boolean isContainedInCandidateClasses(ArrayList<CandidateClassV0> candidateClassV0s, OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
         boolean contained = false;
 
-//        if (candidateClasses.size() < 1) {
-//            logger.error("Arraylist of Candidate class contains 0 candidate class.", true);
-//            return false;
-//        }
-        OWLObjectProperty owlObjectProperty = candidateClasses.get(0).getOwlObjectProperty();
-
-        // this is unnecessary
-//        for (CandidateClass candidateClass : candidateClasses) {
-//            if (!owlObjectProperty.equals(candidateClass.getOwlObjectProperty())) {
-//                logger.error("Owl object proeprty of all candidate classes of this arraylist must be same.");
-//                monitor.stopSystem("Owl object proeprty of all candidate classes of this arraylist must be same.", true);
-//            }
-//        }
+        OWLObjectProperty owlObjectProperty = candidateClassV0s.get(0).getOwlObjectProperty();
 
         HashMap<OWLObjectProperty, HashSet<OWLClassExpression>> objPropsMap = SharedDataHolder.
                 individualHasObjectTypes.get(owlNamedIndividual);
@@ -863,10 +844,10 @@ public class CandidateSolutionFinderV0 {
 
         if (null != objPropsMap && objPropsMap.containsKey(owlObjectProperty)) {
             // if any candidate class of this group contains this individual then the full group contains this individual.
-            for (CandidateClass candidateClass : candidateClasses) {
-                if (owlObjectProperty.equals(candidateClass.getOwlObjectProperty())) {
-                    if (candidateClass.getConjunctiveHornClauses().size() > 0) {
-                        if (isContainedInCandidateClass(candidateClass, owlNamedIndividual, isPosIndiv)) {
+            for (CandidateClassV0 candidateClassV0 : candidateClassV0s) {
+                if (owlObjectProperty.equals(candidateClassV0.getOwlObjectProperty())) {
+                    if (candidateClassV0.getConjunctiveHornClauseV0s().size() > 0) {
+                        if (isContainedInCandidateClass(candidateClassV0, owlNamedIndividual, isPosIndiv)) {
                             contained = true;
                             return contained;
                         }
@@ -883,12 +864,12 @@ public class CandidateSolutionFinderV0 {
      * This means that if any one horn clause of the horn clauses (connected to this cnadidate class)
      * contain this individual then this candidate class contain this individual.
      *
-     * @param candidateClass
+     * @param candidateClassV0
      * @param owlNamedIndividual
      * @return
      */
-    private boolean isContainedInCandidateClass(CandidateClass candidateClass, OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
-        return isContainedInHornClauses(candidateClass.getConjunctiveHornClauses(), owlNamedIndividual, isPosIndiv);
+    private boolean isContainedInCandidateClass(CandidateClassV0 candidateClassV0, OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
+        return isContainedInHornClauses(candidateClassV0.getConjunctiveHornClauseV0s(), owlNamedIndividual, isPosIndiv);
     }
 
 
@@ -899,7 +880,7 @@ public class CandidateSolutionFinderV0 {
      * @param owlNamedIndividual
      * @return
      */
-    private boolean isContainedInHornClauses(ArrayList<ConjunctiveHornClause> hornClauses, OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
+    private boolean isContainedInHornClauses(ArrayList<ConjunctiveHornClauseV0> hornClauses, OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
 
         boolean contained = false;
 
@@ -909,19 +890,13 @@ public class CandidateSolutionFinderV0 {
 //        }
         OWLObjectProperty owlObjectProperty = hornClauses.get(0).getOwlObjectProperty();
 
-//        for (ConjunctiveHornClause hornClause : hornClauses) {
-//            if (!owlObjectProperty.equals(hornClause.getOwlObjectProperty())) {
-//                logger.error("Owl object proeprty of all hornClause of this arraylist must be same.");
-//                monitor.stopSystem("Owl object proeprty of all hornClause of this arraylist must be same.", true);
-//            }
-//        }
 
         HashMap<OWLObjectProperty, HashSet<OWLClassExpression>> objPropsMap = SharedDataHolder.
                 individualHasObjectTypes.get(owlNamedIndividual);
 
         if (null != objPropsMap && objPropsMap.containsKey(owlObjectProperty)) {
             // if any horn clause of this group contains this individual then the full arraylist<hornclauses> contains this individual.
-            for (ConjunctiveHornClause hornClause : hornClauses) {
+            for (ConjunctiveHornClauseV0 hornClause : hornClauses) {
                 if (owlObjectProperty.equals(hornClause.getOwlObjectProperty())) {
                     if (isContainedInHornClause(hornClause, owlNamedIndividual, isPosIndiv)) {
                         contained = true;
@@ -941,7 +916,7 @@ public class CandidateSolutionFinderV0 {
      * @param owlNamedIndividual
      * @return
      */
-    private boolean isContainedInHornClause(ConjunctiveHornClause hornClause, OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
+    private boolean isContainedInHornClause(ConjunctiveHornClauseV0 hornClause, OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
 
         boolean contained = false;
 
@@ -1018,10 +993,10 @@ public class CandidateSolutionFinderV0 {
     /**
      * Calculate accuracy of a hornClause.
      *
-     * @param conjunctiveHornClause
+     * @param conjunctiveHornClauseV0
      * @return
      */
-    private Score calculateAccuracyComplexCustom(ConjunctiveHornClause conjunctiveHornClause) {
+    private Score calculateAccuracyComplexCustom(ConjunctiveHornClauseV0 conjunctiveHornClauseV0) {
 
         /**
          * Individuals covered by this hornClause
@@ -1038,7 +1013,7 @@ public class CandidateSolutionFinderV0 {
          */
         for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
 
-            if (isContainedInHornClause(conjunctiveHornClause, thisOwlNamedIndividual, true)) {
+            if (isContainedInHornClause(conjunctiveHornClauseV0, thisOwlNamedIndividual, true)) {
                 insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
             }
         }
@@ -1049,7 +1024,7 @@ public class CandidateSolutionFinderV0 {
          */
         for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
 
-            if (isContainedInHornClause(conjunctiveHornClause, thisOwlNamedIndividual, false)) {
+            if (isContainedInHornClause(conjunctiveHornClauseV0, thisOwlNamedIndividual, false)) {
                 insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
             }
         }
@@ -1078,12 +1053,12 @@ public class CandidateSolutionFinderV0 {
     }
 
     /**
-     * Calculate accuracy of a candidateClass.
+     * Calculate accuracy of a candidateClassV0.
      *
-     * @param candidateClass
+     * @param candidateClassV0
      * @return
      */
-    private Score calculateAccuracyComplexCustom(CandidateClass candidateClass) {
+    private Score calculateAccuracyComplexCustom(CandidateClassV0 candidateClassV0) {
 
         /**
          * Individuals covered by all parts of solution
@@ -1100,7 +1075,7 @@ public class CandidateSolutionFinderV0 {
          */
         for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
 
-            if (isContainedInCandidateClass(candidateClass, thisOwlNamedIndividual, true)) {
+            if (isContainedInCandidateClass(candidateClassV0, thisOwlNamedIndividual, true)) {
                 insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
             }
         }
@@ -1111,7 +1086,7 @@ public class CandidateSolutionFinderV0 {
          */
         for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
 
-            if (isContainedInCandidateClass(candidateClass, thisOwlNamedIndividual, false)) {
+            if (isContainedInCandidateClass(candidateClassV0, thisOwlNamedIndividual, false)) {
                 insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
             }
         }
@@ -1141,12 +1116,12 @@ public class CandidateSolutionFinderV0 {
     /**
      * Calculate accuracy of a solution.
      *
-     * @param candidateSolution
+     * @param candidateSolutionV0
      * @return
      */
-    private Score calculateAccuracy(CandidateSolution candidateSolution) {
+    private Score calculateAccuracy(CandidateSolutionV0 candidateSolutionV0) {
 
-        HashMap<OWLObjectProperty, ArrayList<CandidateClass>> groupedCandidateClasses = candidateSolution.getGroupedCandidateClasses();
+        HashMap<OWLObjectProperty, ArrayList<CandidateClassV0>> groupedCandidateClasses = candidateSolutionV0.getGroupedCandidateClasses();
 
         /**
          * Individuals covered by all parts of solution
@@ -1167,12 +1142,12 @@ public class CandidateSolutionFinderV0 {
             // it must be contained in each group of the candidate classes.
             int containedInTotalGroups = 0;
 
-            for (Map.Entry<OWLObjectProperty, ArrayList<CandidateClass>> entry : groupedCandidateClasses.entrySet()) {
+            for (Map.Entry<OWLObjectProperty, ArrayList<CandidateClassV0>> entry : groupedCandidateClasses.entrySet()) {
                 // each group will be concatenated by AND.
                 OWLObjectProperty owlObjectProperty = entry.getKey();
-                ArrayList<CandidateClass> candidateClasses = entry.getValue();
-                if (candidateClasses.size() > 0) {
-                    if (!isContainedInCandidateClasses(candidateClasses, thisOwlNamedIndividual, true)) {
+                ArrayList<CandidateClassV0> candidateClassV0s = entry.getValue();
+                if (candidateClassV0s.size() > 0) {
+                    if (!isContainedInCandidateClasses(candidateClassV0s, thisOwlNamedIndividual, true)) {
                         // this individual is not contained in this arraylist of candidate classes.
                         // so this individual is not covered.
                         // we need to start iterating with next individual
@@ -1196,13 +1171,13 @@ public class CandidateSolutionFinderV0 {
 
             int containedInTotalGroups = 0;
 
-            for (Map.Entry<OWLObjectProperty, ArrayList<CandidateClass>> entry : groupedCandidateClasses.entrySet()) {
+            for (Map.Entry<OWLObjectProperty, ArrayList<CandidateClassV0>> entry : groupedCandidateClasses.entrySet()) {
                 // each group will be concatenated by AND.
                 OWLObjectProperty owlObjectProperty = entry.getKey();
                 // not passing object property here, because we can recover object property from candidate class
-                ArrayList<CandidateClass> candidateClasses = entry.getValue();
-                if (candidateClasses.size() > 0) {
-                    if (!isContainedInCandidateClasses(candidateClasses, thisOwlNamedIndividual, false)) {
+                ArrayList<CandidateClassV0> candidateClassV0s = entry.getValue();
+                if (candidateClassV0s.size() > 0) {
+                    if (!isContainedInCandidateClasses(candidateClassV0s, thisOwlNamedIndividual, false)) {
                         // this individual is not contained in this arraylist of candidate classes.
                         // so this individual is not covered.
                         // we need to start iterating with next individual
@@ -1217,9 +1192,6 @@ public class CandidateSolutionFinderV0 {
             }
         }
 
-
-        //logger.debug("coveredPosIndividuals size: " + coveredPosIndividuals.size());
-        //logger.debug("excludedNegIndividuals size: " + excludedNegIndividuals.size());
 
         nrOfPositiveClassifiedAsPositive = coveredPosIndividualsMap.size();
         /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
@@ -1262,18 +1234,18 @@ public class CandidateSolutionFinderV0 {
     /**
      * Calculate accuracy of a solution.
      *
-     * @param candidateSolution
+     * @param candidateSolutionV0
      * @return
      */
-    private void calculateAccuracyByReasoner(CandidateSolution candidateSolution) {
+    private void calculateAccuracyByReasoner(CandidateSolutionV0 candidateSolutionV0) {
 
         // add this class expression to ontology and reinitiate reasoner.
-        OWLClassExpression owlClassExpression = candidateSolution.getSolutionAsOWLClassExpression();
+        OWLClassExpression owlClassExpression = candidateSolutionV0.getSolutionAsOWLClassExpression();
         // create a unique name
         OWLClass owlClass = SharedDataHolder.owlDataFactory.getOWLClass(getUniqueIRI());
         OWLAxiom eqAxiom = SharedDataHolder.owlDataFactory.getOWLEquivalentClassesAxiom(owlClass, owlClassExpression);
         ChangeApplied ca = SharedDataHolder.owlOntologyManager.addAxiom(SharedDataHolder.owlOntology, eqAxiom);
-        logger.info("Adding candidateSolution.getSolutionAsOWLClassExpression to ontology Status: " + ca.toString());
+        logger.info("Adding candidateSolutionV0.getSolutionAsOWLClassExpression to ontology Status: " + ca.toString());
         reasoner = Utility.initReasoner(ConfigParams.reasonerName, SharedDataHolder.owlOntology, monitor);
 
         /**
@@ -1295,9 +1267,6 @@ public class CandidateSolutionFinderV0 {
 
             if (posIndivsByReasoner.contains(thisOwlNamedIndividual)) {
                 insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
-//                logger.info("Good");
-            } else {
-//                logger.info("not found. size: " + posIndivsByReasoner.size());
             }
         }
 
@@ -1311,9 +1280,6 @@ public class CandidateSolutionFinderV0 {
 
             if (negIndivsByReasoner.contains(thisOwlNamedIndividual)) {
                 insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
-//                logger.info("Good");
-            } else {
-//                logger.info("not found. size: " + negIndivsByReasoner.size());
             }
         }
 
@@ -1342,11 +1308,11 @@ public class CandidateSolutionFinderV0 {
         logger.info("recall size: " + recall);
 
         //Score accScore = new Score();
-        //candidateSolution.getScore()
-        candidateSolution.getScore().setPrecision_by_reasoner(precision);
-        candidateSolution.getScore().setRecall_by_reasoner(recall);
-        candidateSolution.getScore().setF_measure_by_reasoner(f_measure);
-        candidateSolution.getScore().setCoverage_by_reasoner(coverage);
+        //candidateSolutionV0.getScore()
+        candidateSolutionV0.getScore().setPrecision_by_reasoner(precision);
+        candidateSolutionV0.getScore().setRecall_by_reasoner(recall);
+        candidateSolutionV0.getScore().setF_measure_by_reasoner(f_measure);
+        candidateSolutionV0.getScore().setCoverage_by_reasoner(coverage);
 
 
     }
@@ -1355,13 +1321,13 @@ public class CandidateSolutionFinderV0 {
      * @param K6
      */
     public void calculateAccuracyOfTopK6ByReasoner(int K6) {
-        if (SharedDataHolder.SortedCandidateSolutionList.size() < K6) {
-            SharedDataHolder.SortedCandidateSolutionList.forEach(candidateSolution -> {
-                calculateAccuracyByReasoner(candidateSolution);
+        if (SharedDataHolder.sortedCandidateSolutionV0List.size() < K6) {
+            SharedDataHolder.sortedCandidateSolutionV0List.forEach(candidateSolutionV0 -> {
+                calculateAccuracyByReasoner(candidateSolutionV0);
             });
         } else {
             for (int i = 0; i < K6; i++) {
-                calculateAccuracyByReasoner(SharedDataHolder.SortedCandidateSolutionList.get(i));
+                calculateAccuracyByReasoner(SharedDataHolder.sortedCandidateSolutionV0List.get(i));
             }
         }
     }
@@ -1371,8 +1337,8 @@ public class CandidateSolutionFinderV0 {
     transient volatile private int o2Length = 0;
 
     // temporary variables for using inside lambda
-    transient volatile private List<ConjunctiveHornClause> conjunctiveHornClausesList = new ArrayList<>();
-    transient volatile private List<CandidateClass> candidateClassesList = new ArrayList<>();
+    transient volatile private List<ConjunctiveHornClauseV0> conjunctiveHornClausesListV0 = new ArrayList<>();
+    transient volatile private List<CandidateClassV0> candidateClassesListV0 = new ArrayList<>();
 
     /**
      * Select top k5 hornCluases from the hornClausesMap.
@@ -1380,20 +1346,20 @@ public class CandidateSolutionFinderV0 {
      * @param limit
      * @return
      */
-    private HashMap<OWLObjectProperty, HashSet<ConjunctiveHornClause>> sortAndFilterHornClauseMap(int limit) {
+    private HashMap<OWLObjectProperty, HashSet<ConjunctiveHornClauseV0>> sortAndFilterHornClauseMap(int limit) {
 
         // make a list
-        conjunctiveHornClausesList.clear();
+        conjunctiveHornClausesListV0.clear();
         hornClausesMap.forEach((owlObjectProperty, conjunctiveHornClauses) -> {
-            conjunctiveHornClausesList.addAll(conjunctiveHornClauses);
+            conjunctiveHornClausesListV0.addAll(conjunctiveHornClauses);
             logger.info("conjunctiveHornClauses size:  " + conjunctiveHornClauses.size());
         });
 
-        if (conjunctiveHornClausesList.size() > 0) {
+        if (conjunctiveHornClausesListV0.size() > 0) {
 
             // sort the list
-            logger.info("horn clauses map  will be filtered initial size: " + conjunctiveHornClausesList.size());
-            conjunctiveHornClausesList.sort((o1, o2) -> {
+            logger.info("horn clauses map  will be filtered initial size: " + conjunctiveHornClausesListV0.size());
+            conjunctiveHornClausesListV0.sort((o1, o2) -> {
                 if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
                     return -1;
                 } else if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
@@ -1426,23 +1392,23 @@ public class CandidateSolutionFinderV0 {
             });
 
             // test sorting
-            logger.info("Score of first hornClause:  " + conjunctiveHornClausesList.get(0).getScore().getDefaultScoreValue());
-            logger.info("Score of last hornClause:  " + conjunctiveHornClausesList.get(conjunctiveHornClausesList.size() - 1).getScore().getDefaultScoreValue());
+            logger.info("Score of first hornClause:  " + conjunctiveHornClausesListV0.get(0).getScore().getDefaultScoreValue());
+            logger.info("Score of last hornClause:  " + conjunctiveHornClausesListV0.get(conjunctiveHornClausesListV0.size() - 1).getScore().getDefaultScoreValue());
 
             // filter/select top n (upto limit)
-            if (conjunctiveHornClausesList.size() > limit + 1) {
-                conjunctiveHornClausesList = conjunctiveHornClausesList.subList(0, limit + 1);
+            if (conjunctiveHornClausesListV0.size() > limit + 1) {
+                conjunctiveHornClausesListV0 = conjunctiveHornClausesListV0.subList(0, limit + 1);
             }
 
             // make group again.
             hornClausesMap.clear();
-            conjunctiveHornClausesList.forEach(conjunctiveHornClause -> {
-                insertIntoHashMap(hornClausesMap, conjunctiveHornClause.getOwlObjectProperty(), conjunctiveHornClause);
+            conjunctiveHornClausesListV0.forEach(conjunctiveHornClauseV0 -> {
+                insertIntoHashMap(hornClausesMap, conjunctiveHornClauseV0.getOwlObjectProperty(), conjunctiveHornClauseV0);
             });
 
             // make sure cconjunctivehornclausemap size is upto limit.
-            if (conjunctiveHornClausesList.size() <= limit + 1) {
-                logger.info("horn clauses map filtered and now size: " + conjunctiveHornClausesList.size());
+            if (conjunctiveHornClausesListV0.size() <= limit + 1) {
+                logger.info("horn clauses map filtered and now size: " + conjunctiveHornClausesListV0.size());
             } else {
                 logger.error("!!!!!!!!!!!!!horn clause map didn't filter perfectly. !!!!!!!!!!!!!");
                 monitor.stopSystem("!!!!!!!!!!!!!horn clause map didn't filter perfectly. !!!!!!!!!!!!!", true);
@@ -1454,22 +1420,22 @@ public class CandidateSolutionFinderV0 {
     }
 
     /**
-     * Select top k6 CandidateClass from the candidateClassMap.
+     * Select top k6 CandidateClassV0 from the candidateClassMap.
      *
      * @param limit
      * @return
      */
-    private HashMap<OWLObjectProperty, HashSet<CandidateClass>> sortAndFilterCandidateClassMap(int limit) {
+    private HashMap<OWLObjectProperty, HashSet<CandidateClassV0>> sortAndFilterCandidateClassMap(int limit) {
         // make a list
-        candidateClassesList.clear();
+        candidateClassesListV0.clear();
         candidateClassesMap.forEach((owlObjectProperty, candidateClasses) -> {
-            candidateClassesList.addAll(candidateClasses);
+            candidateClassesListV0.addAll(candidateClasses);
         });
 
-        if (candidateClassesList.size() > 0) {
+        if (candidateClassesListV0.size() > 0) {
             // sort the list
-            logger.info("horn clauses map  will be filtered initial size: " + candidateClassesList.size());
-            candidateClassesList.sort((o1, o2) -> {
+            logger.info("horn clauses map  will be filtered initial size: " + candidateClassesListV0.size());
+            candidateClassesListV0.sort((o1, o2) -> {
                 if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
                     return -1;
                 } else if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
@@ -1477,14 +1443,14 @@ public class CandidateSolutionFinderV0 {
                     o1Length = 0;
                     o2Length = 0;
 
-                    o1.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
-                        if (null != conjunctiveHornClause.getPosObjectType()) o1Length++;
-                        o1Length += conjunctiveHornClause.getNegObjectTypes().size();
+                    o1.getConjunctiveHornClauseV0s().forEach(conjunctiveHornClauseV0 -> {
+                        if (null != conjunctiveHornClauseV0.getPosObjectType()) o1Length++;
+                        o1Length += conjunctiveHornClauseV0.getNegObjectTypes().size();
                     });
 
-                    o2.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
-                        if (null != conjunctiveHornClause.getPosObjectType()) o2Length++;
-                        o2Length += conjunctiveHornClause.getNegObjectTypes().size();
+                    o2.getConjunctiveHornClauseV0s().forEach(conjunctiveHornClauseV0 -> {
+                        if (null != conjunctiveHornClauseV0.getPosObjectType()) o2Length++;
+                        o2Length += conjunctiveHornClauseV0.getNegObjectTypes().size();
                     });
 
                     if (o1Length - o2Length > 0) {
@@ -1501,23 +1467,23 @@ public class CandidateSolutionFinderV0 {
             });
 
             // test sorting
-            logger.info("Score of first candidate class:  " + candidateClassesList.get(0).getScore().getDefaultScoreValue());
-            logger.info("Score of last candidate class:  " + candidateClassesList.get(candidateClassesList.size() - 1).getScore().getDefaultScoreValue());
+            logger.info("Score of first candidate class:  " + candidateClassesListV0.get(0).getScore().getDefaultScoreValue());
+            logger.info("Score of last candidate class:  " + candidateClassesListV0.get(candidateClassesListV0.size() - 1).getScore().getDefaultScoreValue());
 
             // filter/select top n (upto limit)
-            if (candidateClassesList.size() > limit + 1) {
-                candidateClassesList = candidateClassesList.subList(0, limit + 1);
+            if (candidateClassesListV0.size() > limit + 1) {
+                candidateClassesListV0 = candidateClassesListV0.subList(0, limit + 1);
             }
 
             // make group again.
             candidateClassesMap.clear();
-            candidateClassesList.forEach(conjunctiveHornClause -> {
+            candidateClassesListV0.forEach(conjunctiveHornClause -> {
                 insertIntoHashMap(candidateClassesMap, conjunctiveHornClause.getOwlObjectProperty(), conjunctiveHornClause);
             });
 
             // make sure cconjunctivehornclausemap size is upto limit.
-            if (candidateClassesList.size() <= limit + 1) {
-                logger.info("horn clauses map filtered and now size: " + candidateClassesList.size());
+            if (candidateClassesListV0.size() <= limit + 1) {
+                logger.info("horn clauses map filtered and now size: " + candidateClassesListV0.size());
             } else {
                 logger.error("!!!!!!!!!!!!!horn clause map didn't filter perfectly. !!!!!!!!!!!!!");
                 monitor.stopSystem("!!!!!!!!!!!!!horn clause map didn't filter perfectly. !!!!!!!!!!!!!", true);
@@ -1538,14 +1504,14 @@ public class CandidateSolutionFinderV0 {
      */
     public boolean sortSolutionsCustom(boolean ascending) {
 
-        ArrayList<CandidateSolution> solutionList = new ArrayList<>(
-                SharedDataHolder.CandidateSolutionSet);
+        ArrayList<CandidateSolutionV0> solutionList = new ArrayList<>(
+                SharedDataHolder.candidateSolutionV0Set);
 
         // small to large
         if (ascending) {
-            solutionList.sort(new Comparator<CandidateSolution>() {
+            solutionList.sort(new Comparator<CandidateSolutionV0>() {
                 @Override
-                public int compare(CandidateSolution o1, CandidateSolution o2) {
+                public int compare(CandidateSolutionV0 o1, CandidateSolutionV0 o2) {
                     if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
                         return 1;
                     }
@@ -1555,17 +1521,17 @@ public class CandidateSolutionFinderV0 {
                         o2Length = 0;
 
                         //o1Length += o1.getAtomicPosOwlClasses().size();
-                        o1.getCandidateClasses().forEach(candidateClass -> {
-                            candidateClass.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
-                                if (null != conjunctiveHornClause.getPosObjectType()) o1Length++;
-                                o1Length += conjunctiveHornClause.getNegObjectTypes().size();
+                        o1.getCandidateClassV0s().forEach(candidateClassV0 -> {
+                            candidateClassV0.getConjunctiveHornClauseV0s().forEach(conjunctiveHornClauseV0 -> {
+                                if (null != conjunctiveHornClauseV0.getPosObjectType()) o1Length++;
+                                o1Length += conjunctiveHornClauseV0.getNegObjectTypes().size();
                             });
                         });
                         //o2Length += o2.getAtomicPosOwlClasses().size();
-                        o2.getCandidateClasses().forEach(candidateClass -> {
-                            candidateClass.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
-                                if (null != conjunctiveHornClause.getPosObjectType()) o2Length++;
-                                o2Length += conjunctiveHornClause.getNegObjectTypes().size();
+                        o2.getCandidateClassV0s().forEach(candidateClassV0 -> {
+                            candidateClassV0.getConjunctiveHornClauseV0s().forEach(conjunctiveHornClauseV0 -> {
+                                if (null != conjunctiveHornClauseV0.getPosObjectType()) o2Length++;
+                                o2Length += conjunctiveHornClauseV0.getNegObjectTypes().size();
                             });
                         });
                         if (o1Length - o2Length > 0) {
@@ -1582,9 +1548,9 @@ public class CandidateSolutionFinderV0 {
                 }
             });
         } else {
-            solutionList.sort(new Comparator<CandidateSolution>() {
+            solutionList.sort(new Comparator<CandidateSolutionV0>() {
                 @Override
-                public int compare(CandidateSolution o1, CandidateSolution o2) {
+                public int compare(CandidateSolutionV0 o1, CandidateSolutionV0 o2) {
                     if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
                         return -1;
                     }
@@ -1594,17 +1560,17 @@ public class CandidateSolutionFinderV0 {
                         o2Length = 0;
 
                         //o1Length += o1.getAtomicPosOwlClasses().size();
-                        o1.getCandidateClasses().forEach(candidateClass -> {
-                            candidateClass.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
-                                if (null != conjunctiveHornClause.getPosObjectType()) o1Length++;
-                                o1Length += conjunctiveHornClause.getNegObjectTypes().size();
+                        o1.getCandidateClassV0s().forEach(candidateClassV0 -> {
+                            candidateClassV0.getConjunctiveHornClauseV0s().forEach(conjunctiveHornClauseV0 -> {
+                                if (null != conjunctiveHornClauseV0.getPosObjectType()) o1Length++;
+                                o1Length += conjunctiveHornClauseV0.getNegObjectTypes().size();
                             });
                         });
                         //o2Length += o2.getAtomicPosOwlClasses().size();
-                        o2.getCandidateClasses().forEach(candidateClass -> {
-                            candidateClass.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
-                                if (null != conjunctiveHornClause.getPosObjectType()) o2Length++;
-                                o2Length += conjunctiveHornClause.getNegObjectTypes().size();
+                        o2.getCandidateClassV0s().forEach(candidateClassV0 -> {
+                            candidateClassV0.getConjunctiveHornClauseV0s().forEach(conjunctiveHornClauseV0 -> {
+                                if (null != conjunctiveHornClauseV0.getPosObjectType()) o2Length++;
+                                o2Length += conjunctiveHornClauseV0.getNegObjectTypes().size();
                             });
                         });
 
@@ -1624,7 +1590,7 @@ public class CandidateSolutionFinderV0 {
         }
 
         // save in shared data holder
-        SharedDataHolder.SortedCandidateSolutionList = solutionList;
+        SharedDataHolder.sortedCandidateSolutionV0List = solutionList;
 
         return true;
     }
@@ -1639,7 +1605,7 @@ public class CandidateSolutionFinderV0 {
         monitor.writeMessage("\n####################Solutions####################:");
         solutionCounter = 0;
 
-        SharedDataHolder.SortedCandidateSolutionList.forEach((solution) -> {
+        SharedDataHolder.sortedCandidateSolutionV0List.forEach((solution) -> {
 
             if (solution.getGroupedCandidateClasses().size() > 0) {
                 solutionCounter++;
@@ -1676,7 +1642,7 @@ public class CandidateSolutionFinderV0 {
             }
         });
 
-        logger.info("Total solutions found using raw list: " + SharedDataHolder.SortedCandidateSolutionList.size());
+        logger.info("Total solutions found using raw list: " + SharedDataHolder.sortedCandidateSolutionV0List.size());
         logger.info("Total solutions found after removing empty solution: " + solutionCounter);
         monitor.writeMessage("\nTotal solutions found: " + solutionCounter);
 

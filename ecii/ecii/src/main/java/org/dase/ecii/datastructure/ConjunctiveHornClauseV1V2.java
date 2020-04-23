@@ -46,7 +46,7 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
  *
  *  </pre>
  */
-public class ConjunctiveHornClauseV1 {
+public class ConjunctiveHornClauseV1V2 {
 
     final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -125,7 +125,7 @@ public class ConjunctiveHornClauseV1 {
     /**
      * Public constructor
      */
-    public ConjunctiveHornClauseV1(OWLObjectProperty owlObjectProperty, OWLReasoner _reasoner, OWLOntology _ontology) {
+    public ConjunctiveHornClauseV1V2(OWLObjectProperty owlObjectProperty, OWLReasoner _reasoner, OWLOntology _ontology) {
         if (null == owlObjectProperty) {
             this.owlObjectProperty = SharedDataHolder.noneOWLObjProp;
         } else {
@@ -146,7 +146,7 @@ public class ConjunctiveHornClauseV1 {
      *
      * @param anotherConjunctiveHornClause
      */
-    public ConjunctiveHornClauseV1(ConjunctiveHornClauseV1 anotherConjunctiveHornClause, OWLOntology _ontology) {
+    public ConjunctiveHornClauseV1V2(ConjunctiveHornClauseV1V2 anotherConjunctiveHornClause, OWLOntology _ontology) {
         this.posObjectTypes = new ArrayList<>();
         this.negObjectTypes = new ArrayList<>();
         this.owlObjectProperty = anotherConjunctiveHornClause.owlObjectProperty;
@@ -268,7 +268,7 @@ public class ConjunctiveHornClauseV1 {
     }
 
     /**
-     * Get this ConjunctiveHornClause as AsOWLClassExpression
+     * Get this ConjunctiveHornClauseV0 as AsOWLClassExpression
      * Not filling the r filler/owlObjectProperty here.
      * V1 - fixed
      *
@@ -319,7 +319,7 @@ public class ConjunctiveHornClauseV1 {
 
 
     /**
-     * Print ConjunctiveHornClause  as String
+     * Print ConjunctiveHornClauseV0  as String
      * TODO(Zaman) : need to modify the method to cope v1, v1 fixed now.
      *
      * @return
@@ -404,32 +404,33 @@ public class ConjunctiveHornClauseV1 {
         HashSet<OWLNamedIndividual> coveredIndividuals = new HashSet<>();
         OWLClassExpression owlClassExpression = this.getConjunctiveHornClauseAsOWLClassExpression();
 
-        if (!this.owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
-            owlClassExpression = owlDataFactory.getOWLObjectSomeValuesFrom(owlObjectProperty, owlClassExpression);
-        }
-
-        // if we have calculated previously then just retrieve it from cache and return it.
-        if (null != SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner) {
-            if (SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.containsKey(owlClassExpression)) {
-
-                coveredIndividuals = SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.get(owlClassExpression);
-                logger.debug("calculating covered individuals by candidateSolution " + this.getConjunctiveHornClauseAsOWLClassExpression() + " found in cache.");
-                logger.debug("\t size: " + coveredIndividuals.size());
-                return coveredIndividuals;
+        if (null != owlClassExpression) {
+            if (!this.owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
+                owlClassExpression = owlDataFactory.getOWLObjectSomeValuesFrom(owlObjectProperty, owlClassExpression);
             }
+
+            // if we have calculated previously then just retrieve it from cache and return it.
+            if (null != SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner) {
+                if (SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.containsKey(owlClassExpression)) {
+
+                    coveredIndividuals = SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.get(owlClassExpression);
+                    logger.debug("calculating covered individuals by candidateSolution " + this.getConjunctiveHornClauseAsOWLClassExpression() + " found in cache.");
+                    logger.debug("\t size: " + coveredIndividuals.size());
+                    return coveredIndividuals;
+                }
+            }
+
+            // not found in cache, now expensive reasoner calls.
+            coveredIndividuals = (HashSet<OWLNamedIndividual>) reasoner.getInstances(owlClassExpression, false).getFlattened();
+
+
+            // save it to cache
+            SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.put(owlClassExpression, coveredIndividuals);
+
+            logger.debug("calculating covered individuals by hornClause " + this.getConjunctiveHornClauseAsOWLClassExpression() + " by reasoner finished");
+
+            logger.debug("\t covered all individuals size: " + coveredIndividuals.size());
         }
-
-        // not found in cache, now expensive reasoner calls.
-        coveredIndividuals = (HashSet<OWLNamedIndividual>) reasoner.getInstances(owlClassExpression, false).getFlattened();
-
-
-        // save it to cache
-        SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.put(owlClassExpression, coveredIndividuals);
-
-        logger.debug("calculating covered individuals by hornClause " + this.getConjunctiveHornClauseAsOWLClassExpression() + " by reasoner finished");
-
-        logger.debug("\t covered all individuals size: " + coveredIndividuals.size());
-
         return coveredIndividuals;
     }
 
@@ -509,7 +510,7 @@ public class ConjunctiveHornClauseV1 {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ConjunctiveHornClauseV1 that = (ConjunctiveHornClauseV1) o;
+        ConjunctiveHornClauseV1V2 that = (ConjunctiveHornClauseV1V2) o;
         return Objects.equals(owlObjectProperty, that.owlObjectProperty) &&
                 Objects.equals(new HashSet<>(posObjectTypes), new HashSet<>(that.posObjectTypes)) &&
                 Objects.equals(new HashSet<>(negObjectTypes), new HashSet<>(that.negObjectTypes));

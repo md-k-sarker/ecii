@@ -5,6 +5,7 @@ Written at 5/22/18.
 */
 
 import org.apache.commons.csv.CSVParser;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.impl.Log4JLogger;
 import org.dase.ecii.util.Monitor;
 import org.dase.ecii.util.Utility;
@@ -318,6 +319,9 @@ public class OntoCombiner {
      */
     public void combineOntologies(String outputPath, String inputDirPath) {
         try {
+            if (null == outputPath) {
+                outputPath = new File(outputPath).getParent() + "combined.owl";
+            }
             File inputDirPathAsFile = new File(inputDirPath);
             logger.info("Processing combineOntologies started...............");
             if (inputDirPathAsFile.isDirectory()) {

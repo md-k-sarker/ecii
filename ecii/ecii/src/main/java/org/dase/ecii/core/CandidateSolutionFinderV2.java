@@ -2,7 +2,7 @@ package org.dase.ecii.core;
 
 import org.dase.ecii.datastructure.CandidateClassV2;
 import org.dase.ecii.datastructure.CandidateSolutionV2;
-import org.dase.ecii.datastructure.ConjunctiveHornClauseV1;
+import org.dase.ecii.datastructure.ConjunctiveHornClauseV1V2;
 import org.dase.ecii.datastructure.HashMapUtility;
 import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Monitor;
@@ -43,7 +43,7 @@ public class CandidateSolutionFinderV2 {
     /**
      * This is temporary hashMap used for creating combination of hornClause.
      */
-    private HashMap<OWLObjectProperty, HashSet<ConjunctiveHornClauseV1>> hornClausesMap;
+    private HashMap<OWLObjectProperty, HashSet<ConjunctiveHornClauseV1V2>> hornClausesMap;
 
     /**
      * This is temporary hashSet used for creating combination of hornClause.
@@ -193,26 +193,31 @@ public class CandidateSolutionFinderV2 {
      * @param aList
      * @return
      */
-    private boolean isValidCombinationOfHornClauses(ArrayList<ConjunctiveHornClauseV1> aList) {
+    private boolean isValidCombinationOfHornClauses(ArrayList<ConjunctiveHornClauseV1V2> aList) {
         boolean isValid = false;
         boolean shouldSkip = false;
 
         // if the list contains self subClassOF relation then discard it.
         for (int j = 0; j < aList.size(); j++) {
             OWLClassExpression owlClassExpression1 = aList.get(j).getConjunctiveHornClauseAsOWLClassExpression();
-            // todo(zaman): this is runtime expensive to call reasoner here. deduce some method to find easy way.
-            List<OWLClassExpression> subClasses = reasoner.getSubClasses(owlClassExpression1, false).getFlattened().stream().collect(Collectors.toList());
-            int k = 0;
-            for (k = 0; k < aList.size(); k++) {
-                OWLClassExpression owlClassExpression2 = aList.get(k).getConjunctiveHornClauseAsOWLClassExpression();
-                if (!owlClassExpression1.equals(owlClassExpression2)) {
-                    if (subClasses.contains(owlClassExpression2)) {
-                        shouldSkip = true;
-                        break;
+            if (null != owlClassExpression1) {
+                // todo(zaman): this is runtime expensive to call reasoner here. deduce some method to find easy way.
+                List<OWLClassExpression> subClasses = reasoner.getSubClasses(owlClassExpression1, false).getFlattened().stream().collect(Collectors.toList());
+                int k = 0;
+                for (k = 0; k < aList.size(); k++) {
+                    OWLClassExpression owlClassExpression2 = aList.get(k).getConjunctiveHornClauseAsOWLClassExpression();
+                    if (!owlClassExpression1.equals(owlClassExpression2)) {
+                        if (subClasses.contains(owlClassExpression2)) {
+                            shouldSkip = true;
+                            break;
+                        }
                     }
                 }
-            }
-            if (shouldSkip) {
+                if (shouldSkip) {
+                    break;
+                }
+            } else {
+                shouldSkip = true;
                 break;
             }
         }
@@ -257,7 +262,7 @@ public class CandidateSolutionFinderV2 {
     }
 
     /**
-     * save the initial solutions into SharedDataHolder.CandidateSolutionSet object.
+     * save the initial solutions into SharedDataHolder.candidateSolutionV0Set object.
      */
     public void saveInitialSolutionsCustom() {
 
@@ -278,12 +283,12 @@ public class CandidateSolutionFinderV2 {
             hashMap.forEach((posOwlClassExpression, integer) -> {
 
                 //create conjunctive horn clause and add positive part and no negative part initially
-                ConjunctiveHornClauseV1 conjunctiveHornClauseV1 = new ConjunctiveHornClauseV1(owlObjectProperty, reasoner, ontology);
-                conjunctiveHornClauseV1.addPosObjectType(posOwlClassExpression);
+                ConjunctiveHornClauseV1V2 conjunctiveHornClauseV1V2 = new ConjunctiveHornClauseV1V2(owlObjectProperty, reasoner, ontology);
+                conjunctiveHornClauseV1V2.addPosObjectType(posOwlClassExpression);
 
                 // create candidate class
                 CandidateClassV2 CandidateClassV2 = new CandidateClassV2(owlObjectProperty, reasoner, ontology);
-                CandidateClassV2.addConjunctiveHornClauses(conjunctiveHornClauseV1);
+                CandidateClassV2.addConjunctiveHornClauses(conjunctiveHornClauseV1V2);
 
                 // create candidate solution
                 CandidateSolutionV2 CandidateSolutionV2 = new CandidateSolutionV2(reasoner, ontology);
@@ -291,9 +296,9 @@ public class CandidateSolutionFinderV2 {
                 boolean added = addToSolutions(CandidateSolutionV2);
                 if (added) {
                     // save temporarily for combination
-                    Score hornClauseScore = conjunctiveHornClauseV1.calculateAccuracyComplexCustom();
-                    conjunctiveHornClauseV1.setScore(hornClauseScore);
-                    HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1);
+                    Score hornClauseScore = conjunctiveHornClauseV1V2.calculateAccuracyComplexCustom();
+                    conjunctiveHornClauseV1V2.setScore(hornClauseScore);
+                    HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1V2);
 
                     Score candidateClassScore = CandidateClassV2.calculateAccuracyComplexCustom();
                     CandidateClassV2.setScore(candidateClassScore);
@@ -331,7 +336,7 @@ public class CandidateSolutionFinderV2 {
                                 && SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).get(subClassOwlClassExpression) > ConfigParams.typeOfObjectsInNegIndivsMinSize) {
 
                             //create conjunctive horn clause and add positive part and negative part too
-                            ConjunctiveHornClauseV1 conjunctiveHornClause = new ConjunctiveHornClauseV1(owlObjectProperty, reasoner, ontology);
+                            ConjunctiveHornClauseV1V2 conjunctiveHornClause = new ConjunctiveHornClauseV1V2(owlObjectProperty, reasoner, ontology);
                             conjunctiveHornClause.addPosObjectType(posOwlClassExpression);
                             conjunctiveHornClause.addNegObjectType(subClassOwlClassExpression);
 
@@ -470,13 +475,13 @@ public class CandidateSolutionFinderV2 {
                             // this is trivially true as we are creating combination of those subclasses which are also contained in the negTypes.
 
                             //create conjunctive horn clause and add positive part and negative part too
-                            ConjunctiveHornClauseV1 conjunctiveHornClauseV1 = new ConjunctiveHornClauseV1(owlObjectProperty, reasoner, ontology);
-                            conjunctiveHornClauseV1.setPosObjectTypes(posOwlClassExpressions);
-                            conjunctiveHornClauseV1.setNegObjectTypes(subClasses);
+                            ConjunctiveHornClauseV1V2 conjunctiveHornClauseV1V2 = new ConjunctiveHornClauseV1V2(owlObjectProperty, reasoner, ontology);
+                            conjunctiveHornClauseV1V2.setPosObjectTypes(posOwlClassExpressions);
+                            conjunctiveHornClauseV1V2.setNegObjectTypes(subClasses);
 
                             // create candidate class
                             CandidateClassV2 CandidateClassV2 = new CandidateClassV2(owlObjectProperty, reasoner, ontology);
-                            CandidateClassV2.addConjunctiveHornClauses(conjunctiveHornClauseV1);
+                            CandidateClassV2.addConjunctiveHornClauses(conjunctiveHornClauseV1V2);
 
                             // create candidate solution
                             CandidateSolutionV2 CandidateSolutionV2 = new CandidateSolutionV2(reasoner, ontology);
@@ -484,9 +489,9 @@ public class CandidateSolutionFinderV2 {
                             boolean added = addToSolutions(CandidateSolutionV2);
                             if (added) {
                                 // save temporarily for combination
-                                Score hornClauseScore = conjunctiveHornClauseV1.calculateAccuracyComplexCustom();
-                                conjunctiveHornClauseV1.setScore(hornClauseScore);
-                                HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1);
+                                Score hornClauseScore = conjunctiveHornClauseV1V2.calculateAccuracyComplexCustom();
+                                conjunctiveHornClauseV1V2.setScore(hornClauseScore);
+                                HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1V2);
 
                                 Score candidateClassScore = CandidateClassV2.calculateAccuracyComplexCustom();
                                 CandidateClassV2.setScore(candidateClassScore);
@@ -521,10 +526,10 @@ public class CandidateSolutionFinderV2 {
         hornClausesMap.forEach((owlObjectProperty, conjunctiveHornClauses) -> {
             logger.info("\tcombination of horn clause using object property " +
                     Utility.getShortName(owlObjectProperty) + " started...............");
-            ArrayList<ConjunctiveHornClauseV1> hornClauseArrayList = new ArrayList<>(conjunctiveHornClauses);
+            ArrayList<ConjunctiveHornClauseV1V2> hornClauseArrayList = new ArrayList<>(conjunctiveHornClauses);
             logger.info("\thorn clause size: " + hornClauseArrayList.size());
 
-            ArrayList<ArrayList<ConjunctiveHornClauseV1>> listCombinationOfHornClauses;
+            ArrayList<ArrayList<ConjunctiveHornClauseV1V2>> listCombinationOfHornClauses;
             // combination of 2
             listCombinationOfHornClauses = Utility.combinationHelper(hornClauseArrayList, 2);
             // combination from 3 to upto ccombinationLimit
@@ -535,7 +540,7 @@ public class CandidateSolutionFinderV2 {
             logger.info("listCombinationOfHornClauses size: " + listCombinationOfHornClauses.size());
             //  Valid combination of hornClauses.
             //  TODO: check with pascal. -- Okay -- Pascal said okay, but it seems not okay really.
-            ArrayList<ArrayList<ConjunctiveHornClauseV1>> validListCombinationOfHornClauses = new ArrayList<>();
+            ArrayList<ArrayList<ConjunctiveHornClauseV1V2>> validListCombinationOfHornClauses = new ArrayList<>();
             listCombinationOfHornClauses.forEach(classExpressions -> {
                 if (isValidCombinationOfHornClauses(classExpressions)) {
                     validListCombinationOfHornClauses.add(classExpressions);
@@ -849,14 +854,6 @@ public class CandidateSolutionFinderV2 {
     transient volatile protected int nrOfPositiveIndividuals;
     transient volatile protected int nrOfNegativeIndividuals;
 
-//    // use double to ensure when dividing we are getting double result not integer.
-//    transient volatile protected double nrOfPositiveClassifiedAsPositive;
-//    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-//    transient volatile protected double nrOfPositiveClassifiedAsNegative;
-//    transient volatile protected double nrOfNegativeClassifiedAsNegative;
-//    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-//    transient volatile protected double nrOfNegativeClassifiedAsPositive;
-
 
     /**
      * @param K6
@@ -878,7 +875,7 @@ public class CandidateSolutionFinderV2 {
     transient volatile private int o2Length = 0;
 
     // temporary variables for using inside lambda
-    transient volatile private List<ConjunctiveHornClauseV1> conjunctiveHornClausesList = new ArrayList<>();
+    transient volatile private List<ConjunctiveHornClauseV1V2> conjunctiveHornClausesList = new ArrayList<>();
     transient volatile private List<CandidateClassV2> candidateClassesList = new ArrayList<>();
 
     /**
@@ -887,7 +884,7 @@ public class CandidateSolutionFinderV2 {
      * @param limit
      * @return
      */
-    private HashMap<OWLObjectProperty, HashSet<ConjunctiveHornClauseV1>> sortAndFilterHornClauseMap(int limit) {
+    private HashMap<OWLObjectProperty, HashSet<ConjunctiveHornClauseV1V2>> sortAndFilterHornClauseMap(int limit) {
 
         // make a list
         conjunctiveHornClausesList.clear();
@@ -961,7 +958,7 @@ public class CandidateSolutionFinderV2 {
     }
 
     /**
-     * Select top k6 CandidateClass from the candidateClassMap.
+     * Select top k6 CandidateClassV0 from the candidateClassMap.
      *
      * @param limit
      * @return

@@ -69,7 +69,7 @@ public class TestStripDownOntology {
     /**
      *
      */
-    public void processIndivsWithTypes() {
+    public void processIndivsWithTypes(String inputOntoPath, String entityCsvFilePath, String indivColumnName, String typeColumnName, String outputOntoIRI, String outputOntoPath) {
 
         StripDownOntology stripDownOntology = new StripDownOntology(inputOntoPath);
 
@@ -107,7 +107,7 @@ public class TestStripDownOntology {
         long startTime = System.currentTimeMillis();
 
         TestStripDownOntology testStripDownOntology = new TestStripDownOntology();
-        testStripDownOntology.processIndivsWithTypes();
+//        testStripDownOntology.processIndivsWithTypes();
 
         long endTime = System.currentTimeMillis();
         logger.info("stripping finished.");

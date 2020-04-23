@@ -61,10 +61,10 @@ public class CandidateClassV1 {
     /**
      * Multiple conjunctive horn clause.
      */
-    private ArrayList<ConjunctiveHornClauseV1> conjunctiveHornClauses;
+    private ArrayList<ConjunctiveHornClauseV1V2> conjunctiveHornClauses;
 
     /**
-     * Score associated with this CandidateClass. This score is used to select best n candidateClass (limit K6), which will be used on combination.
+     * Score associated with this CandidateClassV0. This score is used to select best n candidateClass (limit K6), which will be used on combination.
      */
     private Score score;
 
@@ -139,16 +139,16 @@ public class CandidateClassV1 {
 
 
     /**
-     * @return ArrayList<ConjunctiveHornClauseV1>
+     * @return ArrayList<ConjunctiveHornClauseV1V2>
      */
-    public ArrayList<ConjunctiveHornClauseV1> getConjunctiveHornClauses() {
+    public ArrayList<ConjunctiveHornClauseV1V2> getConjunctiveHornClauses() {
         return conjunctiveHornClauses;
     }
 
     /**
      * @param conjunctiveHornClauses
      */
-    public void setConjunctiveHornClauses(ArrayList<ConjunctiveHornClauseV1> conjunctiveHornClauses) {
+    public void setConjunctiveHornClauses(ArrayList<ConjunctiveHornClauseV1V2> conjunctiveHornClauses) {
         this.conjunctiveHornClauses = conjunctiveHornClauses;
         solutionChanged = true;
     }
@@ -156,7 +156,7 @@ public class CandidateClassV1 {
     /**
      * @param conjunctiveHornClause
      */
-    public void addConjunctiveHornClauses(ConjunctiveHornClauseV1 conjunctiveHornClause) {
+    public void addConjunctiveHornClauses(ConjunctiveHornClauseV1V2 conjunctiveHornClause) {
         this.conjunctiveHornClauses.add(conjunctiveHornClause);
         solutionChanged = true;
     }
@@ -195,7 +195,7 @@ public class CandidateClassV1 {
 
         if (null != this.conjunctiveHornClauses) {
             // get all hornclause as class expression and make a hashset.
-            for (ConjunctiveHornClauseV1 conjunctiveHornClause : this.conjunctiveHornClauses) {
+            for (ConjunctiveHornClauseV1V2 conjunctiveHornClause : this.conjunctiveHornClauses) {
                 conjunctiveHornClausesClassExpression.add(conjunctiveHornClause.getConjunctiveHornClauseAsOWLClassExpression());
             }
             ArrayList<OWLClassExpression> conjunctiveHornClausesClassExpressionAList = new ArrayList<>(conjunctiveHornClausesClassExpression);
@@ -320,7 +320,7 @@ public class CandidateClassV1 {
             // all hornClauses are unined
             // we don't need to add r filler as r filler is being added by the conjunctiveHornClause and
             // ∃R.A ⊔ ∃R.B == ∃R.(A ⊔ B)  is true.
-            for(ConjunctiveHornClauseV1 conjunctiveHornClause: conjunctiveHornClauses){
+            for(ConjunctiveHornClauseV1V2 conjunctiveHornClause: conjunctiveHornClauses){
                 coveredIndividuals.addAll( conjunctiveHornClause.individualsCoveredByThisHornClauseByReasoner());
             }
         }

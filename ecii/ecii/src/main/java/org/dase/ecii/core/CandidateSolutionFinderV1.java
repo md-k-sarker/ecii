@@ -3,7 +3,7 @@ package org.dase.ecii.core;
 import org.dase.ecii.datastructure.*;
 import org.dase.ecii.datastructure.CandidateClassV1;
 import org.dase.ecii.datastructure.CandidateSolutionV1;
-import org.dase.ecii.datastructure.ConjunctiveHornClauseV1;
+import org.dase.ecii.datastructure.ConjunctiveHornClauseV1V2;
 import org.dase.ecii.util.Monitor;
 import org.dase.ecii.util.Utility;
 import org.dase.ecii.util.ConfigParams;
@@ -41,7 +41,7 @@ public class CandidateSolutionFinderV1 {
     /**
      * This is temporary hashMap used for creating combination of hornClause.
      */
-    private HashMap<OWLObjectProperty, HashSet<ConjunctiveHornClauseV1>> hornClausesMap;
+    private HashMap<OWLObjectProperty, HashSet<ConjunctiveHornClauseV1V2>> hornClausesMap;
 
     /**
      * This is temporary hashSet used for creating combination of hornClause.
@@ -106,13 +106,6 @@ public class CandidateSolutionFinderV1 {
         logger.info("saveInitialSolutions started...............");
         saveInitialSolutionsCustom();
         logger.info("saveInitialSolutions finished");
-
-        // using candidatesolutionfinder.saveInitialSolutionsCustom() we are creating all initial combination.
-        // as we have used psoitive type and it's super classes and negative types and it's super classes, we are only left with refining with subClass.
-        // For negative type no need to refine with subClass.
-        // For positive type we can refine with subClass. TODO.
-
-        // refining with subclass may be helpful especially for residue project.
 
     }
 
@@ -191,7 +184,7 @@ public class CandidateSolutionFinderV1 {
      * @param aList
      * @return
      */
-    private boolean isValidCombinationOfHornClauses(ArrayList<ConjunctiveHornClauseV1> aList) {
+    private boolean isValidCombinationOfHornClauses(ArrayList<ConjunctiveHornClauseV1V2> aList) {
         boolean isValid = false;
         boolean shouldSkip = false;
 
@@ -255,7 +248,7 @@ public class CandidateSolutionFinderV1 {
     }
 
     /**
-     * save the initial solutions into SharedDataHolder.CandidateSolutionSet object.
+     * save the initial solutions into SharedDataHolder.candidateSolutionV0Set object.
      */
     public void saveInitialSolutionsCustom() {
 
@@ -269,12 +262,12 @@ public class CandidateSolutionFinderV1 {
             hashMap.forEach((posOwlClassExpression, integer) -> {
 
                 //create conjunctive horn clause and add positive part and no negative part initially
-                ConjunctiveHornClauseV1 conjunctiveHornClauseV1 = new ConjunctiveHornClauseV1(owlObjectProperty, reasoner, ontology);
-                conjunctiveHornClauseV1.addPosObjectType(posOwlClassExpression);
+                ConjunctiveHornClauseV1V2 conjunctiveHornClauseV1V2 = new ConjunctiveHornClauseV1V2(owlObjectProperty, reasoner, ontology);
+                conjunctiveHornClauseV1V2.addPosObjectType(posOwlClassExpression);
 
                 // create candidate class
                 CandidateClassV1 candidateClassV1 = new CandidateClassV1(owlObjectProperty, reasoner, ontology);
-                candidateClassV1.addConjunctiveHornClauses(conjunctiveHornClauseV1);
+                candidateClassV1.addConjunctiveHornClauses(conjunctiveHornClauseV1V2);
 
                 // create candidate solution
                 CandidateSolutionV1 candidateSolutionV1 = new CandidateSolutionV1(reasoner, ontology);
@@ -282,9 +275,9 @@ public class CandidateSolutionFinderV1 {
                 boolean added = addToSolutions(candidateSolutionV1);
                 if (added) {
                     // save temporarily for combination
-                    Score hornClauseScore = conjunctiveHornClauseV1.calculateAccuracyComplexCustom();
-                    conjunctiveHornClauseV1.setScore(hornClauseScore);
-                    HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1);
+                    Score hornClauseScore = conjunctiveHornClauseV1V2.calculateAccuracyComplexCustom();
+                    conjunctiveHornClauseV1V2.setScore(hornClauseScore);
+                    HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1V2);
 
                     Score candidateClassScore = candidateClassV1.calculateAccuracyComplexCustom();
                     candidateClassV1.setScore(candidateClassScore);
@@ -298,36 +291,6 @@ public class CandidateSolutionFinderV1 {
         // TODO(zaman): as Pascal said, hornclause must have at-least 1 positive type and possibly more? ecii-extension
         // so this solution need to be chnaged.
         // ref: https://en.wikipedia.org/wiki/Horn_clause
-        // solution using only a single negative type. --- OKay
-//        logger.info("solution using only a single negative type started...............");
-//        SharedDataHolder.typeOfObjectsInNegIndivs.forEach((owlObjectProperty, hashMap) -> {
-//            hashMap.forEach((negOwlClassExpression, integer) -> {
-//
-//                // create conjunctive horn clause and add negative part and no positive part initially
-//                ConjunctiveHornClauseV1 conjunctiveHornClause = new ConjunctiveHornClauseV1(owlObjectProperty);
-//                conjunctiveHornClause.addNegObjectType(negOwlClassExpression);
-//
-//                // create candidate class
-//                CandidateClassV1 candidateClass = new CandidateClassV1(owlObjectProperty);
-//                candidateClass.addConjunctiveHornClauses(conjunctiveHornClause);
-//
-//                // create candidate solution
-//                CandidateSolutionV1 candidateSolution = new CandidateSolutionV1();
-//                candidateSolution.addCandidateClass(candidateClass);
-//                boolean added = addToSolutions(candidateSolution);
-//                if (added) {
-//                    // save temporarily for combination
-//                    Score hornClauseScore = calculateAccuracyComplexCustom(conjunctiveHornClause);
-//                    conjunctiveHornClause.setScore(hornClauseScore);
-//                    insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClause);
-//
-//                    Score candidateClassScore = calculateAccuracyComplexCustom(candidateClass);
-//                    candidateClass.setScore(candidateClassScore);
-//                    insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClass);
-//                }
-//            });
-//        });
-//        logger.info("solution using only a single negative type finished. Total solutions: " + SharedDataHolder.CandidateSolutionSetV1.size());
 
         // create solution using both positive and negative of class expressions.
         // single positive and single negative.
@@ -344,7 +307,7 @@ public class CandidateSolutionFinderV1 {
                         if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).containsKey(subClassOwlClassExpression)) {
 
                             //create conjunctive horn clause and add positive part and negative part too
-                            ConjunctiveHornClauseV1 conjunctiveHornClause = new ConjunctiveHornClauseV1(owlObjectProperty, reasoner, ontology);
+                            ConjunctiveHornClauseV1V2 conjunctiveHornClause = new ConjunctiveHornClauseV1V2(owlObjectProperty, reasoner, ontology);
                             conjunctiveHornClause.addPosObjectType(posOwlClassExpression);
                             conjunctiveHornClause.addNegObjectType(subClassOwlClassExpression);
 
@@ -372,83 +335,7 @@ public class CandidateSolutionFinderV1 {
             });
         });
         logger.info("solution using only a single positive and single negative type finished. Total Solutions: " + SharedDataHolder.CandidateSolutionSetV1.size());
-//
-//        // single positive and multiple negative (upto K1 limit).
-//        logger.info("solution using only a single positive and multiple negative type started...............");
-//        SharedDataHolder.typeOfObjectsInPosIndivs.forEach((owlObjectProperty, hashMap) -> {
-//            hashMap.forEach((posOwlClassExpression, integer) -> {
-//
-//                ArrayList<OWLClassExpression> posTypeOwlSubClassExpressions = new ArrayList<>(
-//                        reasoner.getSubClasses(posOwlClassExpression, false).getFlattened().stream().collect(Collectors.toList()));
-//
-//                ArrayList<OWLClassExpression> posTypeOwlSubClassExpressionsForCombination = new ArrayList<>();
-//
-//                // create combination only those which are contained in the negative type.
-//                // TODO(zaman): Can we remove this restriction? Probably we can allow all concept without the superclasses of postype. reasoner.getsuperclasses()
-//                posTypeOwlSubClassExpressions.forEach(subClassOwlClassExpression -> {
-//                    if (SharedDataHolder.typeOfObjectsInNegIndivs.containsKey(owlObjectProperty)) {
-//                        // if subclass of this class is included in the negative type
-//                        if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).containsKey(subClassOwlClassExpression)) {
-//                            posTypeOwlSubClassExpressionsForCombination.add(subClassOwlClassExpression);
-//                        }
-//                    }
-//                });
-//                // recover memory
-//                posTypeOwlSubClassExpressions = null;
-//
-//                ArrayList<ArrayList<OWLClassExpression>> listCombinationOfSubClassesForNegPortion;
-//                // combination of 2
-//                listCombinationOfSubClassesForNegPortion = Utility.combinationHelper(posTypeOwlSubClassExpressionsForCombination, 2);
-//                // combination from 3 to upto ccombinationLimit
-//                for (int combinationCounter = 3; combinationCounter <= ConfigParams.conceptLimitInNegExpr; combinationCounter++) {
-//                    // combination of combinationCounter
-//                    listCombinationOfSubClassesForNegPortion.addAll(Utility.combinationHelper(posTypeOwlSubClassExpressionsForCombination, combinationCounter));
-//                }
-//
-//                // keep only valid listCombinationOfSubClassesForNegPortion.
-//                // a combination is valid if and only if it doesn't have self subClass.
-//                // TODO: check with pascal. --- Okay
-//                ArrayList<ArrayList<OWLClassExpression>> validListCombinationOfSubClassesForNegPortion = new ArrayList<>();
-//                listCombinationOfSubClassesForNegPortion.forEach(classExpressions -> {
-//                    if (isValidCombinationOfSubClasses(classExpressions)) {
-//                        validListCombinationOfSubClassesForNegPortion.add(classExpressions);
-//                    }
-//                });
-//                // recover memory
-//                listCombinationOfSubClassesForNegPortion = null;
-//
-//                validListCombinationOfSubClassesForNegPortion.forEach(subClasses -> {
-//
-//                    // if every class of this combination is in negative types then include this combination otherwise skip this.
-//                    // this is trivially true as we are creating combination of those subclasses which are also contained in the negTypes.
-//
-//                    //create conjunctive horn clause and add positive part and negative part too
-//                    ConjunctiveHornClauseV1 conjunctiveHornClause = new ConjunctiveHornClauseV1(owlObjectProperty);
-//                    conjunctiveHornClause.setPosObjectType(posOwlClassExpression);
-//                    conjunctiveHornClause.setNegObjectTypes(subClasses);
-//
-//                    // create candidate class
-//                    CandidateClassV1 candidateClass = new CandidateClassV1(owlObjectProperty);
-//                    candidateClass.addConjunctiveHornClauses(conjunctiveHornClause);
-//
-//                    // create candidate solution
-//                    CandidateSolutionV1 candidateSolution = new CandidateSolutionV1();
-//                    candidateSolution.addCandidateClass(candidateClass);
-//                    boolean added = addToSolutions(candidateSolution);
-//                    if (added) {
-//                        // save temporarily for combination
-//                        Score hornClauseScore = calculateAccuracyComplexCustom(conjunctiveHornClause);
-//                        conjunctiveHornClause.setScore(hornClauseScore);
-//                        insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClause);
-//
-//                        Score candidateClassScore = calculateAccuracyComplexCustom(candidateClass);
-//                        candidateClass.setScore(candidateClassScore);
-//                        insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClass);
-//                    }
-//                });
-//            });
-//        });
-//        logger.info("solution using only a single positive and multiple negative type finished. Total Solutions: " + SharedDataHolder.CandidateSolutionSetV1.size());
+
 
         // TODO(zaman): multiple positive and multiple negative. ecii-extension, need to implement this
         // multiple positive (upto K4 limit) and multiple negative (upto K1 limit).
@@ -545,13 +432,13 @@ public class CandidateSolutionFinderV1 {
                     // this is trivially true as we are creating combination of those subclasses which are also contained in the negTypes.
 
                     //create conjunctive horn clause and add positive part and negative part too
-                    ConjunctiveHornClauseV1 conjunctiveHornClauseV1 = new ConjunctiveHornClauseV1(owlObjectProperty, reasoner, ontology);
-                    conjunctiveHornClauseV1.setPosObjectTypes(posOwlClassExpressions);
-                    conjunctiveHornClauseV1.setNegObjectTypes(subClasses);
+                    ConjunctiveHornClauseV1V2 conjunctiveHornClauseV1V2 = new ConjunctiveHornClauseV1V2(owlObjectProperty, reasoner, ontology);
+                    conjunctiveHornClauseV1V2.setPosObjectTypes(posOwlClassExpressions);
+                    conjunctiveHornClauseV1V2.setNegObjectTypes(subClasses);
 
                     // create candidate class
                     CandidateClassV1 candidateClassV1 = new CandidateClassV1(owlObjectProperty, reasoner, ontology);
-                    candidateClassV1.addConjunctiveHornClauses(conjunctiveHornClauseV1);
+                    candidateClassV1.addConjunctiveHornClauses(conjunctiveHornClauseV1V2);
 
                     // create candidate solution
                     CandidateSolutionV1 candidateSolutionV1 = new CandidateSolutionV1(reasoner, ontology);
@@ -559,9 +446,9 @@ public class CandidateSolutionFinderV1 {
                     boolean added = addToSolutions(candidateSolutionV1);
                     if (added) {
                         // save temporarily for combination
-                        Score hornClauseScore = conjunctiveHornClauseV1.calculateAccuracyComplexCustom();
-                        conjunctiveHornClauseV1.setScore(hornClauseScore);
-                        HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1);
+                        Score hornClauseScore = conjunctiveHornClauseV1V2.calculateAccuracyComplexCustom();
+                        conjunctiveHornClauseV1V2.setScore(hornClauseScore);
+                        HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1V2);
 
                         Score candidateClassScore = candidateClassV1.calculateAccuracyComplexCustom();
                         candidateClassV1.setScore(candidateClassScore);
@@ -597,10 +484,10 @@ public class CandidateSolutionFinderV1 {
         hornClausesMap.forEach((owlObjectProperty, conjunctiveHornClauses) -> {
             logger.info("\tcombination of horn clause using object property " +
                     Utility.getShortName(owlObjectProperty) + " started...............");
-            ArrayList<ConjunctiveHornClauseV1> hornClauseArrayList = new ArrayList<>(conjunctiveHornClauses);
+            ArrayList<ConjunctiveHornClauseV1V2> hornClauseArrayList = new ArrayList<>(conjunctiveHornClauses);
             logger.info("\thorn clause size: " + hornClauseArrayList.size());
 
-            ArrayList<ArrayList<ConjunctiveHornClauseV1>> listCombinationOfHornClauses;
+            ArrayList<ArrayList<ConjunctiveHornClauseV1V2>> listCombinationOfHornClauses;
             // combination of 2
             listCombinationOfHornClauses = Utility.combinationHelper(hornClauseArrayList, 2);
             // combination from 3 to upto ccombinationLimit
@@ -611,7 +498,7 @@ public class CandidateSolutionFinderV1 {
             logger.info("listCombinationOfHornClauses size: " + listCombinationOfHornClauses.size());
             //  Valid combination of hornClauses.
             //  TODO: check with pascal. -- Okay -- Pascal said okay, but it seems not okay really.
-            ArrayList<ArrayList<ConjunctiveHornClauseV1>> validListCombinationOfHornClauses = new ArrayList<>();
+            ArrayList<ArrayList<ConjunctiveHornClauseV1V2>> validListCombinationOfHornClauses = new ArrayList<>();
             listCombinationOfHornClauses.forEach(classExpressions -> {
                 if (isValidCombinationOfHornClauses(classExpressions)) {
                     validListCombinationOfHornClauses.add(classExpressions);
@@ -919,14 +806,6 @@ public class CandidateSolutionFinderV1 {
     transient volatile protected int nrOfPositiveIndividuals;
     transient volatile protected int nrOfNegativeIndividuals;
 
-//    // use double to ensure when dividing we are getting double result not integer.
-//    transient volatile protected double nrOfPositiveClassifiedAsPositive;
-//    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-//    transient volatile protected double nrOfPositiveClassifiedAsNegative;
-//    transient volatile protected double nrOfNegativeClassifiedAsNegative;
-//    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-//    transient volatile protected double nrOfNegativeClassifiedAsPositive;
-
 
     /**
      * @param K6
@@ -948,7 +827,7 @@ public class CandidateSolutionFinderV1 {
     transient volatile private int o2Length = 0;
 
     // temporary variables for using inside lambda
-    transient volatile private List<ConjunctiveHornClauseV1> conjunctiveHornClausesList = new ArrayList<>();
+    transient volatile private List<ConjunctiveHornClauseV1V2> conjunctiveHornClausesList = new ArrayList<>();
     transient volatile private List<CandidateClassV1> candidateClassesList = new ArrayList<>();
 
     /**
@@ -957,7 +836,7 @@ public class CandidateSolutionFinderV1 {
      * @param limit
      * @return
      */
-    private HashMap<OWLObjectProperty, HashSet<ConjunctiveHornClauseV1>> sortAndFilterHornClauseMap(int limit) {
+    private HashMap<OWLObjectProperty, HashSet<ConjunctiveHornClauseV1V2>> sortAndFilterHornClauseMap(int limit) {
 
         // make a list
         conjunctiveHornClausesList.clear();
@@ -1031,7 +910,7 @@ public class CandidateSolutionFinderV1 {
     }
 
     /**
-     * Select top k6 CandidateClass from the candidateClassMap.
+     * Select top k6 CandidateClassV0 from the candidateClassMap.
      *
      * @param limit
      * @return
