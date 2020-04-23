@@ -105,7 +105,7 @@ public class Similarity {
         logger.debug("Looking subsumed for individual " + posOwlNamedIndividual.getIRI() + " finished ");
 
         monitor.displayMessage("\n\n##################################", true);
-        monitor.displayMessage("Similarity score of IFP " + posOwlNamedIndividual + ": " + accuracy_avg_for_single_indiv + , true);
+        monitor.displayMessage("Similarity score of IFP " + posOwlNamedIndividual + ": " + accuracy_avg_for_single_indiv , true);
         monitor.displayMessage("##################################\n\n", true);
 
         logger.info("Finding similarity of ifp: " + posOwlNamedIndividual + " finished");
