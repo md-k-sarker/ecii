@@ -22,10 +22,6 @@ public class TestStripDownOntology {
 
     final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static String inputOntoPath = "/Users/sarker/Workspaces/Jetbrains/residue/data/KGS/automated_wiki/wiki_cats_v1_non_cyclic.owl";
-    private static String outputOntoPath = "/Users/sarker/Workspaces/Jetbrains/residue/data/KGS/automated_wiki/wiki_cats_v1_non_cyclic_stripped_for_7_IFP.owl";
-    private static String entityCsvFilePath = "/Users/sarker/Workspaces/Jetbrains/residue/experiments/7_IFP/Entities_With_Ontology/Entities_types_to_strip_down_onto.csv";
-
 
     //constructor
     public TestStripDownOntology() {
@@ -73,7 +69,7 @@ public class TestStripDownOntology {
 
         StripDownOntology stripDownOntology = new StripDownOntology(inputOntoPath);
 
-        HashMap<String, HashSet<String>> namesHashMap = stripDownOntology.readIndivTypesFromCSVFile(entityCsvFilePath, "indivs", "indivtypes");
+        HashMap<String, HashSet<String>> namesHashMap = stripDownOntology.readIndivTypesFromCSVFile(entityCsvFilePath, indivColumnName, typeColumnName);
 
         HashMap<OWLNamedIndividual, HashSet<OWLClass>> entityHashMap = stripDownOntology.convertToOntologyEntity(namesHashMap);
 
@@ -93,6 +89,7 @@ public class TestStripDownOntology {
         }
         outputOntoManager.addAxioms(outputOntology, axiomsToKeep);
 
+        logger.info("saving pruned onto in: "+ outputOntoPath);
         try {
             Utility.saveOntology(outputOntology, outputOntoPath);
         } catch (OWLOntologyStorageException e) {
@@ -101,13 +98,17 @@ public class TestStripDownOntology {
     }
 
 
+    private static String inputOntoPath = "/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/exprs/strip_down_test/prune_test.owl";
+    private static String outputOntoPath = "/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/exprs/strip_down_test/prune_test_pruned1.owl";
+    private static String entityCsvFilePath = "/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/exprs/strip_down_test/prune_test_entities1.csv";
+
     public static void main(String[] args) {
 
         logger.info("Stripping started...............");
         long startTime = System.currentTimeMillis();
 
         TestStripDownOntology testStripDownOntology = new TestStripDownOntology();
-//        testStripDownOntology.processIndivsWithTypes();
+        testStripDownOntology.processIndivsWithTypes(inputOntoPath, entityCsvFilePath, "indivs", "types", "http://www.daselab.com/sarker/prune", outputOntoPath);
 
         long endTime = System.currentTimeMillis();
         logger.info("stripping finished.");

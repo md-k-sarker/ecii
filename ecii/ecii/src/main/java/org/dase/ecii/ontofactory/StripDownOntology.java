@@ -16,10 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Prune the ontology.
@@ -91,7 +88,7 @@ public class StripDownOntology {
      * @param objPropColumnName: must remain on csv file
      * @param indivColumnName:   must remain on csv file
      * @return
-     * @ exception: java.lang.IllegalArgumentException: Mapping for  not found for any header name not found on csv file
+     * @ exception: java.lang.IllegalArgumentException: Mapping for not found for any header name not found on csv file
      */
     public ListofObjPropAndIndivTextualName readEntityFromCSVFile(String csvFilePath, String objPropColumnName, String indivColumnName) {
         ListofObjPropAndIndivTextualName listofObjPropAndIndivTextualName = null;
@@ -156,7 +153,9 @@ public class StripDownOntology {
                     for (CSVRecord strings : csvRecords) {
 
                         String indivName = strings.get(indivColumnName);
-                        String classNames = strings.get(typeColumnName);
+                        String classNames = "";
+                        if (null != typeColumnName)
+                            classNames = strings.get(typeColumnName);
 
                         if (null != indivName && indivName.length() > 0 && null != classNames && classNames.length() > 0) {
                             logger.info("indivName: " + indivName);
@@ -290,7 +289,7 @@ public class StripDownOntology {
                     }
                 }
             }
-        }else{
+        } else {
             logger.error("converting individuals and their types from text to owlentity failed because indivAndTypesNameMap is null");
             return null;
         }
@@ -527,6 +526,7 @@ public class StripDownOntology {
     }
 
     /**
+     * keep all superclasses of owlClass by using the recursive call
      * @param owlClasses
      * @return
      */
@@ -536,8 +536,10 @@ public class StripDownOntology {
         logger.info("Processing extractAxiomsRelatedToOWLClasses started........... ");
 
         for (OWLClass owlClass : owlClasses) {
-            owlAxiomsRelatedToClasses.addAll(inputOntology.getAxioms(owlClass));
             logger.info("Processing owlclass: " + owlClass);
+            Set<OWLClassAxiom> axiomSet = inputOntology.getAxioms(owlClass);
+            logger.info("\tRelated axioms size using inputOntology.getAxioms(owlClass).size: " + axiomSet.size());
+            owlAxiomsRelatedToClasses.addAll(axiomSet);
             findSuperTypesRecursive(owlClass, owlAxiomsRelatedToClasses);
         }
 

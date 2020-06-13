@@ -58,13 +58,13 @@ public class Similarity {
      * <p>
      * option 2 is implemented
      */
-    public double findSimilarityIFPWithAnotherIFP(OWLNamedIndividual posOwlNamedIndividual, OWLNamedIndividual negOwlNamedIndividual)  {
+    public double findSimilarityIndivWithAnotherIndiv(OWLNamedIndividual posOwlNamedIndividual, OWLNamedIndividual negOwlNamedIndividual)  {
 
         if (null == posOwlNamedIndividual || null == negOwlNamedIndividual)
             return -1;
 
-        logger.info("Finding similarity of ifp: " + posOwlNamedIndividual + " started...............");
-        monitor.displayMessage("\nFinding similarity of IFP: " + posOwlNamedIndividual + " started............", true);
+        logger.info("Finding similarity of posOwlNamedIndividual: " + posOwlNamedIndividual + " started...............");
+        monitor.displayMessage("\nFinding similarity of posOwlNamedIndividual: " + posOwlNamedIndividual + " started............", true);
 
         int nullClassCounter = 0;
         if (SharedDataHolder.SortedCandidateSolutionListV2.size() > 0) {
@@ -130,10 +130,10 @@ public class Similarity {
 //        logger.debug("Looking subsumed for individual " + posOwlNamedIndividual.getIRI() + " finished ");
 
         monitor.displayMessage("\n\n##################################", true);
-        monitor.displayMessage("Similarity score of IFP " + Utility.getShortName(posOwlNamedIndividual) + " with IFP : " + Utility.getShortName(posOwlNamedIndividual) + ": "+ similarity, true);
+        monitor.displayMessage("Similarity score of posOwlNamedIndividual " + Utility.getShortName(posOwlNamedIndividual) + " with IFP : " + Utility.getShortName(negOwlNamedIndividual) + ": "+ similarity, true);
         monitor.displayMessage("##################################\n\n", true);
 
-        logger.info("Finding similarity of ifp: " + Utility.getShortName(posOwlNamedIndividual) + " finished");
+        logger.info("Finding similarity of posOwlNamedIndividual: " + Utility.getShortName(posOwlNamedIndividual) + " finished");
         monitor.displayMessage("Finding similarity finished. ", false);
 
 
@@ -160,13 +160,13 @@ public class Similarity {
      * <p>
      * option 2 is implemented
      */
-    public void findSimilarityMultipleIFPsWithASetOfIFPs(String new_ifps_path) throws IOException {
+    public void findSimilarityMultipleIFPsWithASetOfIFPs(String new_indivs_path) throws IOException {
 
         logger.info("Finding similarity started...............");
 //        String ifps_path = "/Users/sarker/Workspaces/Jetbrains/residue/experiments/KG-based similarity/IFP_Categories/ifps_to_compare.txt";
 
-        monitor.displayMessage("\nFinding similarity of IFP's ", true);
-        FileReader fileReader = new FileReader(new_ifps_path);
+        monitor.displayMessage("\nFinding similarity of individuals ", true);
+        FileReader fileReader = new FileReader(new_indivs_path);
         BufferedReader bf = new BufferedReader(fileReader);
 
         String[] strs = bf.readLine().split(",");

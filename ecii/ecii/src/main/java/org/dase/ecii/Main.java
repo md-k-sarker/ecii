@@ -2,8 +2,6 @@ package org.dase.ecii;
 
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
 import org.apache.log4j.PropertyConfigurator;
 import org.dase.ecii.core.*;
 import org.dase.ecii.ontofactory.CreateOWLFromCSV;
@@ -21,10 +19,12 @@ import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.misc.Unsafe;
 
 import javax.swing.*;
 import java.io.*;
 import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -266,7 +266,7 @@ public class Main {
 
         if (posIndivsList.size() == negIndivsList.size()) {
             for (int i = 0; i < posIndivsList.size(); i++) {
-                double similarity_score = similarity.findSimilarityIFPWithAnotherIFP(posIndivsList.get(i), negIndivsList.get(i));
+                double similarity_score = similarity.findSimilarityIndivWithAnotherIndiv(posIndivsList.get(i), negIndivsList.get(i));
             }
         }
     }
@@ -315,6 +315,9 @@ public class Main {
 
 
     /**
+     * Strip down the input ontology and save it to disk.
+     * Keep only the related axioms of given entity (got from csv file).
+     *
      * @param inputOntoPath
      * @param entityCsvFilePath
      * @param indivColumnName
@@ -325,7 +328,7 @@ public class Main {
 
         StripDownOntology stripDownOntology = new StripDownOntology(inputOntoPath);
 
-        HashMap<String, HashSet<String>> namesHashMap = stripDownOntology.readIndivTypesFromCSVFile(entityCsvFilePath, "indivs", "indivtypes");
+        HashMap<String, HashSet<String>> namesHashMap = stripDownOntology.readIndivTypesFromCSVFile(entityCsvFilePath, indivColumnName, typeColumnName);
 
         HashMap<OWLNamedIndividual, HashSet<OWLClass>> entityHashMap = stripDownOntology.convertToOntologyEntity(namesHashMap);
 
@@ -339,7 +342,7 @@ public class Main {
 
         OWLOntology outputOntology = null;
         try {
-            outputOntology = outputOntoManager.createOntology(IRI.create("http://www.daselab.com/residue/analysis"));
+            outputOntology = outputOntoManager.createOntology(IRI.create(outputOntoIRI));
         } catch (OWLOntologyCreationException e) {
             e.printStackTrace();
         }
@@ -347,7 +350,7 @@ public class Main {
 
         try {
             String extension = FilenameUtils.getExtension(inputOntoPath);
-            String outputOntoPath = inputOntoPath.replace("." + extension, "stripped." + extension);
+            String outputOntoPath = inputOntoPath.replace("." + extension, "_stripped." + extension);
             Utility.saveOntology(outputOntology, outputOntoPath);
         } catch (OWLOntologyStorageException e) {
             e.printStackTrace();
@@ -397,6 +400,10 @@ public class Main {
      * @param outputOntologyIRI
      */
     public static void combineOntologies(String inputOntologiesDirectory, String outputOntologyIRI) {
+        if(null == inputOntologiesDirectory){
+            logger.error("Error!!!!!! Input ontologies directory path can't be null");
+            return;
+        }
         OntoCombiner ontoCombiner = new OntoCombiner(outputOntologyIRI);
         ontoCombiner.combineOntologies(null, inputOntologiesDirectory);
     }
@@ -420,49 +427,6 @@ public class Main {
         createOWLFromCSV.parseCSVToCreateIndivAndTheirTypes(indivColumnName, typeColumnName);
     }
 
-    public static void printHelp() {
-        String helpCommand = "\n\nProgram options:" +
-                "\n1. Measure similarity between ontology entities" +
-                "\n2. Perform concept induction" +
-                "\n3. Strip down ontology or keeping entities of interest while discarding others" +
-                "\n4. Create ontology from CSV file" +
-                "\n5. Combine multiple ontology" +
-                "\n\n" +
-                "To measure similarity between ontology entities..... and " +
-                "\nTo perform concept induction....." +
-                "\nProgram runs in two mode. " +
-                "\n\tBatch mode and " +
-                "\n\tsingle mode. " +
-                "\nIn single mode it will take a config file as input parameter and run the program as mentioned by the parameters in config file." +
-                "\nIn Batch mode it take directory as parameter and will run all the config files within that directory." +
-                "\nCommand:" +
-                "\n\tFor single mode: [options] [config_file_path]" +
-                "\n\tFor Batch mode:  [options] [-b directory_path]" +
-                "\n" +
-                "\tFor Help: [-h]" +
-                "\n\tOptions:" +
-                "\n\t\t-m : Measure similarity between ontology entity" +
-                "\n\t\t-e : Concept Induction by ecii algorithm" +
-                "\n\t\t-c : Combine ontology" +
-                "\n\t\t-s : Strip down ontology" +
-                "\n\t\t-o : Ontology Create from CSV" +
-                "\n\n" +
-                "Parameters for different options:" +
-                "\n\t-c [inputOntologiesDirectory, outputOntologyIRI]" +
-                "\n\t-s [-obj/type] [inputOntoPath, entityCsvFilePath, indivColumnName, objPropColumnName/typeColumnName, outputOntoIRI] " +
-                "\n\t-o [entityCsvFilePath, objPropColumnName, indivColumnName, typeColumnName, outputOntoIRI]" +
-                "\n\tExample of Concept Induction command:" +
-                "\n\tFor single mode:" +
-                "\n\t\t\tjava -jar ecii.jar config_file" +
-                "\n\tFor Batch mode:" +
-                "\n\t\t\tjava -jar ecii.jar -b directory";
-
-        String helpCommandParameter = "";
-
-        System.out.println(helpCommand);
-
-    }
-
 
     /**
      * Process the configurations of the program.
@@ -471,39 +435,79 @@ public class Main {
 
     }
 
+    static String argErrorStr1 = "Given parameter:";
+    static String argErrorStr2 = "is not in correct format.";
+    static String argErrorNoArgGiven = "No options and parameter is provided. You need to specify a option and correspoding parameters.";
+
+    public static void printHelp() {
+        String helpCommand = "\n\nProgram options:" +
+                "\n1. Measure similarity between ontology entities" +
+                "\n2. Perform concept induction" +
+                "\n3. Strip down ontology or keeping entities of interest while discarding others" +
+                "\n4. Create ontology from CSV file" +
+                "\n5. Combine multiple ontology" +
+                "\n\n" +
+                "\tFor Help: [-h]" +
+                "\n\tOptions:" +
+                "\n\t\t-m : Measure similarity between ontology entity" +
+                "\n\t\t-e : Concept induction by ecii algorithm" +
+                "\n\t\t-c : Combine ontology" +
+                "\n\t\t-s : Strip down ontology" +
+                "\n\t\t-o : Ontology creation from CSV" +
+                "\n\n" +
+                "Parameters for different options:" +
+                "\n\t-m or -e [config_file_path]" +
+                "\n\t-m or -e [-b] [directory_path]" +
+                "\n\t-c [inputOntologiesDirectory, outputOntologyIRI]" +
+                "\n\t-s [-obj/type] [inputOntoPath, entityCsvFilePath, indivColumnName, objPropColumnName/typeColumnName, outputOntoIRI] " +
+                "\n\t-o [entityCsvFilePath, objPropColumnName, indivColumnName, typeColumnName, outputOntoIRI]" +
+                "\n\nTo measure similarity between ontology entities..... or " +
+                "\nTo perform concept induction....." +
+                "\nProgram runs in two mode. " +
+                "\n\tBatch mode and " +
+                "\n\tsingle mode. " +
+                "\nIn single mode it will take a config file as input parameter and run the program as mentioned by the parameters in config file." +
+                "\nIn Batch mode it take directory as input parameter and will run all the config files within that directory." +
+                "\nCommand:" +
+                "\n\tFor single mode: [option] [config_file_path]" +
+                "\n\tFor Batch mode:  [option] [-b directory_path]" +
+                "\n" +
+                "\n\tExample of Concept Induction command:" +
+                "\n\tFor single mode:" +
+                "\n\t\t\tjava -jar ecii.jar -e config_file" +
+                "\n\tFor Batch mode:" +
+                "\n\t\t\tjava -jar ecii.jar -e -b directory";
+
+        String helpCommandParameter = "";
+
+        System.out.println(helpCommand);
+
+    }
+
 
     private static boolean decideOp(String[] args) {
 
         StringBuilder sb = new StringBuilder();
         for (String arg : args) {
-            sb.append(arg);
+            sb.append(arg + " ");
         }
-
-        String argErrorStr1 = "Given parameter: ";
-        String argErrorStr2 = " is not in correct format.";
-
+        // measure similarity or concept induction by ecii
         if (args[0].equals("-m") || args[0].equals("-e")) {
-            /**
-             * args[0] = confFilePath
-             */
-            logger.debug("given program argument: " + args[1]);
-            if (args.length == 1) {
-                if (args[1].endsWith(".config")) {
-
-                    // parse the config file
-                    ConfigParams.batch = false;
-                    ConfigParams.parseConfigParams(args[1]);
-                    initiateSingleDoOps(ConfigParams.outputResultPath);
-                } else {
-                    System.out.println("Config file must ends with .config");
-                    printHelp();
-                }
-            } else if (args.length >= 2) {
+            logger.debug("given program argument: " + sb.toString());
+            if (args[0].equals("-m")) {
+                logger.info("Program starting to measure similarity");
+            } else {
+                logger.info("Program starting to run concept induction");
+            }
+            if (args.length > 2) {
                 /**
-                 * args[0] = -e
+                 * args[0] = m or -e
                  * args[1] = -b
                  * args[2] = directory
                  */
+                if (args.length > 3) {
+                    logger.info("Intended option requires only 3 parameters but more given. Others are discarded.");
+                }
                 if (args[1].trim().toLowerCase().equals("-b") && !args[2].trim().endsWith(".config")) {
                     ConfigParams.batch = true;
                     ConfigParams.batchStartingPath = args[2];
@@ -520,18 +524,35 @@ public class Main {
                         }
                     }
                 } else {
-                    System.out.println(argErrorStr1 + sb.toString() + argErrorStr2);
+                    System.out.println(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
+                    printHelp();
+                }
+            } else {
+                //  if (args.length == 2), this is always true for this decideOp function
+                /* args[0] = m or -e
+                 * args[1] = *.config  */
+                if (args[1].endsWith(".config")) {
+                    // parse the config file
+                    ConfigParams.batch = false;
+                    ConfigParams.parseConfigParams(args[1]);
+                    initiateSingleDoOps(ConfigParams.outputResultPath);
+                } else {
+                    System.out.println("\nError!!! Config file must end with .config\n");
                     printHelp();
                 }
             }
         } else if (args[0].equals("-c")) {
+            if (args.length == 2) {
+                combineOntologies(args[1], null);
+            }
             if (args.length == 3) {
                 combineOntologies(args[1], args[2]);
             } else {
-                System.out.println(argErrorStr1 + sb.toString() + argErrorStr2);
+                System.out.println(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
                 printHelp();
             }
         } else if (args[0].equals("-s")) {
+            // strip down
             // -s [-obj/type] [inputOntoPath, entityCsvFilePath, indivColumnName, objPropColumnName/typeColumnName, outputOntoIRI]
             if (args.length == 7) {
                 if (args[1].equals("obj") || args[1].equals("type")) {
@@ -541,11 +562,11 @@ public class Main {
                         stripDownOntoIndivsTypes(args[2], args[3], args[4], args[5], args[6]);
                     }
                 } else {
-                    System.out.println(argErrorStr1 + sb.toString() + argErrorStr2);
+                    System.out.println(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
                     printHelp();
                 }
             } else {
-                System.out.println(argErrorStr1 + sb.toString() + argErrorStr2);
+                System.out.println(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
                 printHelp();
             }
         } else if (args[0].equals("-o")) {
@@ -553,16 +574,35 @@ public class Main {
             if (args.length == 6) {
                 createOntologyFromCSV(args[1], args[2], args[3], args[4]);
             } else {
-                System.out.println(argErrorStr1 + sb.toString() + argErrorStr2);
+                System.out.println(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
                 printHelp();
             }
         } else {
-            System.out.println(argErrorStr1 + sb.toString() + argErrorStr2);
+            System.out.println(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
             printHelp();
             return false;
         }
         return true;
     }
+
+    /**
+     * https://github.com/google/guice/issues/1133
+     * https://stackoverflow.com/questions/46454995/how-to-hide-warning-illegal-reflective-access-in-java-9-without-jvm-argument
+     */
+    public static void disableWarning() {
+        try {
+            Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
+            theUnsafe.setAccessible(true);
+            Unsafe u = (Unsafe) theUnsafe.get(null);
+
+            Class cls = Class.forName("jdk.internal.module.IllegalAccessLogger");
+            Field logger = cls.getDeclaredField("logger");
+            u.putObjectVolatile(cls, u.staticFieldOffset(logger), null);
+        } catch (Exception e) {
+            // ignore
+        }
+    }
+
 
     /**
      * @param args
@@ -571,13 +611,15 @@ public class Main {
      */
     public static void main(String[] args) throws OWLOntologyCreationException, IOException, MalFormedIRIException {
 
-//        PropertyConfigurator.configure("/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/main/resources/log4j.properties");
+        PropertyConfigurator.configure("/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/main/resources/log4j.properties");
 
 
 //        Files.walk(Paths.get("/Users/sarker/Workspaces/Jetbrains/residue/experiments/7_IFP/Entities_With_Ontology/raw_expr/"))
 //                .filter(Files::isRegularFile)
 //                .forEach(System.out::println);
 
+
+        disableWarning();
 
         SharedDataHolder.programStartingDir = System.getProperty("user.dir");
         logger.info("Working directory/Program starting directory = " + SharedDataHolder.programStartingDir);
@@ -586,16 +628,21 @@ public class Main {
 
         if (args.length > 0) {
             if (args.length == 1) {
-                printHelp();
+                if (args[0].equals("-h"))
+                    printHelp();
+                else {
+                    System.out.println(argErrorStr1 + " " + args[0] + " " + argErrorStr2);
+                    printHelp();
+                }
             } else {
+                // args.length => 2
                 decideOp(args);
             }
+        } else {
+            //if (args[0].equals("-h"))
+            // args.length == 0
+            System.out.println(argErrorNoArgGiven + "\n");
+            printHelp();
         }
-
-//        if (args[0].equals("-h")) {
-        printHelp();
-//        }
-
-
     }
 }

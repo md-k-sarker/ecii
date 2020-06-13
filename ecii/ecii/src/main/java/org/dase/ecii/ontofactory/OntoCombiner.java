@@ -320,7 +320,7 @@ public class OntoCombiner {
     public void combineOntologies(String outputPath, String inputDirPath) {
         try {
             if (null == outputPath) {
-                outputPath = new File(outputPath).getParent() + "combined.owl";
+                outputPath = Paths.get(inputDirPath).toString() + "/combined.owl";
             }
             File inputDirPathAsFile = new File(inputDirPath);
             logger.info("Processing combineOntologies started...............");
@@ -345,6 +345,11 @@ public class OntoCombiner {
     }
 
     /**
+     *
+     */
+    String outputOntoIRIString_ = "";
+
+    /**
      * @param outputPath
      * @param inputOntoPaths
      */
@@ -356,6 +361,9 @@ public class OntoCombiner {
             try {
                 OWLOntology ontology = Utility.loadOntology(ontofile);
                 logger.info("Adding axioms from : " + ontofile);
+                if (ontology.getOntologyID().getOntologyIRI().isPresent()) {
+                    outputOntoIRIString_ = ontology.getOntologyID().getOntologyIRI().get().toString();
+                }
                 HashSet<OWLAxiom> axioms = ontology.getAxioms().stream().collect(Collectors.toCollection(HashSet::new));
                 addAxioms(axioms);
                 logger.info("axioms size now: " + owlAxioms.size());
@@ -367,7 +375,11 @@ public class OntoCombiner {
         });
 
         logger.info("\nSaving ontology at: " + outputPath);
-        saveOntology(outputPath, this.outputOntoIRIString);
+        if (null != this.outputOntoIRIString) {
+            saveOntology(outputPath, outputOntoIRIString);
+        } else {
+            saveOntology(outputPath, this.outputOntoIRIString_);
+        }
         logger.info("\nSaving ontology at: " + outputPath + " successfull.");
     }
 

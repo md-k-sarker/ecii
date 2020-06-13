@@ -10,6 +10,7 @@ import org.semanticweb.owlapi.search.EntitySearcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Paths;
@@ -96,7 +97,8 @@ public class RawTest {
 
     // main function
     public static void main(String[] args) {
-        System.out.println(Paths.get("/Users/sarker/Workspaces/Jetbrains/residue/experiments/7_IFP/Entities_With_Ontology/raw_expr/IFP_1579_vs_/IFP_1579_vs_IFP_704_accuracy_precision.config"));
+
+
     }
 
 }
