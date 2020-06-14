@@ -60,7 +60,7 @@ public class CreateOWLFromADE20k {
             // createOWL(Paths.get(rootPathNingManual));
             // Files.walk(Paths.get(rootPath)).filter(f -> f.toFile().isFile())
             // .filter(f -> f.toFile().getAbsolutePath().endsWith(".txt")).forEach(f ->
-            // iterateOverFiles(f));
+            // processSuperClass(f));
             // createOWL(
             // "D:/QQDownload/ADE20K_2016_07_26/ADE20K_2016_07_26/images/training/a/abbey/ADE_train_00000970_atr.txt",
             // "Abbey");

@@ -56,15 +56,15 @@ public class TestUtility {
 
         result = Utility.restrictedCombinationHelper(origList);
 
-        result.forEach(characters  -> {
+        result.forEach(characters -> {
             characters.forEach(character -> {
-                System.out.print( character);
+                System.out.print(character);
             });
             System.out.println();
         });
     }
 
-    public void testLoadOntology(){
+    public void testLoadOntology() {
 
         Long startTime = System.currentTimeMillis();
 
@@ -79,12 +79,41 @@ public class TestUtility {
         Long endTime = System.currentTimeMillis();
         Long loadTime = endTime - startTime;
 
-        System.out.println("Ontology load time:  "+ loadTime/1000 + " seconds");
+        System.out.println("Ontology load time:  " + loadTime / 1000 + " seconds");
     }
+
+    public static void testWriteToCSV() {
+
+        ArrayList<String> colNames = new ArrayList<>();
+        colNames.add("A");
+        colNames.add("B");
+        colNames.add("C");
+
+        ArrayList<String> col1Vals = new ArrayList<>();
+        col1Vals.add("a1");
+        col1Vals.add("a2");
+
+        ArrayList<String> col2Vals = new ArrayList<>();
+        col2Vals.add("b1");
+        col2Vals.add("b2");
+        col2Vals.add("b3");
+
+        ArrayList<String> col3Vals = new ArrayList<>();
+        col3Vals.add("c1");
+        col3Vals.add("c2");
+
+        Utility.writeToCSV(
+                "/Users/sarker/Workspaces/Jetbrains/residue-emerald/emerald/" +
+                        "data/ade20k_images_and_owls/matched_objects_with_wiki_pages.csv",
+                colNames, col1Vals, col2Vals, col3Vals);
+
+
+    }
+
 
     public static void main(String[] args) {
         TestUtility tu = new TestUtility();
-        tu.testLoadOntology();
+        tu.testWriteToCSV();
 
     }
 }

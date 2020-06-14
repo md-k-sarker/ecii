@@ -29,6 +29,10 @@ import java.util.*;
  * 1. Pruned ontology (will be saved on the given file location)
  * Invariant:
  * Input entities and their corresponding axioms (entity types and super types and associated obj properties) we need to keep
+ *
+ * General information:
+ *  We should use extractAxiomsRelatedToIndivs(...) this function instead of extractAxiomsRelatedToOWLClasses(...) whenever possible.
+ *  See documentation of function extractAxiomsRelatedToIndivs(...) for details.
  */
 public class StripDownOntology {
 
@@ -87,13 +91,13 @@ public class StripDownOntology {
      * @param csvFilePath
      * @param objPropColumnName: must remain on csv file
      * @param indivColumnName:   must remain on csv file
-     * @return
+     * @return ListofObjPropAndIndivTextualName
      * @ exception: java.lang.IllegalArgumentException: Mapping for not found for any header name not found on csv file
      */
     public ListofObjPropAndIndivTextualName readEntityFromCSVFile(String csvFilePath, String objPropColumnName, String indivColumnName) {
         ListofObjPropAndIndivTextualName listofObjPropAndIndivTextualName = null;
         try {
-            if (null != csvFilePath) {
+            if (null != csvFilePath && null != objPropColumnName && null != indivColumnName) {
                 logger.info("readEntityFromCSVFile started..., input file name: " + csvFilePath);
                 CSVParser csvRecords = Utility.parseCSV(csvFilePath, true);
                 if (null != csvRecords) {
@@ -114,16 +118,16 @@ public class StripDownOntology {
                 }
 
                 logger.info("readEntityFromCSVFile successfull.");
-                logger.info("total namedIndividualsRawName: " + listofObjPropAndIndivTextualName.indivNames.size());
-                logger.info("total objPropsRawName: " + listofObjPropAndIndivTextualName.objPropNames.size());
+                logger.info("total namedIndividuals row found in csv: " + listofObjPropAndIndivTextualName.indivNames.size());
+                logger.info("total objProps row found in csv: " + listofObjPropAndIndivTextualName.objPropNames.size());
                 return listofObjPropAndIndivTextualName;
 
             } else {
-                logger.info("readEntityFromCSVFile starting failed!!!!!!!!!!!!! input entity file name is null!!!!!");
+                logger.error("readEntityFromCSVFile starting failed!!!!!!!!!!!!! input entity file name is null!!!!!");
                 return listofObjPropAndIndivTextualName;
             }
         } catch (Exception ex) {
-            logger.info("readEntityFromCSVFile failed!!!! Reading entity file error, entity file name: " + entityTxtFilePath);
+            logger.error("readEntityFromCSVFile failed!!!! Reading entity file error, entity file name: " + entityTxtFilePath);
             ex.printStackTrace();
             return listofObjPropAndIndivTextualName;
         }
@@ -300,38 +304,6 @@ public class StripDownOntology {
 
 
     /**
-     * Create ontology individual from textual names
-     *
-     * @return
-     */
-//    private static boolean readTextFileAndConvertToOntologyEntity(String entityTxtFilePath) {
-//        try {
-//            if (null != entityTxtFilePath) {
-//                logger.info("readTextFileAndConvertToOntologyEntity started..., input file name: " + entityTxtFilePath);
-//                Files.readAllLines(Paths.get(entityTxtFilePath)).forEach(txtEntity -> {
-//                    IRI iri = IRI.create(txtEntity);
-//                    logger.debug("iri: " + iri);
-//                    // create ontology namedindividual
-//                    OWLNamedIndividual owlNamedIndividual = ontoDataFacotry.getOWLNamedIndividual(iri);
-//                    logger.debug("owlNamedIndividual: " + owlNamedIndividual);
-//                    referredDirectEntities.add(owlNamedIndividual);
-//                });
-//
-//                logger.info("readTextFileAndConvertToOntologyEntity successfull.");
-//                logger.info("total namedIndividuals: " + referredDirectEntities.size());
-//                return true;
-//            } else {
-//                logger.info("readTextFileAndConvertToOntologyEntity starting failed!!!!!!!!!!!!! input entity file name is null!!!!!");
-//                return false;
-//            }
-//        } catch (Exception ex) {
-//            logger.info("readTextFileAndConvertToOntologyEntity failed!!!! Reading entity file error, entity file name: " + entityTxtFilePath);
-//            ex.printStackTrace();
-//            return false;
-//        }
-//    }
-
-    /**
      * Process/search indirect indivs from the ontology.
      *
      * @param listofObjPropAndIndiv
@@ -367,93 +339,8 @@ public class StripDownOntology {
         return listofObjPropAndIndiv;
     }
 
-    /**
-     * @param owlObjectPropertiesOfInterest
-     * @return
-     */
-//    private static boolean processObjectProperties(HashSet<OWLObjectProperty> owlObjectPropertiesOfInterest) {
-//        try {
-//            if (null != owlObjectPropertiesOfInterest) {
-//                logger.info("processObjectProperties started.........");
-//                logger.info("owlObjectPropertiesOfInterest size: " + owlObjectPropertiesOfInterest.size());
-//
-//                if (null != referredDirectEntities) {
-//                    logger.info("referredDirectEntities size: " + referredDirectEntities.size());
-//
-//                    owlObjectPropertiesOfInterest.forEach(owlObjectProperty -> {
-//                        logger.info("Processing object property " + owlObjectProperty);
-//                        referredDirectEntities.forEach(owlNamedIndividual -> {
-//                            logger.debug("\t Processing object property with indiv " + owlNamedIndividual);
-//                            Collection<OWLIndividual> individuals = EntitySearcher.getObjectPropertyValues(owlNamedIndividual, owlObjectProperty, inputOntology);
-//                            logger.debug("\t #Triple found indiv------object_property " + individuals.size());
-//                            individuals.stream().filter(OWLNamedIndividual.class::isInstance).forEach(owlIndividual -> {
-//                                referredIndirectEntities.add((OWLNamedIndividual) owlIndividual);
-//                            });
-//                        });
-//                    });
-//
-//                    logger.info("processObjectProperties finished successfully.");
-//                    logger.info("referredIndirectEntities size: " + referredDirectEntities.size());
-//
-//                    return true;
-//                } else {
-//                    logger.info("processObjectProperties could not start as referredDirectEntities is null.");
-//                    return false;
-//                }
-//            } else {
-//                logger.info("processObjectProperties could not start as owlObjectPropertiesOfInterest is null.");
-//                return false;
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//            return false;
-//        }
-//    }
-
     static int reccounter = 0;
     static int indirectIndiCounter = 0;
-
-    /**
-     * // supertypes until we find owl:Thing
-     *
-     * @param owlClass
-     */
-    private void findSuperTypesRecursive(OWLClass owlClass) {
-//        reccounter++;
-////        if (reccounter > 100000) {
-////            System.exit(-1);
-////        }
-        findSuperTypesRecursive(owlClass, axiomsToKeep);
-//        logger.info("indirectIndiCounter: " + indirectIndiCounter + " \t reccounter: " + reccounter);
-//        logger.info("Counter " + reccounter + " ### findSuperTypesRecursive started with: " + owlClass);
-//
-//        if (ontoDataFacotry.getOWLThing().equals(owlClass))
-//            return;
-//
-//        // initial call
-//        Collection<OWLClassExpression> superClasses = EntitySearcher.
-//                getSuperClasses(owlClass, inputOntology);
-//
-//        logger.info("### findSuperTypesRecursive running with superClasses.size: " + superClasses.size());
-//
-//        if (superClasses.size() < 1)
-//            return;
-//
-//        for (OWLClassExpression owlClassExpression : superClasses) {
-//
-//            logger.info("### findSuperTypesRecursive running with super-owlClassExpression: " + owlClassExpression);
-//
-//            if (owlClassExpression instanceof OWLClass) {
-//                OWLClass owlClassNew = (OWLClass) owlClassExpression;
-//                if (!owlClassNew.equals(owlClass)) {
-//                    axiomsToKeep.addAll(inputOntology.getAxioms(owlClassNew));
-//                    findSuperTypesRecursive(owlClassNew);
-//                }
-//            }
-//        }
-//
-//        logger.info("### findSuperTypesRecursive finished with: " + owlClass);
-    }
 
     /**
      * // supertypes until we find owl:Thing
@@ -497,6 +384,49 @@ public class StripDownOntology {
         logger.info("### findSuperTypesRecursive finished with: " + owlClass);
     }
 
+    /**
+     * extract the axioms related to a single owl class.
+     * This keeps all superclass of the owl class.
+     * but if a class is just subclass of owlThing but not subclass of other class then that class is discarded!!!
+     * <p>
+     * constraint: this function do the inplace modification of owlAxiomsRelatedToClass so not returning any value.
+     *
+     * @param owlClass
+     * @param owlAxiomsRelatedToClass
+     */
+    private void extractAxiomsRelatedToOWLClass(OWLClass owlClass, HashSet<OWLAxiom> owlAxiomsRelatedToClass) {
+        logger.info("\towlAxiomsRelatedToClass size before processing this class: " + owlAxiomsRelatedToClass.size());
+
+        if (null != owlClass && null != owlAxiomsRelatedToClass) {
+            Set<OWLClassAxiom> axiomSet = inputOntology.getAxioms(owlClass);
+            logger.info("\t\tRelated axioms size using inputOntology.getAxioms(owlClass).size: " + axiomSet.size());
+            owlAxiomsRelatedToClass.addAll(axiomSet);
+            findSuperTypesRecursive(owlClass, owlAxiomsRelatedToClass);
+        }
+
+        logger.info("\t\towlAxiomsRelatedToClass size after processing this class: " + owlAxiomsRelatedToClass.size());
+    }
+
+    /**
+     * keep all superclasses of owlClass by using the recursive call,
+     * constraint: if an owlclass is only subclass of owl:Thing then inputOntology.getAxioms(owlClass) doesn't return any axioms!!!!
+     *
+     * @param owlClasses
+     * @return
+     */
+    public HashSet<OWLAxiom> extractAxiomsRelatedToOWLClasses(HashSet<OWLClass> owlClasses) {
+        HashSet<OWLAxiom> owlAxiomsRelatedToClasses = new HashSet<>();
+
+        logger.info("Processing extractAxiomsRelatedToOWLClasses started........... ");
+
+        for (OWLClass owlClass : owlClasses) {
+            logger.info("Processing owlclass: " + owlClass);
+            extractAxiomsRelatedToOWLClass(owlClass, owlAxiomsRelatedToClasses);
+        }
+
+        logger.info("Processing extractAxiomsRelatedToOWLClasses finished. owlAxiomsRelatedToClasses size: " + owlAxiomsRelatedToClasses.size());
+        return owlAxiomsRelatedToClasses;
+    }
 
     /**
      * @param owlNamedIndividual
@@ -514,9 +444,9 @@ public class StripDownOntology {
             // call recursive function to find all class hierarchy
             owlClasses.stream().filter(OWLClass.class::isInstance).forEach(owlClassExpression -> {
                 OWLClass owlClass = (OWLClass) owlClassExpression;
-                axiomsToKeep.addAll(inputOntology.getAxioms(owlClass));
                 logger.info("Entity " + owlNamedIndividual + " has initial types: " + owlClass);
-                findSuperTypesRecursive(owlClass, axiomsToKeep);
+                logger.info("\tProcessing owlclass: " + owlClass);
+                extractAxiomsRelatedToOWLClass(owlClass, axiomsToKeep);
             });
             return true;
         } catch (Exception ex) {
@@ -526,30 +456,13 @@ public class StripDownOntology {
     }
 
     /**
-     * keep all superclasses of owlClass by using the recursive call
-     * @param owlClasses
-     * @return
-     */
-    public HashSet<OWLAxiom> extractAxiomsRelatedToOWLClasses(HashSet<OWLClass> owlClasses) {
-        HashSet<OWLAxiom> owlAxiomsRelatedToClasses = new HashSet<>();
-
-        logger.info("Processing extractAxiomsRelatedToOWLClasses started........... ");
-
-        for (OWLClass owlClass : owlClasses) {
-            logger.info("Processing owlclass: " + owlClass);
-            Set<OWLClassAxiom> axiomSet = inputOntology.getAxioms(owlClass);
-            logger.info("\tRelated axioms size using inputOntology.getAxioms(owlClass).size: " + axiomSet.size());
-            owlAxiomsRelatedToClasses.addAll(axiomSet);
-            findSuperTypesRecursive(owlClass, owlAxiomsRelatedToClasses);
-        }
-
-        logger.info("Processing extractAxiomsRelatedToOWLClasses finished. owlAxiomsRelatedToClasses size: " + owlAxiomsRelatedToClasses.size());
-        return owlAxiomsRelatedToClasses;
-    }
-
-    /**
+     * constraint: if an owlclass is only subclass of owl:Thing then inputOntology.getAxioms(owlClass) doesn't return any axioms!!!!
+     * but inputOntology.getAxioms(owlNamedIndividual) returns and axiom if that class is type of owlNamedIndividual
+     *  so we should use extractAxiomsRelatedToIndivs() this function instead of extractAxiomsRelatedToOWLClasses whenever possible.
+     *
      * @param referredDirectEntities
-     * @return true if (axiomsToKeep.size() > 0) else false. or return false for any exception
+     * @param referredIndirectEntities
+     * @return
      */
     public HashSet<OWLAxiom> extractAxiomsRelatedToIndivs(HashSet<OWLNamedIndividual> referredDirectEntities, HashSet<OWLNamedIndividual> referredIndirectEntities) {
         try {

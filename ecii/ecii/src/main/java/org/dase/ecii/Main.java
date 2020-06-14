@@ -366,9 +366,11 @@ public class Main {
         ListofObjPropAndIndivTextualName listofObjPropAndIndivTextualName = stripDownOntology.
                 readEntityFromCSVFile(entityCsvFilePath, objPropColumnName, indivColumnName);
 
+        // process objprops and direct indivs
         ListofObjPropAndIndiv listofObjPropAndIndiv = stripDownOntology.
                 convertToOntologyEntity(listofObjPropAndIndivTextualName);
 
+        // process indirect indivs
         listofObjPropAndIndiv = stripDownOntology.processIndirectIndivsUsingObjProps(listofObjPropAndIndiv);
 
         HashSet<OWLAxiom> axiomsToKeep = stripDownOntology.extractAxiomsRelatedToIndivs(listofObjPropAndIndiv.directIndivs, listofObjPropAndIndiv.inDirectIndivs);
@@ -557,6 +559,7 @@ public class Main {
             if (args.length == 7) {
                 if (args[1].equals("obj") || args[1].equals("type")) {
                     if (args[1].equals("obj")) {
+                        // this function is preferable instead of the indivTypes.
                         stripDownOntoIndivsObjProps(args[2], args[3], args[4], args[5], args[6]);
                     } else {
                         stripDownOntoIndivsTypes(args[2], args[3], args[4], args[5], args[6]);

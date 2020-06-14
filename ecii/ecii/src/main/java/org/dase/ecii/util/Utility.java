@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import com.wcohen.ss.Levenstein;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
 import org.apache.log4j.Level;
 import org.dase.ecii.core.SharedDataHolder;
 import org.dase.ecii.exceptions.MalFormedIRIException;
@@ -28,6 +29,7 @@ import uk.ac.manchester.cs.factplusplus.owlapiv3.FaCTPlusPlusReasonerFactory;
 
 
 import java.io.*;
+import java.io.Writer;
 import java.lang.invoke.MethodHandles;
 import java.net.URLEncoder;
 import java.nio.file.Files;
@@ -332,6 +334,72 @@ public class Utility {
             e.printStackTrace();
         }
         return csvRecords;
+    }
+
+    /**
+     *  This works perfectly, tested with TestUtility.testWriteToCSV
+     * @param csvPath
+     * @param columnNames
+     * @param columnValues
+     * @return
+     */
+    public static boolean writeToCSV(String csvPath, ArrayList<String> columnNames, ArrayList<String>... columnValues) {
+        try {
+
+            if (columnValues.length != columnNames.size()) {
+                System.out.println("Column names size: " + columnNames.size());
+                System.out.println("Column values size: " + columnValues.length);
+                System.out.println("Number of column name and number of column values must be same, exiting....");
+                return false;
+            }
+            // create a writer
+            Writer writer = Files.newBufferedWriter(Paths.get(csvPath));
+
+            // write CSV file
+            // https://stackoverflow.com/questions/9863742/how-to-pass-an-arraylist-to-a-varargs-method-parameter
+            CSVPrinter printer = CSVFormat.DEFAULT.withHeader(columnNames.toArray(new String[columnNames.size()])).print(writer);
+
+            List<Object[]> dataGrid = new ArrayList<>();
+            // get the max/highest size
+            int maxSizeOfAColumn = 0;
+            for (ArrayList<String> eachColumn : columnValues) {
+                if (maxSizeOfAColumn < eachColumn.size())
+                    maxSizeOfAColumn = eachColumn.size();
+            }
+            System.out.println("Max size of a column: "+ maxSizeOfAColumn);
+
+            for (int rowId = 0; rowId < maxSizeOfAColumn; rowId++) {
+                // make a row of the data
+                Object[] dataRow = new Object[columnNames.size()];
+
+                // append to the row
+                for (int columnId = 0; columnId < columnValues.length; columnId++) {
+
+                    if (rowId < columnValues[columnId].size()) {
+                        dataRow[columnId] = columnValues[columnId].get(rowId);
+                    } else {
+                        dataRow[columnId] = "";
+                    }
+                }
+
+                // append the row to the datagrid
+                dataGrid.add(dataRow);
+            }
+
+            // write list to file
+            printer.printRecords(dataGrid);
+
+            // flush the stream
+            printer.flush();
+
+            // close the writer
+            writer.close();
+
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -759,14 +827,14 @@ public class Utility {
         //logger.debug("regexText: " + regexText);
 
         String negExamplesPortion = "";
-        logger.info("negExamplesPortion1: "+ negExamplesPortion);
+        logger.info("negExamplesPortion1: " + negExamplesPortion);
 
         if (matcher.find()) {
             negExamplesPortion = matcher.group();
             //logger.debug("negExamplesPortion: " + negExamplesPortion);
         }
 
-        logger.info("negExamplesPortion2: "+ negExamplesPortion);
+        logger.info("negExamplesPortion2: " + negExamplesPortion);
 
         String regexEachEntity = "\"{1}([^\"])*\"{1}";
         ArrayList<IRI> negExamplesIRI = extractEachEntityIRIFromTextPortion(negExamplesPortion, regexEachEntity);

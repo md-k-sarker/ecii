@@ -31,11 +31,11 @@ public class TestStripDownOntology {
     /**
      *
      */
-    public void processIndivsWithObjProps() {
+    public void processIndivsWithObjProps(String inputOntoPath, String entityCsvFilePath, String objPropColumnName, String indivColumnName,  String outputOntoIRI, String outputOntoPath) {
         StripDownOntology stripDownOntology = new StripDownOntology(inputOntoPath);
 
         ListofObjPropAndIndivTextualName listofObjPropAndIndivTextualName = stripDownOntology.
-                readEntityFromCSVFile(entityCsvFilePath, "objprops", "indivs");
+                readEntityFromCSVFile(entityCsvFilePath, objPropColumnName, indivColumnName);
 
         ListofObjPropAndIndiv listofObjPropAndIndiv = stripDownOntology.
                 convertToOntologyEntity(listofObjPropAndIndivTextualName);
@@ -48,7 +48,7 @@ public class TestStripDownOntology {
 
         OWLOntology outputOntology = null;
         try {
-            outputOntology = outputOntoManager.createOntology(IRI.create("http://www.daselab.com/residue/analysis"));
+            outputOntology = outputOntoManager.createOntology(IRI.create(outputOntoIRI));
         } catch (OWLOntologyCreationException e) {
             e.printStackTrace();
         }
@@ -83,7 +83,7 @@ public class TestStripDownOntology {
 
         OWLOntology outputOntology = null;
         try {
-            outputOntology = outputOntoManager.createOntology(IRI.create("http://www.daselab.com/residue/analysis"));
+            outputOntology = outputOntoManager.createOntology(IRI.create(outputOntoIRI));
         } catch (OWLOntologyCreationException e) {
             e.printStackTrace();
         }
@@ -108,7 +108,7 @@ public class TestStripDownOntology {
         long startTime = System.currentTimeMillis();
 
         TestStripDownOntology testStripDownOntology = new TestStripDownOntology();
-        testStripDownOntology.processIndivsWithTypes(inputOntoPath, entityCsvFilePath, "indivs", "types", "http://www.daselab.com/sarker/prune", outputOntoPath);
+        testStripDownOntology.processIndivsWithObjProps(inputOntoPath, entityCsvFilePath, "objprops", "indivs", "http://www.daselab.com/sarker/prune", outputOntoPath);
 
         long endTime = System.currentTimeMillis();
         logger.info("stripping finished.");
