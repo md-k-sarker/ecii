@@ -40,7 +40,7 @@ public final class ConfigParams {
     /**
      *
      */
-    public static String resultFileExtension = "_solutions_results_ecii_v2.txt";
+    public static String resultFileExtension = "_results_ecii_v2.txt";
     /**
      * K7/atomic types both appeared in positive and negative
      */
@@ -48,6 +48,7 @@ public final class ConfigParams {
 
     /**
      * This is also called as K1
+     * K1/negExprTypeLimit, limit of number of concepts in a negative expression of a hornClause
      */
     public static int conceptLimitInNegExpr;
     /**
@@ -56,18 +57,24 @@ public final class ConfigParams {
     public static int hornClauseLimit;
     /**
      * This is also called as K3.
+     * K3/permutate/combination untill this number of objectproperties
      */
     public static int objPropsCombinationLimit;
     /**
-     * This is also called as K4. We can use it, but for simplicity do not use it now.
-     * ecii-extension: we are using this one. it can be called as directTypeLimit or conceptLimitInPosExpr
+     * it can be called as directTypeLimit or conceptLimitInPosExpr. This is also called as K4.
+     * ecii-v0: not being used.
+     * ecii-v2: we are using this one.
+     * <p>
+     * limit of number of concepts in a positive expression of a hornClause
      */
     public static int conceptLimitInPosExpr;
 
     /**
      * k9/ maximum posclasses (top scoring) to do the combination.
+     * size of combination would be nCr or posClassListMaxSize--C--conceptLimitInPosExpr
      */
     public static int posClassListMaxSize;
+
     /**
      * Experimental: instead of typeOfObjectsInPosIndivsMaxSize, posClassListMaxSize is multiplied by multiplicationConstant in limiting the positive types list.
      */
@@ -75,9 +82,9 @@ public final class ConfigParams {
 
     /**
      * k10/ maximum negclasses (top scoring) to do the combination.
+     * size would be nCr or negClassListMaxSize--C--conceptLimitInNegExpr
      */
     public static int negClassListMaxSize;
-
 
     /**
      * K5 select upto k5 hornClauses to make combination
@@ -93,6 +100,8 @@ public final class ConfigParams {
      * K8/Validate the accuracy of top solutions by reasoner upto this number of solutions
      */
     public static int validateByReasonerSize;
+
+    public static boolean ascendingOfStringLength;
 
     //public static double combinationThreshold;
     public static boolean batch;
@@ -196,6 +205,7 @@ public final class ConfigParams {
             posClassListMaxSize = Integer.valueOf(prop.getProperty("posClassListMaxSize", "20"));
             negClassListMaxSize = Integer.valueOf(prop.getProperty("negClassListMaxSize", "20"));
             runPairwiseSimilarity = Boolean.parseBoolean(prop.getProperty("removeCommonTypes", "false"));
+            ascendingOfStringLength = Boolean.parseBoolean(prop.getProperty("ascendingOfStringLength", "false"));
 
             confFileDir = Paths.get(confFilePath).getParent().toString();
             String replacement = ConfigParams.resultFileExtension;
@@ -219,6 +229,9 @@ public final class ConfigParams {
     private static boolean parseScoreTypes(String scoreTypeNameRaw) {
         try {
             switch (scoreTypeNameRaw) {
+                case "hybrid":
+                    Score.defaultScoreType = ScoreType.HYBRID;
+                    break;
                 case "precision":
                     Score.defaultScoreType = ScoreType.PRECISION;
                     break;

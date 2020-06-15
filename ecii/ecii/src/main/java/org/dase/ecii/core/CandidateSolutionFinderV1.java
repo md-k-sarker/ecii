@@ -408,7 +408,7 @@ public class CandidateSolutionFinderV1 {
                     // combination of combinationCounter
                     listCombinationOfSubClassesForNegPortion.addAll(Utility.combinationHelper(posTypeOwlSubClassExpressionsForCombination, combinationCounter));
                 }
-                logger.info("listCombinationOfSubClassesForNegPortion size: " + listCombinationOfSubClassesForNegPortion.size());
+                logger.debug("listCombinationOfSubClassesForNegPortion size: " + listCombinationOfSubClassesForNegPortion.size());
 
                 // keep only valid listCombinationOfSubClassesForNegPortion.
                 // a combination is valid if and only if it doesn't have self subClass.
@@ -421,7 +421,7 @@ public class CandidateSolutionFinderV1 {
                 });
                 // recover memory
                 listCombinationOfSubClassesForNegPortion = null;
-                logger.info("validListCombinationOfSubClassesForNegPortion size: " + validListCombinationOfSubClassesForNegPortion.size());
+                logger.debug("validListCombinationOfSubClassesForNegPortion size: " + validListCombinationOfSubClassesForNegPortion.size());
 
                 // now combine the postypes and negtypes
                 // null pointer because in the soutions the postypes is empty or 0

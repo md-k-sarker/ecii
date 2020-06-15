@@ -353,8 +353,8 @@ public class StripDownOntology {
 //        if (reccounter > 100000) {
 //            System.exit(-1);
 //        }
-        logger.info("indirectIndiCounter: " + indirectIndiCounter + " \t reccounter: " + reccounter);
-        logger.info("Counter " + reccounter + " ### findSuperTypesRecursive started with: " + owlClass);
+        logger.debug("indirectIndiCounter: " + indirectIndiCounter + " \t reccounter: " + reccounter);
+        logger.debug("Counter " + reccounter + " ### findSuperTypesRecursive started with: " + owlClass);
 
         if (ontoDataFacotry.getOWLThing().equals(owlClass))
             return;
@@ -363,14 +363,14 @@ public class StripDownOntology {
         Collection<OWLClassExpression> superClasses = EntitySearcher.
                 getSuperClasses(owlClass, inputOntology);
 
-        logger.info("### findSuperTypesRecursive running with superClasses.size: " + superClasses.size());
+        logger.debug("### findSuperTypesRecursive running with superClasses.size: " + superClasses.size());
 
         if (superClasses.size() < 1)
             return;
 
         for (OWLClassExpression owlClassExpression : superClasses) {
 
-            logger.info("### findSuperTypesRecursive running with super-owlClassExpression: " + owlClassExpression);
+            logger.debug("### findSuperTypesRecursive running with super-owlClassExpression: " + owlClassExpression);
 
             if (owlClassExpression instanceof OWLClass) {
                 OWLClass owlClassNew = (OWLClass) owlClassExpression;

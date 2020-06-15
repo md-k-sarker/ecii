@@ -120,11 +120,12 @@ public class Main {
 
 
     /**
-     * Initiate the outputpath, logger path, monitor etc and call doOps().
+     * Initiate the start of a single operation
+     * initiate the outputpath, logger path, monitor etc.
      *
      * @param outputResultPath
      */
-    private static void initiateSingleDoOps(String outputResultPath) {
+    private static void initiateSingleOpsStart(String outputResultPath) {
 
         try {
             // file to write
@@ -135,13 +136,48 @@ public class Main {
             monitor = new Monitor(outPutStream, jTextPane);
             monitor.start("Program started.............", true);
             logger.info("Program started................");
-            doOps();
+        } catch (Exception e) {
+            logger.info("\n\n!!!!!!!Fatal error!!!!!!!\n" + Utility.getStackTraceAsString(e));
+            if (null != monitor) {
+                monitor.stopSystem("\n\n!!!!!!!Fatal error!!!!!!!\n" + Utility.getStackTraceAsString(e), true);
+            } else {
+                System.exit(0);
+            }
+        }
+    }
 
-            monitor.displayMessage("Result saved at: " + ConfigParams.outputResultPath, true);
+    /**
+     * Initiate the end of a single operation.
+     */
+    private static void initiateSingleOpsEnd(String outputResultPath) {
+
+        try {
+            monitor.displayMessage("Result saved at: " + outputResultPath, true);
             monitor.stop(System.lineSeparator() + "Program finished.", true);
             logger.info("Program finished.");
 
             outPutStream.close();
+        } catch (Exception e) {
+            logger.info("\n\n!!!!!!!Fatal error!!!!!!!\n" + Utility.getStackTraceAsString(e));
+            if (null != monitor) {
+                monitor.stopSystem("\n\n!!!!!!!Fatal error!!!!!!!\n" + Utility.getStackTraceAsString(e), true);
+            } else {
+                System.exit(0);
+            }
+        }
+    }
+
+    /**
+     * Initiate the outputpath, logger path, monitor etc and call doOps().
+     *
+     * @param outputResultPath
+     */
+    private static void initiateSingleDoOps(String outputResultPath) {
+
+        try {
+            initiateSingleOpsStart(outputResultPath);
+            doOps();
+            initiateSingleOpsEnd(outputResultPath);
         } catch (Exception e) {
             logger.info("\n\n!!!!!!!Fatal error!!!!!!!\n" + Utility.getStackTraceAsString(e));
             if (null != monitor) {
@@ -227,7 +263,7 @@ public class Main {
         logger.info("\nfinding solutions finished.");
 
         logger.info("sorting solutions................");
-        findConceptsObj.sortSolutionsCustom(false);
+        findConceptsObj.sortSolutionsCustom(ConfigParams.ascendingOfStringLength);
         //findConceptsObj.sortSolutions(false);
         logger.info("sorting solutions finished.");
 
@@ -361,6 +397,17 @@ public class Main {
      *
      */
     public static void stripDownOntoIndivsObjProps(String inputOntoPath, String entityCsvFilePath, String indivColumnName, String objPropColumnName, String outputOntoIRI) {
+
+        String extension = FilenameUtils.getExtension(inputOntoPath);
+        logger.info("extension: " + extension);
+        String outputOntoPath = inputOntoPath.replace("." + extension, "_stripped." + extension);
+        String outputLogPath = outputOntoPath.replace("." + extension, ".log");
+
+        initiateSingleOpsStart(outputLogPath);
+
+        System.out.println("inputOntoPath: " + inputOntoPath);
+        monitor.displayMessage("File stripped started with inputOntoPath " + inputOntoPath + "........... ", true);
+
         StripDownOntology stripDownOntology = new StripDownOntology(inputOntoPath);
 
         ListofObjPropAndIndivTextualName listofObjPropAndIndivTextualName = stripDownOntology.
@@ -386,8 +433,7 @@ public class Main {
         outputOntoManager.addAxioms(outputOntology, axiomsToKeep);
 
         try {
-            String extension = FilenameUtils.getExtension(inputOntoPath);
-            String outputOntoPath = inputOntoPath.replace("." + extension, "stripped." + extension);
+
             Utility.saveOntology(outputOntology, outputOntoPath);
 
             monitor.displayMessage("File stripped successfully and saved at: " + outputOntoPath, true);
@@ -395,6 +441,8 @@ public class Main {
         } catch (OWLOntologyStorageException e) {
             e.printStackTrace();
         }
+
+        initiateSingleOpsEnd(outputLogPath);
     }
 
     /**
@@ -402,7 +450,7 @@ public class Main {
      * @param outputOntologyIRI
      */
     public static void combineOntologies(String inputOntologiesDirectory, String outputOntologyIRI) {
-        if(null == inputOntologiesDirectory){
+        if (null == inputOntologiesDirectory) {
             logger.error("Error!!!!!! Input ontologies directory path can't be null");
             return;
         }
@@ -503,7 +551,7 @@ public class Main {
             }
             if (args.length > 2) {
                 /**
-                 * args[0] = m or -e
+                 * args[0] = -m or -e
                  * args[1] = -b
                  * args[2] = directory
                  */
@@ -555,11 +603,12 @@ public class Main {
             }
         } else if (args[0].equals("-s")) {
             // strip down
-            // -s [-obj/type] [inputOntoPath, entityCsvFilePath, indivColumnName, objPropColumnName/typeColumnName, outputOntoIRI]
+            // -s [obj/type] [inputOntoPath, entityCsvFilePath, indivColumnName, objPropColumnName/typeColumnName, outputOntoIRI]
             if (args.length == 7) {
                 if (args[1].equals("obj") || args[1].equals("type")) {
                     if (args[1].equals("obj")) {
                         // this function is preferable instead of the indivTypes.
+
                         stripDownOntoIndivsObjProps(args[2], args[3], args[4], args[5], args[6]);
                     } else {
                         stripDownOntoIndivsTypes(args[2], args[3], args[4], args[5], args[6]);

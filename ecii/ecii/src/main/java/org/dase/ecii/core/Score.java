@@ -34,6 +34,9 @@ public class Score {
         double value;
         logger.debug("Default Score type: " + defaultScoreType);
         switch (defaultScoreType) {
+            case HYBRID:
+                value = precision + recall + coverage;
+                break;
             case PRECISION:
                 value = precision;
                 break;

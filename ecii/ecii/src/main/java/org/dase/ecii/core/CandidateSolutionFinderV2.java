@@ -451,7 +451,7 @@ public class CandidateSolutionFinderV2 {
                             listCombinationOfSubClassesForNegPortion.
                                     addAll(Utility.combinationHelper(posTypeOwlSubClassExpressionsForCombination, combinationCounter));
                         }
-                        logger.info("listCombinationOfSubClassesForNegPortion size: " + listCombinationOfSubClassesForNegPortion.size());
+                        logger.debug("listCombinationOfSubClassesForNegPortion size: " + listCombinationOfSubClassesForNegPortion.size());
 
                         // keep only valid listCombinationOfSubClassesForNegPortion.
                         // a combination is valid if and only if it doesn't have self subClass.
@@ -464,7 +464,7 @@ public class CandidateSolutionFinderV2 {
                         });
                         // recover memory
                         listCombinationOfSubClassesForNegPortion = null;
-                        logger.info("validListCombinationOfSubClassesForNegPortion size: " + validListCombinationOfSubClassesForNegPortion.size());
+                        logger.debug("validListCombinationOfSubClassesForNegPortion size: " + validListCombinationOfSubClassesForNegPortion.size());
 
                         // now combine the postypes and negtypes
                         // null pointer because in the soutions the postypes is empty or 0
@@ -1040,89 +1040,45 @@ public class CandidateSolutionFinderV2 {
     /**
      * Sort the solutions
      *
-     * @param ascending
+     * @param ascendingOfStringLength
      * @return
      */
-    public boolean sortSolutionsCustom(boolean ascending) {
+    public boolean sortSolutionsCustom(boolean ascendingOfStringLength) {
 
         ArrayList<CandidateSolutionV2> solutionList = new ArrayList<>(
                 SharedDataHolder.CandidateSolutionSetV2);
 
-        // small to large
-        if (ascending) {
-            solutionList.sort(new Comparator<CandidateSolutionV2>() {
-                @Override
-                public int compare(CandidateSolutionV2 o1, CandidateSolutionV2 o2) {
-                    if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
-                        return 1;
-                    }
-                    if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
-                        // compare length, shorter length will be chosen first
-                        o1Length = 0;
-                        o2Length = 0;
-
-                        //o1Length += o1.getAtomicPosOwlClasses().size();
-                        o1.getCandidateClasses().forEach(candidateClass -> {
-                            candidateClass.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
-                                if (null != conjunctiveHornClause.getPosObjectTypes())
-                                    o1Length += conjunctiveHornClause.getPosObjectTypes().size();
-                                if (null != conjunctiveHornClause.getNegObjectTypes())
-                                    o1Length += conjunctiveHornClause.getNegObjectTypes().size();
-                            });
-                        });
-                        //o2Length += o2.getAtomicPosOwlClasses().size();
-                        o2.getCandidateClasses().forEach(candidateClass -> {
-                            candidateClass.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
-                                if (null != conjunctiveHornClause.getPosObjectTypes())
-                                    o2Length += conjunctiveHornClause.getPosObjectTypes().size();
-                                if (null != conjunctiveHornClause.getNegObjectTypes())
-                                    o2Length += conjunctiveHornClause.getNegObjectTypes().size();
-                            });
-                        });
-                        if (o1Length - o2Length > 0) {
-                            return -1;
-                        }
-                        if (o1Length == o2Length) {
-                            return 0;
-                        } else {
-                            return 1;
-                        }
-                    } else {
-                        return -1;
-                    }
+        solutionList.sort(new Comparator<CandidateSolutionV2>() {
+            @Override
+            public int compare(CandidateSolutionV2 o1, CandidateSolutionV2 o2) {
+                if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
+                    return -1;
                 }
-            });
-        } else {
-            solutionList.sort(new Comparator<CandidateSolutionV2>() {
-                @Override
-                public int compare(CandidateSolutionV2 o1, CandidateSolutionV2 o2) {
-                    if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
-                        return -1;
-                    }
-                    if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
-                        // compare length
-                        o1Length = 0;
-                        o2Length = 0;
+                if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
+                    // compare length
+                    o1Length = 0;
+                    o2Length = 0;
 
-                        //o1Length += o1.getAtomicPosOwlClasses().size();
-                        o1.getCandidateClasses().forEach(candidateClass -> {
-                            candidateClass.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
-                                if (null != conjunctiveHornClause.getPosObjectTypes())
-                                    o1Length += conjunctiveHornClause.getPosObjectTypes().size();
-                                if (null != conjunctiveHornClause.getNegObjectTypes())
-                                    o1Length += conjunctiveHornClause.getNegObjectTypes().size();
-                            });
+                    //o1Length += o1.getAtomicPosOwlClasses().size();
+                    o1.getCandidateClasses().forEach(candidateClass -> {
+                        candidateClass.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
+                            if (null != conjunctiveHornClause.getPosObjectTypes())
+                                o1Length += conjunctiveHornClause.getPosObjectTypes().size();
+                            if (null != conjunctiveHornClause.getNegObjectTypes())
+                                o1Length += conjunctiveHornClause.getNegObjectTypes().size();
                         });
-                        //o2Length += o2.getAtomicPosOwlClasses().size();
-                        o2.getCandidateClasses().forEach(candidateClass -> {
-                            candidateClass.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
-                                if (null != conjunctiveHornClause.getPosObjectTypes())
-                                    o2Length += conjunctiveHornClause.getPosObjectTypes().size();
-                                if (null != conjunctiveHornClause.getNegObjectTypes())
-                                    o2Length += conjunctiveHornClause.getNegObjectTypes().size();
-                            });
+                    });
+                    //o2Length += o2.getAtomicPosOwlClasses().size();
+                    o2.getCandidateClasses().forEach(candidateClass -> {
+                        candidateClass.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
+                            if (null != conjunctiveHornClause.getPosObjectTypes())
+                                o2Length += conjunctiveHornClause.getPosObjectTypes().size();
+                            if (null != conjunctiveHornClause.getNegObjectTypes())
+                                o2Length += conjunctiveHornClause.getNegObjectTypes().size();
                         });
-
+                    });
+                    // small to large of solution length
+                    if (ascendingOfStringLength) {
                         if (o1Length - o2Length > 0) {
                             return 1;
                         }
@@ -1132,11 +1088,20 @@ public class CandidateSolutionFinderV2 {
                             return -1;
                         }
                     } else {
-                        return 1;
+                        if (o1Length - o2Length > 0) {
+                            return -1;
+                        }
+                        if (o1Length == o2Length) {
+                            return 0;
+                        } else {
+                            return 1;
+                        }
                     }
+                } else {
+                    return 1;
                 }
-            });
-        }
+            }
+        });
 
         // save in shared data holder
         SharedDataHolder.SortedCandidateSolutionListV2 = solutionList;

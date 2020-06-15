@@ -149,14 +149,13 @@ public class OntoCombiner {
     /**
      * @param csvPath
      */
-    public void process_image_names_from_csv(String csvPath) {
+    public void process_image_names_from_csv(String csvPath, String columnName) {
 
         logger.info("Processing csv file: " + csvPath);
         CSVParser csvRecords = Utility.parseCSV(csvPath, true);
-        String image_file_name = "filename";
 
         csvRecords.forEach(strings -> {
-            String each_image_file_name = strings.get(image_file_name);
+            String each_image_file_name = strings.get(columnName);
 
             for (Map.Entry<String, HashSet<String>> entry : fileBrowserMapping.entrySet()) {
                 for (String eachFile : entry.getValue()) {
@@ -192,8 +191,8 @@ public class OntoCombiner {
 
 //            printFileHierarchy();
 
-            process_image_names_from_csv(csvPath1);
-            process_image_names_from_csv(csvPath2);
+            process_image_names_from_csv(csvPath1, "filename");
+            process_image_names_from_csv(csvPath2, "filename");
 
             printSmallOntoFileNames();
 
@@ -230,87 +229,47 @@ public class OntoCombiner {
     }
 
 
-    private void combineAllSmallOntoFromADE20KWithSumo(String ade2krootPath, String OntoCombinerSavingPath, String sumoPath) {
-        try {
-            String[] paths = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "y", "z"};
-            for (int i = 0; i < paths.length; i++) {
-
-                if (i > 0) {
-                    traversingRootPath = ade2krootPath.replace("/" + paths[i - 1] + "/", "/" + paths[i] + "/");
-
-                    OntoCombinerSavingPath = OntoCombinerSavingPath.replace("_" + paths[i - 1] + ".owl", "_" + paths[i] + ".owl");
-
-                    OntoCombinerLogPath = OntoCombinerLogPath.replace("_" + paths[i - 1] + ".log", "_" + paths[i] + ".log");
-                } else {
-
-                }
-                owlAxioms = new HashSet<>();
-                fileBrowserMapping = new HashMap<>();
-
-                logger.info("Program started.............");
-                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(OntoCombinerLogPath));
-                PrintStream printStream = new PrintStream(bos, true);
-                monitor = new Monitor(printStream);
-
-
-                System.out.println("traversingRootPath: " + traversingRootPath);
-                System.out.println("OntoCombinerSavingPath: " + OntoCombinerSavingPath);
-                System.out.println("OntoCombinerLogPath: " + OntoCombinerLogPath);
-                Log4JLogger l = new Log4JLogger();
-
-                doOps(sumoPath);
-
-                printStream.close();
-            }
-
-        } catch (FileNotFoundException ex) {
-            logger.error("!!!!!!!!!!!!OWLOntologyCreationException!!!!!!!!!!!!");
-            logger.error(Utility.getStackTraceAsString(ex));
-            monitor.stopSystem("Stopping program", true);
-        } finally {
-            monitor.stopSystem("Program finished", true);
-        }
-    }
-
-
-    private void test1(String traversingRootPath, String ontoCombinerSavingPath, String ontoIRIString) {
-
-
-        HashSet<OWLAxiom> allAxioms = new HashSet<>();
-        try {
-            Files.walk(Paths.get(traversingRootPath)).filter(f -> f.toString().endsWith(".owl")).forEach(ontoFile -> {
-                try {
-                    OWLOntology ontology = Utility.loadOntology(ontoFile, monitor);
-                    logger.info("Adding axioms from : " + ontoFile.toString());
-                    HashSet<OWLAxiom> axioms = ontology.getAxioms().stream().collect(Collectors.toCollection(HashSet::new));
-                    allAxioms.addAll(axioms);
-
-                    logger.info("axioms size now: " + allAxioms.size());
-                } catch (Exception ex) {
-                    logger.error("!!!!!!!!!!!!!!");
-                    ex.printStackTrace();
-                }
-            });
-        } catch (Exception ex) {
-            logger.error("!!!!!!!!!!!!!!");
-            ex.printStackTrace();
-        }
-
-        logger.info("\nSaving ontology at: " + ontoCombinerSavingPath);
-        saveOntology(allAxioms, ontoCombinerSavingPath, ontoIRIString);
-
-    }
-
-
-    private static String OntoCombinerLogPath = "Users/sarker/Workspaces/Jetbrains/emerald/experiments/ade20k-sumo/log_sumo_combining.log";
-    private static String sumoPath = "/Users/sarker/Workspaces/Jetbrains/emerald/experiments/ade20k-sumo/SUMO_properly_named.owl";
-    private static String OntoCombinerSavingPath = "/Users/sarker/Workspaces/Jetbrains/emerald/experiments/ade20k-sumo/SUMO_combined.owl";
-    private static String traversingRootPath = "/Users/sarker/Workspaces/Jetbrains/emerald/data/ade20k_images_and_owls/";
-
-    private static HashSet<String> smallOntoPaths = new HashSet<>();
-
-    private static String csvPath1 = "/Users/sarker/Workspaces/Jetbrains/emerald/experiments/ade20k-sumo/kitchen_vs_non-kitchen.csv";
-    private static String csvPath2 = "/Users/sarker/Workspaces/Jetbrains/emerald/experiments/ade20k-sumo/livingRoom_vs_non-livingRoom.csv";
+//    private void combineAllSmallOntoFromADE20KWithSumo(String ade2krootPath, String OntoCombinerSavingPath, String sumoPath) {
+//        try {
+//            String[] paths = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "y", "z"};
+//            for (int i = 0; i < paths.length; i++) {
+//
+//                if (i > 0) {
+//                    traversingRootPath = ade2krootPath.replace("/" + paths[i - 1] + "/", "/" + paths[i] + "/");
+//
+//                    OntoCombinerSavingPath = OntoCombinerSavingPath.replace("_" + paths[i - 1] + ".owl", "_" + paths[i] + ".owl");
+//
+//                    OntoCombinerLogPath = OntoCombinerLogPath.replace("_" + paths[i - 1] + ".log", "_" + paths[i] + ".log");
+//                } else {
+//
+//                }
+//                owlAxioms = new HashSet<>();
+//                fileBrowserMapping = new HashMap<>();
+//
+//                logger.info("Program started.............");
+//                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(OntoCombinerLogPath));
+//                PrintStream printStream = new PrintStream(bos, true);
+//                monitor = new Monitor(printStream);
+//
+//
+//                System.out.println("traversingRootPath: " + traversingRootPath);
+//                System.out.println("OntoCombinerSavingPath: " + OntoCombinerSavingPath);
+//                System.out.println("OntoCombinerLogPath: " + OntoCombinerLogPath);
+//                Log4JLogger l = new Log4JLogger();
+//
+//                doOps(sumoPath);
+//
+//                printStream.close();
+//            }
+//
+//        } catch (FileNotFoundException ex) {
+//            logger.error("!!!!!!!!!!!!OWLOntologyCreationException!!!!!!!!!!!!");
+//            logger.error(Utility.getStackTraceAsString(ex));
+//            monitor.stopSystem("Stopping program", true);
+//        } finally {
+//            monitor.stopSystem("Program finished", true);
+//        }
+//    }
 
 
     /**
@@ -343,6 +302,61 @@ public class OntoCombiner {
             logger.error("Exception!!!!!!!!!" + Utility.getStackTraceAsString(e));
         }
     }
+
+
+    /**
+     * This function takes the images names of ADE20K which are written in csv file.
+     * Then search for the owl files matching the image names and then
+     * combine those ontologies.
+     *
+     * @param outputPath
+     * @param csvPath
+     */
+    public void combineOntologies(String outputPath, String traversingRootPath, String csvPath, String csvColumnName, boolean useFileNameExtender, String fileNameExtender) {
+        try {
+
+            logger.info("Processing combineOntologies started...............");
+            HashSet<String> owl_files_path = new HashSet<>();
+
+            // create file hierarchy map. key is the file name and value is the full path
+            HashMap<String, String> all_image_files_path = new HashMap<>();
+            Files.walk(Paths.get(traversingRootPath))
+                    .filter(f -> f.toFile().isFile() && f.toString().endsWith(".jpg")).
+                    forEach(f -> all_image_files_path.put(f.getFileName().toString(), f.toString()));
+
+            CSVParser csvRecords = Utility.parseCSV(csvPath, true);
+
+            csvRecords.forEach(strings -> {
+                String each_image_file_name = strings.get(csvColumnName);
+                if (all_image_files_path.containsKey(each_image_file_name)) {
+
+                    String each_image_file_path = all_image_files_path.get(each_image_file_name);
+
+                    String each_image_file_path_without_extension = each_image_file_path.replace(".jpg", "");
+
+                    if (useFileNameExtender) {
+                        each_image_file_path_without_extension = each_image_file_path_without_extension + fileNameExtender;
+                    }
+                    String each_owl_file_path = each_image_file_path_without_extension + ".owl";
+
+                    owl_files_path.add(each_owl_file_path);
+                } else {
+                    logger.error(" Error!!!!!!!!!!. image file not found in " + traversingRootPath);
+                }
+            });
+
+            System.out.println("Total owl files found: " + owl_files_path.size());
+
+            System.out.println("Calling the next step ontocombiner.......");
+            combineOntologies(outputPath, owl_files_path);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error("Exception!!!!!!!!!" + Utility.getStackTraceAsString(e));
+        }
+    }
+
 
     /**
      *
@@ -383,15 +397,60 @@ public class OntoCombiner {
         logger.info("\nSaving ontology at: " + outputPath + " successfull.");
     }
 
+
+    private static String OntoCombinerLogPath = "Users/sarker/Workspaces/Jetbrains/emerald/experiments/ade20k-sumo/log_sumo_combining.log";
+    private static String sumoPath = "/Users/sarker/Workspaces/Jetbrains/emerald/experiments/ade20k-sumo/SUMO_properly_named.owl";
+    private static String OntoCombinerSavingPath = "/Users/sarker/Workspaces/Jetbrains/emerald/experiments/ade20k-sumo/SUMO_combined.owl";
+    private static String traversingRootPath = "/Users/sarker/Workspaces/Jetbrains/emerald/data/ade20k_images_and_owls/";
+
+    private static HashSet<String> smallOntoPaths = new HashSet<>();
+
+    private static String csvPath1 = "/Users/sarker/Workspaces/Jetbrains/emerald/experiments/ade20k-sumo/kitchen_vs_non-kitchen.csv";
+    private static String csvPath2 = "/Users/sarker/Workspaces/Jetbrains/emerald/experiments/ade20k-sumo/livingRoom_vs_non-livingRoom.csv";
+
+    private void test1(String traversingRootPath, String ontoCombinerSavingPath, String ontoIRIString) {
+
+
+        HashSet<OWLAxiom> allAxioms = new HashSet<>();
+        try {
+            Files.walk(Paths.get(traversingRootPath)).filter(f -> f.toString().endsWith(".owl")).forEach(ontoFile -> {
+                try {
+                    OWLOntology ontology = Utility.loadOntology(ontoFile, monitor);
+                    logger.info("Adding axioms from : " + ontoFile.toString());
+                    HashSet<OWLAxiom> axioms = ontology.getAxioms().stream().collect(Collectors.toCollection(HashSet::new));
+                    allAxioms.addAll(axioms);
+
+                    logger.info("axioms size now: " + allAxioms.size());
+                } catch (Exception ex) {
+                    logger.error("!!!!!!!!!!!!!!");
+                    ex.printStackTrace();
+                }
+            });
+        } catch (Exception ex) {
+            logger.error("!!!!!!!!!!!!!!");
+            ex.printStackTrace();
+        }
+
+        logger.info("\nSaving ontology at: " + ontoCombinerSavingPath);
+        saveOntology(allAxioms, ontoCombinerSavingPath, ontoIRIString);
+
+    }
+
     public static void main(String[] args) {
 //        String p1 = "/Users/sarker/Dropbox/Project_HCBD/Experiments/nesy-2017/";
 //        String p2 = "/Users/sarker/Dropbox/Project_HCBD/Experiments/nesy-2017/sumo_with_wordnet.owl";
 //
 //        test1(p1, p2, ontoIRIString);
+
         OntoCombiner ontoCombiner = new OntoCombiner("http://www.daselab.com/residue/analysis");
+        // combineOntologies(String outputPath, String traversingRootPath, String csvPath, String csvColumnName, boolean useFileNameExtender, String fileNameExtender)
         ontoCombiner.combineOntologies(
-                "/Users/sarker/Workspaces/Jetbrains/residue/experiments/7_IFP/Entities_With_Ontology/tmp/7_ifp_combined_with_wiki_V3.owl",
-                "/Users/sarker/Workspaces/Jetbrains/residue/experiments/7_IFP/Entities_With_Ontology/tmp");
+                "/Users/sarker/Workspaces/Jetbrains/residue-emerald/emerald/data/classification_data_by_srikanth/combined_owls_untill_6_14_2020.owl",
+                "/Users/sarker/Workspaces/Jetbrains/residue-emerald/emerald/data/ade20k_images_and_owls",
+                "/Users/sarker/Workspaces/Jetbrains/residue-emerald/emerald/data/classification_data_by_srikanth/images_untill_6_14_2020.csv",
+                "image_names",
+                true,
+                "_wiki");
 
 
     }
