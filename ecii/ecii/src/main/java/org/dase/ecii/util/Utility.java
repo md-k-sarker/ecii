@@ -317,9 +317,12 @@ public class Utility {
         return confidenceValue;
     }
 
-    /*
-    Parse csv files using apache comons
-    http://commons.apache.org/proper/commons-csv/user-guide.html
+    /**
+     * Parse csv files using apache commons
+     * http://commons.apache.org/proper/commons-csv/user-guide.html
+     * @param csvPath
+     * @param withHeader
+     * @return
      */
     public static CSVParser parseCSV(String csvPath, boolean withHeader) {
         CSVParser csvRecords = null;
@@ -337,7 +340,10 @@ public class Utility {
     }
 
     /**
-     *  This works perfectly, tested with TestUtility.testWriteToCSV
+     * Write data to csv file.
+     * This can wirte data like pandas dataframe, where we can specify column name and column values, row by row.
+     *
+     * This works perfectly, tested with TestUtility.testWriteToCSV
      * @param csvPath
      * @param columnNames
      * @param columnValues
@@ -445,6 +451,11 @@ public class Utility {
         return dateFormat;
     }
 
+    /**
+     * Provide Stack trace of exception as string
+     * @param e
+     * @return
+     */
     public static String getStackTraceAsString(Exception e) {
 
         StringWriter sw = new StringWriter();
@@ -453,7 +464,6 @@ public class Utility {
         String sStackTrace = sw.toString(); // stack trace as a string
         return sStackTrace;
     }
-
 
     /**
      * Precompute inference using owlreasoner
@@ -557,7 +567,6 @@ public class Utility {
         return owlReasoner;
     }
 
-
     /**
      * extract prefixes from the conf file content. if the prefixes don't include new line then java properties
      * can extract this but it may have new line. so need regular expression.
@@ -607,7 +616,6 @@ public class Utility {
 
         return prefixes;
     }
-
 
     /**
      * Read object properties from the conf file.
@@ -688,16 +696,17 @@ public class Utility {
         return entityIRIs;
     }
 
-
     /**
      * Create an valid IRI based on the given string. Given name must be ex:ob1 or :ob1 or ob1 format format.
      * if only ob1 is given then it must be full name. like www.http://hcbd.org#indi
+     *
+     * It looks prefix mapping on ConfigParams.prefixes, so when looking it must not be null.
      *
      * @param entityFullName: String. format must be ex:indi or :indi or indi.
      * @return IRI
      */
     public static IRI createEntityIRI(String entityFullName) throws MalFormedIRIException {
-        String prefix;
+        String prefix="";
         String suffix;
         String[] parts;
         // parts[0] is prefix
@@ -714,7 +723,12 @@ public class Utility {
 
                     suffix = parts[1];
                     // if parts[0] is empty or "" then it will get the default prefix from the prefixes hashmap.
-                    prefix = ConfigParams.prefixes.get(parts[0]);
+                    if(null != ConfigParams.prefixes) {
+                        prefix = ConfigParams.prefixes.get(parts[0]);
+                    }else {
+                        logger.error("Looking prefix mapping on ConfigParams.prefixes while it is null.");
+                        return null;
+                    }
                     return createEntityIRI(prefix, suffix);
                 }
             } else {
@@ -727,7 +741,6 @@ public class Utility {
             return IRI.create(entityFullName);
         }
     }
-
 
     /**
      * Create an valid IRI based on the given prefix and suffix.
@@ -753,7 +766,6 @@ public class Utility {
             return null;
         }
     }
-
 
     public static IRI getUniqueIRI() {
         ++SharedDataHolder.newIRICounter;
@@ -803,7 +815,6 @@ public class Utility {
         return posIndivs;
     }
 
-
     /**
      * Read neg examples from the conf confFile
      *
@@ -846,7 +857,6 @@ public class Utility {
         return negIndivs;
     }
 
-
     /**
      * @param indivs:    array of string. example: ex:indi1, ex:indi2
      * @param indivsSet: the set where indivs should be added.
@@ -867,7 +877,6 @@ public class Utility {
         }
         return indivsSet;
     }
-
 
     /**
      * Read ontology path from conf confFile
@@ -906,7 +915,6 @@ public class Utility {
 
         return ontoPath;
     }
-
 
     /**
      * Removes concepts which are direct subclassof owl:Thing and don't have any subclass.

@@ -150,4 +150,45 @@ public class SharedDataHolder {
      */
     public static int newIRICounter = 0;
 
+
+    /**
+     * clean the shared data holders.
+     * should be called before starting the each induction operation.
+     */
+    public static void cleanSharedDataHolder() {
+
+        SharedDataHolder.objProperties.clear();
+        SharedDataHolder.posIndivs.clear();
+        SharedDataHolder.negIndivs.clear();
+
+        SharedDataHolder.objectsInPosIndivs.clear();
+        SharedDataHolder.objectsInNegIndivs.clear();
+
+        SharedDataHolder.typeOfObjectsInPosIndivs = new HashMap<>();
+        SharedDataHolder.typeOfObjectsInNegIndivs = new HashMap<>();
+
+        SharedDataHolder.sortedTypeOfObjectsInNegIndivs = new HashMap<>();
+        SharedDataHolder.sortedTypeOfObjectsInNegIndivs = new HashMap<>();
+
+        SharedDataHolder.individualHasObjectTypes = new HashMap<>();
+
+        SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.clear();
+        SharedDataHolder.IndividualsOfThisOWLClassExpressionByECII.clear();
+
+        SharedDataHolder.sortedByReasonerCandidateSolutionV0List.clear();
+
+        SharedDataHolder.candidateSolutionV0Set.clear();
+        // HashMap<Solution:solution,Boolean:shouldTraverse> SolutionsMap
+        SharedDataHolder.sortedCandidateSolutionV0List.clear();
+
+        SharedDataHolder.CandidateSolutionSetV1.clear();
+        SharedDataHolder.SortedCandidateSolutionListV1.clear();
+
+        SharedDataHolder.CandidateSolutionSetV2.clear();
+        SharedDataHolder.SortedCandidateSolutionListV2.clear();
+
+        SharedDataHolder.newIRICounter = 0;
+    }
+
+
 }

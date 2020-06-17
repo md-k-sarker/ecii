@@ -71,7 +71,7 @@ public class CreateOWLFromADE20kAndMapwithWiki {
                     filter(f -> f.toFile().isFile() && f.toFile().getAbsolutePath().endsWith(".txt")).
                     forEach(f -> {
                         try {
-//                            processSuperClass(f);
+//                            createSuperClassName(f);
                             createOWL(f);
                             printStatus(f.toString());
                         } catch (Exception e) {
@@ -130,7 +130,7 @@ public class CreateOWLFromADE20kAndMapwithWiki {
             // createOWL(Paths.get(rootPathNingManual));
             // Files.walk(Paths.get(rootPath)).filter(f -> f.toFile().isFile())
             // .filter(f -> f.toFile().getAbsolutePath().endsWith(".txt")).forEach(f ->
-            // processSuperClass(f));
+            // createSuperClassName(f));
             //            createOWL(Paths.get("/Users/sarker/Workspaces/Jetbrains/" +
             //                    "residue-emerald/emerald/data/ade20k_images_and_owls/training/a/abbey/ADE_train_00000970_atr.txt"));
         } catch (Exception e) {
@@ -200,8 +200,10 @@ public class CreateOWLFromADE20kAndMapwithWiki {
         }
     }
 
-    /*
+    /**
      *
+     * @param filePath
+     * @throws Exception
      */
     public static void createOWL(Path filePath) throws Exception {
 

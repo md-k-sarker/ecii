@@ -287,23 +287,24 @@ public class CandidateSolutionFinderV2 {
                 conjunctiveHornClauseV1V2.addPosObjectType(posOwlClassExpression);
 
                 // create candidate class
-                CandidateClassV2 CandidateClassV2 = new CandidateClassV2(owlObjectProperty, reasoner, ontology);
-                CandidateClassV2.addConjunctiveHornClauses(conjunctiveHornClauseV1V2);
+                CandidateClassV2 candidateClassV2 = new CandidateClassV2(owlObjectProperty, reasoner, ontology);
+                candidateClassV2.addConjunctiveHornClauses(conjunctiveHornClauseV1V2);
 
                 // create candidate solution
-                CandidateSolutionV2 CandidateSolutionV2 = new CandidateSolutionV2(reasoner, ontology);
-                CandidateSolutionV2.addCandidateClass(CandidateClassV2);
-                boolean added = addToSolutions(CandidateSolutionV2);
+                CandidateSolutionV2 candidateSolutionV2 = new CandidateSolutionV2(reasoner, ontology);
+                candidateSolutionV2.addCandidateClass(candidateClassV2);
+                boolean added = addToSolutions(candidateSolutionV2);
                 if (added) {
                     // save temporarily for combination
                     Score hornClauseScore = conjunctiveHornClauseV1V2.calculateAccuracyComplexCustom();
                     conjunctiveHornClauseV1V2.setScore(hornClauseScore);
                     HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1V2);
 
-                    Score candidateClassScore = CandidateClassV2.calculateAccuracyComplexCustom();
-                    CandidateClassV2.setScore(candidateClassScore);
-                    HashMapUtility.insertIntoHashMap(candidateClassesMap, owlObjectProperty, CandidateClassV2);
+                    Score candidateClassScore = candidateClassV2.calculateAccuracyComplexCustom();
+                    candidateClassV2.setScore(candidateClassScore);
+                    HashMapUtility.insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClassV2);
                 }
+
             });
         });
         logger.info("solution using only a single positive type finished. Total solutions: " + SharedDataHolder.CandidateSolutionSetV2.size());
@@ -322,8 +323,9 @@ public class CandidateSolutionFinderV2 {
                 logger.info(" \t size of typeOfObjectsInPosIndivs hashMap after limiting: " + hashMap.size());
             }
 
+            logger.info(" \t size of typeOfObjectsInPosIndivs hashMap after limiting: " + hashMap.size());
             hashMap.forEach((posOwlClassExpression, integer) -> {
-
+                logger.info("posOwlClassExpression: "+ posOwlClassExpression);
                 ArrayList<OWLClassExpression> posTypeOwlSubClassExpressions = new ArrayList<>(
                         reasoner.getSubClasses(posOwlClassExpression, false).getFlattened().stream().collect(Collectors.toList()));
 
@@ -347,7 +349,13 @@ public class CandidateSolutionFinderV2 {
                             // create candidate solution
                             CandidateSolutionV2 candidateSolution = new CandidateSolutionV2(reasoner, ontology);
                             candidateSolution.addCandidateClass(candidateClass);
+                            ////////////////////////////////////////
+                            ///// taking long time
+                            logger.info("addToSolutions() started.............");
                             boolean added = addToSolutions(candidateSolution);
+                            logger.info("addToSolutions() finished");
+                            /////////////////////////////////////
+                            logger.info("creating candidate solution finished: "+ candidateSolution.getSolutionAsString(false));
                             if (added) {
                                 // save temporarily for combination
                                 Score hornClauseScore = conjunctiveHornClause.calculateAccuracyComplexCustom();
@@ -358,6 +366,7 @@ public class CandidateSolutionFinderV2 {
                                 candidateClass.setScore(candidateClassScore);
                                 HashMapUtility.insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClass);
                             }
+                            logger.info("adding candidate solution finished: "+ candidateClassesMap.size());
                         }
                     }
                 });
@@ -389,9 +398,10 @@ public class CandidateSolutionFinderV2 {
                     logger.info("\t HashMap<OWLClassExpression, Integer> size after limiting:  " + limitedPosTypes.size());
 
                     // positive portion
-                    ArrayList<ArrayList<OWLClassExpression>> listCombinationOfPosClassesForPosPortion;
+                    ArrayList<ArrayList<OWLClassExpression>> listCombinationOfPosClassesForPosPortion = new ArrayList<>();
                     // making a list of 2 item means it will consist of single item, this is to reduce the code from uppper portions.
-                    listCombinationOfPosClassesForPosPortion = Utility.combinationHelper(limitedPosTypes, 2);
+                    if (ConfigParams.conceptLimitInPosExpr >= 2)
+                        listCombinationOfPosClassesForPosPortion = Utility.combinationHelper(limitedPosTypes, 2);
                     // combination of 3 to the limit
                     for (int combinationCounter = 3; combinationCounter < ConfigParams.conceptLimitInPosExpr; combinationCounter++) {
                         listCombinationOfPosClassesForPosPortion.addAll(Utility.combinationHelper(limitedPosTypes, combinationCounter));
@@ -529,9 +539,10 @@ public class CandidateSolutionFinderV2 {
             ArrayList<ConjunctiveHornClauseV1V2> hornClauseArrayList = new ArrayList<>(conjunctiveHornClauses);
             logger.info("\thorn clause size: " + hornClauseArrayList.size());
 
-            ArrayList<ArrayList<ConjunctiveHornClauseV1V2>> listCombinationOfHornClauses;
+            ArrayList<ArrayList<ConjunctiveHornClauseV1V2>> listCombinationOfHornClauses = new ArrayList<>();
             // combination of 2
-            listCombinationOfHornClauses = Utility.combinationHelper(hornClauseArrayList, 2);
+            if (ConfigParams.hornClauseLimit >= 2)
+                listCombinationOfHornClauses = Utility.combinationHelper(hornClauseArrayList, 2);
             // combination from 3 to upto ccombinationLimit
             for (int combinationCounter = 3; combinationCounter <= ConfigParams.hornClauseLimit; combinationCounter++) {
                 // combination of combinationCounter
@@ -821,9 +832,10 @@ public class CandidateSolutionFinderV2 {
         ArrayList<OWLObjectProperty> objectPropertyArrayList = new ArrayList<>(SharedDataHolder.objProperties.keySet());
 
         // combination of all positiveType
-        ArrayList<ArrayList<OWLObjectProperty>> listCombination;
+        ArrayList<ArrayList<OWLObjectProperty>> listCombination = new ArrayList<>();
         // combination of 2
-        listCombination = Utility.combinationHelper(objectPropertyArrayList, 2);
+        if (ConfigParams.objPropsCombinationLimit >= 2)
+            listCombination = Utility.combinationHelper(objectPropertyArrayList, 2);
 
         // combination from 3 to upto conceptsCombinationLimit or k3 limit
         for (int combinationCounter = 3; combinationCounter <= ConfigParams.objPropsCombinationLimit; combinationCounter++) {

@@ -15,6 +15,7 @@ import java.util.Arrays;
 /**
  * Class to copy image/any file from one directory to another directory.
  * This is primarily used to copy image files of ade20k dataset.
+ * @deprecated, we are using now python copier
  */
 public class CopyImageFiles {
 

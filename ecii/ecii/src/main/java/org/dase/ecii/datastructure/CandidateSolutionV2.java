@@ -59,7 +59,7 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
  *  *   Inside of a group, we have multiple candidateClass
  *  *       multiple candidateClass are conjuncted.
  *
- *  *       Inside of CandidateClassV0:
+ *  *       Inside of CandidateClassV2:
  *  *           multiple horclauses are conjuncted
  *
  * * Implementation note:
@@ -417,6 +417,8 @@ public class CandidateSolutionV2 {
 
         int rFilledSize = 0;
         // print r filled type then
+        // problematic or view problem: ∃ :imageContains.((:Unsolved_problems_in_physics ⊓ :Materials) ⊓ (:Unsolved_problems_in_physics ⊓ :Phases_of_matter))
+        // can we make it: ∃ :imageContains.((:Unsolved_problems_in_physics ⊓ :Materials ⊓ :Phases_of_matter) )
         for (Map.Entry<OWLObjectProperty, ArrayList<CandidateClassV2>> entry : groupedCandidateClasses.entrySet()) {
 
             // each group will be concatenated by AND.
@@ -438,12 +440,13 @@ public class CandidateSolutionV2 {
                             sb.append(candidateClasses.get(0).getCandidateClassAsString(includePrefix));
                         } else {
                             sb.append("(");
+                            ////////////////
                             sb.append(candidateClasses.get(0).getCandidateClassAsString(includePrefix));
-
                             for (int i = 1; i < candidateClasses.size(); i++) {
                                 sb.append(" " + OR.toString() + " ");
                                 sb.append(candidateClasses.get(i).getCandidateClassAsString(includePrefix));
                             }
+                            ///////////////
                             sb.append(")");
                         }
                     }
@@ -538,6 +541,8 @@ public class CandidateSolutionV2 {
 
     /**
      * Calculate accuracy of a solution, according to the new method.
+     * This essentially do the calculation by using reasoner. Reasoner chokes up/takes long time if ontology contains lot of individuals.
+     * even though the individuals are not related to our experiment!!!!!!!!!!!
      * TODO(Zaman) : need to fix the accuracy calculation for v2
      *
      * @return

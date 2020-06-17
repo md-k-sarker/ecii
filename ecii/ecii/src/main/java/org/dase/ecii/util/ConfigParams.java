@@ -40,7 +40,7 @@ public final class ConfigParams {
     /**
      *
      */
-    public static String resultFileExtension = "_results_ecii_v2.txt";
+    public static String resultFileExtension = "";
     /**
      * K7/atomic types both appeared in positive and negative
      */
@@ -52,6 +52,7 @@ public final class ConfigParams {
      */
     public static int conceptLimitInNegExpr;
     /**
+     * Number of allowable hornClause inside of a candidateClass.
      * This is also called as K2
      */
     public static int hornClauseLimit;
@@ -196,7 +197,7 @@ public final class ConfigParams {
 
             conceptLimitInPosExpr = Integer.valueOf(prop.getProperty("conceptLimitInPosExpr", "2"));
             conceptLimitInNegExpr = Integer.valueOf(prop.getProperty("conceptLimitInNegExpr", "2"));
-            hornClauseLimit = Integer.valueOf(prop.getProperty("hornClauseLimit", "2"));
+            hornClauseLimit = 1; //Integer.valueOf(prop.getProperty("hornClauseLimit", "2"));
             objPropsCombinationLimit = Integer.valueOf(prop.getProperty("objPropsCombinationLimit", "2"));
             hornClausesListMaxSize = Integer.valueOf(prop.getProperty("hornClausesListMaxSize", "10"));
             candidateClassesListMaxSize = Integer.valueOf(prop.getProperty("candidateClassesListMaxSize", "10"));
@@ -206,6 +207,7 @@ public final class ConfigParams {
             negClassListMaxSize = Integer.valueOf(prop.getProperty("negClassListMaxSize", "20"));
             runPairwiseSimilarity = Boolean.parseBoolean(prop.getProperty("removeCommonTypes", "false"));
             ascendingOfStringLength = Boolean.parseBoolean(prop.getProperty("ascendingOfStringLength", "false"));
+            resultFileExtension = prop.getProperty("resultFileExtension","_results_ecii_v2.txt");
 
             confFileDir = Paths.get(confFilePath).getParent().toString();
             String replacement = ConfigParams.resultFileExtension;

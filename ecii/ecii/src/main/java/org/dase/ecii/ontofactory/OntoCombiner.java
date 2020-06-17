@@ -38,15 +38,12 @@ public class OntoCombiner {
     final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static Monitor monitor;
-    private HashSet<OWLAxiom> owlAxioms = new HashSet<>();
-
-//    private static HashSet<OWLAxiom> owlAxioms = new HashSet<>();
 
     /* Folder name is the key and set< of .owl file> (annotations files) are the value.*/
     private HashMap<String, HashSet<String>> fileBrowserMapping = new HashMap<>();
-    //    private String outputOntoIRIString = "http://www.daselab.org/ontologies/ADE20K/hcbdwsu";
 
     public String outputOntoIRIString = "";
+    private HashSet<OWLAxiom> owlAxioms = new HashSet<>();
 
     public OntoCombiner(String outputOntoIRIString) {
         this.outputOntoIRIString = outputOntoIRIString;
@@ -64,11 +61,22 @@ public class OntoCombiner {
         return owlAxioms.size();
     }
 
+    /**
+     *
+     * @param path
+     * @param iri
+     */
     public void saveOntology(String path, String iri) {
         IRI ontoIRI = IRI.create(iri);
         saveOntology(path, ontoIRI);
     }
 
+    /**
+     *
+     * @param owlAxioms
+     * @param path
+     * @param iri
+     */
     public void saveOntology(HashSet<OWLAxiom> owlAxioms, String path, String iri) {
         IRI ontoIRI = IRI.create(iri);
         saveOntology(owlAxioms, path, ontoIRI);
@@ -76,6 +84,8 @@ public class OntoCombiner {
 
     /**
      * Create an ontology using all the axioms in owlAxioms.
+     * @param savingPath
+     * @param ontologyIRI
      */
     public void saveOntology(String savingPath, IRI ontologyIRI) {
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -89,8 +99,12 @@ public class OntoCombiner {
         }
     }
 
+
     /**
      * Create an ontology using all the axioms in owlAxioms.
+     * @param owlAxioms
+     * @param savingPath
+     * @param ontologyIRI
      */
     public void saveOntology(HashSet<OWLAxiom> owlAxioms, String savingPath, IRI ontologyIRI) {
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -178,7 +192,6 @@ public class OntoCombiner {
         logger.info("############Printing small Onto File Names finished.");
     }
 
-
     /**
      * Iterate over folders/files to combine ontologies.
      */
@@ -229,49 +242,6 @@ public class OntoCombiner {
     }
 
 
-//    private void combineAllSmallOntoFromADE20KWithSumo(String ade2krootPath, String OntoCombinerSavingPath, String sumoPath) {
-//        try {
-//            String[] paths = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "y", "z"};
-//            for (int i = 0; i < paths.length; i++) {
-//
-//                if (i > 0) {
-//                    traversingRootPath = ade2krootPath.replace("/" + paths[i - 1] + "/", "/" + paths[i] + "/");
-//
-//                    OntoCombinerSavingPath = OntoCombinerSavingPath.replace("_" + paths[i - 1] + ".owl", "_" + paths[i] + ".owl");
-//
-//                    OntoCombinerLogPath = OntoCombinerLogPath.replace("_" + paths[i - 1] + ".log", "_" + paths[i] + ".log");
-//                } else {
-//
-//                }
-//                owlAxioms = new HashSet<>();
-//                fileBrowserMapping = new HashMap<>();
-//
-//                logger.info("Program started.............");
-//                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(OntoCombinerLogPath));
-//                PrintStream printStream = new PrintStream(bos, true);
-//                monitor = new Monitor(printStream);
-//
-//
-//                System.out.println("traversingRootPath: " + traversingRootPath);
-//                System.out.println("OntoCombinerSavingPath: " + OntoCombinerSavingPath);
-//                System.out.println("OntoCombinerLogPath: " + OntoCombinerLogPath);
-//                Log4JLogger l = new Log4JLogger();
-//
-//                doOps(sumoPath);
-//
-//                printStream.close();
-//            }
-//
-//        } catch (FileNotFoundException ex) {
-//            logger.error("!!!!!!!!!!!!OWLOntologyCreationException!!!!!!!!!!!!");
-//            logger.error(Utility.getStackTraceAsString(ex));
-//            monitor.stopSystem("Stopping program", true);
-//        } finally {
-//            monitor.stopSystem("Program finished", true);
-//        }
-//    }
-
-
     /**
      * @param outputPath
      * @param inputDirPath
@@ -305,12 +275,15 @@ public class OntoCombiner {
 
 
     /**
-     * This function takes the images names of ADE20K which are written in csv file.
-     * Then search for the owl files matching the image names and then
-     * combine those ontologies.
+     * This function takes the raw entity names (images names of ADE20K or text entity names for ifp) which are written in csv file.
+     * Then search for the owl files matching the entity names and create hashmap of the owlfilespath
      *
      * @param outputPath
+     * @param traversingRootPath
      * @param csvPath
+     * @param csvColumnName
+     * @param useFileNameExtender
+     * @param fileNameExtender
      */
     public void combineOntologies(String outputPath, String traversingRootPath, String csvPath, String csvColumnName, boolean useFileNameExtender, String fileNameExtender) {
         try {
@@ -356,7 +329,6 @@ public class OntoCombiner {
             logger.error("Exception!!!!!!!!!" + Utility.getStackTraceAsString(e));
         }
     }
-
 
     /**
      *
@@ -445,13 +417,12 @@ public class OntoCombiner {
         OntoCombiner ontoCombiner = new OntoCombiner("http://www.daselab.com/residue/analysis");
         // combineOntologies(String outputPath, String traversingRootPath, String csvPath, String csvColumnName, boolean useFileNameExtender, String fileNameExtender)
         ontoCombiner.combineOntologies(
-                "/Users/sarker/Workspaces/Jetbrains/residue-emerald/emerald/data/classification_data_by_srikanth/combined_owls_untill_6_14_2020.owl",
-                "/Users/sarker/Workspaces/Jetbrains/residue-emerald/emerald/data/ade20k_images_and_owls",
+                "/Users/sarker/Workspaces/Jetbrains/residue-emerald/emerald/data/classification_data_by_srikanth/combined_small_owls_sumo_iri_untill_6_14_2020.owl",
+                "/Users/sarker/Dropbox/Emerald-Tailor-Expr-Data/ade20k_images_and_owls",
                 "/Users/sarker/Workspaces/Jetbrains/residue-emerald/emerald/data/classification_data_by_srikanth/images_untill_6_14_2020.csv",
                 "image_names",
-                true,
+                false,
                 "_wiki");
-
 
     }
 

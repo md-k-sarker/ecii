@@ -42,15 +42,32 @@ public class CreateOWLFromADE20k {
 
     public static int counter = 0;
 
+    /**
+     * private constructor
+     */
+    public CreateOWLFromADE20k() {
+
+    }
+
+    /**
+     * Main method
+     * @param args
+     */
     public static void main(String[] args) {
         try {
+
+            CreateOWLFromADE20k createOWLFromADE20k = new CreateOWLFromADE20k();
 
             Files.walk(Paths.get(rootPath)).
                     filter(f -> f.toFile().isFile() && f.toFile().getAbsolutePath().endsWith(".txt")).
                     forEach(f -> {
                         try {
-                            iterateOverFiles(f);
-                            //createOWL(f);
+                            SuperClassFacilitator superClassFacilitator = createOWLFromADE20k.createSuperClassName(f);
+                            createOWLFromADE20k.createOWL(superClassFacilitator.path,
+                                    superClassFacilitator.owlClassName,
+                                    superClassFacilitator.shouldCreateSuperClass,
+                                    superClassFacilitator.owlSuperClassName);
+                            createOWLFromADE20k.printStatus(superClassFacilitator.path.toString());
                         } catch (Exception e) {
                             e.printStackTrace();
                             System.out.println("Error Occurred: " + e.toString());
@@ -60,7 +77,7 @@ public class CreateOWLFromADE20k {
             // createOWL(Paths.get(rootPathNingManual));
             // Files.walk(Paths.get(rootPath)).filter(f -> f.toFile().isFile())
             // .filter(f -> f.toFile().getAbsolutePath().endsWith(".txt")).forEach(f ->
-            // processSuperClass(f));
+            // createSuperClassName(f));
             // createOWL(
             // "D:/QQDownload/ADE20K_2016_07_26/ADE20K_2016_07_26/images/training/a/abbey/ADE_train_00000970_atr.txt",
             // "Abbey");
@@ -69,7 +86,17 @@ public class CreateOWLFromADE20k {
         }
     }
 
-    public static void iterateOverFiles(Path path) {
+    /**
+     * @param path
+     */
+    /**
+     * Create class name and super class name by taking the path name of a text file.
+     * This is written for the ADE20K images atrribute files.
+     *
+     * @param path the path of the text file which has ade20k like directory structures. has attributes
+     * @return SuperClassFacilitator
+     */
+    public SuperClassFacilitator createSuperClassName(Path path) {
         String parent = path.getParent().getFileName().toString();
         // added on may 13
         String[] parts = parent.split("_");
@@ -108,19 +135,38 @@ public class CreateOWLFromADE20k {
             System.out.println("else condition: " + "\n\towl_class_name: " + owl_class_name + "\n\towl_super_class_name: " + owl_super_class_name);
         }
 
-        // call to create owl files
-        try {
-            // System.out.println("#########: "+ path.toString());
-            // D:\QQDownload\ADE20K_2016_07_26\ADE20K_2016_07_26\images\training\a\airport_terminal\ADE_train_00001150_atr.txt
-            createOWL(path, owl_class_name, shouldCreateSuperClass, owl_super_class_name);
-            printStatus(path.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        SuperClassFacilitator superClassFacilitator = new SuperClassFacilitator(
+                path,
+                owl_class_name,
+                shouldCreateSuperClass,
+                owl_super_class_name);
 
+        return superClassFacilitator;
     }
 
-    public static void printStatus(String status) {
+    /**
+     * Internal class to facilitate the parameter passing of different methods.
+     */
+    private class SuperClassFacilitator {
+        public Path path;
+        public String owlClassName;
+        public boolean shouldCreateSuperClass;
+        public String owlSuperClassName;
+
+        public SuperClassFacilitator(Path path, String owlClassName, boolean shouldCreateSuperClass, String owlSuperClassName) {
+            if (null != path && owlClassName != null && owlSuperClassName != null) {
+                this.path = path;
+                this.owlClassName = owlClassName;
+                this.shouldCreateSuperClass = shouldCreateSuperClass;
+                this.owlSuperClassName = owlSuperClassName;
+            }
+        }
+    }
+
+    /**
+     * @param status
+     */
+    public void printStatus(String status) {
         try {
             counter++;
             System.out.println("creating owl from file: " + status + " is successfull");
@@ -131,6 +177,11 @@ public class CreateOWLFromADE20k {
         }
     }
 
+    /**
+     * @param score
+     * @param owlDataFactory
+     * @return
+     */
     public static OWLObjectProperty getObjectProperty(Double score, OWLDataFactory owlDataFactory) {
         if (score < 0 || score > 1) {
             return null;
@@ -395,11 +446,16 @@ public class CreateOWLFromADE20k {
 
     }
 
-    /*
+    /**
      *
+     * @param filePath
+     * @param owl_class_name
+     * @param shouldCreateSuperClass
+     * @param owl_super_class_name
+     * @throws Exception
      */
-    public static void createOWL(Path filePath, String owl_class_name, boolean shouldCreateSuperClass,
-                                 String owl_super_class_name) throws Exception {
+    public void createOWL(Path filePath, String owl_class_name, boolean shouldCreateSuperClass,
+                          String owl_super_class_name) throws Exception {
 
         File f = filePath.toFile();
         String imageName = f.getName().replaceAll("_atr.txt", "");
@@ -610,7 +666,7 @@ public class CreateOWLFromADE20k {
 
         // Save Ontology
         owlManager.saveOntology(ontology, new OWLXMLDocumentFormat(), owlDiskFileIRI);
-        System.out.println("ontology has total "+ ontology.getAxioms().size() + " axioms");
+        System.out.println("ontology has total " + ontology.getAxioms().size() + " axioms");
         System.out.println("saved on file: " + owlDiskFileIRI + "\nSuccessfull");
     }
 }

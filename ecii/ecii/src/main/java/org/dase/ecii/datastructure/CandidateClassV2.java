@@ -47,7 +47,7 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.AND;
  *  Here, (B1 ⊓ ... ⊓ Bn ⊓ ¬(D1 ⊔...⊔ Djk)) is a conjunctive HornClause.
  *
  *
- * There is a limit  on how many conjunctive horn clauses may be added.
+ * There is a limit on how many conjunctive horn clauses may be added.
  * That is called K2.
  * k2 = limit of horn clauses. = ConfigParams.hornClauseLimit.
  * </pre>

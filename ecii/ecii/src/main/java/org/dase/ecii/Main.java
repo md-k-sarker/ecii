@@ -32,7 +32,12 @@ import java.text.DateFormat;
 import java.util.*;
 
 /**
- * Main class to initiate the induction process
+ * Main class to initiate the different processes
+ * 1. Concept Induction -e
+ * 2. Measure similarity -m
+ * 3. Combine Ontoloty -c
+ * 4. Strip ontology -s
+ * 5. Ontology creation -o
  */
 public class Main {
 
@@ -44,9 +49,6 @@ public class Main {
     private static OWLReasoner owlReasoner;
     private static PrintStream outPutStream;
     private static Monitor monitor;
-
-    static String alreadyGotResultPath = "/home/sarker/MegaCloud/ProjectHCBD/experiments/ade_with_wn_sumo/automated/without_score_got_result/";
-    static ArrayList<String> alreadyGotResult = new ArrayList<String>();
 
     private static JTextPane jTextPane;
 
@@ -84,40 +86,8 @@ public class Main {
      * should be called before starting the each induction operation.
      */
     private static void cleanSharedDataHolder() {
-
-        SharedDataHolder.objProperties.clear();
-        SharedDataHolder.posIndivs.clear();
-        SharedDataHolder.negIndivs.clear();
-
-        SharedDataHolder.objectsInPosIndivs.clear();
-        SharedDataHolder.objectsInNegIndivs.clear();
-
-        SharedDataHolder.typeOfObjectsInPosIndivs = new HashMap<>();
-        SharedDataHolder.typeOfObjectsInNegIndivs = new HashMap<>();
-
-        SharedDataHolder.sortedTypeOfObjectsInNegIndivs = new HashMap<>();
-        SharedDataHolder.sortedTypeOfObjectsInNegIndivs = new HashMap<>();
-
-        SharedDataHolder.individualHasObjectTypes = new HashMap<>();
-
-        SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.clear();
-        SharedDataHolder.IndividualsOfThisOWLClassExpressionByECII.clear();
-
-        SharedDataHolder.sortedByReasonerCandidateSolutionV0List.clear();
-
-        SharedDataHolder.candidateSolutionV0Set.clear();
-        // HashMap<Solution:solution,Boolean:shouldTraverse> SolutionsMap
-        SharedDataHolder.sortedCandidateSolutionV0List.clear();
-
-        SharedDataHolder.CandidateSolutionSetV1.clear();
-        SharedDataHolder.SortedCandidateSolutionListV1.clear();
-
-        SharedDataHolder.CandidateSolutionSetV2.clear();
-        SharedDataHolder.SortedCandidateSolutionListV2.clear();
-
-        SharedDataHolder.newIRICounter = 0;
+        SharedDataHolder.cleanSharedDataHolder();
     }
-
 
     /**
      * Initiate the start of a single operation
@@ -322,7 +292,7 @@ public class Main {
         try {
             // iterate over the files of a the folder
             Files.walk(dirPath).filter(f -> f.toFile().isFile())
-                    .filter(f -> f.toFile().getAbsolutePath().endsWith(".config"))
+                    .filter(f -> f.toFile().getAbsolutePath().endsWith(".config") && f.toFile().getAbsolutePath().contains("_sumo_bkg_"))
                     .forEach(f -> {
                         // will get each file
                         String resultantFilePath = f.toString().replace(".config", ConfigParams.resultFileExtension);
@@ -446,6 +416,8 @@ public class Main {
     }
 
     /**
+     * Combine the ontologies.
+     * It calls the ontocombiner and provide different arguments to do the different type of combining.
      * @param inputOntologiesDirectory
      * @param outputOntologyIRI
      */
@@ -534,7 +506,12 @@ public class Main {
 
     }
 
-
+    /**
+     * Decide the different operations by this program.
+     * This should be called if the arguments start with -m, -e, -o, -s, -c
+     * @param args
+     * @return
+     */
     private static boolean decideOp(String[] args) {
 
         StringBuilder sb = new StringBuilder();
@@ -662,9 +639,6 @@ public class Main {
      * @throws IOException
      */
     public static void main(String[] args) throws OWLOntologyCreationException, IOException, MalFormedIRIException {
-
-        PropertyConfigurator.configure("/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/main/resources/log4j.properties");
-
 
 //        Files.walk(Paths.get("/Users/sarker/Workspaces/Jetbrains/residue/experiments/7_IFP/Entities_With_Ontology/raw_expr/"))
 //                .filter(Files::isRegularFile)
