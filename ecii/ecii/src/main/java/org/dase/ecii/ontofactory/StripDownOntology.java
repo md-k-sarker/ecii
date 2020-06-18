@@ -7,11 +7,15 @@ Written at 3/7/20.
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.log4j.PropertyConfigurator;
+import org.dase.ecii.core.SharedDataHolder;
 import org.dase.ecii.ontofactory.strip.ListofObjPropAndIndiv;
 import org.dase.ecii.ontofactory.strip.ListofObjPropAndIndivTextualName;
 import org.dase.ecii.util.Utility;
 import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.model.parameters.ChangeApplied;
+import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.search.EntitySearcher;
+import org.semanticweb.owlapi.util.OWLEntityRemover;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,17 +26,17 @@ import java.util.*;
  * Prune the ontology.
  * Input:
  * 1. Ontology, (possibly a large ontology, in our case the wikipedia hierarchy)
- * 2. Entities
- * 3. Object properties (in most case we do indiv1 imgContains obj1 and then we look for the type of obj1)
+ * 2. Entities (proving by csv files)
+ * 3. Object properties (in most case we have indiv1 imgContains obj1 and then we look for the type of obj1)
  * <p>
  * Output:
  * 1. Pruned ontology (will be saved on the given file location)
  * Invariant:
  * Input entities and their corresponding axioms (entity types and super types and associated obj properties) we need to keep
- *
+ * <p>
  * General information:
- *  We should use extractAxiomsRelatedToIndivs(...) this function instead of extractAxiomsRelatedToOWLClasses(...) whenever possible.
- *  See documentation of function extractAxiomsRelatedToIndivs(...) for details.
+ * We should use extractAxiomsRelatedToIndivs(...) this function instead of extractAxiomsRelatedToOWLClasses(...) whenever possible.
+ * See documentation of function extractAxiomsRelatedToIndivs(...) for details.
  */
 public class StripDownOntology {
 
@@ -41,7 +45,7 @@ public class StripDownOntology {
     /**
      * axioms to keep
      */
-    private static HashSet<OWLAxiom> axiomsToKeep = new HashSet<>();
+    private HashSet<OWLAxiom> axiomsToKeep = new HashSet<>();
 
     /**
      * Ontology manipulator
@@ -51,7 +55,6 @@ public class StripDownOntology {
     //    private static OWLOntologyManager outputOntoManager;
     private static OWLDataFactory ontoDataFacotry;
 //    private static OWLOntology outputOntology;
-
     /**
      * Entities/OWLNamedIndividuals we need. After parsing the text file, entities are converted from string to owl entity and saved to this data structure.
      */
@@ -61,6 +64,12 @@ public class StripDownOntology {
      * Entities/OWLNamedIndividuals we need. These are the individuals like obj1 of this triple: indiv1 imgContains obj1
      */
 //    private static HashSet<OWLNamedIndividual> referredIndirectEntities = new HashSet<>();
+
+    /**
+     * public Constructor
+     *
+     * @param inputOntoPath
+     */
     public StripDownOntology(String inputOntoPath) {
         try {
             if (null != inputOntoPath) {
@@ -76,6 +85,7 @@ public class StripDownOntology {
                 logger.info("Onto load time: " + (ontoLoadEndTime - ontoLoadStartTime) / 1000 + " seconds");
 
             } else {
+                logger.error("Can't construct the StripDownOntology constructor");
                 logger.error("Initiating ontology related resources failed!!!!!!!!!!!!! because inputOntoPath is null");
             }
         } catch (Exception ex) {
@@ -84,9 +94,10 @@ public class StripDownOntology {
         }
     }
 
-
     /**
      * Read entity from csv file,
+     * <p>
+     * objectProperty name and Individual names must be on different column of the csv.
      *
      * @param csvFilePath
      * @param objPropColumnName: must remain on csv file
@@ -97,31 +108,40 @@ public class StripDownOntology {
     public ListofObjPropAndIndivTextualName readEntityFromCSVFile(String csvFilePath, String objPropColumnName, String indivColumnName) {
         ListofObjPropAndIndivTextualName listofObjPropAndIndivTextualName = null;
         try {
-            if (null != csvFilePath && null != objPropColumnName && null != indivColumnName) {
-                logger.info("readEntityFromCSVFile started..., input file name: " + csvFilePath);
-                CSVParser csvRecords = Utility.parseCSV(csvFilePath, true);
-                if (null != csvRecords) {
-                    listofObjPropAndIndivTextualName = new ListofObjPropAndIndivTextualName();
+            if (null != csvFilePath) {
+                if (null != objPropColumnName) {
+                    if (null != indivColumnName) {
+                        logger.info("readEntityFromCSVFile started..., input file name: " + csvFilePath);
+                        CSVParser csvRecords = Utility.parseCSV(csvFilePath, true);
+                        if (null != csvRecords) {
+                            listofObjPropAndIndivTextualName = new ListofObjPropAndIndivTextualName();
 
-                    for (CSVRecord strings : csvRecords) {
-                        String objPropName = strings.get(objPropColumnName);
-                        if (null != objPropName && objPropName.length() > 0) {
-                            logger.info("ObjPropName: " + objPropName);
-                            listofObjPropAndIndivTextualName.objPropNames.add(objPropName);
+                            for (CSVRecord strings : csvRecords) {
+                                String objPropName = strings.get(objPropColumnName);
+                                if (null != objPropName && objPropName.length() > 0) {
+                                    logger.info("ObjPropName: " + objPropName);
+                                    listofObjPropAndIndivTextualName.objPropNames.add(objPropName);
+                                }
+                                String indivName = strings.get(indivColumnName);
+                                if (null != indivName && indivName.length() > 0) {
+                                    logger.info("indivName: " + indivName);
+                                    listofObjPropAndIndivTextualName.indivNames.add(indivName);
+                                }
+                            }
                         }
-                        String indivName = strings.get(indivColumnName);
-                        if (null != indivName && indivName.length() > 0) {
-                            logger.info("indivName: " + indivName);
-                            listofObjPropAndIndivTextualName.indivNames.add(indivName);
-                        }
+
+                        logger.info("readEntityFromCSVFile successfull.");
+                        logger.info("Total namedIndividuals row found in csv: " + listofObjPropAndIndivTextualName.indivNames.size());
+                        logger.info("Total objProps row found in csv: " + listofObjPropAndIndivTextualName.objPropNames.size());
+                        return listofObjPropAndIndivTextualName;
+                    } else {
+                        logger.error("readEntityFromCSVFile starting failed!!!!!!!!!!!!! indivColumnName is null!!!!!");
+                        return listofObjPropAndIndivTextualName;
                     }
+                } else {
+                    logger.error("readEntityFromCSVFile starting failed!!!!!!!!!!!!! objPropColumnName is null!!!!!");
+                    return listofObjPropAndIndivTextualName;
                 }
-
-                logger.info("readEntityFromCSVFile successfull.");
-                logger.info("total namedIndividuals row found in csv: " + listofObjPropAndIndivTextualName.indivNames.size());
-                logger.info("total objProps row found in csv: " + listofObjPropAndIndivTextualName.objPropNames.size());
-                return listofObjPropAndIndivTextualName;
-
             } else {
                 logger.error("readEntityFromCSVFile starting failed!!!!!!!!!!!!! input entity file name is null!!!!!");
                 return listofObjPropAndIndivTextualName;
@@ -133,8 +153,9 @@ public class StripDownOntology {
         }
     }
 
-
     /**
+     * Read individual names and their types from csv file.
+     *
      * @param csvFilePath
      * @param indivColumnName
      * @param typeColumnName
@@ -195,12 +216,11 @@ public class StripDownOntology {
         }
     }
 
-
     /**
      * Convert from text to ontology entity
      *
      * @param listofObjPropAndIndivTextualName
-     * @return
+     * @return ListofObjPropAndIndiv
      */
     public ListofObjPropAndIndiv convertToOntologyEntity(ListofObjPropAndIndivTextualName listofObjPropAndIndivTextualName) {
 
@@ -301,7 +321,6 @@ public class StripDownOntology {
         logger.info("converting individuals and their types from text to owlentity successfull.");
         return indivClassMap;
     }
-
 
     /**
      * Process/search indirect indivs from the ontology.
@@ -409,8 +428,9 @@ public class StripDownOntology {
 
     /**
      * keep all superclasses of owlClass by using the recursive call,
-     * constraint: if an owlclass is only subclass of owl:Thing then inputOntology.getAxioms(owlClass) doesn't return any axioms!!!!
-     *
+     * constraint: if an owlclass is only subclass of owl:Thing then and has some individual as instance, then
+     *      inputOntology.getAxioms(owlClass) doesn't return any axioms!!!!
+     * @deprecated
      * @param owlClasses
      * @return
      */
@@ -429,6 +449,15 @@ public class StripDownOntology {
     }
 
     /**
+     * Extract axioms related to an individual and stores those axioms to the
+     * axiomsToKeep field of this class.
+     *
+     * Steps to extract:
+     *      1. Extract axioms related to this individual
+     *      2. Find types of this individual
+     *      3. Extract axioms related to that types
+     *      4. Find super types of that type recursively and extract axioms related to them.
+     *
      * @param owlNamedIndividual
      * @return
      */
@@ -456,9 +485,11 @@ public class StripDownOntology {
     }
 
     /**
-     * constraint: if an owlclass is only subclass of owl:Thing then inputOntology.getAxioms(owlClass) doesn't return any axioms!!!!
-     * but inputOntology.getAxioms(owlNamedIndividual) returns and axiom if that class is type of owlNamedIndividual
-     *  so we should use extractAxiomsRelatedToIndivs() this function instead of extractAxiomsRelatedToOWLClasses whenever possible.
+     * constraint: if an owlclass is only subclass of owl:Thing then and has some individual as instance, then
+     *      inputOntology.getAxioms(owlClass) doesn't return any axioms!!!!
+     *  but inputOntology.getAxioms(owlNamedIndividual) returns axioms
+     *
+     * so we should use this function instead of function extractAxiomsRelatedToOWLClasses() whenever possible.
      *
      * @param referredDirectEntities
      * @param referredIndirectEntities
@@ -498,6 +529,130 @@ public class StripDownOntology {
         }
     }
 
+
+    /**
+     * Removes concepts which are direct subclassof owl:Thing and don't have any subclass.
+     * TODO:
+     *
+     * @param combinedOntology
+     * @param owlReasoner
+     * @return
+     */
+    public static OWLOntology removeNonRelatedConceptsV1(OWLOntology combinedOntology, OWLReasoner owlReasoner) {
+
+        OWLEntityRemover entityRemover = new OWLEntityRemover(Collections.singleton(combinedOntology));
+
+        combinedOntology.getClassesInSignature().forEach(owlClass -> {
+            Optional<OWLClass> supClass = owlReasoner.getSuperClasses(owlClass, true).getFlattened().stream().findFirst();
+            if (supClass.isPresent()) {
+                OWLClass superClass = supClass.get();
+                if (superClass.isOWLThing()) {
+                    if (owlReasoner.getSubClasses(owlClass, true).getFlattened().size() < 2) {
+                        // logger.info("removing owlclass: "+ Utility.getShortName(owlClass));
+                        entityRemover.visit(owlClass);
+                    } else {
+                        logger.info("can not remove owlclass: " + Utility.getShortName(owlClass));
+                    }
+                }
+            }
+        });
+
+        ChangeApplied ca = combinedOntology.getOWLOntologyManager().applyChanges(entityRemover.getChanges());
+        if (logger != null)
+            logger.info("Removing " + ca.toString());
+
+        return combinedOntology;
+    }
+
+
+    /**
+     * keep those concepts which are type of positive or negative objects.
+     * alternatively keep
+     * those concepts which have at-least a single instance.
+     * TODO: FIX
+     *
+     * @param combinedOntology
+     * @param owlReasoner
+     * @return
+     */
+    public static OWLOntology removeNonRelatedConceptsV2(OWLOntology combinedOntology, OWLReasoner owlReasoner) {
+
+        OWLEntityRemover entityRemover = new OWLEntityRemover(Collections.singleton(combinedOntology));
+
+        combinedOntology.getClassesInSignature().forEach(owlClass -> {
+            if (owlReasoner.getInstances(owlClass, false).getFlattened().size() < 1) {
+                entityRemover.visit(owlClass);
+            }
+        });
+
+        ChangeApplied ca = combinedOntology.getOWLOntologyManager().applyChanges(entityRemover.getChanges());
+        if (logger != null)
+            logger.info("Removing " + ca.toString());
+
+        return combinedOntology;
+    }
+
+
+    /**
+     * Removes concepts which are not
+     * 1. class type of positive objects or negative objects or
+     * 2. subClass type of positive objects or negative objects or
+     * 3. superclass type of positive objects or negative objects .
+     * <p>
+     * TODO: FIX
+     *
+     * @param combinedOntology
+     * @param owlReasoner
+     * @return
+     */
+//    public static OWLOntology removeNonRelatedConceptsV3(OWLOntology combinedOntology, OWLReasoner owlReasoner) {
+//
+//        OWLEntityRemover entityRemover = new OWLEntityRemover(Collections.singleton(combinedOntology));
+//
+//        combinedOntology.classesInSignature().forEach(owlClass -> {
+//            if (SharedDataHolder.typeOfObjectsInPosIndivs.containsKey(owlClass) || SharedDataHolder.typeOfObjectsInNegIndivs.containsKey(owlClass) || (owlClass.isOWLThing())) {
+//
+//            } else {
+//
+//            }
+//        });
+//
+//        ChangeApplied ca = combinedOntology.getOWLOntologyManager().applyChanges(entityRemover.getChanges());
+//        if (logger != null)
+//            logger.info("Removing " + ca.toString());
+//
+//        return combinedOntology;
+//    }
+
+
+    /**
+     * Removes non related properties.
+     *
+     * @param combinedOntology
+     * @return
+     */
+    public static OWLOntology removeNonRelatedProperties(OWLOntology combinedOntology) {
+
+        OWLEntityRemover entityRemover = new OWLEntityRemover(Collections.singleton(combinedOntology));
+
+        combinedOntology.getObjectPropertiesInSignature().forEach(owlObjectProperty -> {
+            if (!SharedDataHolder.objProperties.containsKey(owlObjectProperty)) {
+                entityRemover.visit(owlObjectProperty);
+            }
+//            if (!owlObjectProperty.equals(SharedDataHolder.objPropImageContains)) {
+//
+//            }
+        });
+
+        ChangeApplied ca = combinedOntology.getOWLOntologyManager().applyChanges(entityRemover.getChanges());
+        if (logger != null)
+            logger.info("Removing " + ca.toString());
+
+        return combinedOntology;
+    }
+
+
+
     /**
      * inputs
      * 1. Input Ontology path
@@ -509,6 +664,10 @@ public class StripDownOntology {
     private static String outputOntoPath = "/Users/sarker/Workspaces/Jetbrains/residue/data/KGS/automated_wiki/wiki_full_cats_with_pages_v1_non_cyclic_jan_20_32808131_fixed_non_unicode_stripped_for_7_ifps.rdf";
     private static String entityTxtFilePath = "/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/exprs/river_vs_other_concepts_from_r/river_45_vs_29_from_r_training_entities.txt";
 
+    /**
+     * Being used to test different methods easily
+     * @param args
+     */
     public static void main(String[] args) {
 
         try {

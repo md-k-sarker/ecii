@@ -2,7 +2,6 @@ package org.dase.ecii;
 
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.PropertyConfigurator;
 import org.dase.ecii.core.*;
 import org.dase.ecii.ontofactory.CreateOWLFromCSV;
 import org.dase.ecii.ontofactory.DLSyntaxRendererExt;
@@ -28,7 +27,6 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.DateFormat;
 import java.util.*;
 
 /**
@@ -43,7 +41,7 @@ public class Main {
 
     final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static OWLOntology ontology;
+    //    private static OWLOntology ontology;
     //private static OWLOntologyManager manager;
     //private static OWLDataFactory dataFacotry;
     private static OWLReasoner owlReasoner;
@@ -54,30 +52,6 @@ public class Main {
 
     public static void setTextPane(JTextPane textPane) {
         jTextPane = textPane;
-    }
-
-
-    /**
-     * Initiate the variables by using namespace from loaded ontology.
-     * Must be called after loading ontology.
-     */
-    public static void init() {
-        // make sure ontology is loaded before init.
-        if (null != ontology) {
-            SharedDataHolder.owlOntology = ontology;
-            SharedDataHolder.owlOntologyManager = ontology.getOWLOntologyManager();
-            SharedDataHolder.owlDataFactory = ontology.getOWLOntologyManager().getOWLDataFactory();
-
-
-            IRI objectPropIri = IRI.create(ConfigParams.namespace, "imageContains");
-            OWLObjectProperty imgContains = SharedDataHolder.owlDataFactory.getOWLObjectProperty(objectPropIri);
-            // SharedDataHolder.objPropImageContains = imgContains;
-            SharedDataHolder.dlSyntaxRendererExt = new DLSyntaxRendererExt();
-        } else {
-            logger.error("init called before ontology loading.");
-            logger.error("program exiting");
-            monitor.stopSystem("", true);
-        }
     }
 
 
@@ -142,12 +116,11 @@ public class Main {
      *
      * @param outputResultPath
      */
-    private static void initiateSingleDoOps(String outputResultPath) {
+    private static void doSingleConceptInductionM(String outputResultPath) {
 
         try {
-            initiateSingleOpsStart(outputResultPath);
-            doOps();
-            initiateSingleOpsEnd(outputResultPath);
+            ConceptInductionM conceptInductionM = new ConceptInductionM(monitor);
+            conceptInductionM.doOpsConceptInductionM();
         } catch (Exception e) {
             logger.info("\n\n!!!!!!!Fatal error!!!!!!!\n" + Utility.getStackTraceAsString(e));
             if (null != monitor) {
@@ -159,131 +132,12 @@ public class Main {
     }
 
 
-    /**
-     * Start the single induction process.
-     *
-     * @throws OWLOntologyCreationException
-     * @throws IOException
-     */
-    private static void doOps() throws OWLOntologyCreationException, IOException, MalFormedIRIException {
-
-        logger.info("Working with confFile: " + ConfigParams.confFilePath);
-        monitor.writeMessage("Working with confFile: " + Paths.get(ConfigParams.confFilePath).getFileName());
-        // load ontotology
-        ontology = Utility.loadOntology(ConfigParams.ontoPath);
-        //loadOntology();
-
-        //init variables
-        init();
-
-        // algorithm starting time here.
-        DateFormat dateFormat = Utility.getDateTimeFormat();
-        Long algoStartTime = System.currentTimeMillis();
-        monitor.displayMessage("Algorithm starts at: " + dateFormat.format(new Date()), true);
-
-        // initiate reasoner
-        logger.info("reasoner initializing started........");
-        owlReasoner = Utility.initReasoner(ConfigParams.reasonerName, ontology, monitor);
-        logger.info("reasoner initialized successfully");
-
-        logger.info("reading pos and neg indivs from conf file started........");
-        SharedDataHolder.posIndivs = Utility.readPosExamplesFromConf(SharedDataHolder.confFileFullContent);
-        logger.info("reading pos indivs from conf file finished successfully. SharedDataHolder.posIndivs.size: " + SharedDataHolder.posIndivs.size());
-        logger.info("reading neg indivs from conf file started........");
-        SharedDataHolder.negIndivs = Utility.readNegExamplesFromConf(SharedDataHolder.confFileFullContent);
-        logger.info("reading neg indivs from conf file finished successfully SharedDataHolder.negIndivs.size: " + SharedDataHolder.negIndivs.size());
-
-        // write user defined values to resultFile
-        monitor.writeMessage("\nUser defined parameters:");
-        monitor.writeMessage("K1/negExprTypeLimit: " + ConfigParams.conceptLimitInNegExpr);
-        monitor.writeMessage("K2/hornClauseLimit: " + ConfigParams.hornClauseLimit);
-        monitor.writeMessage("K3/objPropsCombinationLimit: " + ConfigParams.objPropsCombinationLimit);
-        monitor.writeMessage("K4/posExprTypeLimit: " + ConfigParams.conceptLimitInPosExpr);
-        monitor.writeMessage("K5/hornClausesListMaxSize: " + ConfigParams.hornClausesListMaxSize);
-        monitor.writeMessage("K6/candidateClassesListMaxSize: " + ConfigParams.candidateClassesListMaxSize);
-        monitor.writeMessage("K7/removeCommonTypes: " + ConfigParams.removeCommonTypes);
-        monitor.writeMessage("DefaultScoreType: " + Score.defaultScoreType);
-        monitor.writeMessage("ReasonerName: " + ConfigParams.reasonerName);
-        monitor.writeMessage("k8/ValidateByReasonerSize: " + ConfigParams.validateByReasonerSize);
-        monitor.writeMessage("k9/posClassListMaxSize: " + ConfigParams.posClassListMaxSize);
-        monitor.writeMessage("k10/negClassListMaxSize: " + ConfigParams.negClassListMaxSize);
-
-        logger.info("posIndivs from conf:");
-        monitor.writeMessage("posIndivs from conf:");
-        SharedDataHolder.posIndivs.forEach(owlNamedIndividual -> {
-            logger.info("\t" + Utility.getShortName(owlNamedIndividual));
-            monitor.writeMessage("\t" + Utility.getShortName(owlNamedIndividual));
-        });
-
-        logger.info("negIndivs from conf:");
-        monitor.writeMessage("negIndivs from conf:");
-        SharedDataHolder.negIndivs.forEach(owlNamedIndividual -> {
-            logger.info("\t" + Utility.getShortName(owlNamedIndividual));
-            monitor.writeMessage("\t" + Utility.getShortName(owlNamedIndividual));
-        });
-
-        // Create a new ConceptFinder object with the given reasoner.
-        CandidateSolutionFinderV2 findConceptsObj = new CandidateSolutionFinderV2(owlReasoner, ontology, outPutStream, monitor);
-        //ConceptFinderComplex findConceptsObj = new ConceptFinderComplex(owlReasoner, ontology, outPutStream, monitor);
-
-        logger.info("finding solutions started...............");
-        // SharedDataHolder.objPropImageContains,
-        findConceptsObj.findConcepts(0, 0);
-        //findConceptsObj.findConcepts(ConfigParams.tolerance, SharedDataHolder.objPropImageContains, ConfigParams.conceptsCombinationLimit);
-        logger.info("\nfinding solutions finished.");
-
-        logger.info("sorting solutions................");
-        findConceptsObj.sortSolutionsCustom(ConfigParams.ascendingOfStringLength);
-        //findConceptsObj.sortSolutions(false);
-        logger.info("sorting solutions finished.");
-
-        logger.info("calculating accuracy using reasoner for top k6 solutions................");
-        findConceptsObj.calculateAccuracyOfTopK6ByReasoner(ConfigParams.validateByReasonerSize);
-        logger.info("calculating accuracy using reasoner for top k6 solutions................");
-
-        Long algoEndTime = System.currentTimeMillis();
-        monitor.displayMessage("\nAlgorithm ends at: " + dateFormat.format(new Date()), true);
-        logger.info("Algorithm ends at: " + dateFormat.format(new Date()), true);
-        monitor.displayMessage("\nAlgorithm duration: " + (algoEndTime - algoStartTime) / 1000.0 + " sec", true);
-        logger.info("Algorithm duration: " + (algoEndTime - algoStartTime) / 1000.0 + " sec", true);
-
-        logger.info("printing solutions started...............");
-        findConceptsObj.printSolutions(ConfigParams.validateByReasonerSize);
-        logger.info("printing solutions finished.");
-        monitor.writeMessage("\nTotal solutions found: " + SharedDataHolder.SortedCandidateSolutionListV2.size());
-
-        if (ConfigParams.runPairwiseSimilarity) {
-            logger.info("\nFinding similarity started...............");
-            measurePairwiseSimilarity();
-            logger.info("Finding similarity finished");
-        }
-    }
-
-    public static void measurePairwiseSimilarity() {
-        if (SharedDataHolder.posIndivs.size() != SharedDataHolder.negIndivs.size()) {
-            logger.error("Pairwise similarity cant be done as positive and negative size is not equal");
-            return;
-        }
-
-        ArrayList<OWLNamedIndividual> posIndivsList = new ArrayList<>(SharedDataHolder.posIndivs);
-        ArrayList<OWLNamedIndividual> negIndivsList = new ArrayList<>(SharedDataHolder.negIndivs);
-
-        Similarity similarity = new Similarity(monitor, 0, owlReasoner);
-
-        if (posIndivsList.size() == negIndivsList.size()) {
-            for (int i = 0; i < posIndivsList.size(); i++) {
-                double similarity_score = similarity.findSimilarityIndivWithAnotherIndiv(posIndivsList.get(i), negIndivsList.get(i));
-            }
-        }
-    }
-
-
     private static void processBatchRunning(String dirPath) {
         processBatchRunning(Paths.get(dirPath));
     }
 
     /**
-     * Iterate over the folders and call initiateSingleDoOps() for each confFile.
+     * Iterate over the folders and call doSingleConceptInductionM() for each confFile.
      *
      * @param dirPath
      */
@@ -305,7 +159,9 @@ public class Main {
                             // parse the config file
                             cleanSharedDataHolder();
                             ConfigParams.parseConfigParams(f.toString());
-                            initiateSingleDoOps(ConfigParams.outputResultPath);
+                            initiateSingleOpsStart(ConfigParams.outputResultPath);
+                            doSingleConceptInductionM(ConfigParams.outputResultPath);
+                            initiateSingleOpsEnd(ConfigParams.outputResultPath);
                         }
                     });
         } catch (Exception e) {
@@ -321,14 +177,20 @@ public class Main {
 
 
     /**
+     * Use stripDownOntoIndivsObjProps() function instead of this one.
+     * <p>
      * Strip down the input ontology and save it to disk.
      * Keep only the related axioms of given entity (got from csv file).
+     * This function creates problem as
+     * extractAxiomsRelatedToOWLClasses() only keeps classes which are subclass or superclass of someother class,
+     * but not the direct subclass of owl:Thing, although that class may have instance.
      *
      * @param inputOntoPath
      * @param entityCsvFilePath
      * @param indivColumnName
      * @param typeColumnName
      * @param outputOntoIRI
+     * @deprecated
      */
     public static void stripDownOntoIndivsTypes(String inputOntoPath, String entityCsvFilePath, String indivColumnName, String typeColumnName, String outputOntoIRI) {
 
@@ -364,7 +226,14 @@ public class Main {
     }
 
     /**
+     * Strip down the input ontology and save it to disk.
+     * Keep only the related axioms of given entity (got from csv file).
      *
+     * @param inputOntoPath
+     * @param entityCsvFilePath
+     * @param indivColumnName
+     * @param objPropColumnName
+     * @param outputOntoIRI
      */
     public static void stripDownOntoIndivsObjProps(String inputOntoPath, String entityCsvFilePath, String indivColumnName, String objPropColumnName, String outputOntoIRI) {
 
@@ -418,6 +287,7 @@ public class Main {
     /**
      * Combine the ontologies.
      * It calls the ontocombiner and provide different arguments to do the different type of combining.
+     *
      * @param inputOntologiesDirectory
      * @param outputOntologyIRI
      */
@@ -509,6 +379,7 @@ public class Main {
     /**
      * Decide the different operations by this program.
      * This should be called if the arguments start with -m, -e, -o, -s, -c
+     *
      * @param args
      * @return
      */
@@ -562,7 +433,9 @@ public class Main {
                     // parse the config file
                     ConfigParams.batch = false;
                     ConfigParams.parseConfigParams(args[1]);
-                    initiateSingleDoOps(ConfigParams.outputResultPath);
+                    initiateSingleOpsStart(ConfigParams.outputResultPath);
+                    doSingleConceptInductionM(ConfigParams.outputResultPath);
+                    initiateSingleOpsEnd(ConfigParams.outputResultPath);
                 } else {
                     System.out.println("\nError!!! Config file must end with .config\n");
                     printHelp();
@@ -585,7 +458,6 @@ public class Main {
                 if (args[1].equals("obj") || args[1].equals("type")) {
                     if (args[1].equals("obj")) {
                         // this function is preferable instead of the indivTypes.
-
                         stripDownOntoIndivsObjProps(args[2], args[3], args[4], args[5], args[6]);
                     } else {
                         stripDownOntoIndivsTypes(args[2], args[3], args[4], args[5], args[6]);

@@ -916,127 +916,6 @@ public class Utility {
         return ontoPath;
     }
 
-    /**
-     * Removes concepts which are direct subclassof owl:Thing and don't have any subclass.
-     * TODO:
-     *
-     * @param combinedOntology
-     * @param owlReasoner
-     * @return
-     */
-    public static OWLOntology removeNonRelatedConceptsV1(OWLOntology combinedOntology, OWLReasoner owlReasoner) {
-
-        OWLEntityRemover entityRemover = new OWLEntityRemover(Collections.singleton(combinedOntology));
-
-        combinedOntology.getClassesInSignature().forEach(owlClass -> {
-            Optional<OWLClass> supClass = owlReasoner.getSuperClasses(owlClass, true).getFlattened().stream().findFirst();
-            if (supClass.isPresent()) {
-                OWLClass superClass = supClass.get();
-                if (superClass.isOWLThing()) {
-                    if (owlReasoner.getSubClasses(owlClass, true).getFlattened().size() < 2) {
-                        // logger.info("removing owlclass: "+ Utility.getShortName(owlClass));
-                        entityRemover.visit(owlClass);
-                    } else {
-                        logger.info("can not remove owlclass: " + Utility.getShortName(owlClass));
-                    }
-                }
-            }
-        });
-
-        ChangeApplied ca = combinedOntology.getOWLOntologyManager().applyChanges(entityRemover.getChanges());
-        if (logger != null)
-            logger.info("Removing " + ca.toString());
-
-        return combinedOntology;
-    }
-
-
-    /**
-     * keep those concepts which are type of positive or negative objects.
-     * alternatively keep
-     * those concepts which have at-least a single instance.
-     * TODO: FIX
-     *
-     * @param combinedOntology
-     * @param owlReasoner
-     * @return
-     */
-    public static OWLOntology removeNonRelatedConceptsV2(OWLOntology combinedOntology, OWLReasoner owlReasoner) {
-
-        OWLEntityRemover entityRemover = new OWLEntityRemover(Collections.singleton(combinedOntology));
-
-        combinedOntology.getClassesInSignature().forEach(owlClass -> {
-            if (owlReasoner.getInstances(owlClass, false).getFlattened().size() < 1) {
-                entityRemover.visit(owlClass);
-            }
-        });
-
-        ChangeApplied ca = combinedOntology.getOWLOntologyManager().applyChanges(entityRemover.getChanges());
-        if (logger != null)
-            logger.info("Removing " + ca.toString());
-
-        return combinedOntology;
-    }
-
-
-    /**
-     * Removes concepts which are not
-     * 1. class type of positive objects or negative objects or
-     * 2. subClass type of positive objects or negative objectsor
-     * 3. superclass type of positive objects or negative objects .
-     * <p>
-     * TODO: FIX
-     *
-     * @param combinedOntology
-     * @param owlReasoner
-     * @return
-     */
-//    public static OWLOntology removeNonRelatedConceptsV3(OWLOntology combinedOntology, OWLReasoner owlReasoner) {
-//
-//        OWLEntityRemover entityRemover = new OWLEntityRemover(Collections.singleton(combinedOntology));
-//
-//        combinedOntology.classesInSignature().forEach(owlClass -> {
-//            if (SharedDataHolder.typeOfObjectsInPosIndivs.containsKey(owlClass) || SharedDataHolder.typeOfObjectsInNegIndivs.containsKey(owlClass) || (owlClass.isOWLThing())) {
-//
-//            } else {
-//
-//            }
-//        });
-//
-//        ChangeApplied ca = combinedOntology.getOWLOntologyManager().applyChanges(entityRemover.getChanges());
-//        if (logger != null)
-//            logger.info("Removing " + ca.toString());
-//
-//        return combinedOntology;
-//    }
-
-
-    /**
-     * Removes non related properties.
-     *
-     * @param combinedOntology
-     * @return
-     */
-    public static OWLOntology removeNonRelatedProperties(OWLOntology combinedOntology) {
-
-        OWLEntityRemover entityRemover = new OWLEntityRemover(Collections.singleton(combinedOntology));
-
-        combinedOntology.getObjectPropertiesInSignature().forEach(owlObjectProperty -> {
-            if (!SharedDataHolder.objProperties.containsKey(owlObjectProperty)) {
-                entityRemover.visit(owlObjectProperty);
-            }
-//            if (!owlObjectProperty.equals(SharedDataHolder.objPropImageContains)) {
-//
-//            }
-        });
-
-        ChangeApplied ca = combinedOntology.getOWLOntologyManager().applyChanges(entityRemover.getChanges());
-        if (logger != null)
-            logger.info("Removing " + ca.toString());
-
-        return combinedOntology;
-    }
-
 
     /**
      * Create named individual from each line of the text file.
@@ -1063,7 +942,6 @@ public class Utility {
             throw new NullPointerException("Given filePath is null.");
         }
     }
-
 
     /**
      * Combination helper.
@@ -1104,7 +982,6 @@ public class Utility {
 
         return result;
     }
-
 
     /**
      * Combines several collections of elements and create permutations of all of them, taking one element from each
@@ -1147,7 +1024,6 @@ public class Utility {
         }
     }
 
-
     /**
      * Return the correct path by resolving relative or absoluteness. root dir is user.dir
      *
@@ -1183,7 +1059,6 @@ public class Utility {
             return confDir.endsWith("/") ? confDir + path : confDir + "/" + path;
         }
     }
-
 
     /**
      * To test various methods

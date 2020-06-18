@@ -24,6 +24,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
+/**
+ * Class to compute the similarity
+ */
 public class Similarity {
 
     final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
