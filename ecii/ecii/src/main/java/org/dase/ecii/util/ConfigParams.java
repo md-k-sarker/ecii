@@ -111,6 +111,10 @@ public final class ConfigParams {
     // used in CreateOWLFromADE20k.java class
     public static final String ontologyIRI = "http://www.daselab.org/ontologies/ADE20K/hcbdwsu/";
 
+    /**
+     * whether to measure the parwise similarity or not.
+     * Will be overridden by the program parameter -m or -e
+     */
     public static boolean runPairwiseSimilarity = false;
 
     //@formatter:off
@@ -205,7 +209,7 @@ public final class ConfigParams {
             validateByReasonerSize = Integer.valueOf(prop.getProperty("validateByReasonerSize", "0"));
             posClassListMaxSize = Integer.valueOf(prop.getProperty("posClassListMaxSize", "20"));
             negClassListMaxSize = Integer.valueOf(prop.getProperty("negClassListMaxSize", "20"));
-            runPairwiseSimilarity = Boolean.parseBoolean(prop.getProperty("removeCommonTypes", "false"));
+            runPairwiseSimilarity = Boolean.parseBoolean(prop.getProperty("runPairwiseSimilarity", "false"));
             ascendingOfStringLength = Boolean.parseBoolean(prop.getProperty("ascendingOfStringLength", "false"));
             resultFileExtension = prop.getProperty("resultFileExtension","_results_ecii_v2.txt");
 

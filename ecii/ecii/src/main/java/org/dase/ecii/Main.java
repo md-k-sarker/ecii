@@ -13,6 +13,7 @@ import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Monitor;
 import org.dase.ecii.util.Utility;
 import org.dase.ecii.exceptions.MalFormedIRIException;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
@@ -72,11 +73,12 @@ public class Main {
     private static void initiateSingleOpsStart(String outputResultPath) {
 
         try {
-            // file to write
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputResultPath));
-            PrintStream printStream = new PrintStream(bos, true);
-            outPutStream = printStream;
-
+            if (null != outputResultPath) {
+                // file to write
+                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputResultPath));
+                PrintStream printStream = new PrintStream(bos, true);
+                outPutStream = printStream;
+            }
             monitor = new Monitor(outPutStream, jTextPane);
             monitor.start("Program started.............", true);
             logger.info("Program started................");
@@ -96,11 +98,15 @@ public class Main {
     private static void initiateSingleOpsEnd(String outputResultPath) {
 
         try {
-            monitor.displayMessage("Result saved at: " + outputResultPath, true);
+            if (null != outputResultPath) {
+                monitor.displayMessage("Result saved at: " + outputResultPath, true);
+            }
             monitor.stop(System.lineSeparator() + "Program finished.", true);
             logger.info("Program finished.");
 
-            outPutStream.close();
+            if (null != outPutStream) {
+                outPutStream.close();
+            }
         } catch (Exception e) {
             logger.info("\n\n!!!!!!!Fatal error!!!!!!!\n" + Utility.getStackTraceAsString(e));
             if (null != monitor) {
@@ -112,7 +118,7 @@ public class Main {
     }
 
     /**
-     * Initiate the outputpath, logger path, monitor etc and call doOps().
+     * Call function to do concept induction and possibly measure pariwise similarity
      *
      * @param outputResultPath
      */
@@ -132,8 +138,13 @@ public class Main {
     }
 
 
-    private static void processBatchRunning(String dirPath) {
-        processBatchRunning(Paths.get(dirPath));
+    /**
+     * Call processBatchRunning by changing String dirPath to path dirPath
+     * @param dirPath
+     * @param runPairwiseSimilarity
+     */
+    private static void processBatchRunning(String dirPath, boolean runPairwiseSimilarity) {
+        processBatchRunning(Paths.get(dirPath), runPairwiseSimilarity);
     }
 
     /**
@@ -141,7 +152,7 @@ public class Main {
      *
      * @param dirPath
      */
-    private static void processBatchRunning(Path dirPath) {
+    private static void processBatchRunning(Path dirPath, boolean runPairwiseSimilarity) {
 
         try {
             // iterate over the files of a the folder
@@ -159,6 +170,8 @@ public class Main {
                             // parse the config file
                             cleanSharedDataHolder();
                             ConfigParams.parseConfigParams(f.toString());
+                            ConfigParams.runPairwiseSimilarity = runPairwiseSimilarity;
+                            // overridde the configParams settings
                             initiateSingleOpsStart(ConfigParams.outputResultPath);
                             doSingleConceptInductionM(ConfigParams.outputResultPath);
                             initiateSingleOpsEnd(ConfigParams.outputResultPath);
@@ -194,6 +207,7 @@ public class Main {
      */
     public static void stripDownOntoIndivsTypes(String inputOntoPath, String entityCsvFilePath, String indivColumnName, String typeColumnName, String outputOntoIRI) {
 
+        initiateSingleOpsStart(null);
         StripDownOntology stripDownOntology = new StripDownOntology(inputOntoPath);
 
         HashMap<String, HashSet<String>> namesHashMap = stripDownOntology.readIndivTypesFromCSVFile(entityCsvFilePath, indivColumnName, typeColumnName);
@@ -223,6 +237,7 @@ public class Main {
         } catch (OWLOntologyStorageException e) {
             e.printStackTrace();
         }
+        initiateSingleOpsEnd(null);
     }
 
     /**
@@ -238,13 +253,13 @@ public class Main {
     public static void stripDownOntoIndivsObjProps(String inputOntoPath, String entityCsvFilePath, String indivColumnName, String objPropColumnName, String outputOntoIRI) {
 
         String extension = FilenameUtils.getExtension(inputOntoPath);
-        logger.info("extension: " + extension);
+        logger.debug("extension: " + extension);
         String outputOntoPath = inputOntoPath.replace("." + extension, "_stripped." + extension);
         String outputLogPath = outputOntoPath.replace("." + extension, ".log");
 
         initiateSingleOpsStart(outputLogPath);
 
-        System.out.println("inputOntoPath: " + inputOntoPath);
+        logger.info("inputOntoPath: " + inputOntoPath);
         monitor.displayMessage("File stripped started with inputOntoPath " + inputOntoPath + "........... ", true);
 
         StripDownOntology stripDownOntology = new StripDownOntology(inputOntoPath);
@@ -296,11 +311,56 @@ public class Main {
             logger.error("Error!!!!!! Input ontologies directory path can't be null");
             return;
         }
+        initiateSingleOpsStart(null);
         OntoCombiner ontoCombiner = new OntoCombiner(outputOntologyIRI);
         ontoCombiner.combineOntologies(null, inputOntologiesDirectory);
+        initiateSingleOpsEnd(null);
+    }
+
+
+    /**
+     * It take a root path to search files, file names are written in csv file,
+     * then use some mechanism to change file names to match with owl file.
+     *
+     * @param outputPath
+     * @param traversingRootPath
+     * @param csvPath
+     * @param csvColumnName
+     * @param useFileNameExtender
+     * @param fileNameExtender
+     */
+    public static void combineOntologiesBySearchingFilesFromCSV(String outputPath,
+                                                                String traversingRootPath,
+                                                                String csvPath, String csvColumnName,
+                                                                String useFileNameExtender, String fileNameExtender) {
+        boolean shouldUseFileNameExtender = Boolean.parseBoolean(useFileNameExtender);
+
+        if (null == traversingRootPath) {
+            logger.error("Error!!!!!! Input ontologies directory path can't be null");
+            return;
+        }
+        if (null == csvPath) {
+            logger.error("Error!!!!!! csv path can't be null");
+            return;
+        }
+        if (null == csvColumnName) {
+            logger.error("Error!!!!!! csvColumnName can't be null");
+            return;
+        }
+        initiateSingleOpsStart(null);
+        OntoCombiner ontoCombiner = new OntoCombiner();
+        ontoCombiner.combineOntologiesBySearchingFilesFromCSV(outputPath,
+                traversingRootPath,
+                csvPath,
+                csvColumnName,
+                shouldUseFileNameExtender,
+                fileNameExtender);
+        initiateSingleOpsEnd(null);
+
     }
 
     /**
+     * Call functions to create ontology by using the entity names from csv
      * @param csvPath
      * @param indivColumnName
      * @param typeColumnName
@@ -308,6 +368,9 @@ public class Main {
      * @param objPropColumnName
      */
     public static void createOntologyFromCSV(String csvPath, String indivColumnName, String typeColumnName, String ontoIRI, String delimeter, String objPropColumnName) {
+
+        initiateSingleOpsStart(null);
+
         CreateOWLFromCSV createOWLFromCSV = null;
         logger.info("Creating ontology by processing csv file: " + csvPath + " started............");
 
@@ -322,9 +385,13 @@ public class Main {
 
         createOWLFromCSV.parseCSVToCreateIndivAndTheirTypes(indivColumnName, typeColumnName);
         logger.info("Creating ontology by processing csv file: " + csvPath + " finished.");
+
+        initiateSingleOpsEnd(null);
     }
 
     /**
+     * Call functions to create ontology by using the entity names from csv
+     *
      * @param csvPath
      * @param entityColumnName
      * @param usePrefixForIndivCreation
@@ -332,8 +399,9 @@ public class Main {
      * @param assignTypeUsingSameEntity
      * @param ontoIRI
      */
-    public static void createOntologyFromCSV(String csvPath, String entityColumnName, String usePrefixForIndivCreation, String indivPrefix, String assignTypeUsingSameEntity, String ontoIRI,String delimeter) {
+    public static void createOntologyFromCSV(String csvPath, String entityColumnName, String usePrefixForIndivCreation, String indivPrefix, String assignTypeUsingSameEntity, String ontoIRI, String delimeter) {
 
+        initiateSingleOpsStart(null);
         boolean usePrefixForIndivCreation_ = false;
         boolean assignTypeUsingSameEntity_ = false;
 
@@ -357,6 +425,7 @@ public class Main {
 
         createOWLFromCSV.parseCSVToCreateIndivAndTheirTypes(entityColumnName, usePrefixForIndivCreation_, indivPrefix, assignTypeUsingSameEntity_);
         logger.info("Creating ontology by processing csv file: " + csvPath + " finished.");
+        initiateSingleOpsEnd(null);
     }
 
 
@@ -391,6 +460,7 @@ public class Main {
                 "\n\t-m or -e [config_file_path]" +
                 "\n\t-m or -e [-b] [directory_path]" +
                 "\n\t-c [inputOntologiesDirectory, outputOntologyIRI]" +
+                "\n\t\t-c [outputPath, traversingRootPath, csvPath, csvColumnName, useFileNameExtender, fileNameExtender]" +
                 "\n\t-s [-obj/type] [inputOntoPath, entityCsvFilePath, indivColumnName, objPropColumnName/typeColumnName, outputOntoIRI] " +
                 "\n\t-o [entityCsvFilePath, indivColumnName, typeColumnName, outputOntoIRI, delimeter, objPropColumnName]" +
                 "\n\t\t-o [entityCsvFilePath, entityColumnName, usePrefixForIndivCreation, indivPrefix, assignTypeUsingSameEntity, ontoIRI, delimeter]" +
@@ -422,7 +492,7 @@ public class Main {
      * This should be called if the arguments start with -m, -e, -o, -s, -c
      *
      * @param args
-     * @return
+     * @return boolean
      */
     private static boolean decideOp(String[] args) {
 
@@ -431,13 +501,17 @@ public class Main {
             sb.append(arg + " ");
         }
         // measure similarity or concept induction by ecii
-        if (args[0].equals("-m") || args[0].equals("-e")) {
+        if (args[0].equalsIgnoreCase("-m") || args[0].equalsIgnoreCase("-e")) {
             logger.debug("given program argument: " + sb.toString());
-            if (args[0].equals("-m")) {
+            boolean runPairwiseSimilarity = false;
+            if (args[0].equalsIgnoreCase("-m")) {
                 logger.info("Program starting to measure similarity");
+                runPairwiseSimilarity = true;
             } else {
                 logger.info("Program starting to run concept induction");
+                runPairwiseSimilarity = false;
             }
+
             if (args.length > 2) {
                 /**
                  * args[0] = -m or -e
@@ -445,17 +519,18 @@ public class Main {
                  * args[2] = directory
                  */
                 if (args.length > 3) {
-                    logger.info("Intended option requires only 3 parameters but more given. Others are discarded.");
+                    logger.warn("Intended option requires only 3 parameters but more given. First 3 are taken and others are discarded.");
                 }
-                if (args[1].trim().toLowerCase().equals("-b") && !args[2].trim().endsWith(".config")) {
+
+                if (args[1].trim().equalsIgnoreCase("-b") && !args[2].trim().endsWith(".config")) {
                     ConfigParams.batch = true;
                     ConfigParams.batchStartingPath = args[2];
                     // start with args[1])
                     try {
                         logger.info("Running on folder: " + args[2]);
-                        processBatchRunning(args[2]);
+                        processBatchRunning(args[2], runPairwiseSimilarity);
                     } catch (Exception e) {
-                        logger.info("\n\n!!!!!!!Fatal error!!!!!!!\n" + Utility.getStackTraceAsString(e));
+                        logger.error("\n\n!!!!!!!Fatal error!!!!!!!\n" + Utility.getStackTraceAsString(e));
                         if (null != monitor) {
                             monitor.stopSystem("\n\n!!!!!!!Fatal error!!!!!!!\n" + Utility.getStackTraceAsString(e), true);
                         } else {
@@ -463,7 +538,7 @@ public class Main {
                         }
                     }
                 } else {
-                    System.out.println(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
+                    logger.error(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
                     printHelp();
                 }
             } else {
@@ -474,29 +549,39 @@ public class Main {
                     // parse the config file
                     ConfigParams.batch = false;
                     ConfigParams.parseConfigParams(args[1]);
+                    // overridde the configParams settings
+                    ConfigParams.runPairwiseSimilarity = runPairwiseSimilarity;
                     initiateSingleOpsStart(ConfigParams.outputResultPath);
                     doSingleConceptInductionM(ConfigParams.outputResultPath);
                     initiateSingleOpsEnd(ConfigParams.outputResultPath);
                 } else {
-                    System.out.println("\nError!!! Config file must end with .config\n");
+                    logger.error("\nError!!! Config file must end with .config\n");
                     printHelp();
                 }
             }
-        } else if (args[0].equals("-c")) {
-            if (args.length == 2) {
-                combineOntologies(args[1], null);
-            }
-            if (args.length == 3) {
-                combineOntologies(args[1], args[2]);
+        } else if (args[0].equalsIgnoreCase("-c")) {
+            logger.debug("given program argument: " + sb.toString());
+            if (args.length == 2 || args.length == 3 || args.length == 7) {
+                logger.info("Program starting to combine ontologies");
+                if (args.length == 2) {
+                    combineOntologies(args[1], null);
+                }
+                if (args.length == 3) {
+                    combineOntologies(args[1], args[2]);
+                }
+                if (args.length == 7) {
+                    combineOntologiesBySearchingFilesFromCSV(args[1], args[2], args[3], args[4], args[5], args[6]);
+                }
             } else {
-                System.out.println(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
+                logger.error(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
                 printHelp();
             }
-        } else if (args[0].equals("-s")) {
+        } else if (args[0].equalsIgnoreCase("-s")) {
             // strip down
             // -s [obj/type] [inputOntoPath, entityCsvFilePath, indivColumnName, objPropColumnName/typeColumnName, outputOntoIRI]
             if (args.length == 7) {
                 if (args[1].equals("obj") || args[1].equals("type")) {
+                    logger.info("Program starting to strip/prune ontology entities");
                     if (args[1].equals("obj")) {
                         // this function is preferable instead of the indivTypes.
                         stripDownOntoIndivsObjProps(args[2], args[3], args[4], args[5], args[6]);
@@ -504,25 +589,28 @@ public class Main {
                         stripDownOntoIndivsTypes(args[2], args[3], args[4], args[5], args[6]);
                     }
                 } else {
-                    System.out.println(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
+                    logger.error(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
                     printHelp();
                 }
             } else {
-                System.out.println(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
+                logger.error(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
                 printHelp();
             }
-        } else if (args[0].equals("-o")) {
+        } else if (args[0].equalsIgnoreCase("-o")) {
             // -o [entityCsvFilePath, indivColumnName, typeColumnName, outputOntoIRI, objPropColumnName]"
-            if (args.length == 7) {
-                createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6]);
-            } else if (args.length == 8) {
-                createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+            if (args.length == 7 || args.length == 8) {
+                logger.info("Program starting to create ontology");
+                if (args.length == 7) {
+                    createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6]);
+                } else if (args.length == 8) {
+                    createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+                }
             } else {
-                System.out.println(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
+                logger.error(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
                 printHelp();
             }
         } else {
-            System.out.println(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
+            logger.error(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
             printHelp();
             return false;
         }
@@ -530,6 +618,7 @@ public class Main {
     }
 
     /**
+     * weird hack to disable the warnings
      * https://github.com/google/guice/issues/1133
      * https://stackoverflow.com/questions/46454995/how-to-hide-warning-illegal-reflective-access-in-java-9-without-jvm-argument
      */
@@ -549,17 +638,21 @@ public class Main {
 
 
     /**
+     * Main driver function for the ECII system.
+     * This function captures the arguments, passes the arguments to decideOp or show help
+     * ECII system can perform several data analysis operations like
+     * "\n1. Measure similarity between ontology entities"
+     * "\n2. Perform concept induction"
+     * "\n3. Strip down ontology or keeping entities of interest while discarding others"
+     * "\n4. Create ontology from CSV file"
+     * "\n5. Combine multiple ontology"
+     * so it is important to pass the arguments to appropriate functions, which is being done by decideOp() function
+     *
      * @param args
-     * @throws OWLOntologyCreationException
-     * @throws IOException
      */
-    public static void main(String[] args) throws OWLOntologyCreationException, IOException, MalFormedIRIException {
+    public static void main(String[] args) {
 
-//        Files.walk(Paths.get("/Users/sarker/Workspaces/Jetbrains/residue/experiments/7_IFP/Entities_With_Ontology/raw_expr/"))
-//                .filter(Files::isRegularFile)
-//                .forEach(System.out::println);
-
-
+        // weird hack to disable the warnings
         disableWarning();
 
         SharedDataHolder.programStartingDir = System.getProperty("user.dir");
@@ -570,6 +663,7 @@ public class Main {
         if (args.length > 0) {
             if (args.length == 1) {
                 if (args[0].equals("-h"))
+                    //if (args[0].equals("-h"))
                     printHelp();
                 else {
                     System.out.println(argErrorStr1 + " " + args[0] + " " + argErrorStr2);
@@ -577,10 +671,14 @@ public class Main {
                 }
             } else {
                 // args.length => 2
-                decideOp(args);
+                if (args[0].matches("-m|-e|-o|-s|-c|-M|-E|-O|-S|-C")) {
+                    decideOp(args);
+                } else {
+                    System.out.println(argErrorStr1 + " " + args[0] + " " + argErrorStr2);
+                    printHelp();
+                }
             }
         } else {
-            //if (args[0].equals("-h"))
             // args.length == 0
             System.out.println(argErrorNoArgGiven + "\n");
             printHelp();

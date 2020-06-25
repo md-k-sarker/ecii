@@ -19,7 +19,7 @@ public class Monitor {
     // log level: ALL < DEBUG < INFO < WARN < ERROR < FATAL < OFF
 
     private long startTime;
-    private final PrintStream out;
+    private PrintStream out;
     private DateFormat dateFormat;
     private JTextPane jTextPane;
 
@@ -31,15 +31,28 @@ public class Monitor {
         this.dateFormat = dateFormat;
     }
 
-
-    // stop initializing
-    public Monitor(PrintStream _printStream) {
-        this.out = _printStream;
-        this.dateFormat = Utility.getDateTimeFormat();
+    /**
+     *
+     */
+    public Monitor() {
+        this(null);
     }
 
+    /**
+     * @param _printStream
+     */
+    public Monitor(PrintStream _printStream) {
+        this(_printStream, null);
+    }
+
+    /**
+     * @param _printStream
+     * @param textPane
+     */
     public Monitor(PrintStream _printStream, JTextPane textPane) {
-        this.out = _printStream;
+        if (null != _printStream) {
+            this.out = _printStream;
+        }
         this.dateFormat = Utility.getDateTimeFormat();
         if (null != textPane) {
             this.jTextPane = textPane;
@@ -62,9 +75,8 @@ public class Monitor {
     public void displayMessage(String message, boolean write) {
 
         System.out.println(message);
-        if (write) {
+        if (write && null != out) {
             out.println(message);
-
         }
         String txt = "";
 
@@ -79,8 +91,10 @@ public class Monitor {
     }
 
     public void writeMessage(String message) {
-        out.println(message);
-        out.flush();
+        if (null != out) {
+            out.println(message);
+            out.flush();
+        }
 
 //        String txt = jTextPane.getText();
 //        if (txt == null) {
@@ -124,7 +138,9 @@ public class Monitor {
 
     public void stopSystem(String message, boolean write) {
         stop(message, write);
-        out.close();
+        if (null != out) {
+            out.close();
+        }
         System.exit(1);
     }
 }

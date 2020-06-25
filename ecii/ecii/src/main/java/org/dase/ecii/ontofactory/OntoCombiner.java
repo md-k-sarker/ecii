@@ -253,8 +253,9 @@ public class OntoCombiner {
 
     /**
      * This function takes the raw entity names (images names of ADE20K or text entity names for ifp) which are written in csv file.
-     * Then search for the owl files matching the entity names and create hashmap of the owlfilespath
+     * Then search for the corresponding owl files matching the raw entity names and create hashmap of the owlfilespath
      *
+     * Then it just call the combineOntologies(outputPath, owl_files_path) to combine the ontologies
      * @param outputPath
      * @param traversingRootPath
      * @param csvPath
@@ -262,7 +263,7 @@ public class OntoCombiner {
      * @param useFileNameExtender
      * @param fileNameExtender
      */
-    public void combineOntologies(String outputPath, String traversingRootPath, String csvPath, String csvColumnName, boolean useFileNameExtender, String fileNameExtender) {
+    public void combineOntologiesBySearchingFilesFromCSV(String outputPath, String traversingRootPath, String csvPath, String csvColumnName, boolean useFileNameExtender, String fileNameExtender) {
         try {
 
             logger.info("Processing combineOntologies started...............");
@@ -299,7 +300,6 @@ public class OntoCombiner {
 
             System.out.println("Calling the next step ontocombiner.......");
             combineOntologies(outputPath, owl_files_path);
-
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -449,7 +449,7 @@ public class OntoCombiner {
 
         OntoCombiner ontoCombiner = new OntoCombiner("http://www.daselab.com/residue/analysis");
         // combineOntologies(String outputPath, String traversingRootPath, String csvPath, String csvColumnName, boolean useFileNameExtender, String fileNameExtender)
-        ontoCombiner.combineOntologies(
+        ontoCombiner.combineOntologiesBySearchingFilesFromCSV(
                 "/Users/sarker/Workspaces/Jetbrains/residue-emerald/emerald/data/classification_data_by_srikanth/combined_small_owls_sumo_iri_untill_6_14_2020.owl",
                 "/Users/sarker/Dropbox/Emerald-Tailor-Expr-Data/ade20k_images_and_owls",
                 "/Users/sarker/Workspaces/Jetbrains/residue-emerald/emerald/data/classification_data_by_srikanth/images_untill_6_14_2020.csv",

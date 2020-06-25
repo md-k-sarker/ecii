@@ -98,6 +98,9 @@ public class RawTest {
     // main function
     public static void main(String[] args) {
 
+        String a = "-Ce";
+
+        System.out.println(a.matches("-m|-e|-o|-s|-c|-M|-E|-O|-S|-C"));
 
     }
 
