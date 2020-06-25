@@ -95,6 +95,24 @@ public class StripDownOntology {
     }
 
     /**
+     * Public constructor
+     * @param owlOntology
+     */
+    public StripDownOntology(OWLOntology owlOntology){
+        try {
+            if(null != owlOntology){
+                inputOntology = owlOntology;
+                inputOntoManager = inputOntology.getOWLOntologyManager();
+                ontoDataFacotry = inputOntoManager.getOWLDataFactory();
+            }
+        }catch (Exception ex){
+            logger.error("Initiating ontology related resources failed!!!!!!!!!!!!!");
+            ex.printStackTrace();
+        }
+
+    }
+
+    /**
      * Read entity from csv file,
      * <p>
      * objectProperty name and Individual names must be on different column of the csv.
@@ -325,6 +343,12 @@ public class StripDownOntology {
     /**
      * Process/search indirect indivs from the ontology.
      *
+     * Essentially this function takes:
+     * ListofObjPropAndIndiv.objPropsofInterest
+     * ListofObjPropAndIndiv.directIndivs
+     *      and search for indirectIndiv and save it inside
+     * ListofObjPropAndIndiv.inDirectIndivs
+     *
      * @param listofObjPropAndIndiv
      * @return the same object which was sent as parameter
      */
@@ -400,7 +424,7 @@ public class StripDownOntology {
             }
         }
 
-        logger.info("### findSuperTypesRecursive finished with: " + owlClass);
+        logger.debug("### findSuperTypesRecursive finished with: " + owlClass);
     }
 
     /**
@@ -468,7 +492,7 @@ public class StripDownOntology {
             // find the types of this owlNamedIndividual
             Collection<OWLClassExpression> owlClasses = new HashSet<>();
             owlClasses = EntitySearcher.getTypes(owlNamedIndividual, inputOntology);
-            logger.info("Entity " + owlNamedIndividual + " has initial types total: " + owlClasses.size());
+            logger.debug("Entity " + owlNamedIndividual + " has initial types total: " + owlClasses.size());
 
             // call recursive function to find all class hierarchy
             owlClasses.stream().filter(OWLClass.class::isInstance).forEach(owlClassExpression -> {
@@ -662,7 +686,7 @@ public class StripDownOntology {
      */
     private static String inputOntoPath = "/Users/sarker/Workspaces/Jetbrains/residue/data/KGS/automated_wiki/wiki_full_cats_with_pages_v1_non_cyclic_jan_20_32808131_fixed_non_unicode.rdf";
     private static String outputOntoPath = "/Users/sarker/Workspaces/Jetbrains/residue/data/KGS/automated_wiki/wiki_full_cats_with_pages_v1_non_cyclic_jan_20_32808131_fixed_non_unicode_stripped_for_7_ifps.rdf";
-    private static String entityTxtFilePath = "/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/exprs/river_vs_other_concepts_from_r/river_45_vs_29_from_r_training_entities.txt";
+    private static String entityTxtFilePath = "/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/expr_types/river_vs_other_concepts_from_r/river_45_vs_29_from_r_training_entities.txt";
 
     /**
      * Being used to test different methods easily

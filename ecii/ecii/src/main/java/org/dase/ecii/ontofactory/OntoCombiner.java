@@ -43,14 +43,36 @@ public class OntoCombiner {
     private HashMap<String, HashSet<String>> fileBrowserMapping = new HashMap<>();
 
     public String outputOntoIRIString = "";
-    private HashSet<OWLAxiom> owlAxioms = new HashSet<>();
+    /**
+     * Instance level owlAxioms holder.
+     * For a single instance this variable will store all the owlAxioms need to combined.
+     */
+    private HashSet<OWLAxiom> owlAxioms;
 
+    /**
+     * private empty construcor
+     */
+    public OntoCombiner() {
+        this(null);
+    }
+
+    /**
+     * public constructor
+     *
+     * @param outputOntoIRIString
+     */
     public OntoCombiner(String outputOntoIRIString) {
         this.outputOntoIRIString = outputOntoIRIString;
         this.owlAxioms = new HashSet<>();
     }
 
-
+    /**
+     * Add axioms to the instance level variable
+     * private HashSet<OWLAxiom> owlAxioms
+     *
+     * @param newAxioms
+     * @return
+     */
     public long addAxioms(HashSet<OWLAxiom> newAxioms) {
 
         if (null != owlAxioms) {
@@ -62,6 +84,7 @@ public class OntoCombiner {
     }
 
     /**
+     * save ontology to disk
      *
      * @param path
      * @param iri
@@ -72,18 +95,8 @@ public class OntoCombiner {
     }
 
     /**
-     *
-     * @param owlAxioms
-     * @param path
-     * @param iri
-     */
-    public void saveOntology(HashSet<OWLAxiom> owlAxioms, String path, String iri) {
-        IRI ontoIRI = IRI.create(iri);
-        saveOntology(owlAxioms, path, ontoIRI);
-    }
-
-    /**
      * Create an ontology using all the axioms in owlAxioms.
+     *
      * @param savingPath
      * @param ontologyIRI
      */
@@ -99,9 +112,21 @@ public class OntoCombiner {
         }
     }
 
+    /**
+     * save ontology to disk
+     *
+     * @param owlAxioms
+     * @param path
+     * @param iri
+     */
+    public void saveOntology(HashSet<OWLAxiom> owlAxioms, String path, String iri) {
+        IRI ontoIRI = IRI.create(iri);
+        saveOntology(owlAxioms, path, ontoIRI);
+    }
 
     /**
-     * Create an ontology using all the axioms in owlAxioms.
+     * Create an ontology using all the axioms in owlAxioms. and save it to disk
+     *
      * @param owlAxioms
      * @param savingPath
      * @param ontologyIRI
@@ -118,7 +143,6 @@ public class OntoCombiner {
         }
     }
 
-
     /**
      * Check whether the file structure is correct.
      */
@@ -132,8 +156,12 @@ public class OntoCombiner {
         });
     }
 
-
-    private void createFileHierarchy() {
+    /**
+     * create hierarchy and store the data in fileBrowserMapping variable
+     *
+     * @param traversingRootPath
+     */
+    private void createFileHierarchy(String traversingRootPath) {
         try {
 
             //Files.walk(Paths.get(traversingRootPath)).filter(d->)
@@ -193,56 +221,6 @@ public class OntoCombiner {
     }
 
     /**
-     * Iterate over folders/files to combine ontologies.
-     */
-    private void doOps(String sumoOntoPath) {
-        try {
-
-            logger.info("doOps started.............");
-
-            createFileHierarchy();
-
-//            printFileHierarchy();
-
-            process_image_names_from_csv(csvPath1, "filename");
-            process_image_names_from_csv(csvPath2, "filename");
-
-            printSmallOntoFileNames();
-
-            // load original sumo
-            OWLOntology _ontology = Utility.loadOntology(sumoOntoPath, monitor);
-            HashSet<OWLAxiom> _axioms = _ontology.getAxioms().stream().collect(Collectors.toCollection(HashSet::new));
-            addAxioms(_axioms);
-
-            // load each small onto.
-            smallOntoPaths.forEach(ontofile -> {
-                try {
-
-                    OWLOntology ontology = Utility.loadOntology(ontofile, monitor);
-                    logger.info("Adding axioms from : " + ontofile.toString());
-                    HashSet<OWLAxiom> axioms = ontology.getAxioms().stream().collect(Collectors.toCollection(HashSet::new));
-                    addAxioms(axioms);
-                    logger.info("axioms size now: " + owlAxioms.size());
-                } catch (Exception ex) {
-                    logger.error("!!!!!!!!!!!!Exception!!!!!!!!!!!!");
-                    logger.error(Utility.getStackTraceAsString(ex));
-                    monitor.stopSystem("Stopping program", true);
-                }
-            });
-
-            logger.info("\nSaving ontology at: " + OntoCombinerSavingPath);
-            saveOntology(OntoCombinerSavingPath, outputOntoIRIString);
-
-            logger.info("doOps finished.");
-        } catch (Exception ex) {
-            logger.error("!!!!!!!!!!!!Exception!!!!!!!!!!!!");
-            logger.error(Utility.getStackTraceAsString(ex));
-            monitor.stopSystem("Stopping program", true);
-        }
-    }
-
-
-    /**
      * @param outputPath
      * @param inputDirPath
      */
@@ -272,7 +250,6 @@ public class OntoCombiner {
             logger.error("Exception!!!!!!!!!" + Utility.getStackTraceAsString(e));
         }
     }
-
 
     /**
      * This function takes the raw entity names (images names of ADE20K or text entity names for ifp) which are written in csv file.
@@ -364,12 +341,67 @@ public class OntoCombiner {
         if (null != this.outputOntoIRIString) {
             saveOntology(outputPath, outputOntoIRIString);
         } else {
-            saveOntology(outputPath, this.outputOntoIRIString_);
+            if(null != outputOntoIRIString_) {
+                saveOntology(outputPath, this.outputOntoIRIString_);
+            }else {
+                logger.error("Error!!!!!! Can't save ontology as ontology iri is null");
+            }
         }
         logger.info("\nSaving ontology at: " + outputPath + " successfull.");
     }
 
 
+    /**
+     * Iterate over folders/files to combine ontologies.
+     */
+    private void combineSumoOntoswithADE20K(String sumoOntoPath) {
+        try {
+
+            logger.info("combineSumoOntoswithADE20K started.............");
+
+            createFileHierarchy(traversingRootPath);
+
+//            printFileHierarchy();
+
+            process_image_names_from_csv(csvPath1, "filename");
+            process_image_names_from_csv(csvPath2, "filename");
+
+            printSmallOntoFileNames();
+
+            // load original sumo
+            OWLOntology _ontology = Utility.loadOntology(sumoOntoPath, monitor);
+            HashSet<OWLAxiom> _axioms = _ontology.getAxioms().stream().collect(Collectors.toCollection(HashSet::new));
+            addAxioms(_axioms);
+
+            // load each small onto.
+            smallOntoPaths.forEach(ontofile -> {
+                try {
+
+                    OWLOntology ontology = Utility.loadOntology(ontofile, monitor);
+                    logger.info("Adding axioms from : " + ontofile.toString());
+                    HashSet<OWLAxiom> axioms = ontology.getAxioms().stream().collect(Collectors.toCollection(HashSet::new));
+                    addAxioms(axioms);
+                    logger.info("axioms size now: " + owlAxioms.size());
+                } catch (Exception ex) {
+                    logger.error("!!!!!!!!!!!!Exception!!!!!!!!!!!!");
+                    logger.error(Utility.getStackTraceAsString(ex));
+                    monitor.stopSystem("Stopping program", true);
+                }
+            });
+
+            logger.info("\nSaving ontology at: " + OntoCombinerSavingPath);
+            saveOntology(OntoCombinerSavingPath, outputOntoIRIString);
+
+            logger.info("combineSumoOntoswithADE20K finished.");
+        } catch (Exception ex) {
+            logger.error("!!!!!!!!!!!!Exception!!!!!!!!!!!!");
+            logger.error(Utility.getStackTraceAsString(ex));
+            monitor.stopSystem("Stopping program", true);
+        }
+    }
+
+
+    // test different functionalities
     private static String OntoCombinerLogPath = "Users/sarker/Workspaces/Jetbrains/emerald/experiments/ade20k-sumo/log_sumo_combining.log";
     private static String sumoPath = "/Users/sarker/Workspaces/Jetbrains/emerald/experiments/ade20k-sumo/SUMO_properly_named.owl";
     private static String OntoCombinerSavingPath = "/Users/sarker/Workspaces/Jetbrains/emerald/experiments/ade20k-sumo/SUMO_combined.owl";
@@ -413,6 +445,7 @@ public class OntoCombiner {
 //        String p2 = "/Users/sarker/Dropbox/Project_HCBD/Experiments/nesy-2017/sumo_with_wordnet.owl";
 //
 //        test1(p1, p2, ontoIRIString);
+
 
         OntoCombiner ontoCombiner = new OntoCombiner("http://www.daselab.com/residue/analysis");
         // combineOntologies(String outputPath, String traversingRootPath, String csvPath, String csvColumnName, boolean useFileNameExtender, String fileNameExtender)

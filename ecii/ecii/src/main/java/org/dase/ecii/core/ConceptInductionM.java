@@ -6,12 +6,12 @@ Written at 6/17/20.
 
 import org.dase.ecii.exceptions.MalFormedIRIException;
 import org.dase.ecii.ontofactory.DLSyntaxRendererExt;
+import org.dase.ecii.ontofactory.StripDownOntology;
+import org.dase.ecii.ontofactory.strip.ListofObjPropAndIndiv;
 import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Monitor;
 import org.dase.ecii.util.Utility;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,12 +21,10 @@ import java.io.PrintStream;
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Paths;
 import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Driver Class to call/start concept induction or measure similarity operations.
- *
  */
 public class ConceptInductionM {
 
@@ -42,7 +40,7 @@ public class ConceptInductionM {
     /**
      *
      */
-    private ConceptInductionM(){
+    private ConceptInductionM() {
 
     }
 
@@ -50,14 +48,20 @@ public class ConceptInductionM {
      * Constructor
      */
     public ConceptInductionM(Monitor monitor) {
-
+        this.monitor = monitor;
     }
 
+
     /**
-     * Initiate the variables by using namespace from loaded ontology.
-     * Must be called after loading ontology.
+     * Load ontology and save the reference to SharedDataHolder
+     *
+     * @throws IOException
+     * @throws OWLOntologyCreationException
      */
-    public  void init() {
+    public void loadOntoAndSaveReference() throws IOException, OWLOntologyCreationException {
+        // load ontotology
+        ontology = Utility.loadOntology(ConfigParams.ontoPath);
+
         // make sure ontology is loaded before init.
         if (null != ontology) {
             SharedDataHolder.owlOntology = ontology;
@@ -65,7 +69,54 @@ public class ConceptInductionM {
             SharedDataHolder.owlDataFactory = ontology.getOWLOntologyManager().getOWLDataFactory();
             SharedDataHolder.dlSyntaxRendererExt = new DLSyntaxRendererExt();
         } else {
-            logger.error("init called before ontology loading.");
+            logger.error("ontology is null.");
+            logger.error("program exiting");
+            monitor.stopSystem("", true);
+        }
+    }
+
+    /**
+     * Strip the ontology to make the processing easier.
+     * Stripping is strictly in memory, no saving in disk
+     */
+    public void stripOnto() {
+
+        if (null != ontology) {
+            logger.info("Stripping started..............");
+            logger.info("Before stripping axioms size: " + ontology.getAxioms().size());
+
+            StripDownOntology stripDownOntology = new StripDownOntology(ontology);
+            ListofObjPropAndIndiv listofObjPropAndIndiv = new ListofObjPropAndIndiv();
+            // direct individuals
+            listofObjPropAndIndiv.directIndivs.addAll(SharedDataHolder.posIndivs);
+            listofObjPropAndIndiv.directIndivs.addAll(SharedDataHolder.negIndivs);
+            // indirect individuals
+            if (SharedDataHolder.objProperties.size() > 1) {
+
+                for (Map.Entry<OWLObjectProperty, Double> entry : SharedDataHolder.objProperties.entrySet()) {
+                    OWLObjectProperty owlObjectProperty = entry.getKey();
+                    if (owlObjectProperty != SharedDataHolder.noneOWLObjProp) {
+                        listofObjPropAndIndiv.objPropsofInterest.add(owlObjectProperty);
+                    }
+                }
+                // search and save the indirectIndivs
+                listofObjPropAndIndiv = stripDownOntology.processIndirectIndivsUsingObjProps(listofObjPropAndIndiv);
+            }
+            HashSet<OWLAxiom> axiomsToKeep = stripDownOntology.extractAxiomsRelatedToIndivs(
+                    listofObjPropAndIndiv.directIndivs,
+                    listofObjPropAndIndiv.inDirectIndivs);
+
+            HashSet<OWLAxiom> axiomsToRemove = new HashSet<>();
+            Set<OWLAxiom> allAxioms = ontology.getAxioms();
+            // set subtraction allAxioms.removeAll = allAxioms-axiomsToKeep = allAxioms will contain only the axioms to remove
+            allAxioms.removeAll(axiomsToKeep);
+            axiomsToRemove.addAll(allAxioms);
+
+            SharedDataHolder.owlOntologyManager.removeAxioms(ontology, axiomsToRemove);
+            logger.info("After stripping axioms size: " + ontology.getAxioms().size());
+            logger.info("Stripping finished.");
+        } else {
+            logger.error("Stripping can't start. Ontology is null");
             logger.error("program exiting");
             monitor.stopSystem("", true);
         }
@@ -77,27 +128,21 @@ public class ConceptInductionM {
      * @throws OWLOntologyCreationException
      * @throws IOException
      */
-    public  void doOpsConceptInductionM() throws
+    public void doOpsConceptInductionM() throws
             OWLOntologyCreationException, IOException, MalFormedIRIException {
 
         logger.info("Working with confFile: " + ConfigParams.confFilePath);
         monitor.writeMessage("Working with confFile: " + Paths.get(ConfigParams.confFilePath).getFileName());
-        // load ontotology
-        ontology = Utility.loadOntology(ConfigParams.ontoPath);
-        //loadOntology();
-
-        //init variables
-        init();
 
         // algorithm starting time here.
         DateFormat dateFormat = Utility.getDateTimeFormat();
         Long algoStartTime = System.currentTimeMillis();
         monitor.displayMessage("Algorithm starts at: " + dateFormat.format(new Date()), true);
 
-        // initiate reasoner
-        logger.info("reasoner initializing started........");
-        owlReasoner = Utility.initReasoner(ConfigParams.reasonerName, ontology, monitor);
-        logger.info("reasoner initialized successfully");
+//        // initiate reasoner
+//        logger.info("reasoner initializing started........");
+//        owlReasoner = Utility.initReasoner(ConfigParams.reasonerName, ontology, monitor);
+//        logger.info("reasoner initialized successfully");
 
         logger.info("reading pos and neg indivs from conf file started........");
         SharedDataHolder.posIndivs = Utility.readPosExamplesFromConf(SharedDataHolder.confFileFullContent);
@@ -134,6 +179,26 @@ public class ConceptInductionM {
             logger.info("\t" + Utility.getShortName(owlNamedIndividual));
             monitor.writeMessage("\t" + Utility.getShortName(owlNamedIndividual));
         });
+
+        logger.info("objProps from conf:");
+        monitor.writeMessage("objProps from conf:");
+        SharedDataHolder.objProperties.forEach((owlObjectProperty, aDouble) -> {
+            logger.info("\t" + Utility.getShortName(owlObjectProperty));
+            monitor.writeMessage("\t" + Utility.getShortName(owlObjectProperty));
+        });
+
+
+        //load Onto
+        loadOntoAndSaveReference();
+
+        // strip down the ontology
+        stripOnto();
+
+
+        // initiate reasoner
+        logger.info("reasoner initializing started........");
+        owlReasoner = Utility.initReasoner(ConfigParams.reasonerName, ontology, monitor);
+        logger.info("reasoner initialized successfully");
 
         // Create a new ConceptFinder object with the given reasoner.
         CandidateSolutionFinderV2 findConceptsObj = new CandidateSolutionFinderV2(owlReasoner, ontology, outPutStream, monitor);
@@ -173,7 +238,7 @@ public class ConceptInductionM {
     }
 
 
-    public  void measurePairwiseSimilarity() {
+    public void measurePairwiseSimilarity() {
         if (SharedDataHolder.posIndivs.size() != SharedDataHolder.negIndivs.size()) {
             logger.error("Pairwise similarity cant be done as positive and negative size is not equal");
             return;

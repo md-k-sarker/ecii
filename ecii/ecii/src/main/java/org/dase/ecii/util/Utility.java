@@ -20,6 +20,7 @@ import org.semanticweb.owlapi.profiles.OWLProfileReport;
 import org.semanticweb.owlapi.profiles.Profiles;
 import org.semanticweb.owlapi.reasoner.*;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
+import org.semanticweb.owlapi.util.OWLEntityRenamer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.manchester.cs.jfact.JFactFactory;
@@ -372,7 +373,7 @@ public class Utility {
                 if (maxSizeOfAColumn < eachColumn.size())
                     maxSizeOfAColumn = eachColumn.size();
             }
-            System.out.println("Max size of a column: "+ maxSizeOfAColumn);
+            System.out.println("Max size of a column: " + maxSizeOfAColumn);
 
             for (int rowId = 0; rowId < maxSizeOfAColumn; rowId++) {
                 // make a row of the data
@@ -706,7 +707,7 @@ public class Utility {
      * @return IRI
      */
     public static IRI createEntityIRI(String entityFullName) throws MalFormedIRIException {
-        String prefix="";
+        String prefix = "";
         String suffix;
         String[] parts;
         // parts[0] is prefix
@@ -723,9 +724,9 @@ public class Utility {
 
                     suffix = parts[1];
                     // if parts[0] is empty or "" then it will get the default prefix from the prefixes hashmap.
-                    if(null != ConfigParams.prefixes) {
+                    if (null != ConfigParams.prefixes) {
                         prefix = ConfigParams.prefixes.get(parts[0]);
-                    }else {
+                    } else {
                         logger.error("Looking prefix mapping on ConfigParams.prefixes while it is null.");
                         return null;
                     }
@@ -1057,6 +1058,37 @@ public class Utility {
         } else {
             // path is relative
             return confDir.endsWith("/") ? confDir + path : confDir + "/" + path;
+        }
+    }
+
+
+    /**
+     * Rename all entities with the matching oldIRIPrefix to newIRIPrefix
+     * Specifically it renames
+     *      classes,
+     *      object properties,
+     *      data properties,
+     *      individuals and
+     *      data types
+     *
+     *      no annotations or nothing else.
+     * @param ontologyPath
+     * @param oldIRIPrefix
+     * @param newIRIPrefix
+     * @return
+     */
+    public static boolean ontologyEntityRenamer(String ontologyPath, String oldIRIPrefix, String newIRIPrefix) {
+        try {
+            OWLOntology owlOntology = loadOntology(ontologyPath);
+            OWLOntologyManager owlOntologyManager = owlOntology.getOWLOntologyManager();
+
+            // instance
+            OWLEntityRenamer owlEntityRenamer = new OWLEntityRenamer(owlOntologyManager, Collections.singleton(owlOntology));
+
+
+            return true;
+        } catch (Exception ex) {
+            return false;
         }
     }
 

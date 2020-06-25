@@ -1,0 +1,472 @@
+/Library/Java/JavaVirtualMachines/jdk-9.0.4.jdk/Contents/Home/bin/java "-javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=57301:/Applications/IntelliJ IDEA.app/Contents/bin" -Dfile.encoding=UTF-8 -classpath /Users/sarker/Workspaces/Jetbrains/ecii/target/classes:/Users/sarker/.m2/repository/net/sourceforge/owlapi/owlapi-compatibility/5.1.4/owlapi-compatibility-5.1.4.jar:/Users/sarker/.m2/repository/net/sourceforge/owlapi/owlapi-apibinding/5.1.4/owlapi-apibinding-5.1.4.jar:/Users/sarker/.m2/repository/net/sourceforge/owlapi/owlapi-api/5.1.4/owlapi-api-5.1.4.jar:/Users/sarker/.m2/repository/net/sourceforge/owlapi/owlapi-impl/5.1.4/owlapi-impl-5.1.4.jar:/Users/sarker/.m2/repository/net/sourceforge/owlapi/owlapi-parsers/5.1.4/owlapi-parsers-5.1.4.jar:/Users/sarker/.m2/repository/net/sourceforge/owlapi/owlapi-oboformat/5.1.4/owlapi-oboformat-5.1.4.jar:/Users/sarker/.m2/repository/net/sourceforge/owlapi/owlapi-tools/5.1.4/owlapi-tools-5.1.4.jar:/Users/sarker/.m2/repository/net/sourceforge/owlapi/owlapi-rio/5.1.4/owlapi-rio-5.1.4.jar:/Users/sarker/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.8.5/jackson-core-2.8.5.jar:/Users/sarker/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.8.5/jackson-databind-2.8.5.jar:/Users/sarker/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.8.5/jackson-annotations-2.8.5.jar:/Users/sarker/.m2/repository/org/apache/commons/commons-rdf-api/0.3.0-incubating/commons-rdf-api-0.3.0-incubating.jar:/Users/sarker/.m2/repository/org/tukaani/xz/1.6/xz-1.6.jar:/Users/sarker/.m2/repository/org/slf4j/jcl-over-slf4j/1.7.22/jcl-over-slf4j-1.7.22.jar:/Users/sarker/.m2/repository/org/eclipse/rdf4j/rdf4j-model/2.2.2/rdf4j-model-2.2.2.jar:/Users/sarker/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-api/2.2.2/rdf4j-rio-api-2.2.2.jar:/Users/sarker/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-languages/2.2.2/rdf4j-rio-languages-2.2.2.jar:/Users/sarker/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-datatypes/2.2.2/rdf4j-rio-datatypes-2.2.2.jar:/Users/sarker/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-binary/2.2.2/rdf4j-rio-binary-2.2.2.jar:/Users/sarker/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-n3/2.2.2/rdf4j-rio-n3-2.2.2.jar:/Users/sarker/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-nquads/2.2.2/rdf4j-rio-nquads-2.2.2.jar:/Users/sarker/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-ntriples/2.2.2/rdf4j-rio-ntriples-2.2.2.jar:/Users/sarker/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-rdfjson/2.2.2/rdf4j-rio-rdfjson-2.2.2.jar:/Users/sarker/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-jsonld/2.2.2/rdf4j-rio-jsonld-2.2.2.jar:/Users/sarker/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-rdfxml/2.2.2/rdf4j-rio-rdfxml-2.2.2.jar:/Users/sarker/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-trix/2.2.2/rdf4j-rio-trix-2.2.2.jar:/Users/sarker/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-turtle/2.2.2/rdf4j-rio-turtle-2.2.2.jar:/Users/sarker/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-trig/2.2.2/rdf4j-rio-trig-2.2.2.jar:/Users/sarker/.m2/repository/org/eclipse/rdf4j/rdf4j-util/2.2.2/rdf4j-util-2.2.2.jar:/Users/sarker/.m2/repository/com/github/jsonld-java/jsonld-java/0.9.0/jsonld-java-0.9.0.jar:/Users/sarker/.m2/repository/org/apache/httpcomponents/httpclient-osgi/4.5.2/httpclient-osgi-4.5.2.jar:/Users/sarker/.m2/repository/org/apache/httpcomponents/httpclient/4.5.2/httpclient-4.5.2.jar:/Users/sarker/.m2/repository/commons-codec/commons-codec/1.9/commons-codec-1.9.jar:/Users/sarker/.m2/repository/org/apache/httpcomponents/httpmime/4.5.2/httpmime-4.5.2.jar:/Users/sarker/.m2/repository/org/apache/httpcomponents/httpclient-cache/4.5.2/httpclient-cache-4.5.2.jar:/Users/sarker/.m2/repository/org/apache/httpcomponents/fluent-hc/4.5.2/fluent-hc-4.5.2.jar:/Users/sarker/.m2/repository/org/apache/httpcomponents/httpcore-osgi/4.4.4/httpcore-osgi-4.4.4.jar:/Users/sarker/.m2/repository/org/apache/httpcomponents/httpcore/4.4.4/httpcore-4.4.4.jar:/Users/sarker/.m2/repository/org/apache/httpcomponents/httpcore-nio/4.4.4/httpcore-nio-4.4.4.jar:/Users/sarker/.m2/repository/net/sf/trove4j/trove4j/3.0.3/trove4j-3.0.3.jar:/Users/sarker/.m2/repository/com/github/ben-manes/caffeine/caffeine/2.5.6/caffeine-2.5.6.jar:/Users/sarker/.m2/repository/com/google/guava/guava/20.0/guava-20.0.jar:/Users/sarker/.m2/repository/com/google/inject/guice/4.1.0/guice-4.1.0.jar:/Users/sarker/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar:/Users/sarker/.m2/repository/aopalliance/aopalliance/1.0/aopalliance-1.0.jar:/Users/sarker/.m2/repository/com/google/inject/extensions/guice-assistedinject/4.1.0/guice-assistedinject-4.1.0.jar:/Users/sarker/.m2/repository/com/google/inject/extensions/guice-multibindings/4.1.0/guice-multibindings-4.1.0.jar:/Users/sarker/.m2/repository/com/google/code/findbugs/jsr305/3.0.1/jsr305-3.0.1.jar:/Users/sarker/.m2/repository/commons-io/commons-io/2.5/commons-io-2.5.jar:/Users/sarker/.m2/repository/net/sourceforge/owlapi/org.semanticweb.hermit/1.4.1.513/org.semanticweb.hermit-1.4.1.513.jar:/Users/sarker/.m2/repository/commons-logging/commons-logging/1.1.3/commons-logging-1.1.3.jar:/Users/sarker/.m2/repository/net/sourceforge/owlapi/owlapi-distribution/5.1.3/owlapi-distribution-5.1.3.jar:/Users/sarker/.m2/repository/org/apache/ws/commons/axiom/axiom-api/1.2.14/axiom-api-1.2.14.jar:/Users/sarker/.m2/repository/org/apache/geronimo/specs/geronimo-activation_1.1_spec/1.1/geronimo-activation_1.1_spec-1.1.jar:/Users/sarker/.m2/repository/org/apache/geronimo/specs/geronimo-javamail_1.4_spec/1.7.1/geronimo-javamail_1.4_spec-1.7.1.jar:/Users/sarker/.m2/repository/jaxen/jaxen/1.1.4/jaxen-1.1.4.jar:/Users/sarker/.m2/repository/org/apache/geronimo/specs/geronimo-stax-api_1.0_spec/1.0.1/geronimo-stax-api_1.0_spec-1.0.1.jar:/Users/sarker/.m2/repository/org/apache/james/apache-mime4j-core/0.7.2/apache-mime4j-core-0.7.2.jar:/Users/sarker/.m2/repository/org/apache/ws/commons/axiom/axiom-c14n/1.2.14/axiom-c14n-1.2.14.jar:/Users/sarker/.m2/repository/org/apache/ws/commons/axiom/axiom-impl/1.2.14/axiom-impl-1.2.14.jar:/Users/sarker/.m2/repository/org/codehaus/woodstox/woodstox-core-asl/4.1.4/woodstox-core-asl-4.1.4.jar:/Users/sarker/.m2/repository/org/codehaus/woodstox/stax2-api/3.1.1/stax2-api-3.1.1.jar:/Users/sarker/.m2/repository/org/apache/ws/commons/axiom/axiom-dom/1.2.14/axiom-dom-1.2.14.jar:/Users/sarker/.m2/repository/dk/brics/automaton/automaton/1.11-8/automaton-1.11-8.jar:/Users/sarker/.m2/repository/net/sourceforge/owlapi/jfact/4.0.4/jfact-4.0.4.jar:/Users/sarker/.m2/repository/joda-time/joda-time/2.3/joda-time-2.3.jar:/Users/sarker/.m2/repository/org/roaringbitmap/RoaringBitmap/0.4.9/RoaringBitmap-0.4.9.jar:/Users/sarker/.m2/repository/com/wcohen/com.wcohen.secondstring/0.1/com.wcohen.secondstring-0.1.jar:/Users/sarker/.m2/repository/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar:/Users/sarker/.m2/repository/org/slf4j/slf4j-log4j12/1.7.25/slf4j-log4j12-1.7.25.jar:/Users/sarker/.m2/repository/log4j/log4j/1.2.17/log4j-1.2.17.jar Main file.conf
+log4j:WARN No such property [maxBackupIndex] in org.apache.log4j.DailyRollingFileAppender.
+log4j:WARN No such property [maxFileSize] in org.apache.log4j.DailyRollingFileAppender.
+2018-08-12 09:39:43 DEBUG Main:367 - args.length: 1
+2018-08-12 09:39:43 INFO  Main:368 - Working directory/Program starting directory = /Users/sarker/Workspaces/Jetbrains/ecii
+2018-08-12 09:39:43 DEBUG Main:372 - given program argument: file.conf
+2018-08-12 09:39:43 INFO  ConfigParams:70 - Printing config file before parsing: 
+2018-08-12 09:39:43 INFO  ConfigParams:73 - positiveTypeLimit: 20
+2018-08-12 09:39:43 INFO  ConfigParams:73 - batch: false
+2018-08-12 09:39:43 INFO  ConfigParams:73 - noOfObjectProp: 4
+2018-08-12 09:39:43 INFO  ConfigParams:73 - prefixes: [ ("kb",
+2018-08-12 09:39:43 INFO  ConfigParams:73 - combinationLimit: 4
+2018-08-12 09:39:43 INFO  ConfigParams:73 - namespace: http://www.daselab.org/ontologies/ADE20K/hcbdwsu#
+2018-08-12 09:39:43 INFO  ConfigParams:73 - path.confFilePath: /Users/sarker/Workspaces/ProjectHCBD/experiments/ecii_aaai/neuron_activation_tracing/without_score/ning_v3/Bathroom/bathroom_one_vs_all.conf
+2018-08-12 09:39:43 INFO  ConfigParams:73 - "http: //example.com/trains#")]
+2018-08-12 09:39:43 INFO  ConfigParams:73 - combinationThreshold: .2
+2018-08-12 09:39:43 INFO  ConfigParams:73 - path.outputResult: /Users/sarker/Workspaces/ProjectHCBD/experiments/ecii_aaai/neuron_activation_tracing/without_score/ning_v3/Bathroom/
+2018-08-12 09:39:43 INFO  ConfigParams:73 - tolerance: 0.0
+2018-08-12 09:39:43 INFO  ConfigParams:73 - conceptLimitInNegExpr: 3
+2018-08-12 09:39:43 INFO  ConfigParams:76 - 
+#############################
+
+2018-08-12 09:39:43 DEBUG Utility:691 - Reading ontoPath from full text: // declare some prefixes to use as abbreviations
+prefixes = [ ("ex","http://www.daselab.org/ontologies/ADE20K/hcbdwsu#") ]
+
+// knowledge source definition
+ks.type = "OWL File"
+ks.fileName = "/Users/sarker/Workspaces/ProjectHCBD/datas/sumo_aligned/without_scores/sumo_aligned_without_score_minimal.owl"
+ks.reasoningString = "rule"
+
+// object properties
+objectProperties={":imageContains"}
+
+// reasoner
+//reasoner.type = "closed world reasoner"
+//reasoner.sources = { ks }
+
+// modified owlapi reasoner
+reasoner.type = "oar"
+reasoner.sources = { ks }
+reasoner.reasonerImplementation = "hermit"
+
+// learning problem
+lp.type = "posNegStandard"
+//lp.type = "posonlylp"
+lp.positiveExamples = {"ex:bathroom_ADE_train_00000006","ex:bathroom_ADE_train_00000007","ex:bathroom_ADE_train_00000008","ex:bathroom_ADE_train_00000009","ex:bathroom_ADE_train_00000010" }
+
+lp.negativeExamples = { "ex:airport_terminal_ADE_train_00000001","ex:bedroom_ADE_train_00000192","ex:building_facade_ADE_train_00004593","ex:conference_room_ADE_train_00000570","ex:corridor_ADE_train_00000574","ex:dining_room_ADE_train_00006845","ex:highway_ADE_train_00008988","ex:hotel_room_ADE_train_00009520","ex:kitchen_ADE_train_00000594","ex:living_room_ADE_train_00000651","ex:mountain_snowy_ADE_train_00000932","ex:office_ADE_train_00000933","ex:street_ADE_train_00016858", "ex:skyscraper_ADE_train_00000954"}
+
+
+// learning algorithm
+// create learning algorithm to run
+la.type = "celoe"
+la.maxNrOfResults = 1000
+la.maxExecutionTimeInSeconds = 300
+
+2018-08-12 09:39:43 INFO  Utility:711 - OntoPath: /Users/sarker/Workspaces/ProjectHCBD/datas/sumo_aligned/without_scores/sumo_aligned_without_score_minimal.owl is valid ontoPath.
+2018-08-12 09:39:43 DEBUG Utility:404 - regexText: (prefixes){1}(\s)*=(\s)*\[{1}([^]]|[\s])*]{1}
+2018-08-12 09:39:43 DEBUG Utility:409 - prefixesPortion: prefixes = [ ("ex","http://www.daselab.org/ontologies/ADE20K/hcbdwsu#") ]
+2018-08-12 09:39:43 DEBUG Utility:420 - regexForEachMapEntry: [(]([^)]|[\s])*[)]{1}
+2018-08-12 09:39:43 INFO  Utility:425 - eachMapEntry: ("ex","http://www.daselab.org/ontologies/ADE20K/hcbdwsu#")
+2018-08-12 09:39:43 INFO  Utility:429 - prefix: ex
+2018-08-12 09:39:43 INFO  Utility:430 - suffix: http://www.daselab.org/ontologies/ADE20K/hcbdwsu#
+2018-08-12 09:39:43 DEBUG Utility:448 - Reading object properties from full content: // declare some prefixes to use as abbreviations
+prefixes = [ ("ex","http://www.daselab.org/ontologies/ADE20K/hcbdwsu#") ]
+
+// knowledge source definition
+ks.type = "OWL File"
+ks.fileName = "/Users/sarker/Workspaces/ProjectHCBD/datas/sumo_aligned/without_scores/sumo_aligned_without_score_minimal.owl"
+ks.reasoningString = "rule"
+
+// object properties
+objectProperties={":imageContains"}
+
+// reasoner
+//reasoner.type = "closed world reasoner"
+//reasoner.sources = { ks }
+
+// modified owlapi reasoner
+reasoner.type = "oar"
+reasoner.sources = { ks }
+reasoner.reasonerImplementation = "hermit"
+
+// learning problem
+lp.type = "posNegStandard"
+//lp.type = "posonlylp"
+lp.positiveExamples = {"ex:bathroom_ADE_train_00000006","ex:bathroom_ADE_train_00000007","ex:bathroom_ADE_train_00000008","ex:bathroom_ADE_train_00000009","ex:bathroom_ADE_train_00000010" }
+
+lp.negativeExamples = { "ex:airport_terminal_ADE_train_00000001","ex:bedroom_ADE_train_00000192","ex:building_facade_ADE_train_00004593","ex:conference_room_ADE_train_00000570","ex:corridor_ADE_train_00000574","ex:dining_room_ADE_train_00006845","ex:highway_ADE_train_00008988","ex:hotel_room_ADE_train_00009520","ex:kitchen_ADE_train_00000594","ex:living_room_ADE_train_00000651","ex:mountain_snowy_ADE_train_00000932","ex:office_ADE_train_00000933","ex:street_ADE_train_00016858", "ex:skyscraper_ADE_train_00000954"}
+
+
+// learning algorithm
+// create learning algorithm to run
+la.type = "celoe"
+la.maxNrOfResults = 1000
+la.maxExecutionTimeInSeconds = 300
+
+2018-08-12 09:39:43 DEBUG Utility:462 - objPropsPortion: objectProperties={":imageContains"}
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.google.inject.internal.cglib.core.$ReflectUtils$1 (file:/Users/sarker/.m2/repository/com/google/inject/guice/4.1.0/guice-4.1.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of com.google.inject.internal.cglib.core.$ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+2018-08-12 09:39:44 INFO  ConfigParams:110 - Printing Config properties after parsing: 
+2018-08-12 09:39:44 INFO  ConfigParams:122 - 	confFilePath: /Users/sarker/Workspaces/ProjectHCBD/experiments/ecii_aaai/neuron_activation_tracing/without_score/ning_v3/Bathroom/bathroom_one_vs_all.conf
+2018-08-12 09:39:44 INFO  ConfigParams:123 - 	ontoPath: /Users/sarker/Workspaces/ProjectHCBD/datas/sumo_aligned/without_scores/sumo_aligned_without_score_minimal.owl
+2018-08-12 09:39:44 INFO  ConfigParams:124 - 	outputResultPath: /Users/sarker/Workspaces/ProjectHCBD/experiments/ecii_aaai/neuron_activation_tracing/without_score/ning_v3/Bathroom/bathroom_one_vs_all_expl_by_ecii_custom_v2.txt
+2018-08-12 09:39:44 INFO  ConfigParams:125 - 	namespace: http://www.daselab.org/ontologies/ADE20K/hcbdwsu#
+2018-08-12 09:39:44 INFO  ConfigParams:126 - 	tolerance: 0.0
+2018-08-12 09:39:44 INFO  ConfigParams:127 - 	combinationLimit: 4
+2018-08-12 09:39:44 INFO  ConfigParams:128 - 	combinationThreshold: 0.2
+2018-08-12 09:39:44 INFO  ConfigParams:129 - 	positiveTypeLimit: 20
+2018-08-12 09:39:44 INFO  ConfigParams:130 - 	conceptLimitInNegExpr: 
+Program started.............
+Program starts at: 08.12.2018  09.39.44 AM
+2018-08-12 09:39:44 INFO  Main:154 - Program started................
+Algorithm starts at: 08.12.2018  09.39.44 AM
+2018-08-12 09:39:44 INFO  Main:213 - Working with confFile: /Users/sarker/Workspaces/ProjectHCBD/experiments/ecii_aaai/neuron_activation_tracing/without_score/ning_v3/Bathroom/bathroom_one_vs_all.conf
+2018-08-12 09:39:44 INFO  Utility:115 - Ontology Path before resolving: /Users/sarker/Workspaces/ProjectHCBD/datas/sumo_aligned/without_scores/sumo_aligned_without_score_minimal.owl
+2018-08-12 09:39:44 INFO  Utility:123 - Path is not symbolic: /Users/sarker/Workspaces/ProjectHCBD/datas/sumo_aligned/without_scores/sumo_aligned_without_score_minimal.owl
+2018-08-12 09:39:44 INFO  Utility:127 - Ontology Path after resolving: /Users/sarker/Workspaces/ProjectHCBD/datas/sumo_aligned/without_scores/sumo_aligned_without_score_minimal.owl
+2018-08-12 09:39:44 INFO  Utility:135 - 
+Ontology loading...
+2018-08-12 09:39:44 DEBUG TripleLogger:136 - Total number of triples: 6688
+2018-08-12 09:39:44 DEBUG TripleLogger:31 - Loaded OntologyID(OntologyIRI(<http://www.daselab.org/ontologies/ADE20K/hcbdwsu#>) VersionIRI(<null>))
+2018-08-12 09:39:44 INFO  Utility:139 - Ontology Loaded
+2018-08-12 09:39:44 INFO  Utility:140 - Ontology path: /Users/sarker/Workspaces/ProjectHCBD/datas/sumo_aligned/without_scores/sumo_aligned_without_score_minimal.owl
+2018-08-12 09:39:44 INFO  Utility:141 - Ontology id : OntologyID(OntologyIRI(<http://www.daselab.org/ontologies/ADE20K/hcbdwsu#>) VersionIRI(<null>))
+2018-08-12 09:39:45 INFO  Utility:147 - total violations: 719
+2018-08-12 09:39:45 INFO  Utility:149 - Format : RDF/XML Syntax
+2018-08-12 09:39:45 INFO  Main:228 - 
+Removing non related properties..................
+2018-08-12 09:39:45 INFO  Main:229 - Before removing there are total: 780 object properties.
+2018-08-12 09:39:45 INFO  Utility:838 - Removing SUCCESSFULLY
+2018-08-12 09:39:45 INFO  Main:232 - After removing there are total: 1 object properties.
+2018-08-12 09:39:45 INFO  Main:233 - 
+Removing non related properties finished.
+2018-08-12 09:39:45 INFO  Main:235 - 
+Removing non related concepts..................
+2018-08-12 09:39:45 INFO  Main:236 - Before removing there are total: 505 concepts.
+2018-08-12 09:39:45 INFO  Utility:743 - can not remove owlclass: Entity
+2018-08-12 09:39:45 INFO  Utility:751 - Removing SUCCESSFULLY
+2018-08-12 09:39:45 INFO  Main:239 - After removing there are total: 193 concepts.
+2018-08-12 09:39:45 INFO  Main:240 - 
+Removing non related concepts finished.
+2018-08-12 09:39:45 INFO  Main:243 - 
+Saving minimal ontology...................
+2018-08-12 09:39:45 INFO  Main:252 - 
+Saving minimal ontology finished
+2018-08-12 09:39:45 DEBUG Utility:592 - Reading posExamples from full content: // declare some prefixes to use as abbreviations
+prefixes = [ ("ex","http://www.daselab.org/ontologies/ADE20K/hcbdwsu#") ]
+
+// knowledge source definition
+ks.type = "OWL File"
+ks.fileName = "/Users/sarker/Workspaces/ProjectHCBD/datas/sumo_aligned/without_scores/sumo_aligned_without_score_minimal.owl"
+ks.reasoningString = "rule"
+
+// object properties
+objectProperties={":imageContains"}
+
+// reasoner
+//reasoner.type = "closed world reasoner"
+//reasoner.sources = { ks }
+
+// modified owlapi reasoner
+reasoner.type = "oar"
+reasoner.sources = { ks }
+reasoner.reasonerImplementation = "hermit"
+
+// learning problem
+lp.type = "posNegStandard"
+//lp.type = "posonlylp"
+lp.positiveExamples = {"ex:bathroom_ADE_train_00000006","ex:bathroom_ADE_train_00000007","ex:bathroom_ADE_train_00000008","ex:bathroom_ADE_train_00000009","ex:bathroom_ADE_train_00000010" }
+
+lp.negativeExamples = { "ex:airport_terminal_ADE_train_00000001","ex:bedroom_ADE_train_00000192","ex:building_facade_ADE_train_00004593","ex:conference_room_ADE_train_00000570","ex:corridor_ADE_train_00000574","ex:dining_room_ADE_train_00006845","ex:highway_ADE_train_00008988","ex:hotel_room_ADE_train_00009520","ex:kitchen_ADE_train_00000594","ex:living_room_ADE_train_00000651","ex:mountain_snowy_ADE_train_00000932","ex:office_ADE_train_00000933","ex:street_ADE_train_00016858", "ex:skyscraper_ADE_train_00000954"}
+
+
+// learning algorithm
+// create learning algorithm to run
+la.type = "celoe"
+la.maxNrOfResults = 1000
+la.maxExecutionTimeInSeconds = 300
+
+2018-08-12 09:39:46 DEBUG Utility:631 - Reading negExamples from full content: // declare some prefixes to use as abbreviations
+prefixes = [ ("ex","http://www.daselab.org/ontologies/ADE20K/hcbdwsu#") ]
+
+// knowledge source definition
+ks.type = "OWL File"
+ks.fileName = "/Users/sarker/Workspaces/ProjectHCBD/datas/sumo_aligned/without_scores/sumo_aligned_without_score_minimal.owl"
+ks.reasoningString = "rule"
+
+// object properties
+objectProperties={":imageContains"}
+
+// reasoner
+//reasoner.type = "closed world reasoner"
+//reasoner.sources = { ks }
+
+// modified owlapi reasoner
+reasoner.type = "oar"
+reasoner.sources = { ks }
+reasoner.reasonerImplementation = "hermit"
+
+// learning problem
+lp.type = "posNegStandard"
+//lp.type = "posonlylp"
+lp.positiveExamples = {"ex:bathroom_ADE_train_00000006","ex:bathroom_ADE_train_00000007","ex:bathroom_ADE_train_00000008","ex:bathroom_ADE_train_00000009","ex:bathroom_ADE_train_00000010" }
+
+lp.negativeExamples = { "ex:airport_terminal_ADE_train_00000001","ex:bedroom_ADE_train_00000192","ex:building_facade_ADE_train_00004593","ex:conference_room_ADE_train_00000570","ex:corridor_ADE_train_00000574","ex:dining_room_ADE_train_00006845","ex:highway_ADE_train_00008988","ex:hotel_room_ADE_train_00009520","ex:kitchen_ADE_train_00000594","ex:living_room_ADE_train_00000651","ex:mountain_snowy_ADE_train_00000932","ex:office_ADE_train_00000933","ex:street_ADE_train_00016858", "ex:skyscraper_ADE_train_00000954"}
+
+
+// learning algorithm
+// create learning algorithm to run
+la.type = "celoe"
+la.maxNrOfResults = 1000
+la.maxExecutionTimeInSeconds = 300
+
+2018-08-12 09:39:46 INFO  Main:260 - posIndivs from conf
+2018-08-12 09:39:46 INFO  Main:263 - 	bathroom_ADE_train_00000006
+2018-08-12 09:39:46 INFO  Main:263 - 	bathroom_ADE_train_00000009
+2018-08-12 09:39:46 INFO  Main:263 - 	bathroom_ADE_train_00000007
+2018-08-12 09:39:46 INFO  Main:263 - 	bathroom_ADE_train_00000008
+2018-08-12 09:39:46 INFO  Main:263 - 	bathroom_ADE_train_00000010
+2018-08-12 09:39:46 INFO  Main:267 - 
+negIndivs from conf
+2018-08-12 09:39:46 INFO  Main:270 - 	airport_terminal_ADE_train_00000001
+2018-08-12 09:39:46 INFO  Main:270 - 	bedroom_ADE_train_00000192
+2018-08-12 09:39:46 INFO  Main:270 - 	conference_room_ADE_train_00000570
+2018-08-12 09:39:46 INFO  Main:270 - 	corridor_ADE_train_00000574
+2018-08-12 09:39:46 INFO  Main:270 - 	mountain_snowy_ADE_train_00000932
+2018-08-12 09:39:46 INFO  Main:270 - 	kitchen_ADE_train_00000594
+2018-08-12 09:39:46 INFO  Main:270 - 	living_room_ADE_train_00000651
+2018-08-12 09:39:46 INFO  Main:270 - 	skyscraper_ADE_train_00000954
+2018-08-12 09:39:46 INFO  Main:270 - 	highway_ADE_train_00008988
+2018-08-12 09:39:46 INFO  Main:270 - 	street_ADE_train_00016858
+2018-08-12 09:39:46 INFO  Main:270 - 	dining_room_ADE_train_00006845
+2018-08-12 09:39:46 INFO  Main:270 - 	office_ADE_train_00000933
+2018-08-12 09:39:46 INFO  Main:270 - 	building_facade_ADE_train_00004593
+2018-08-12 09:39:46 INFO  Main:270 - 	hotel_room_ADE_train_00009520
+2018-08-12 09:39:46 INFO  Main:277 - 
+finding solutions started...............
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:451 - 
+extractObjectTypes started...............
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:453 - Extracting objectTypes using objectProperty: imageContains
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:93 - Given obj property: <http://www.daselab.org/ontologies/ADE20K/hcbdwsu#imageContains>
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:100 - 
+Below individuals appeared in bathroom_ADE_train_00000006 image
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:102 - object count: 6
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_007_0_bathroom_ADE_train_00000006
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_003_0_bathroom_ADE_train_00000006
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_005_0_bathroom_ADE_train_00000006
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_008_0_bathroom_ADE_train_00000006
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_006_0_bathroom_ADE_train_00000006
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_001_0_bathroom_ADE_train_00000006
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:100 - 
+Below individuals appeared in bathroom_ADE_train_00000009 image
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:102 - object count: 5
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_001_0_bathroom_ADE_train_00000009
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_005_0_bathroom_ADE_train_00000009
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_007_0_bathroom_ADE_train_00000009
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_008_0_bathroom_ADE_train_00000009
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_010_0_bathroom_ADE_train_00000009
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:100 - 
+Below individuals appeared in bathroom_ADE_train_00000007 image
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:102 - object count: 12
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_009_0_bathroom_ADE_train_00000007
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_019_0_bathroom_ADE_train_00000007
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_013_0_bathroom_ADE_train_00000007
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_007_0_bathroom_ADE_train_00000007
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_012_0_bathroom_ADE_train_00000007
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_005_0_bathroom_ADE_train_00000007
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_008_0_bathroom_ADE_train_00000007
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_006_0_bathroom_ADE_train_00000007
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_014_0_bathroom_ADE_train_00000007
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_016_0_bathroom_ADE_train_00000007
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_001_0_bathroom_ADE_train_00000007
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_011_0_bathroom_ADE_train_00000007
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:100 - 
+Below individuals appeared in bathroom_ADE_train_00000008 image
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:102 - object count: 6
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_007_0_bathroom_ADE_train_00000008
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_001_0_bathroom_ADE_train_00000008
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_006_0_bathroom_ADE_train_00000008
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_004_0_bathroom_ADE_train_00000008
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_008_0_bathroom_ADE_train_00000008
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_009_0_bathroom_ADE_train_00000008
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:100 - 
+Below individuals appeared in bathroom_ADE_train_00000010 image
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:102 - object count: 6
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_008_0_bathroom_ADE_train_00000010
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_006_0_bathroom_ADE_train_00000010
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_016_0_bathroom_ADE_train_00000010
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_001_0_bathroom_ADE_train_00000010
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_007_0_bathroom_ADE_train_00000010
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:105 - 	indi: obj_005_0_bathroom_ADE_train_00000010
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:159 - 
+Below individuals appeared in airport_terminal_ADE_train_00000001 image
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:160 - object count: 6
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:159 - 
+Below individuals appeared in bedroom_ADE_train_00000192 image
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:160 - object count: 9
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:159 - 
+Below individuals appeared in conference_room_ADE_train_00000570 image
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:160 - object count: 7
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:159 - 
+Below individuals appeared in corridor_ADE_train_00000574 image
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:160 - object count: 3
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:159 - 
+Below individuals appeared in mountain_snowy_ADE_train_00000932 image
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:160 - object count: 4
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:159 - 
+Below individuals appeared in kitchen_ADE_train_00000594 image
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:160 - object count: 13
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:159 - 
+Below individuals appeared in living_room_ADE_train_00000651 image
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:160 - object count: 10
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:159 - 
+Below individuals appeared in skyscraper_ADE_train_00000954 image
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:160 - object count: 3
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:159 - 
+Below individuals appeared in highway_ADE_train_00008988 image
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:160 - object count: 6
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:159 - 
+Below individuals appeared in street_ADE_train_00016858 image
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:160 - object count: 5
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:159 - 
+Below individuals appeared in dining_room_ADE_train_00006845 image
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:160 - object count: 7
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:159 - 
+Below individuals appeared in office_ADE_train_00000933 image
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:160 - object count: 14
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:159 - 
+Below individuals appeared in building_facade_ADE_train_00004593 image
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:160 - object count: 6
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:159 - 
+Below individuals appeared in hotel_room_ADE_train_00009520 image
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:160 - object count: 15
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:218 - 
+types appeared both in pos and neg: 
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:226 - 	typesBothInPosAndNeg: Ceiling
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:226 - 	typesBothInPosAndNeg: WN_Window
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:226 - 	typesBothInPosAndNeg: Thing
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:226 - 	typesBothInPosAndNeg: WN_Curtain
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:226 - 	typesBothInPosAndNeg: WN_Wall
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:226 - 	typesBothInPosAndNeg: WN_Table
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:226 - 	typesBothInPosAndNeg: Floor
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:226 - 	typesBothInPosAndNeg: WN_Painting
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:230 - 
+Before removing types (types which appeared in both pos and neg images): 
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:231 - pos types: 
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:233 - 	WN_Mirror
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:233 - 	Ceiling
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:233 - 	Toilet
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:233 - 	WN_Window
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:233 - 	Thing
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:233 - 	WN_Curtain
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:233 - 	WN_Wall
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:233 - 	WN_Table
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:233 - 	Floor
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:233 - 	WN_Painting
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:235 - neg types: 
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	Thing
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	WN_Window
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	WN_Machine
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	Mountain
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	WN_Table
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	WN_Painting
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	WN_Document
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	Tray
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	Glass
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	Ceiling
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	Bag
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	WN_Bed
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	WN_Tree
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	Rug
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	Field
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	Door
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	WN_Shelf
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	WN_Wall
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	Tree
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	WN_Box
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	Road
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	WN_Projectionscreen
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	Sofa
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	Floor
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	WN_Grass
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	WN_Curtain
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	WN_Building
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	Chair
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	Oven
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	Telephone
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:237 - 	WN_Plant
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:246 - typeOfObjectsInPosIndivsCustom changed after removing.
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:248 - typeOfObjectsInNegIndivsCustom changed after removing.
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:250 - 
+After removing types (types which appeared in both pos and neg images): 
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:251 - pos types: 
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:253 - 	WN_Mirror
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:253 - 	Toilet
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:255 - neg types: 
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	WN_Machine
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	Mountain
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	WN_Document
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	Tray
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	Glass
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	Bag
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	WN_Bed
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	WN_Tree
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	Rug
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	Field
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	Door
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	WN_Shelf
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	Tree
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	WN_Box
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	Road
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	WN_Projectionscreen
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	Sofa
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	WN_Grass
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	WN_Building
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	Chair
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	Oven
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	Telephone
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:257 - 	WN_Plant
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:456 - 
+extractObjectTypes finished.
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:265 - Testing extractObjectTypes:
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:267 - Object Property: imageContains has related types:
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:269 - 	WN_Mirror
+2018-08-12 09:39:46 DEBUG ConceptFinderComplexCustom:269 - 	Toilet
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:463 - 
+saveInitialSolutions started...............
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:465 - 
+saveInitialSolutions finished
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:468 - 
+createInitialSolution started...............
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:473 - 
+createInitialSolution finished.
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:478 - 
+doV2Recursion started...............
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:483 - 
+doV2Recursion finished.
+2018-08-12 09:39:46 INFO  Main:280 - 
+finding solutions finished.
+
+Algorithm ends at: 08.12.2018  09.39.46 AM
+2018-08-12 09:39:46 INFO  Main:284 - 
+Algorithm ends at: 08.12.2018  09.39.46 AM
+
+Algorithm duration: 2 sec
+2018-08-12 09:39:46 INFO  Main:286 - 
+Algorithm duration: 2 sec
+2018-08-12 09:39:46 INFO  Main:288 - 
+sorting solutions................
+2018-08-12 09:39:46 INFO  Main:290 - 
+sorting solutions finished.
+2018-08-12 09:39:46 INFO  Main:292 - 
+printing solutions started...............
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:60 - 
+####################Solutions####################:
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:79 - 
+Total solutions found using raw list: 0
+2018-08-12 09:39:46 INFO  ConceptFinderComplexCustom:80 - 
+Total solutions found after removing empty solution: 0
+2018-08-12 09:39:46 INFO  Main:294 - 
+printing solutions finished.
+
+Program finished.
+Program ends at: 08.12.2018  09.39.46 AM
+Program duration: 2 sec
+2018-08-12 09:39:46 INFO  Main:158 - Program finished.
+
+Process finished with exit code 0

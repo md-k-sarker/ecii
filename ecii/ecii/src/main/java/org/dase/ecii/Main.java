@@ -302,21 +302,61 @@ public class Main {
 
     /**
      * @param csvPath
-     * @param objPropColumnName
      * @param indivColumnName
      * @param typeColumnName
+     * @param ontoIRI
+     * @param objPropColumnName
      */
-    public static void createOntologyFromCSV(String csvPath, String objPropColumnName, String indivColumnName, String typeColumnName) {
+    public static void createOntologyFromCSV(String csvPath, String indivColumnName, String typeColumnName, String ontoIRI, String delimeter, String objPropColumnName) {
         CreateOWLFromCSV createOWLFromCSV = null;
+        logger.info("Creating ontology by processing csv file: " + csvPath + " started............");
+
         try {
-            logger.info("processing csv file: " + csvPath);
+            // "http://www.daselab.com/residue/analysis"
             createOWLFromCSV = new CreateOWLFromCSV(csvPath.toString(), "talksAbout",
-                    "http://www.daselab.com/residue/analysis");
+                    ontoIRI, delimeter);
         } catch (OWLOntologyCreationException e) {
+            logger.error("Error in creating ontology: " + csvPath + " !!!!!!!!!!!!");
             e.printStackTrace();
         }
 
         createOWLFromCSV.parseCSVToCreateIndivAndTheirTypes(indivColumnName, typeColumnName);
+        logger.info("Creating ontology by processing csv file: " + csvPath + " finished.");
+    }
+
+    /**
+     * @param csvPath
+     * @param entityColumnName
+     * @param usePrefixForIndivCreation
+     * @param indivPrefix
+     * @param assignTypeUsingSameEntity
+     * @param ontoIRI
+     */
+    public static void createOntologyFromCSV(String csvPath, String entityColumnName, String usePrefixForIndivCreation, String indivPrefix, String assignTypeUsingSameEntity, String ontoIRI,String delimeter) {
+
+        boolean usePrefixForIndivCreation_ = false;
+        boolean assignTypeUsingSameEntity_ = false;
+
+        if (usePrefixForIndivCreation.toString().toLowerCase().equals("true")) {
+            usePrefixForIndivCreation_ = true;
+        }
+        if (assignTypeUsingSameEntity.toString().toLowerCase().equals("true")) {
+            assignTypeUsingSameEntity_ = true;
+        }
+        CreateOWLFromCSV createOWLFromCSV = null;
+        logger.info("Creating ontology by processing csv file: " + csvPath + " started............");
+
+        try {
+            // "http://www.daselab.com/residue/analysis"
+            createOWLFromCSV = new CreateOWLFromCSV(csvPath.toString(), ontoIRI, delimeter);
+        } catch (OWLOntologyCreationException e) {
+            logger.error("Error in creating ontology: " + csvPath + " !!!!!!!!!!!!");
+            e.printStackTrace();
+        }
+//     public void parseCSVToCreateIndivAndTheirTypes(String entityColumnName, boolean usePrefixForIndivCreation, String indivPrefix, boolean assignTypeUsingSameEntity)
+
+        createOWLFromCSV.parseCSVToCreateIndivAndTheirTypes(entityColumnName, usePrefixForIndivCreation_, indivPrefix, assignTypeUsingSameEntity_);
+        logger.info("Creating ontology by processing csv file: " + csvPath + " finished.");
     }
 
 
@@ -352,7 +392,8 @@ public class Main {
                 "\n\t-m or -e [-b] [directory_path]" +
                 "\n\t-c [inputOntologiesDirectory, outputOntologyIRI]" +
                 "\n\t-s [-obj/type] [inputOntoPath, entityCsvFilePath, indivColumnName, objPropColumnName/typeColumnName, outputOntoIRI] " +
-                "\n\t-o [entityCsvFilePath, objPropColumnName, indivColumnName, typeColumnName, outputOntoIRI]" +
+                "\n\t-o [entityCsvFilePath, indivColumnName, typeColumnName, outputOntoIRI, delimeter, objPropColumnName]" +
+                "\n\t\t-o [entityCsvFilePath, entityColumnName, usePrefixForIndivCreation, indivPrefix, assignTypeUsingSameEntity, ontoIRI, delimeter]" +
                 "\n\nTo measure similarity between ontology entities..... or " +
                 "\nTo perform concept induction....." +
                 "\nProgram runs in two mode. " +
@@ -471,9 +512,11 @@ public class Main {
                 printHelp();
             }
         } else if (args[0].equals("-o")) {
-            // -o [entityCsvFilePath, objPropColumnName, indivColumnName, typeColumnName, outputOntoIRI]"
-            if (args.length == 6) {
-                createOntologyFromCSV(args[1], args[2], args[3], args[4]);
+            // -o [entityCsvFilePath, indivColumnName, typeColumnName, outputOntoIRI, objPropColumnName]"
+            if (args.length == 7) {
+                createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6]);
+            } else if (args.length == 8) {
+                createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
             } else {
                 System.out.println(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
                 printHelp();
