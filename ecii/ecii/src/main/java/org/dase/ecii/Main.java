@@ -467,7 +467,7 @@ public class Main {
                 "\n\nTo measure similarity between ontology entities..... or " +
                 "\nTo perform concept induction....." +
                 "\nProgram runs in two mode. " +
-                "\n\tBatch mode and " +
+                "\n\tBatch mode or " +
                 "\n\tsingle mode. " +
                 "\nIn single mode it will take a config file as input parameter and run the program as mentioned by the parameters in config file." +
                 "\nIn Batch mode it take directory as input parameter and will run all the config files within that directory." +
@@ -479,7 +479,10 @@ public class Main {
                 "\n\tFor single mode:" +
                 "\n\t\t\tjava -jar ecii.jar -e config_file" +
                 "\n\tFor Batch mode:" +
-                "\n\t\t\tjava -jar ecii.jar -e -b directory";
+                "\n\t\t\tjava -jar ecii.jar -e -b directory"+
+                "\n\nConcept induction or similarity measure has many tuning parameters. Those are written in the configuration file." +
+                "\nExample of configuration file can be seen in" +
+                "https://github.com/md-k-sarker/ecii";
 
         String helpCommandParameter = "";
 

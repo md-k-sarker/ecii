@@ -908,7 +908,8 @@ public class CandidateSolutionFinderV2 {
         if (conjunctiveHornClausesList.size() > 0) {
 
             // sort the list
-            logger.info("horn clauses map  will be filtered initial size: " + conjunctiveHornClausesList.size());
+            // todo(zaman): need to use the unified sorting algorithm, instead of this local one
+            logger.info("horn clauses map  will be filtered, initial size: " + conjunctiveHornClausesList.size());
             conjunctiveHornClausesList.sort((o1, o2) -> {
                 if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
                     return -1;

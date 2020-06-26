@@ -22,86 +22,157 @@ public final class ConfigParams {
     private static String appConfigFileName = "app.properties";
     final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
+    /**
+     * Java.util.properties does not accept multiline comment, weird!!
+     */
     private static Properties prop;
 
     // properties needed
+    /**
+     * Configuration file path. For concept induction or similarity measurement lot's of settings are required.
+     * So those are written in a config file and config file path are given as a parameter to the program.
+     */
     public static String confFilePath;
+    /**
+     * For batch running we can provide the directory of config files  and the system will run for all config files.
+     */
     public static String confFileDir;
+    /**
+     * Ontology reasoner name
+     * Possible reasoners: hermit, elk, fact, jfact, pellet
+     * Default: pellet
+     */
     public static String reasonerName;
+    /**
+     * Type of metric to calculate accuracy/score of a solution.
+     * Possible metrices: coverage, precision, recall, f_measure, hybrid (precision+recall+f_measure)
+     * Default: f_measure
+     */
     public static String scoreTypeNameRaw;
+    /**
+     * Ontology path, for batch running it will be different for multiple operation
+     */
     public static String ontoPath;
-    //outputResultPath will always be at the same directory of the confFile.
+    /*
+     * outputResultPath will always be at the same directory of the confFile.
+     */
     public static String outputResultPath;
-    // default prefix.
+
+    /**
+     * default prefix.
+     */
     public static String namespace;
-    // all prefix:suffix map
+
+    /**
+     * all prefix:suffix map
+     */
     public static HashMap<String, String> prefixes;
 
     /**
-     *
+     * Exension of result file.
+     * Default: _results_ecii_v2.txt
+     * result file for concept induction of similarity measure.
      */
     public static String resultFileExtension = "";
+
     /**
-     * K7/atomic types both appeared in positive and negative
+     * removeCommonTypes: Whether to remove those atomic types which appeared in both positive and negative inidviduals.
+     * Also named as K7
+     * Boolean
+     * Default: true
      */
     public static boolean removeCommonTypes;
 
     /**
-     * This is also called as K1
-     * K1/negExprTypeLimit, limit of number of concepts in a negative expression of a hornClause
+     * conceptLimitInNegExpr: Use only these number of top performing atomic concepts in the negative expression of a hornClause
+     * Also named as K1
+     * Integer
+     * Default: 2
      */
     public static int conceptLimitInNegExpr;
+
     /**
-     * Number of allowable hornClause inside of a candidateClass.
-     * This is also called as K2
+     * hornClauseLimit: Number of allowable hornClause inside of a candidateClass.
+     * Also named as K2
+     * Integer
+     * Default: 2
      */
     public static int hornClauseLimit;
+
     /**
-     * This is also called as K3.
-     * K3/permutate/combination untill this number of objectproperties
+     * objPropsCombinationLimit: Use this number of objectproperties in a single solution If we have more than 1 then it
+     * will combine those objectProperties to make a solution.
+     * Also named as K3.
+     * Integer
+     * Default: 2
      */
     public static int objPropsCombinationLimit;
+
     /**
-     * it can be called as directTypeLimit or conceptLimitInPosExpr. This is also called as K4.
-     * ecii-v0: not being used.
-     * ecii-v2: we are using this one.
-     * <p>
-     * limit of number of concepts in a positive expression of a hornClause
+     * conceptLimitInPosExpr: Limit the number of atomic concepts in the positive expression of a hornClause
+     * it can be called as directTypeLimit or conceptLimitInPosExpr.
+     * Also named as K4.
+     * ecii-v0: not used.
+     * ecii-v2: being used.
+     * Integer
+     * Default: 2
      */
     public static int conceptLimitInPosExpr;
 
     /**
-     * k9/ maximum posclasses (top scoring) to do the combination.
+     * posClassListMaxSize: Select these numbers of top performing positiveClasses, from the list of positiveClasses (if more exist)
+     * to combine them.
+     * We use this combination to make the positive expression of hornClause.
      * size of combination would be nCr or posClassListMaxSize--C--conceptLimitInPosExpr
+     * Also named as K9
+     * Integer
+     * Default 20
      */
     public static int posClassListMaxSize;
 
     /**
-     * Experimental: instead of typeOfObjectsInPosIndivsMaxSize, posClassListMaxSize is multiplied by multiplicationConstant in limiting the positive types list.
-     */
-    public static int multiplicationConstant = 1;
-
-    /**
-     * k10/ maximum negclasses (top scoring) to do the combination.
+     * negClassListMaxSize: Select these numbers of top performing negativeClasses, from the list of negativeClasses (if more exist)
+     * to combine them.
+     * We use this combination to make the negative expression of hornClause.
      * size would be nCr or negClassListMaxSize--C--conceptLimitInNegExpr
+     * Also named as k10
+     * Integer
+     * Default: 20
      */
     public static int negClassListMaxSize;
 
     /**
-     * K5 select upto k5 hornClauses to make combination
+     * hornClausesListMaxSize: Select these numbers of top performing hornClauses, to combine them in candidateClasses
+     * size would be nCr or hornClausesListMaxSize--C--hornClauseLimit
+     * Also named as K5
+     * Integer
+     * Default: 10
      */
     public static int hornClausesListMaxSize;
 
     /**
-     * K6 select upto k6 candidate classes to make combination
+     * candidateClassesListMaxSize: Select these numbers of top performing candidateClasses, to combine them in candidateSolution
+     * size would be nCr or candidateClassesListMaxSize--C--objPropsCombinationLimit
+     * Also named as K6
+     * Integer
+     * Default: 10
      */
     public static int candidateClassesListMaxSize;
 
     /**
-     * K8/Validate the accuracy of top solutions by reasoner upto this number of solutions
+     * validateByReasonerSize: Validate the accuracy of top solutions by reasoner upto this number of solutions
+     * Also named as k8
+     * Integer
+     * Default: 0
      */
     public static int validateByReasonerSize;
 
+    /**
+     * ascendingOfStringLength: To sort the solution whether use string length from small to large or large to small.
+     * If true, use small to large, if false use large to small
+     * Boolean
+     * Default: false
+     */
     public static boolean ascendingOfStringLength;
 
     //public static double combinationThreshold;
@@ -117,6 +188,13 @@ public final class ConfigParams {
      */
     public static boolean runPairwiseSimilarity = false;
 
+    /**
+     * Experimental: instead of typeOfObjectsInPosIndivsMaxSize, posClassListMaxSize is multiplied by multiplicationConstant in limiting the positive types list.
+     * This limits the solution size severely!! need to check. todo(zaman)
+     * Integer
+     * Default 1
+     */
+    public static int multiplicationConstant = 1;
     //@formatter:off
     /**
      * Experimental, maximum positive individuals (positive objects connected through some property) size, it was used to limit
@@ -126,15 +204,18 @@ public final class ConfigParams {
      *                         .limit(ConfigParams.typeOfObjectsInPosIndivsMaxSize)
      *                         .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
      */
-//    public static int typeOfObjectsInPosIndivsMaxSize = 100;
+    //    public static int typeOfObjectsInPosIndivsMaxSize = 100;
 
     /**
      * Experimental
+     * This is being used inside: solution using multiple positive and multiple negative type
+     * need to check. todo(zaman)
      */
     public static int typeOfObjectsInPosIndivsMinSize = 5;
 
     /**
      * Experimental
+     * need to check. todo(zaman)
      */
     public static int typeOfObjectsInNegIndivsMinSize = 5;
     //@formatter:on
@@ -153,7 +234,7 @@ public final class ConfigParams {
 
         try (InputStream input = new BufferedInputStream(new FileInputStream(confFilePath))) {
 
-            logger.info("given confFilePath: " + confFilePath);
+            logger.info("Given confFilePath: " + confFilePath);
 
             if (input == null) {
                 logger.error("Error reading " + confFilePath + " file");
@@ -173,7 +254,6 @@ public final class ConfigParams {
 
             logger.info(System.lineSeparator() + "#############################" + System.lineSeparator());
 
-
             SharedDataHolder.confFileFullContent = readAllContent(confFilePath);
 
             prefixes = Utility.extractPrefixesFromConf(SharedDataHolder.confFileFullContent);
@@ -185,7 +265,7 @@ public final class ConfigParams {
             // allowable names: coverage,precision,recall,f_measure,coverage_by_reasoner,
             // precision_by_reasoner,recall_by_reasoner,f_measure_by_reasoner
             // beware that properties are case sensitive
-            scoreTypeNameRaw = prop.getProperty("scoreType", "precision");
+            scoreTypeNameRaw = prop.getProperty("scoreType", "f_measure");
             parseScoreTypes(scoreTypeNameRaw);
 
             // reasoner
@@ -196,7 +276,7 @@ public final class ConfigParams {
             // add none object property
             SharedDataHolder.objProperties.put(SharedDataHolder.noneOWLObjProp, 1.0);
 
-            logger.info("pos indivs---------");
+            logger.info("Pos indivs---------");
             logger.info(prop.get("lp.positiveExamples").toString());
 
             conceptLimitInPosExpr = Integer.valueOf(prop.getProperty("conceptLimitInPosExpr", "2"));
@@ -211,7 +291,7 @@ public final class ConfigParams {
             negClassListMaxSize = Integer.valueOf(prop.getProperty("negClassListMaxSize", "20"));
             runPairwiseSimilarity = Boolean.parseBoolean(prop.getProperty("runPairwiseSimilarity", "false"));
             ascendingOfStringLength = Boolean.parseBoolean(prop.getProperty("ascendingOfStringLength", "false"));
-            resultFileExtension = prop.getProperty("resultFileExtension","_results_ecii_v2.txt");
+            resultFileExtension = prop.getProperty("resultFileExtension", "_results_ecii_v2.txt");
 
             confFileDir = Paths.get(confFilePath).getParent().toString();
             String replacement = ConfigParams.resultFileExtension;
@@ -221,10 +301,8 @@ public final class ConfigParams {
             //ontoPath = prop.getProperty("ks.fileName");
             ontoPath = Utility.getCorrectPath(confFileDir, Utility.readOntoPathFromConf(SharedDataHolder.confFileFullContent));
 
-
             logger.info("Printing Config properties after parsing: ");
             printConfigProperties();
-
 
         } catch (Exception ex) {
             logger.error("Fatal Error", ex);
@@ -263,7 +341,7 @@ public final class ConfigParams {
                     Score.defaultScoreType = ScoreType.COVERAGE_by_REASONER;
                     break;
                 default:
-                    Score.defaultScoreType = ScoreType.PRECISION;
+                    Score.defaultScoreType = ScoreType.F_MEASURE;
             }
             return true;
         } catch (Exception ex) {
