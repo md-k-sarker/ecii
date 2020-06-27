@@ -31,7 +31,9 @@ public class TestCreateOWLFromCSV {
                             logger.info("processing csv file: " + path);
                             createOWLFromCSV = new CreateOWLFromCSV(path.toString(),
                                     "talksAbout",
-                                    "http://www.daselab.com/residue/analysis");
+                                    "http://www.daselab.com/residue/analysis",
+                                    true,
+                                    "#");
                         } catch (OWLOntologyCreationException e) {
                             e.printStackTrace();
                         }

@@ -6,6 +6,7 @@ Written at 7/30/18.
 
 import org.dase.ecii.exceptions.MalFormedIRIException;
 import org.dase.ecii.core.SharedDataHolder;
+import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Utility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,17 +109,17 @@ public class TestConfParsing {
     private static void testParsing(){
         try {
             logger.debug("ObjectProperties:");
-            Utility.readObjectPropsFromConf(SharedDataHolder.confFileFullContent).forEach((owlObjectProperty, aDouble) -> {
+            Utility.readObjectPropsFromConf(SharedDataHolder.confFileFullContent, ConfigParams.delimeter).forEach((owlObjectProperty, aDouble) -> {
                 logger.debug(owlObjectProperty.getIRI().toString() + " " + aDouble.toString());
             });
 
             logger.debug("Positive Individuals:");
-            Utility.readPosExamplesFromConf(SharedDataHolder.confFileFullContent).forEach(owlNamedIndividual -> {
+            Utility.readPosExamplesFromConf(SharedDataHolder.confFileFullContent, ConfigParams.delimeter).forEach(owlNamedIndividual -> {
                 logger.debug(owlNamedIndividual.getIRI().toString());
             });
 
             logger.debug("Negative Individuals:");
-            Utility.readNegExamplesFromConf(SharedDataHolder.confFileFullContent).forEach(owlNamedIndividual -> {
+            Utility.readNegExamplesFromConf(SharedDataHolder.confFileFullContent, ConfigParams.delimeter).forEach(owlNamedIndividual -> {
                 logger.debug(owlNamedIndividual.getIRI().toString());
             });
         }catch (MalFormedIRIException ex){

@@ -626,7 +626,7 @@ public class Utility {
      * @param confFileFullContent : confFile content
      * @return HashMap<OWLObjectProperty, Double>
      */
-    public static HashMap<OWLObjectProperty, Double> readObjectPropsFromConf(String confFileFullContent) throws IOException, MalFormedIRIException {
+    public static HashMap<OWLObjectProperty, Double> readObjectPropsFromConf(String confFileFullContent, String delimeter) throws IOException, MalFormedIRIException {
 
         //logger.debug("Reading object properties from full content: " + confFileFullContent);
 
@@ -646,7 +646,7 @@ public class Utility {
         }
 
         String regexEachEntity = "\"{1}([^\"])*\"{1}";
-        ArrayList<IRI> objPropsIRI = extractEachEntityIRIFromTextPortion(objPropsPortion, regexEachEntity);
+        ArrayList<IRI> objPropsIRI = extractEachEntityIRIFromTextPortion(objPropsPortion, regexEachEntity, delimeter);
 
         HashMap<OWLObjectProperty, Double> objectPropertyFloatHashMap = new HashMap<>();
         objPropsIRI.forEach(iri -> {
@@ -670,12 +670,17 @@ public class Utility {
      *                        "kb:calvin"
      *                        }
      * @param regexEachEntity : String
+     * @param delimeter : String , only allowed are #, / or :
      * @return ArrayList<IRI>
      */
-    public static ArrayList<IRI> extractEachEntityIRIFromTextPortion(String textPortion, String regexEachEntity) throws MalFormedIRIException {
+    public static ArrayList<IRI> extractEachEntityIRIFromTextPortion(String textPortion, String regexEachEntity, String delimeter) throws MalFormedIRIException {
+
+        if (!delimeter.matches("#|/|:")){
+            logger.error("Delimeter is not one of #, / or :");
+            return null;
+        }
 
         ArrayList<IRI> entityIRIs = new ArrayList<>();
-
 
         Pattern pattern = Pattern.compile(regexEachEntity);
         Matcher matcher = pattern.matcher(textPortion);
@@ -686,7 +691,7 @@ public class Utility {
             eachObjPropStr = matcher.group();
             eachObjPropStr = eachObjPropStr.replaceAll("\"", "");
             //logger.debug("matched str for entity: " + eachObjPropStr);
-            IRI iri = createEntityIRI(eachObjPropStr);
+            IRI iri = createEntityIRI(eachObjPropStr, delimeter);
             if (null != iri) {
                 entityIRIs.add(iri);
             } else {
@@ -699,14 +704,18 @@ public class Utility {
 
     /**
      * Create an valid IRI based on the given string. Given name must be ex:ob1 or :ob1 or ob1 format format.
-     * if only ob1 is given then it must be full name. like www.http://hcbd.org#indi
+     * if only ob1 is given then it must be full name. like
+     * www.http://hcbd.org#indi or
+     * www.http://hcbd.org/indi or
+     * www.http://hcbd.org:indi
      *
      * It looks prefix mapping on ConfigParams.prefixes, so when looking it must not be null.
      *
      * @param entityFullName: String. format must be ex:indi or :indi or indi.
+     * @param delimeter: String. must be one of # or / or :
      * @return IRI
      */
-    public static IRI createEntityIRI(String entityFullName) throws MalFormedIRIException {
+    public static IRI createEntityIRI(String entityFullName, String delimeter) throws MalFormedIRIException {
         String prefix = "";
         String suffix;
         String[] parts;
@@ -730,7 +739,7 @@ public class Utility {
                         logger.error("Looking prefix mapping on ConfigParams.prefixes while it is null.");
                         return null;
                     }
-                    return createEntityIRI(prefix, suffix);
+                    return createEntityIRI(prefix, suffix, delimeter);
                 }
             } else {
                 // it is malformed syntax.
@@ -750,16 +759,17 @@ public class Utility {
      * @param suffix
      * @return IRI
      */
-    public static IRI createEntityIRI(String prefix, String suffix) {
+    public static IRI createEntityIRI(String prefix, String suffix, String delimeter) {
         if (prefix.length() > 0 && suffix.length() > 0) {
             String validName = "";
-            if (prefix.endsWith("#") && suffix.startsWith("#")) {
+            if (prefix.endsWith(delimeter) && suffix.startsWith(delimeter)) {
                 suffix = suffix.substring(1, prefix.length());
                 validName = prefix + suffix;
-            } else if ((prefix.endsWith("#") && (!suffix.startsWith("#"))) || ((!prefix.endsWith("#")) && suffix.startsWith("#"))) {
+            } else if ((prefix.endsWith(delimeter) && (!suffix.startsWith(delimeter))) ||
+                    ((!prefix.endsWith(delimeter)) && suffix.startsWith(delimeter))) {
                 validName = prefix + suffix;
             } else {
-                validName = prefix + "#" + suffix;
+                validName = prefix + delimeter + suffix;
             }
             IRI iri = IRI.create(validName);
             return iri;
@@ -771,8 +781,9 @@ public class Utility {
     public static IRI getUniqueIRI() {
         ++SharedDataHolder.newIRICounter;
         String str = ":_Dracula__Dragon_Z" + SharedDataHolder.newIRICounter;
+        String delimeter = ":";
         try {
-            return Utility.createEntityIRI(str);
+            return Utility.createEntityIRI(str, delimeter);
         } catch (MalFormedIRIException ex) {
             return IRI.create(str);
         }
@@ -782,10 +793,11 @@ public class Utility {
      * Read pos examples from the conf confFile
      *
      * @param confFileFullContent
+     * @param delimeter
      * @return HashSet of OWLNamedIndividual
      * @throws IOException
      */
-    public static HashSet<OWLNamedIndividual> readPosExamplesFromConf(String confFileFullContent) throws IOException, MalFormedIRIException {
+    public static HashSet<OWLNamedIndividual> readPosExamplesFromConf(String confFileFullContent, String delimeter) throws IOException, MalFormedIRIException {
 
         //logger.debug("Reading posExamples from full content: " + confFileFullContent);
         HashSet<OWLNamedIndividual> posIndivs = new HashSet<OWLNamedIndividual>();
@@ -807,7 +819,7 @@ public class Utility {
 
 
         String regexEachEntity = "\"{1}([^\"])*\"{1}";
-        ArrayList<IRI> posExamplesIRI = extractEachEntityIRIFromTextPortion(posExamplesPortion, regexEachEntity);
+        ArrayList<IRI> posExamplesIRI = extractEachEntityIRIFromTextPortion(posExamplesPortion, regexEachEntity, delimeter);
 
         posExamplesIRI.forEach(iri -> {
             OWLNamedIndividual eachIndi = OWLManager.getOWLDataFactory().getOWLNamedIndividual(iri);
@@ -820,10 +832,11 @@ public class Utility {
      * Read neg examples from the conf confFile
      *
      * @param confFileFullContent
+     * @param delimeter
      * @return HashSet of OWLNamedIndividual
      * @throws IOException
      */
-    public static HashSet<OWLNamedIndividual> readNegExamplesFromConf(String confFileFullContent) throws IOException, MalFormedIRIException {
+    public static HashSet<OWLNamedIndividual> readNegExamplesFromConf(String confFileFullContent, String delimeter) throws IOException, MalFormedIRIException {
 
         //logger.debug("Reading negExamples from full content: " + confFileFullContent);
         HashSet<OWLNamedIndividual> negIndivs = new HashSet<OWLNamedIndividual>();
@@ -849,7 +862,7 @@ public class Utility {
         logger.info("negExamplesPortion2: " + negExamplesPortion);
 
         String regexEachEntity = "\"{1}([^\"])*\"{1}";
-        ArrayList<IRI> negExamplesIRI = extractEachEntityIRIFromTextPortion(negExamplesPortion, regexEachEntity);
+        ArrayList<IRI> negExamplesIRI = extractEachEntityIRIFromTextPortion(negExamplesPortion, regexEachEntity, delimeter);
 
         negExamplesIRI.forEach(iri -> {
             OWLNamedIndividual eachIndi = OWLManager.getOWLDataFactory().getOWLNamedIndividual(iri);
@@ -925,7 +938,7 @@ public class Utility {
      * @throws IOException
      * @deprecated
      */
-    private static HashSet<OWLNamedIndividual> getIndivsFromTxtFile(String filePath) throws IOException, MalFormedIRIException {
+    private static HashSet<OWLNamedIndividual> getIndivsFromTxtFile(String filePath, String delimeter) throws IOException, MalFormedIRIException {
 
         if (null != filePath) {
             String indiName;
@@ -934,7 +947,7 @@ public class Utility {
             BufferedReader br = new BufferedReader(new FileReader(new File(filePath)));
 
             while ((indiName = br.readLine()) != null) {
-                IRI indiIRI = createEntityIRI(indiName);
+                IRI indiIRI = createEntityIRI(indiName, delimeter);
                 indi = OWLManager.getOWLDataFactory().getOWLNamedIndividual(indiIRI);
                 indivs.add(indi);
             }

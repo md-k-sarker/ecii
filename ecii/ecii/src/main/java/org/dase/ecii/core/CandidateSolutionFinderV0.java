@@ -1224,7 +1224,7 @@ public class CandidateSolutionFinderV0 {
         String str = ":_Dracula__Dragon_Z" + newIRICounter;
         try {
 
-            return Utility.createEntityIRI(str);
+            return Utility.createEntityIRI(str, ConfigParams.delimeter);
         } catch (MalFormedIRIException ex) {
             return IRI.create(str);
         }

@@ -69,6 +69,13 @@ public final class ConfigParams {
     public static HashMap<String, String> prefixes;
 
     /**
+     * Default delimeter of ontology entity
+     * Only allowables are #, : or /
+     * Default #
+     */
+    public static String delimeter = "#";
+
+    /**
      * Exension of result file.
      * Default: _results_ecii_v2.txt
      * result file for concept induction of similarity measure.
@@ -175,6 +182,13 @@ public final class ConfigParams {
      */
     public static boolean ascendingOfStringLength;
 
+    /**
+     * When printing solutions, use rdfs:label annotations instead of name
+     * Boolean, Optional
+     * Default: false
+     */
+    public static boolean printLabelInsteadOfName = false;
+
     //public static double combinationThreshold;
     public static boolean batch;
     public static String batchStartingPath;
@@ -260,6 +274,8 @@ public final class ConfigParams {
             // default prefix is the namespace
             namespace = prop.getProperty("namespace");
             prefixes.put("", namespace);
+            // delimeter
+            delimeter = prop.getProperty("delimeter", "#");
 
             // score type
             // allowable names: coverage,precision,recall,f_measure,coverage_by_reasoner,
@@ -272,7 +288,7 @@ public final class ConfigParams {
             reasonerName = prop.getProperty("reasoner.reasonerImplementation", "pellet");
 
             // obj property
-            SharedDataHolder.objProperties = Utility.readObjectPropsFromConf(SharedDataHolder.confFileFullContent);
+            SharedDataHolder.objProperties = Utility.readObjectPropsFromConf(SharedDataHolder.confFileFullContent, delimeter);
             // add none object property
             SharedDataHolder.objProperties.put(SharedDataHolder.noneOWLObjProp, 1.0);
 
@@ -292,6 +308,7 @@ public final class ConfigParams {
             runPairwiseSimilarity = Boolean.parseBoolean(prop.getProperty("runPairwiseSimilarity", "false"));
             ascendingOfStringLength = Boolean.parseBoolean(prop.getProperty("ascendingOfStringLength", "false"));
             resultFileExtension = prop.getProperty("resultFileExtension", "_results_ecii_v2.txt");
+            printLabelInsteadOfName = Boolean.parseBoolean(prop.getProperty("ascendingOfStringLength", "false"));
 
             confFileDir = Paths.get(confFilePath).getParent().toString();
             String replacement = ConfigParams.resultFileExtension;

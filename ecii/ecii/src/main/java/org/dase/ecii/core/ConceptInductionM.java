@@ -145,10 +145,10 @@ public class ConceptInductionM {
 //        logger.info("reasoner initialized successfully");
 
         logger.info("reading pos and neg indivs from conf file started........");
-        SharedDataHolder.posIndivs = Utility.readPosExamplesFromConf(SharedDataHolder.confFileFullContent);
+        SharedDataHolder.posIndivs = Utility.readPosExamplesFromConf(SharedDataHolder.confFileFullContent, ConfigParams.delimeter);
         logger.info("reading pos indivs from conf file finished successfully. SharedDataHolder.posIndivs.size: " + SharedDataHolder.posIndivs.size());
         logger.info("reading neg indivs from conf file started........");
-        SharedDataHolder.negIndivs = Utility.readNegExamplesFromConf(SharedDataHolder.confFileFullContent);
+        SharedDataHolder.negIndivs = Utility.readNegExamplesFromConf(SharedDataHolder.confFileFullContent, ConfigParams.delimeter);
         logger.info("reading neg indivs from conf file finished successfully SharedDataHolder.negIndivs.size: " + SharedDataHolder.negIndivs.size());
 
         // write user defined values to resultFile

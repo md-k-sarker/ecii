@@ -140,6 +140,7 @@ public class Main {
 
     /**
      * Call processBatchRunning by changing String dirPath to path dirPath
+     *
      * @param dirPath
      * @param runPairwiseSimilarity
      */
@@ -361,23 +362,29 @@ public class Main {
 
     /**
      * Call functions to create ontology by using the entity names from csv
+     *
      * @param csvPath
      * @param indivColumnName
      * @param typeColumnName
      * @param ontoIRI
+     * @param providingEntityFullName, if false it will use  ontoIRI+entityName to generate full name
+     * @param delimeter
      * @param objPropColumnName
      */
-    public static void createOntologyFromCSV(String csvPath, String indivColumnName, String typeColumnName, String ontoIRI, String delimeter, String objPropColumnName) {
+    public static void createOntologyFromCSV(String csvPath, String indivColumnName, String typeColumnName, String ontoIRI, String providingEntityFullName, String delimeter, String objPropColumnName) {
 
         initiateSingleOpsStart(null);
 
         CreateOWLFromCSV createOWLFromCSV = null;
         logger.info("Creating ontology by processing csv file: " + csvPath + " started............");
-
+        boolean isProvidingEntityFullName = false;
+        if (providingEntityFullName.toString().toLowerCase().equals("true")) {
+            isProvidingEntityFullName = true;
+        }
         try {
             // "http://www.daselab.com/residue/analysis"
             createOWLFromCSV = new CreateOWLFromCSV(csvPath.toString(), "talksAbout",
-                    ontoIRI, delimeter);
+                    ontoIRI, isProvidingEntityFullName, delimeter);
         } catch (OWLOntologyCreationException e) {
             logger.error("Error in creating ontology: " + csvPath + " !!!!!!!!!!!!");
             e.printStackTrace();
@@ -398,12 +405,15 @@ public class Main {
      * @param indivPrefix
      * @param assignTypeUsingSameEntity
      * @param ontoIRI
+     * @param providingEntityFullName,  if false it will use  ontoIRI+entityName to generate full name
+     * @param delimeter
      */
-    public static void createOntologyFromCSV(String csvPath, String entityColumnName, String usePrefixForIndivCreation, String indivPrefix, String assignTypeUsingSameEntity, String ontoIRI, String delimeter) {
+    public static void createOntologyFromCSV(String csvPath, String entityColumnName, String usePrefixForIndivCreation, String indivPrefix, String assignTypeUsingSameEntity, String ontoIRI, String providingEntityFullName, String delimeter) {
 
         initiateSingleOpsStart(null);
         boolean usePrefixForIndivCreation_ = false;
         boolean assignTypeUsingSameEntity_ = false;
+        boolean isProvidingEntityFullName = false;
 
         if (usePrefixForIndivCreation.toString().toLowerCase().equals("true")) {
             usePrefixForIndivCreation_ = true;
@@ -411,12 +421,15 @@ public class Main {
         if (assignTypeUsingSameEntity.toString().toLowerCase().equals("true")) {
             assignTypeUsingSameEntity_ = true;
         }
+        if (providingEntityFullName.toString().toLowerCase().equals("true")) {
+            isProvidingEntityFullName = true;
+        }
         CreateOWLFromCSV createOWLFromCSV = null;
         logger.info("Creating ontology by processing csv file: " + csvPath + " started............");
 
         try {
             // "http://www.daselab.com/residue/analysis"
-            createOWLFromCSV = new CreateOWLFromCSV(csvPath.toString(), ontoIRI, delimeter);
+            createOWLFromCSV = new CreateOWLFromCSV(csvPath.toString(), ontoIRI, isProvidingEntityFullName, delimeter);
         } catch (OWLOntologyCreationException e) {
             logger.error("Error in creating ontology: " + csvPath + " !!!!!!!!!!!!");
             e.printStackTrace();
@@ -462,8 +475,8 @@ public class Main {
                 "\n\t-c [inputOntologiesDirectory, outputOntologyIRI]" +
                 "\n\t\t-c [outputPath, traversingRootPath, csvPath, csvColumnName, useFileNameExtender, fileNameExtender]" +
                 "\n\t-s [-obj/type] [inputOntoPath, entityCsvFilePath, indivColumnName, objPropColumnName/typeColumnName, outputOntoIRI] " +
-                "\n\t-o [entityCsvFilePath, indivColumnName, typeColumnName, outputOntoIRI, delimeter, objPropColumnName]" +
-                "\n\t\t-o [entityCsvFilePath, entityColumnName, usePrefixForIndivCreation, indivPrefix, assignTypeUsingSameEntity, ontoIRI, delimeter]" +
+                "\n\t-o [entityCsvFilePath, indivColumnName, typeColumnName, outputOntoIRI, providingEntityFullName, delimeter, objPropColumnName]" +
+                "\n\t\t-o [entityCsvFilePath, entityColumnName, usePrefixForIndivCreation, indivPrefix, assignTypeUsingSameEntity, ontoIRI, providingEntityFullName, delimeter]" +
                 "\n\nTo measure similarity between ontology entities..... or " +
                 "\nTo perform concept induction....." +
                 "\nProgram runs in two mode. " +
@@ -479,7 +492,7 @@ public class Main {
                 "\n\tFor single mode:" +
                 "\n\t\t\tjava -jar ecii.jar -e config_file" +
                 "\n\tFor Batch mode:" +
-                "\n\t\t\tjava -jar ecii.jar -e -b directory"+
+                "\n\t\t\tjava -jar ecii.jar -e -b directory" +
                 "\n\nConcept induction or similarity measure has many tuning parameters. Those are written in the configuration file." +
                 "\nExample of configuration file can be seen in" +
                 "https://github.com/md-k-sarker/ecii";
@@ -601,12 +614,12 @@ public class Main {
             }
         } else if (args[0].equalsIgnoreCase("-o")) {
             // -o [entityCsvFilePath, indivColumnName, typeColumnName, outputOntoIRI, objPropColumnName]"
-            if (args.length == 7 || args.length == 8) {
+            if (args.length == 8 || args.length == 9) {
                 logger.info("Program starting to create ontology");
-                if (args.length == 7) {
-                    createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6]);
-                } else if (args.length == 8) {
+                if (args.length == 8) {
                     createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+                } else if (args.length == 9) {
+                    createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
                 }
             } else {
                 logger.error(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
