@@ -646,9 +646,15 @@ public class Utility {
         }
 
         String regexEachEntity = "\"{1}([^\"])*\"{1}";
+        logger.info("objPropsPortion: " + objPropsPortion);
+        HashMap<OWLObjectProperty, Double> objectPropertyFloatHashMap = new HashMap<>();
+
+        // if starts with comment
+        String commentRegex = "^(#|\\/*|\\/\\/).*";
+        if (objPropsPortion.matches(commentRegex)) return objectPropertyFloatHashMap;
+
         ArrayList<IRI> objPropsIRI = extractEachEntityIRIFromTextPortion(objPropsPortion, regexEachEntity, delimeter);
 
-        HashMap<OWLObjectProperty, Double> objectPropertyFloatHashMap = new HashMap<>();
         objPropsIRI.forEach(iri -> {
             OWLObjectProperty objProp = OWLManager.getOWLDataFactory().getOWLObjectProperty(iri);
             // by default give all objectproperty same score. based on the score we may choose to use certain object properties or nor.
@@ -732,7 +738,7 @@ public class Utility {
                 } else {
 
                     suffix = parts[1];
-                    // if parts[0] is empty or "" then it will get the default prefix from the prefixes hashmap.
+                    // if parts[0] is empty or "" then it will get the default prefix/namespace from the prefixes hashmap.
                     if (null != ConfigParams.prefixes) {
                         prefix = ConfigParams.prefixes.get(parts[0]);
                     } else {
