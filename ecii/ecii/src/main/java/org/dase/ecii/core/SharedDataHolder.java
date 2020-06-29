@@ -20,7 +20,14 @@ public class SharedDataHolder {
 
     public static OWLDataFactory owlDataFactory;
     public static OWLOntologyManager owlOntologyManager;
-    public static OWLOntology owlOntology;
+    /**
+     * Original loaded ontology
+     */
+    public static OWLOntology owlOntologyOriginal;
+    /**
+     * Stripped ontology, will not be saved in memory
+     */
+    public static OWLOntology owlOntologyStripped;
     //public static OWLObjectProperty objPropImageContains;
     public static DLSyntaxRendererExt dlSyntaxRendererExt;
 

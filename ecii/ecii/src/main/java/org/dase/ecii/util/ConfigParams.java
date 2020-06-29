@@ -3,6 +3,9 @@ package org.dase.ecii.util;
 import org.dase.ecii.core.Score;
 import org.dase.ecii.core.ScoreType;
 import org.dase.ecii.core.SharedDataHolder;
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +18,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Properties;
 
 public final class ConfigParams {
@@ -73,7 +77,7 @@ public final class ConfigParams {
      * Only allowables are #, : or /
      * Default #
      */
-    public static String delimeter = "#";
+    public static String delimeterOntoEntityIRI = "#";
 
     /**
      * Exension of result file.
@@ -183,7 +187,9 @@ public final class ConfigParams {
     public static boolean ascendingOfStringLength;
 
     /**
-     * When printing solutions, use rdfs:label annotations instead of name
+     * When printing solutions, use rdfs:label annotations instead of name.
+     * if no rdfs label is given, it will print the gerShortNameWithPrefix
+     * If this is true, it will override the gerShortNameWithPrefix options, will just print the rdfs label.
      * Boolean, Optional
      * Default: false
      */
@@ -275,7 +281,11 @@ public final class ConfigParams {
             namespace = prop.getProperty("namespace");
             prefixes.put("", namespace);
             // delimeter
-            delimeter = prop.getProperty("delimeter", "#");
+            delimeterOntoEntityIRI = prop.getProperty("delimeter", "#");
+
+            // pos and neg indivs
+            parsePosAndNegIndivTypes(prop, "lp.positiveExamples", "lp.negativeExamples");
+
 
             // score type
             // allowable names: coverage,precision,recall,f_measure,coverage_by_reasoner,
@@ -288,12 +298,13 @@ public final class ConfigParams {
             reasonerName = prop.getProperty("reasoner.reasonerImplementation", "pellet");
 
             // obj property
-            SharedDataHolder.objProperties = Utility.readObjectPropsFromConf(SharedDataHolder.confFileFullContent, delimeter);
+            SharedDataHolder.objProperties = Utility.readObjectPropsFromConf(SharedDataHolder.confFileFullContent, delimeterOntoEntityIRI);
             // add none object property
             SharedDataHolder.objProperties.put(SharedDataHolder.noneOWLObjProp, 1.0);
 
-            logger.info("Pos indivs---------");
-            logger.info(prop.get("lp.positiveExamples").toString());
+            // posIndivs
+
+            // negIndivs
 
             conceptLimitInPosExpr = Integer.valueOf(prop.getProperty("conceptLimitInPosExpr", "2"));
             conceptLimitInNegExpr = Integer.valueOf(prop.getProperty("conceptLimitInNegExpr", "2"));
@@ -308,7 +319,7 @@ public final class ConfigParams {
             runPairwiseSimilarity = Boolean.parseBoolean(prop.getProperty("runPairwiseSimilarity", "false"));
             ascendingOfStringLength = Boolean.parseBoolean(prop.getProperty("ascendingOfStringLength", "false"));
             resultFileExtension = prop.getProperty("resultFileExtension", "_results_ecii_v2.txt");
-            printLabelInsteadOfName = Boolean.parseBoolean(prop.getProperty("ascendingOfStringLength", "false"));
+            printLabelInsteadOfName = Boolean.parseBoolean(prop.getProperty("printLabelInsteadOfName", "false"));
 
             confFileDir = Paths.get(confFilePath).getParent().toString();
             String replacement = ConfigParams.resultFileExtension;
@@ -325,6 +336,110 @@ public final class ConfigParams {
             logger.error("Fatal Error", ex);
             System.exit(-1);
         }
+    }
+
+    /**
+     * This method should be used for large number of individuals processing.
+     * It puts a restriction on the input config file, as this function is executed before parsing the prefixes and namespaces,
+     * individuals must have full name. It will just create individual by the name it finds there.
+     *
+     * For example, input should't be like this......
+     *  lp.positiveExamples = {"ex:indi_GO_0005737","ex:indi_GO_0005739"}
+     * input should be like this....
+     *  lp.positiveExamples = {"http://purl.obolibrary.org/obo/indi_GO_0005737","http://purl.obolibrary.org/obo/indi_GO_0005739"
+     *
+     * @return
+     */
+    /**
+     * This method should be used for large number of individuals processing.
+     * It puts a restriction on the input config file, as this function is executed before parsing the prefixes and namespaces,
+     * individuals must have full name. It will just create individual by the name it finds there.
+     * <p>
+     * For example, input should't be like this......
+     * lp.positiveExamples = {"ex:indi_GO_0005737","ex:indi_GO_0005739"}
+     * input should be like this....
+     * lp.positiveExamples = {"http://purl.obolibrary.org/obo/indi_GO_0005737","http://purl.obolibrary.org/obo/indi_GO_0005739"}
+     *
+     * @param prop
+     * @param posIndivKey
+     * @param negIndivKey
+     * @return
+     */
+    private static boolean parsePosAndNegIndivTypes(Properties prop, String posIndivKey, String negIndivKey) {
+        try {
+            logger.info("Parsing positive and negative individuals............");
+            // process positive
+            String posIndivsStr = prop.getProperty(posIndivKey, "");
+
+            if (null != posIndivsStr) {
+                if (posIndivsStr.length() > 0) {
+                   HashSet<String> posIndivsStrSet = getIndivsArray(posIndivsStr);
+                   posIndivsStrSet.forEach(s -> {
+                       OWLNamedIndividual eachIndi = OWLManager.getOWLDataFactory().getOWLNamedIndividual(IRI.create(s));
+                       SharedDataHolder.posIndivs.add(eachIndi);
+                   });
+                } else {
+
+                }
+            } else {
+                logger.error("ERROR!!!!!!!!, posIndivs portion can't be null, program exiting");
+                System.exit(-1);
+            }
+
+            // process negative
+            String negIndivsStr = prop.getProperty(negIndivKey, "");
+
+            if (null != negIndivsStr) {
+                if (negIndivsStr.length() > 0) {
+                    HashSet<String> negIndivsStrSet = getIndivsArray(negIndivsStr);
+                    negIndivsStrSet.forEach(s -> {
+                        OWLNamedIndividual eachIndi = OWLManager.getOWLDataFactory().getOWLNamedIndividual(IRI.create(s));
+                        SharedDataHolder.negIndivs.add(eachIndi);
+                    });
+                } else {
+
+                }
+            } else {
+                logger.warn("Warning!!!!!!!!, negIndivs portion is empty.\tWill produce result using only positive individuals");
+            }
+
+            logger.info("Parsing positive and negative individuals finished");
+            logger.info("Positive individuals size: "+ SharedDataHolder.posIndivs.size());
+            logger.info("Negative individuals size: "+ SharedDataHolder.negIndivs.size());
+
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    /**
+     * By taking a text portion convert it into set of raw indivs name
+     * Expected text: {"http://purl.obolibrary.org/obo/indi_GO_0005737","http://purl.obolibrary.org/obo/indi_GO_0005739"}
+     *
+     * @param indivsPortion
+     * @return
+     */
+    private static HashSet<String> getIndivsArray(String indivsPortion) {
+        HashSet<String> indivsName = new HashSet<>();
+        if (null != indivsPortion) {
+            StringBuilder stringBuilder = new StringBuilder(indivsPortion);
+            String[] indivsStrArr = indivsPortion.trim().replace("{", "").replace("}", "").split(",");
+            for (String eachIndivsStr : indivsStrArr) {
+                if (eachIndivsStr.length() > 0) {
+                    eachIndivsStr = eachIndivsStr.replace("\"", "").replace("\"", "");
+                    if (eachIndivsStr.length() > 0) {
+                        indivsName.add(eachIndivsStr);
+                    }
+                }else {
+
+                }
+            }
+        } else {
+            logger.warn("Warning!!!!!!! indivsPortion is null. If this happens for negative individual then it's okay, " +
+                    "otherwise program will malfunction");
+        }
+        return indivsName;
     }
 
     private static boolean parseScoreTypes(String scoreTypeNameRaw) {

@@ -8,6 +8,7 @@ import com.wcohen.ss.Levenstein;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 import org.apache.log4j.Level;
 import org.dase.ecii.core.SharedDataHolder;
 import org.dase.ecii.exceptions.MalFormedIRIException;
@@ -15,11 +16,10 @@ import org.dase.ecii.ontofactory.LabelExtractor;
 import org.semanticweb.HermiT.Configuration;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
-import org.semanticweb.owlapi.model.parameters.ChangeApplied;
 import org.semanticweb.owlapi.profiles.OWLProfileReport;
 import org.semanticweb.owlapi.profiles.Profiles;
 import org.semanticweb.owlapi.reasoner.*;
-import org.semanticweb.owlapi.util.OWLEntityRemover;
+import org.semanticweb.owlapi.search.EntitySearcher;
 import org.semanticweb.owlapi.util.OWLEntityRenamer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -257,9 +257,34 @@ public class Utility {
             return null;
         if (owlEntity.equals(SharedDataHolder.noneOWLObjProp))
             return SharedDataHolder.noneObjPropStr;
+
+        String rdfsLabel = "";
+        if (ConfigParams.printLabelInsteadOfName && null != SharedDataHolder.owlOntologyOriginal) {
+
+            // https://stackoverflow.com/questions/27611174/cannot-get-annotations-for-owlclass-in-owlapi
+            for (OWLAnnotation owlAnnotation : EntitySearcher.getAnnotations(
+                    owlEntity.getIRI(), SharedDataHolder.owlOntologyOriginal)) {
+                if (owlAnnotation.getProperty().equals(
+                        SharedDataHolder.owlDataFactory.getRDFSLabel())) {
+                    try {
+                        if (owlAnnotation.getValue().isLiteral())
+                            rdfsLabel = owlAnnotation.getValue().asLiteral().get().getLiteral();
+                        else rdfsLabel = owlAnnotation.getValue().toString();
+                    } catch (Exception ex) {
+                        logger.debug("annotation may not be string literal and other error may occur");
+                    }
+                }
+            }
+        }
+
         String shortName = owlEntity.getIRI().getShortForm();
         if (shortName == null) {
             shortName = "";
+        }
+        if (rdfsLabel.length() > 0 && shortName.length() > 0) {
+            shortName = shortName + "---" + rdfsLabel;
+        } else if (rdfsLabel.length() > 0) {
+            shortName = rdfsLabel;
         }
         return shortName;
     }
@@ -277,12 +302,38 @@ public class Utility {
         if (owlEntity.equals(SharedDataHolder.noneOWLObjProp))
             return SharedDataHolder.noneObjPropStr;
 
-        Optional<String> prefixedName = SharedDataHolder.owlDocumentFormat.asPrefixOWLOntologyFormat().
-                getPrefixName2PrefixMap().entrySet().stream().filter(e -> owlEntity.getIRI().toString().startsWith(e.getValue())).
+        String rdfsLabel = "";
+        if (ConfigParams.printLabelInsteadOfName && null != SharedDataHolder.owlOntologyOriginal) {
+
+            // https://stackoverflow.com/questions/27611174/cannot-get-annotations-for-owlclass-in-owlapi
+            for (OWLAnnotation owlAnnotation : EntitySearcher.getAnnotations(
+                    owlEntity.getIRI(), SharedDataHolder.owlOntologyOriginal)) {
+                if (owlAnnotation.getProperty().equals(
+                        SharedDataHolder.owlDataFactory.getRDFSLabel())) {
+                    try {
+                        if (owlAnnotation.getValue().isLiteral())
+                            rdfsLabel = owlAnnotation.getValue().asLiteral().get().getLiteral();
+                        else rdfsLabel = owlAnnotation.getValue().toString();
+                    } catch (Exception ex) {
+                        logger.debug("annotation may not be string literal and other error may occur");
+                    }
+                }
+            }
+        }
+
+        Optional<String> prefixedName = SharedDataHolder.owlDocumentFormat.
+                asPrefixOWLOntologyFormat().getPrefixName2PrefixMap().
+                entrySet().stream().filter(e -> owlEntity.getIRI().toString().startsWith(e.getValue())).
                 map(e -> e.getKey() + owlEntity.getIRI().getShortForm()).findFirst();
-        if (prefixedName.isPresent())
-            return prefixedName.get();
-        else return null;
+        if (prefixedName.isPresent()) {
+            String prefixedName_ = prefixedName.get();
+            if (rdfsLabel.length() > 0) {
+                prefixedName_ = prefixedName_ + "---" + rdfsLabel;
+            }
+            return prefixedName_;
+        } else if (rdfsLabel.length() > 0) {
+            return rdfsLabel;
+        } else return null;
     }
 
     /**
@@ -681,7 +732,7 @@ public class Utility {
      */
     public static ArrayList<IRI> extractEachEntityIRIFromTextPortion(String textPortion, String regexEachEntity, String delimeter) throws MalFormedIRIException {
 
-        if (!delimeter.matches("#|/|:")){
+        if (!delimeter.matches("#|/|:")) {
             logger.error("Delimeter is not one of #, / or :");
             return null;
         }
@@ -835,7 +886,7 @@ public class Utility {
     }
 
     /**
-     * Read neg examples from the conf confFile
+     * Read neg examples from the confFile
      *
      * @param confFileFullContent
      * @param delimeter
@@ -846,7 +897,6 @@ public class Utility {
 
         //logger.debug("Reading negExamples from full content: " + confFileFullContent);
         HashSet<OWLNamedIndividual> negIndivs = new HashSet<OWLNamedIndividual>();
-
 
         String inputText = confFileFullContent;
 
@@ -875,6 +925,52 @@ public class Utility {
             negIndivs.add(eachIndi);
         });
         return negIndivs;
+    }
+
+    /**
+     * Read pos and neg examples from the csvfile and store then in SharedDataholder
+     * Just create positive and negative individuals, no checking of prefix and suffix things
+     *
+     * @param csvFilePath
+     * @param negColumnName
+     *
+     * @throws IOException
+     * @throws MalFormedIRIException
+     */
+    public static void readPosAndNegExamplesFromCSV(String csvFilePath, String posColumnName, String negColumnName) throws IOException, MalFormedIRIException {
+
+        logger.info("Reading positive and negative individuals from csv............");
+
+        HashSet<OWLNamedIndividual> posIndivs = new HashSet<OWLNamedIndividual>();
+        HashSet<OWLNamedIndividual> negIndivs = new HashSet<OWLNamedIndividual>();
+
+        try {
+            CSVParser csvRecords = Utility.parseCSV(csvFilePath, true);
+            for (CSVRecord strings : csvRecords) {
+                String eachPosName = strings.get(posColumnName);
+                String eachNegName = strings.get(negColumnName);
+                if (eachPosName.length() > 0) {
+                    OWLNamedIndividual eachPosIndi = OWLManager.getOWLDataFactory().getOWLNamedIndividual(IRI.create(eachPosName));
+                    posIndivs.add(eachPosIndi);
+                }
+                if (eachNegName.length() > 0) {
+                    OWLNamedIndividual eachNegIndi = OWLManager.getOWLDataFactory().getOWLNamedIndividual(IRI.create(eachNegName));
+                    negIndivs.add(eachNegIndi);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.error("Error in reading negindivs from csv, program exiting!!!!!!!");
+            System.exit(-1);
+        }
+
+        SharedDataHolder.posIndivs = posIndivs;
+        SharedDataHolder.negIndivs = negIndivs;
+
+        logger.info("Reading positive and negative individuals from csv finished");
+        logger.info("Positive individuals size: "+ SharedDataHolder.posIndivs.size());
+        logger.info("Negative individuals size: "+ SharedDataHolder.negIndivs.size());
+
     }
 
     /**
@@ -935,7 +1031,6 @@ public class Utility {
 
         return ontoPath;
     }
-
 
     /**
      * Create named individual from each line of the text file.

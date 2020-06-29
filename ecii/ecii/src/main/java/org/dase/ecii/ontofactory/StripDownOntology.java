@@ -438,16 +438,16 @@ public class StripDownOntology {
      * @param owlAxiomsRelatedToClass
      */
     private void extractAxiomsRelatedToOWLClass(OWLClass owlClass, HashSet<OWLAxiom> owlAxiomsRelatedToClass) {
-        logger.info("\towlAxiomsRelatedToClass size before processing this class: " + owlAxiomsRelatedToClass.size());
+        logger.debug("\towlAxiomsRelatedToClass size before processing this class: " + owlAxiomsRelatedToClass.size());
 
         if (null != owlClass && null != owlAxiomsRelatedToClass) {
             Set<OWLClassAxiom> axiomSet = inputOntology.getAxioms(owlClass);
-            logger.info("\t\tRelated axioms size using inputOntology.getAxioms(owlClass).size: " + axiomSet.size());
+            logger.debug("\t\tRelated axioms size using inputOntology.getAxioms(owlClass).size: " + axiomSet.size());
             owlAxiomsRelatedToClass.addAll(axiomSet);
             findSuperTypesRecursive(owlClass, owlAxiomsRelatedToClass);
         }
 
-        logger.info("\t\towlAxiomsRelatedToClass size after processing this class: " + owlAxiomsRelatedToClass.size());
+        logger.debug("\t\towlAxiomsRelatedToClass size after processing this class: " + owlAxiomsRelatedToClass.size());
     }
 
     /**
@@ -464,7 +464,7 @@ public class StripDownOntology {
         logger.info("Processing extractAxiomsRelatedToOWLClasses started........... ");
 
         for (OWLClass owlClass : owlClasses) {
-            logger.info("Processing owlclass: " + owlClass);
+            logger.debug("Processing owlclass: " + owlClass);
             extractAxiomsRelatedToOWLClass(owlClass, owlAxiomsRelatedToClasses);
         }
 
@@ -497,8 +497,8 @@ public class StripDownOntology {
             // call recursive function to find all class hierarchy
             owlClasses.stream().filter(OWLClass.class::isInstance).forEach(owlClassExpression -> {
                 OWLClass owlClass = (OWLClass) owlClassExpression;
-                logger.info("Entity " + owlNamedIndividual + " has initial types: " + owlClass);
-                logger.info("\tProcessing owlclass: " + owlClass);
+                logger.debug("Entity " + owlNamedIndividual + " has initial types: " + owlClass);
+                logger.debug("\tProcessing owlclass: " + owlClass);
                 extractAxiomsRelatedToOWLClass(owlClass, axiomsToKeep);
             });
             return true;

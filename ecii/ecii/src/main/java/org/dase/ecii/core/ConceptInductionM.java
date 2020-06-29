@@ -64,8 +64,8 @@ public class ConceptInductionM {
 
         // make sure ontology is loaded before init.
         if (null != ontology) {
-            SharedDataHolder.owlOntology = ontology;
-            SharedDataHolder.owlOntologyManager = ontology.getOWLOntologyManager();
+            SharedDataHolder.owlOntologyOriginal = ontology;
+            SharedDataHolder.owlOntologyManager = SharedDataHolder.owlOntologyOriginal.getOWLOntologyManager();
             SharedDataHolder.owlDataFactory = ontology.getOWLOntologyManager().getOWLDataFactory();
             SharedDataHolder.dlSyntaxRendererExt = new DLSyntaxRendererExt();
         } else {
@@ -106,14 +106,30 @@ public class ConceptInductionM {
                     listofObjPropAndIndiv.directIndivs,
                     listofObjPropAndIndiv.inDirectIndivs);
 
-            HashSet<OWLAxiom> axiomsToRemove = new HashSet<>();
-            Set<OWLAxiom> allAxioms = ontology.getAxioms();
-            // set subtraction allAxioms.removeAll = allAxioms-axiomsToKeep = allAxioms will contain only the axioms to remove
-            allAxioms.removeAll(axiomsToKeep);
-            axiomsToRemove.addAll(allAxioms);
+            /**
+             * Option 1
+             */
+//            HashSet<OWLAxiom> axiomsToRemove = new HashSet<>();
+//            Set<OWLAxiom> allAxioms = ontology.getAxioms();
+//            // set subtraction allAxioms.removeAll = allAxioms-axiomsToKeep = allAxioms will contain only the axioms to remove
+//            allAxioms.removeAll(axiomsToKeep);
+//            axiomsToRemove.addAll(allAxioms);
+//
+//            SharedDataHolder.owlOntologyManager.removeAxioms(ontology, axiomsToRemove);
 
-            SharedDataHolder.owlOntologyManager.removeAxioms(ontology, axiomsToRemove);
-            logger.info("After stripping axioms size: " + ontology.getAxioms().size());
+            /**
+             * Option 2, create new in memory ontology
+             */
+            try {
+                SharedDataHolder.owlOntologyStripped = SharedDataHolder.owlOntologyManager.createOntology(axiomsToKeep);
+            } catch (OWLOntologyCreationException e) {
+                logger.error("Fatar error!!!!!!!!");
+                e.printStackTrace();
+                logger.error("program exiting");
+                monitor.stopSystem("", true);
+            }
+
+            logger.info("After stripping axioms size: " + SharedDataHolder.owlOntologyStripped.getAxioms().size());
             logger.info("Stripping finished.");
         } else {
             logger.error("Stripping can't start. Ontology is null");
@@ -133,23 +149,6 @@ public class ConceptInductionM {
 
         logger.info("Working with confFile: " + ConfigParams.confFilePath);
         monitor.writeMessage("Working with confFile: " + Paths.get(ConfigParams.confFilePath).getFileName());
-
-        // algorithm starting time here.
-        DateFormat dateFormat = Utility.getDateTimeFormat();
-        Long algoStartTime = System.currentTimeMillis();
-        monitor.displayMessage("Algorithm starts at: " + dateFormat.format(new Date()), true);
-
-//        // initiate reasoner
-//        logger.info("reasoner initializing started........");
-//        owlReasoner = Utility.initReasoner(ConfigParams.reasonerName, ontology, monitor);
-//        logger.info("reasoner initialized successfully");
-
-        logger.info("reading pos and neg indivs from conf file started........");
-        SharedDataHolder.posIndivs = Utility.readPosExamplesFromConf(SharedDataHolder.confFileFullContent, ConfigParams.delimeter);
-        logger.info("reading pos indivs from conf file finished successfully. SharedDataHolder.posIndivs.size: " + SharedDataHolder.posIndivs.size());
-        logger.info("reading neg indivs from conf file started........");
-        SharedDataHolder.negIndivs = Utility.readNegExamplesFromConf(SharedDataHolder.confFileFullContent, ConfigParams.delimeter);
-        logger.info("reading neg indivs from conf file finished successfully SharedDataHolder.negIndivs.size: " + SharedDataHolder.negIndivs.size());
 
         // write user defined values to resultFile
         monitor.writeMessage("\nUser defined parameters:");
@@ -187,6 +186,10 @@ public class ConceptInductionM {
             monitor.writeMessage("\t" + Utility.getShortName(owlObjectProperty));
         });
 
+        // algorithm starting time here.
+        DateFormat dateFormat = Utility.getDateTimeFormat();
+        Long algoStartTime = System.currentTimeMillis();
+        monitor.displayMessage("Algorithm starts at: " + dateFormat.format(new Date()), true);
 
         //load Onto
         loadOntoAndSaveReference();
@@ -194,14 +197,13 @@ public class ConceptInductionM {
         // strip down the ontology
         stripOnto();
 
-
         // initiate reasoner
         logger.info("reasoner initializing started........");
-        owlReasoner = Utility.initReasoner(ConfigParams.reasonerName, ontology, monitor);
+        owlReasoner = Utility.initReasoner(ConfigParams.reasonerName, SharedDataHolder.owlOntologyStripped, monitor);
         logger.info("reasoner initialized successfully");
 
         // Create a new ConceptFinder object with the given reasoner.
-        CandidateSolutionFinderV2 findConceptsObj = new CandidateSolutionFinderV2(owlReasoner, ontology, outPutStream, monitor);
+        CandidateSolutionFinderV2 findConceptsObj = new CandidateSolutionFinderV2(owlReasoner, SharedDataHolder.owlOntologyStripped, outPutStream, monitor);
         //ConceptFinderComplex findConceptsObj = new ConceptFinderComplex(owlReasoner, ontology, outPutStream, monitor);
 
         logger.info("finding solutions started...............");

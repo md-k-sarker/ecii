@@ -637,7 +637,7 @@ public class CandidateSolutionFinderV2 {
             //bare type/direct type --------- indiv type using obj-prop
             if (owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
                 //for no object property or direct types we used SharedDataHolder.noneOWLObjProp
-                logger.info("Below concepts are type/supertype of positive " + posIndiv.getIRI().toString() + " individual.");
+                logger.debug("Below concepts are type/supertype of positive " + posIndiv.getIRI().toString() + " individual.");
                 HashSet<OWLClass> classHashSet = new HashSet<>(reasoner.getTypes(posIndiv, false).getFlattened());
                 logger.debug("object count: " + classHashSet.size());
                 classHashSet.forEach(posType -> {
@@ -652,7 +652,7 @@ public class CandidateSolutionFinderV2 {
                 });
             } else {
 
-                logger.info("Below concepts are type/supertype of positive "
+                logger.debug("Below concepts are type/supertype of positive "
                         + posIndiv.getIRI().toString() + " individual through objProp " + owlObjectProperty.getIRI());
                 HashSet<OWLNamedIndividual> objectsHashSet = new HashSet<>(
                         reasoner.getObjectPropertyValues(posIndiv, owlObjectProperty).getFlattened());
@@ -682,7 +682,7 @@ public class CandidateSolutionFinderV2 {
 
             if (owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
                 //for no object property or direct types we used SharedDataHolder.noneOWLObjProp
-                logger.info("Below concepts are type/supertype of negative " + negIndiv.getIRI().toString() + " individual.");
+                logger.debug("Below concepts are type/supertype of negative " + negIndiv.getIRI().toString() + " individual.");
                 HashSet<OWLClass> classHashSet = new HashSet<>(reasoner.getTypes(negIndiv, false).getFlattened());
                 logger.debug("object count: " + classHashSet.size());
                 classHashSet.forEach(negType -> {
@@ -696,7 +696,7 @@ public class CandidateSolutionFinderV2 {
                     }
                 });
             } else {
-                logger.info("Below concepts are type/supertype of negative " +
+                logger.debug("Below concepts are type/supertype of negative " +
                         negIndiv.getIRI().toString() + " individual through objProp " + owlObjectProperty.getIRI());
                 HashSet<OWLNamedIndividual> objectsHashSet = new HashSet<>
                         (reasoner.getObjectPropertyValues(negIndiv, owlObjectProperty).getFlattened());

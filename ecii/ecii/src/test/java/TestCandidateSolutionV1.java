@@ -24,17 +24,17 @@ public class TestCandidateSolutionV1 {
 
     public static void main(String[] args) {
         try {
-            SharedDataHolder.owlOntology = Utility.loadOntology("/Users/sarker/Desktop/concept_or_individual.owl");
-            SharedDataHolder.owlOntologyManager = SharedDataHolder.owlOntology.getOWLOntologyManager();
+            SharedDataHolder.owlOntologyOriginal = Utility.loadOntology("/Users/sarker/Desktop/concept_or_individual.owl");
+            SharedDataHolder.owlOntologyManager = SharedDataHolder.owlOntologyOriginal.getOWLOntologyManager();
             SharedDataHolder.owlDataFactory = SharedDataHolder.owlOntologyManager.getOWLDataFactory();
 
-            OWLReasoner owlReasoner = Utility.initReasoner("pellet", SharedDataHolder.owlOntology, null);
+            OWLReasoner owlReasoner = Utility.initReasoner("pellet", SharedDataHolder.owlOntologyOriginal, null);
 
-            CandidateSolutionV1 candidateSolutionV1 = new CandidateSolutionV1(owlReasoner, SharedDataHolder.owlOntology);
+            CandidateSolutionV1 candidateSolutionV1 = new CandidateSolutionV1(owlReasoner, SharedDataHolder.owlOntologyOriginal);
 
-            CandidateClassV1 candidateClassV1 = new CandidateClassV1(SharedDataHolder.noneOWLObjProp, owlReasoner, SharedDataHolder.owlOntology);
+            CandidateClassV1 candidateClassV1 = new CandidateClassV1(SharedDataHolder.noneOWLObjProp, owlReasoner, SharedDataHolder.owlOntologyOriginal);
 
-            ConjunctiveHornClauseV1V2 conjunctiveHornClauseV1V2 = new ConjunctiveHornClauseV1V2(SharedDataHolder.noneOWLObjProp, owlReasoner, SharedDataHolder.owlOntology);
+            ConjunctiveHornClauseV1V2 conjunctiveHornClauseV1V2 = new ConjunctiveHornClauseV1V2(SharedDataHolder.noneOWLObjProp, owlReasoner, SharedDataHolder.owlOntologyOriginal);
 
             OWLClass classHuman = SharedDataHolder.owlDataFactory.getOWLClass(IRI.create("http://www.daselab.com/sarker/mock#Human"));
 

@@ -6,8 +6,8 @@ Written at 8/12/18.
 import org.dase.ecii.core.SharedDataHolder;
 import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Utility;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.search.EntitySearcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,10 +117,10 @@ public class TestUtility {
 
         String str = "//abc";
         String regex = "^(#|\\/*|\\/\\/).*";
-        logger.info("regex: "+ regex);
+        logger.info("regex: " + regex);
         if (str.matches(regex)) {
             logger.info("started");
-        }else {
+        } else {
             logger.info("not started");
         }
 
@@ -158,10 +158,37 @@ public class TestUtility {
 
     }
 
+    public static void testGetShortNameWithPrefix() {
+        try {
+            OWLOntology owlOntology = Utility.loadOntology("/Users/sarker/Workspaces/Jetbrains/residue-emerald/residue/data/KGS/processed_expr_ready/combined_go_with_top5pct_and_10pct_v1.owl");
+
+            OWLClass owlClass = owlOntology.getOWLOntologyManager().getOWLDataFactory().getOWLClass(IRI.create("http://purl.obolibrary.org/obo/GO_0005575"));
+
+            String rdfsLabel = "";
+
+            OWLEntity owlEntity = (OWLEntity) owlClass;
+
+            // https://stackoverflow.com/questions/27611174/cannot-get-annotations-for-owlclass-in-owlapi
+            for (OWLAnnotation owlAnnotation : EntitySearcher.getAnnotations(owlEntity, owlOntology)) {
+//                logger.info("owlAnnotation: " + owlAnnotation.getProperty()
+//                        .equals(owlOntology.getOWLOntologyManager().getOWLDataFactory().getRDFSLabel()));
+                if (owlAnnotation.getProperty()
+                        .equals(owlOntology.getOWLOntologyManager().getOWLDataFactory().getRDFSLabel())) {
+                    rdfsLabel = owlAnnotation.getValue().asLiteral().get().getLiteral();
+                    logger.info("rdfsLabel: "+ rdfsLabel);
+                }
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+
+    }
 
     public static void main(String[] args) {
         TestUtility tu = new TestUtility();
-        tu.testReadObjectPropsFromConf();
+        tu.testGetShortNameWithPrefix();
 
     }
 }

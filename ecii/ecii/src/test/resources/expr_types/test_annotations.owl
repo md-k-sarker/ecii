@@ -1,0 +1,747 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://example.com/foo#"
+     xml:base="http://example.com/foo"
+     xmlns:foo="http://example.com/foo#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://example.com/foo"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://example.com/foo#hasShape -->
+
+    <owl:ObjectProperty rdf:about="http://example.com/foo#hasShape"/>
+    
+
+
+    <!-- http://example.com/foo#has_car -->
+
+    <owl:ObjectProperty rdf:about="http://example.com/foo#has_car"/>
+    
+
+
+    <!-- http://example.com/foo#load -->
+
+    <owl:ObjectProperty rdf:about="http://example.com/foo#load"/>
+    
+
+
+    <!-- http://example.com/foo#load_count -->
+
+    <owl:ObjectProperty rdf:about="http://example.com/foo#load_count"/>
+    
+
+
+    <!-- http://example.com/foo#wheels -->
+
+    <owl:ObjectProperty rdf:about="http://example.com/foo#wheels"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://example.com/foo#car -->
+
+    <owl:Class rdf:about="http://example.com/foo#car">
+        <rdfs:label>testLabel</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.com/foo#closed -->
+
+    <owl:Class rdf:about="http://example.com/foo#closed"/>
+    
+
+
+    <!-- http://example.com/foo#double -->
+
+    <owl:Class rdf:about="http://example.com/foo#double"/>
+    
+
+
+    <!-- http://example.com/foo#jagged -->
+
+    <owl:Class rdf:about="http://example.com/foo#jagged"/>
+    
+
+
+    <!-- http://example.com/foo#long -->
+
+    <owl:Class rdf:about="http://example.com/foo#long"/>
+    
+
+
+    <!-- http://example.com/foo#open_car -->
+
+    <owl:Class rdf:about="http://example.com/foo#open_car"/>
+    
+
+
+    <!-- http://example.com/foo#shape -->
+
+    <owl:Class rdf:about="http://example.com/foo#shape"/>
+    
+
+
+    <!-- http://example.com/foo#short -->
+
+    <owl:Class rdf:about="http://example.com/foo#short"/>
+    
+
+
+    <!-- http://example.com/foo#train -->
+
+    <owl:Class rdf:about="http://example.com/foo#train"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://example.com/foo#car_101 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_101">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#u_shaped"/>
+        <load rdf:resource="http://example.com/foo#rectangle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_102 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_102">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#long"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#rectangle"/>
+        <load_count rdf:resource="http://example.com/foo#two"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_11 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_11">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#long"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#rectangle"/>
+        <load_count rdf:resource="http://example.com/foo#three"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_12 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_12">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#closed"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#triangle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_13 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_13">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#long"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#hexagon"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#three"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_14 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_14">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#circle"/>
+        <load rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_21 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_21">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#u_shaped"/>
+        <load rdf:resource="http://example.com/foo#triangle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_22 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_22">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#u_shaped"/>
+        <load rdf:resource="http://example.com/foo#rectangle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_23 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_23">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#closed"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#circle"/>
+        <load_count rdf:resource="http://example.com/foo#two"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_31 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_31">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#circle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_32 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_32">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#closed"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#hexagon"/>
+        <load rdf:resource="http://example.com/foo#triangle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_33 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_33">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#closed"/>
+        <rdf:type rdf:resource="http://example.com/foo#long"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#triangle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#three"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_41 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_41">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#u_shaped"/>
+        <load rdf:resource="http://example.com/foo#triangle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_42 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_42">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#double"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#triangle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_43 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_43">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#closed"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#elipse"/>
+        <load rdf:resource="http://example.com/foo#rectangle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_44 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_44">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#rectangle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_51 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_51">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#double"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#triangle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_52 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_52">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#closed"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#rectangle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#three"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_53 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_53">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#closed"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#circle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_61 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_61">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#closed"/>
+        <rdf:type rdf:resource="http://example.com/foo#long"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#circle"/>
+        <load_count rdf:resource="http://example.com/foo#three"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_62 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_62">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#triangle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_71 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_71">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#double"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#circle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_72 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_72">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#u_shaped"/>
+        <load rdf:resource="http://example.com/foo#triangle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_73 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_73">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#jagged"/>
+        <rdf:type rdf:resource="http://example.com/foo#long"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load_count rdf:resource="http://example.com/foo#zero"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_81 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_81">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#closed"/>
+        <rdf:type rdf:resource="http://example.com/foo#long"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#rectangle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#three"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_82 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_82">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#u_shaped"/>
+        <load rdf:resource="http://example.com/foo#circle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_91 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_91">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#u_shaped"/>
+        <load rdf:resource="http://example.com/foo#circle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_92 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_92">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#jagged"/>
+        <rdf:type rdf:resource="http://example.com/foo#long"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#rectangle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_93 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_93">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#rectangle"/>
+        <load rdf:resource="http://example.com/foo#rectangle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#car_94 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#car_94">
+        <rdf:type rdf:resource="http://example.com/foo#car"/>
+        <rdf:type rdf:resource="http://example.com/foo#open_car"/>
+        <rdf:type rdf:resource="http://example.com/foo#short"/>
+        <hasShape rdf:resource="http://example.com/foo#u_shaped"/>
+        <load rdf:resource="http://example.com/foo#circle"/>
+        <load_count rdf:resource="http://example.com/foo#one"/>
+        <wheels rdf:resource="http://example.com/foo#two"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#circle -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#circle">
+        <rdf:type rdf:resource="http://example.com/foo#shape"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#east1 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#east1">
+        <rdf:type rdf:resource="http://example.com/foo#train"/>
+        <has_car rdf:resource="http://example.com/foo#car_11"/>
+        <has_car rdf:resource="http://example.com/foo#car_12"/>
+        <has_car rdf:resource="http://example.com/foo#car_13"/>
+        <has_car rdf:resource="http://example.com/foo#car_14"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#east2 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#east2">
+        <rdf:type rdf:resource="http://example.com/foo#train"/>
+        <has_car rdf:resource="http://example.com/foo#car_21"/>
+        <has_car rdf:resource="http://example.com/foo#car_22"/>
+        <has_car rdf:resource="http://example.com/foo#car_23"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#east3 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#east3">
+        <rdf:type rdf:resource="http://example.com/foo#train"/>
+        <has_car rdf:resource="http://example.com/foo#car_31"/>
+        <has_car rdf:resource="http://example.com/foo#car_32"/>
+        <has_car rdf:resource="http://example.com/foo#car_33"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#east4 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#east4">
+        <rdf:type rdf:resource="http://example.com/foo#train"/>
+        <has_car rdf:resource="http://example.com/foo#car_41"/>
+        <has_car rdf:resource="http://example.com/foo#car_42"/>
+        <has_car rdf:resource="http://example.com/foo#car_43"/>
+        <has_car rdf:resource="http://example.com/foo#car_44"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#east5 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#east5">
+        <rdf:type rdf:resource="http://example.com/foo#train"/>
+        <has_car rdf:resource="http://example.com/foo#car_51"/>
+        <has_car rdf:resource="http://example.com/foo#car_52"/>
+        <has_car rdf:resource="http://example.com/foo#car_53"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#elipse -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#elipse">
+        <rdf:type rdf:resource="http://example.com/foo#shape"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#hexagon -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#hexagon">
+        <rdf:type rdf:resource="http://example.com/foo#shape"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#one -->
+
+    <owl:Thing rdf:about="http://example.com/foo#one">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://example.com/foo#rectangle -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#rectangle">
+        <rdf:type rdf:resource="http://example.com/foo#shape"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#three -->
+
+    <owl:Thing rdf:about="http://example.com/foo#three">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://example.com/foo#triangle -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#triangle">
+        <rdf:type rdf:resource="http://example.com/foo#shape"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#two -->
+
+    <owl:Thing rdf:about="http://example.com/foo#two">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://example.com/foo#u_shaped -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#u_shaped">
+        <rdf:type rdf:resource="http://example.com/foo#shape"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#west10 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#west10">
+        <rdf:type rdf:resource="http://example.com/foo#train"/>
+        <has_car rdf:resource="http://example.com/foo#car_101"/>
+        <has_car rdf:resource="http://example.com/foo#car_102"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#west6 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#west6">
+        <rdf:type rdf:resource="http://example.com/foo#train"/>
+        <has_car rdf:resource="http://example.com/foo#car_61"/>
+        <has_car rdf:resource="http://example.com/foo#car_62"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#west7 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#west7">
+        <rdf:type rdf:resource="http://example.com/foo#train"/>
+        <has_car rdf:resource="http://example.com/foo#car_71"/>
+        <has_car rdf:resource="http://example.com/foo#car_72"/>
+        <has_car rdf:resource="http://example.com/foo#car_73"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#west8 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#west8">
+        <rdf:type rdf:resource="http://example.com/foo#train"/>
+        <has_car rdf:resource="http://example.com/foo#car_81"/>
+        <has_car rdf:resource="http://example.com/foo#car_82"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#west9 -->
+
+    <owl:NamedIndividual rdf:about="http://example.com/foo#west9">
+        <rdf:type rdf:resource="http://example.com/foo#train"/>
+        <has_car rdf:resource="http://example.com/foo#car_91"/>
+        <has_car rdf:resource="http://example.com/foo#car_92"/>
+        <has_car rdf:resource="http://example.com/foo#car_93"/>
+        <has_car rdf:resource="http://example.com/foo#car_94"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.com/foo#zero -->
+
+    <owl:Thing rdf:about="http://example.com/foo#zero">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    </owl:Thing>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

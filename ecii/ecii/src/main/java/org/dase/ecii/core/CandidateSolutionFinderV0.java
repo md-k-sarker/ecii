@@ -1224,7 +1224,7 @@ public class CandidateSolutionFinderV0 {
         String str = ":_Dracula__Dragon_Z" + newIRICounter;
         try {
 
-            return Utility.createEntityIRI(str, ConfigParams.delimeter);
+            return Utility.createEntityIRI(str, ConfigParams.delimeterOntoEntityIRI);
         } catch (MalFormedIRIException ex) {
             return IRI.create(str);
         }
@@ -1244,9 +1244,9 @@ public class CandidateSolutionFinderV0 {
         // create a unique name
         OWLClass owlClass = SharedDataHolder.owlDataFactory.getOWLClass(getUniqueIRI());
         OWLAxiom eqAxiom = SharedDataHolder.owlDataFactory.getOWLEquivalentClassesAxiom(owlClass, owlClassExpression);
-        ChangeApplied ca = SharedDataHolder.owlOntologyManager.addAxiom(SharedDataHolder.owlOntology, eqAxiom);
+        ChangeApplied ca = SharedDataHolder.owlOntologyManager.addAxiom(SharedDataHolder.owlOntologyOriginal, eqAxiom);
         logger.info("Adding candidateSolutionV0.getSolutionAsOWLClassExpression to ontology Status: " + ca.toString());
-        reasoner = Utility.initReasoner(ConfigParams.reasonerName, SharedDataHolder.owlOntology, monitor);
+        reasoner = Utility.initReasoner(ConfigParams.reasonerName, SharedDataHolder.owlOntologyOriginal, monitor);
 
         /**
          * Individuals covered by all parts of solution
