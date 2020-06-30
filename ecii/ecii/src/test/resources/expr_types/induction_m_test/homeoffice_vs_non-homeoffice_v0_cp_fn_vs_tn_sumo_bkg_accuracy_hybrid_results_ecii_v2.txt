@@ -1,0 +1,3374 @@
+Program started.............
+Program starts at: 06.30.2020  14.54.16 PM
+Working with confFile: homeoffice_vs_non-homeoffice_v0_cp_fn_vs_tn_sumo_bkg_accuracy_hybrid.config
+
+User defined parameters:
+K1/negExprTypeLimit: 1
+K2/hornClauseLimit: 2
+K3/objPropsCombinationLimit: 1
+K4/posExprTypeLimit: 3
+K5/hornClausesListMaxSize: 20
+K6/candidateClassesListMaxSize: 3
+K7/removeCommonTypes: false
+DefaultScoreType: HYBRID
+ReasonerName: pellet
+k8/ValidateByReasonerSize: 0
+k9/posClassListMaxSize: 20
+k10/negClassListMaxSize: 15
+posIndivs from conf:
+	ADE_train_00009320
+	ADE_train_00009324
+	ADE_train_00009323
+	ADE_train_00009316
+	ADE_train_00009319
+negIndivs from conf:
+	ADE_train_00008686
+	ADE_train_00004230
+	ADE_train_00011509
+	ADE_train_00008688
+	ADE_train_00011508
+	ADE_train_00008689
+	ADE_train_00010996
+	ADE_train_00010995
+	ADE_train_00004228
+	ADE_train_00004229
+	ADE_train_00010997
+objProps from conf:
+	imageContains
+	__%!dop%!__
+Algorithm starts at: 06.30.2020  14.54.16 PM
+
+Algorithm ends at: 06.30.2020  14.54.28 PM
+
+Algorithm duration: 11.947 sec
+
+####################Solutions####################:
+solution 1: ∃ :imageContains.((:Table) ⊓ (:Physical ⊓ ¬ :Furniture))
+	 coverage_score: 1.0
+	 precision: 1.0
+	 recall: 1.0
+	 f_measure: 1.0
+solution 2: ∃ :imageContains.((:Table) ⊓ (:Entity ⊓ ¬ :Furniture))
+	 coverage_score: 1.0
+	 precision: 1.0
+	 recall: 1.0
+	 f_measure: 1.0
+solution 3: ∃ :imageContains.((:Table) ⊓ (:Object ⊓ ¬ :Furniture))
+	 coverage_score: 1.0
+	 precision: 1.0
+	 recall: 1.0
+	 f_measure: 1.0
+solution 4: ∃ :imageContains.((:Artifact ⊓ ¬ :Furniture) ⊓ (:Furniture))
+	 coverage_score: 1.0
+	 precision: 1.0
+	 recall: 1.0
+	 f_measure: 1.0
+solution 5: ∃ :imageContains.((:Artifact ⊓ ¬ :Furniture) ⊓ (:Device))
+	 coverage_score: 1.0
+	 precision: 1.0
+	 recall: 1.0
+	 f_measure: 1.0
+solution 6: ∃ :imageContains.(:Artifact ⊓ ¬ :Furniture)
+	 coverage_score: 1.0
+	 precision: 1.0
+	 recall: 1.0
+	 f_measure: 1.0
+solution 7: ∃ :imageContains.(:EngineeringComponent)
+	 coverage_score: 1.0
+	 precision: 1.0
+	 recall: 1.0
+	 f_measure: 1.0
+solution 8: ∃ :imageContains.(:Table)
+	 coverage_score: 0.9375
+	 precision: 0.8333333333333334
+	 recall: 1.0
+	 f_measure: 0.9090909090909091
+solution 9: ∃ :imageContains.((:ManufacturedProduct) ⊓ (:Physical ⊓ ¬ :Furniture))
+	 coverage_score: 0.875
+	 precision: 0.7142857142857143
+	 recall: 1.0
+	 f_measure: 0.8333333333333333
+solution 10: ∃ :imageContains.((:ManufacturedProduct) ⊓ (:Entity ⊓ ¬ :Furniture))
+	 coverage_score: 0.875
+	 precision: 0.7142857142857143
+	 recall: 1.0
+	 f_measure: 0.8333333333333333
+solution 11: ∃ :imageContains.((:ManufacturedProduct) ⊓ (:Object ⊓ ¬ :Furniture))
+	 coverage_score: 0.875
+	 precision: 0.7142857142857143
+	 recall: 1.0
+	 f_measure: 0.8333333333333333
+solution 12: ∃ :imageContains.(:Device)
+	 coverage_score: 0.875
+	 precision: 0.7142857142857143
+	 recall: 1.0
+	 f_measure: 0.8333333333333333
+solution 13: ∃ :imageContains.((:DurableGood) ⊓ (:SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.875
+	 precision: 1.0
+	 recall: 0.6
+	 f_measure: 0.7499999999999999
+solution 14: ∃ :imageContains.((:SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Floor))
+	 coverage_score: 0.875
+	 precision: 1.0
+	 recall: 0.6
+	 f_measure: 0.7499999999999999
+solution 15: ∃ :imageContains.((:SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Wall))
+	 coverage_score: 0.875
+	 precision: 1.0
+	 recall: 0.6
+	 f_measure: 0.7499999999999999
+solution 16: ∃ :imageContains.((:DurableGood) ⊓ (:Floor))
+	 coverage_score: 0.875
+	 precision: 1.0
+	 recall: 0.6
+	 f_measure: 0.7499999999999999
+solution 17: ∃ :imageContains.((:DurableGood) ⊓ (:Wall))
+	 coverage_score: 0.875
+	 precision: 1.0
+	 recall: 0.6
+	 f_measure: 0.7499999999999999
+solution 18: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 19: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 20: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 21: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 22: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 23: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 24: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant) ⊓ (:Entity ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 25: ∃ :imageContains.((:SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 26: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass) ⊓ (:Object ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 27: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism) ⊓ (:Artifact ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 28: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass) ⊓ (:Entity ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 29: ∃ :imageContains.((:SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 30: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Artifact ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 31: ∃ :imageContains.((:Physical ⊓ ¬ :Furniture) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 32: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Physical ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 33: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant) ⊓ (:Physical ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 34: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass) ⊓ (:Physical ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 35: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Entity ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 36: ∃ :imageContains.((:Entity ⊓ ¬ :Furniture) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 37: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass) ⊓ (:Artifact ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 38: ∃ :imageContains.((:Object ⊓ ¬ :Furniture) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 39: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Object ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 40: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant) ⊓ (:SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 41: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant) ⊓ (:Artifact ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 42: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass) ⊓ (:SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 43: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant) ⊓ (:Object ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 44: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant) ⊓ (:Table))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 45: ∃ :imageContains.((:DurableGood) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 46: ∃ :imageContains.((:Floor) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 47: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism) ⊓ (:Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 48: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism) ⊓ (:Device))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 49: ∃ :imageContains.((:Product) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 50: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant) ⊓ (:Product))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 51: ∃ :imageContains.((:Floor) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 52: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass) ⊓ (:Wall))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 53: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Device))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 54: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant) ⊓ (:DurableGood))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 55: ∃ :imageContains.((:DurableGood) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 56: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 57: ∃ :imageContains.((:Table) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 58: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass) ⊓ (:DurableGood))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 59: ∃ :imageContains.((:EngineeringComponent) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 60: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Table))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 61: ∃ :imageContains.((:EngineeringComponent) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 62: ∃ :imageContains.((:Object ⊓ ¬ :Furniture) ⊓ (:Artifact ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 63: ∃ :imageContains.((:Physical ⊓ ¬ :Furniture) ⊓ (:Artifact ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 64: ∃ :imageContains.((:Product) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 65: ∃ :imageContains.((:Entity ⊓ ¬ :Furniture) ⊓ (:Artifact ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 66: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant) ⊓ (:Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 67: ∃ :imageContains.((:SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Artifact ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 68: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass) ⊓ (:ManufacturedProduct))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 69: ∃ :imageContains.((:Artifact) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 70: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant) ⊓ (:Device))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 71: ∃ :imageContains.((:SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Entity ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 72: ∃ :imageContains.((:EngineeringComponent) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 73: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant) ⊓ (:Wall))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 74: ∃ :imageContains.((:SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Object ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 75: ∃ :imageContains.((:Wall) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 76: ∃ :imageContains.((:EngineeringComponent) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 77: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass) ⊓ (:Floor))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 78: ∃ :imageContains.((:Wall) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 79: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant) ⊓ (:Floor))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 80: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass) ⊓ (:Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 81: ∃ :imageContains.((:Artifact) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 82: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass) ⊓ (:Device))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 83: ∃ :imageContains.((:SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Physical ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 84: ∃ :imageContains.((:Artifact) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 85: ∃ :imageContains.((:Artifact) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 86: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant) ⊓ (:ManufacturedProduct))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 87: ∃ :imageContains.((:Product) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 88: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass) ⊓ (:Table))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 89: ∃ :imageContains.((:ManufacturedProduct) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 90: ∃ :imageContains.((:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:ManufacturedProduct))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 91: ∃ :imageContains.((:Floor) ⊓ (:Object ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 92: ∃ :imageContains.((:Object ⊓ ¬ :Furniture) ⊓ (:Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 93: ∃ :imageContains.((:SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Table))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 94: ∃ :imageContains.((:Entity ⊓ ¬ :Furniture) ⊓ (:Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 95: ∃ :imageContains.((:Product) ⊓ (:Artifact ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 96: ∃ :imageContains.((:Wall) ⊓ (:Physical ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 97: ∃ :imageContains.((:Table) ⊓ (:Artifact ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 98: ∃ :imageContains.((:Object ⊓ ¬ :Furniture) ⊓ (:Device))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 99: ∃ :imageContains.((:Entity ⊓ ¬ :Furniture) ⊓ (:Device))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 100: ∃ :imageContains.((:DurableGood) ⊓ (:Artifact ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 101: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 102: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism)
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 103: ∃ :imageContains.((:Product) ⊓ (:SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 104: ∃ :imageContains.((:Product) ⊓ (:Physical ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 105: ∃ :imageContains.((:Floor) ⊓ (:Artifact ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 106: ∃ :imageContains.((:Artifact) ⊓ (:Physical ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 107: ∃ :imageContains.((:SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:ManufacturedProduct))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 108: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant)
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 109: ∃ :imageContains.((:Floor) ⊓ (:Entity ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 110: ∃ :imageContains.((:Artifact) ⊓ (:SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 111: ∃ :imageContains.((:Physical ⊓ ¬ :Furniture) ⊓ (:Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 112: ∃ :imageContains.((:Wall) ⊓ (:Entity ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 113: ∃ :imageContains.((:Floor) ⊓ (:Physical ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 114: ∃ :imageContains.((:Physical ⊓ ¬ :Furniture) ⊓ (:Device))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 115: ∃ :imageContains.((:Wall) ⊓ (:Object ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 116: ∃ :imageContains.((:ManufacturedProduct) ⊓ (:Artifact ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 117: ∃ :imageContains.((:Artifact) ⊓ (:Artifact ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 118: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass)
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 119: ∃ :imageContains.((:DurableGood) ⊓ (:Physical ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 120: ∃ :imageContains.((:Product) ⊓ (:Object ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 121: ∃ :imageContains.((:Artifact) ⊓ (:Entity ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 122: ∃ :imageContains.((:SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Device))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 123: ∃ :imageContains.((:SelfConnectedObject ⊓ ¬ :FloweringPlant) ⊓ (:Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 124: ∃ :imageContains.((:Wall) ⊓ (:Artifact ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 125: ∃ :imageContains.((:Artifact) ⊓ (:Object ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 126: ∃ :imageContains.((:DurableGood) ⊓ (:Object ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 127: ∃ :imageContains.((:EngineeringComponent) ⊓ (:SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 128: ∃ :imageContains.((:Product) ⊓ (:Entity ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 129: ∃ :imageContains.((:DurableGood) ⊓ (:Entity ⊓ ¬ :Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 130: ∃ :imageContains.((:Product) ⊓ (:Floor))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 131: ∃ :imageContains.((:EngineeringComponent) ⊓ (:ManufacturedProduct))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 132: ∃ :imageContains.((:ManufacturedProduct) ⊓ (:Device))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 133: ∃ :imageContains.((:Floor) ⊓ (:Table))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 134: ∃ :imageContains.((:Wall) ⊓ (:ManufacturedProduct))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 135: ∃ :imageContains.((:EngineeringComponent) ⊓ (:Product))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 136: ∃ :imageContains.((:DurableGood) ⊓ (:Device))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 137: ∃ :imageContains.((:Product) ⊓ (:Device))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 138: ∃ :imageContains.((:Floor) ⊓ (:ManufacturedProduct))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 139: ∃ :imageContains.((:EngineeringComponent) ⊓ (:DurableGood))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 140: ∃ :imageContains.((:EngineeringComponent) ⊓ (:Floor))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 141: ∃ :imageContains.((:Product) ⊓ (:Wall))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 142: ∃ :imageContains.((:Floor) ⊓ (:Device))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 143: ∃ :imageContains.((:Floor) ⊓ (:Furniture))
+	 coverage_score: 0.8125
+	 precision: 1.0
+	 recall: 0.4
+	 f_measure: 0.5714285714285715
+solution 144: ∃ :imageContains.(:ManufacturedProduct)
+	 coverage_score: 0.6875
+	 precision: 0.5
+	 recall: 1.0
+	 f_measure: 0.6666666666666666
+solution 145: ∃ :imageContains.(:Product)
+	 coverage_score: 0.6875
+	 precision: 0.5
+	 recall: 1.0
+	 f_measure: 0.6666666666666666
+solution 146: ∃ :imageContains.(:DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.5
+	 recall: 1.0
+	 f_measure: 0.6666666666666666
+solution 147: ∃ :imageContains.(:Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.5
+	 recall: 1.0
+	 f_measure: 0.6666666666666666
+solution 148: ∃ :imageContains.(:Chair)
+	 coverage_score: 0.8125
+	 precision: 0.75
+	 recall: 0.6
+	 f_measure: 0.6666666666666665
+solution 149: ∃ :imageContains.((:Object ⊓ ¬ :Furniture) ⊓ (:Physical ⊓ ¬ :Furniture))
+	 coverage_score: 0.625
+	 precision: 0.45454545454545453
+	 recall: 1.0
+	 f_measure: 0.625
+solution 150: ∃ :imageContains.((:Entity ⊓ ¬ :Furniture) ⊓ (:Physical ⊓ ¬ :Furniture))
+	 coverage_score: 0.625
+	 precision: 0.45454545454545453
+	 recall: 1.0
+	 f_measure: 0.625
+solution 151: ∃ :imageContains.((:Object ⊓ ¬ :Furniture) ⊓ (:Entity ⊓ ¬ :Furniture))
+	 coverage_score: 0.625
+	 precision: 0.45454545454545453
+	 recall: 1.0
+	 f_measure: 0.625
+solution 152: ∃ :imageContains.(:Object ⊓ ¬ :Furniture)
+	 coverage_score: 0.625
+	 precision: 0.45454545454545453
+	 recall: 1.0
+	 f_measure: 0.625
+solution 153: ∃ :imageContains.(:Entity ⊓ ¬ :Furniture)
+	 coverage_score: 0.625
+	 precision: 0.45454545454545453
+	 recall: 1.0
+	 f_measure: 0.625
+solution 154: ∃ :imageContains.(:Physical ⊓ ¬ :Furniture)
+	 coverage_score: 0.625
+	 precision: 0.45454545454545453
+	 recall: 1.0
+	 f_measure: 0.625
+solution 155: ∃ :imageContains.((:Seat) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 156: ∃ :imageContains.((:Chair) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Grass))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 157: ∃ :imageContains.((:Seat) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 158: ∃ :imageContains.((:Seat) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 159: ∃ :imageContains.((:Seat) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 160: ∃ :imageContains.((:Chair) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Organism))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 161: ∃ :imageContains.((:Chair) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 162: ∃ :imageContains.((:Chair) ⊓ (:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Plant))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 163: ∃ :imageContains.((:Seat) ⊓ (:Physical ⊓ ¬ :Furniture))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 164: ∃ :imageContains.((:Seat) ⊓ (:SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 165: ∃ :imageContains.((:Seat) ⊓ (:Artifact ⊓ ¬ :Furniture))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 166: ∃ :imageContains.((:Chair) ⊓ (:Artifact ⊓ ¬ :Furniture))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 167: ∃ :imageContains.((:Seat) ⊓ (:Entity ⊓ ¬ :Furniture))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 168: ∃ :imageContains.((:Chair) ⊓ (:Physical ⊓ ¬ :Furniture))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 169: ∃ :imageContains.((:Chair) ⊓ (:SelfConnectedObject ⊓ ¬ :FloweringPlant))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 170: ∃ :imageContains.((:Chair) ⊓ (:Object ⊓ ¬ :Furniture))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 171: ∃ :imageContains.((:Seat) ⊓ (:Object ⊓ ¬ :Furniture))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 172: ∃ :imageContains.((:Chair) ⊓ (:Entity ⊓ ¬ :Furniture))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 173: ∃ :imageContains.((:Seat) ⊓ (:Floor))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 174: ∃ :imageContains.((:Chair) ⊓ (:Floor))
+	 coverage_score: 0.75
+	 precision: 1.0
+	 recall: 0.2
+	 f_measure: 0.33333333333333337
+solution 175: ∃ :imageContains.(:Seat)
+	 coverage_score: 0.75
+	 precision: 0.6
+	 recall: 0.6
+	 f_measure: 0.6
+solution 176: ∃ :imageContains.(:Artifact)
+	 coverage_score: 0.5
+	 precision: 0.38461538461538464
+	 recall: 1.0
+	 f_measure: 0.5555555555555556
+solution 177: ∃ :imageContains.((:Floor) ⊓ (:Wall))
+	 coverage_score: 0.625
+	 precision: 0.4444444444444444
+	 recall: 0.8
+	 f_measure: 0.5714285714285714
+solution 178: ∃ :imageContains.(:Wall)
+	 coverage_score: 0.625
+	 precision: 0.4444444444444444
+	 recall: 0.8
+	 f_measure: 0.5714285714285714
+solution 179: ∃ :imageContains.(:Floor)
+	 coverage_score: 0.625
+	 precision: 0.4444444444444444
+	 recall: 0.8
+	 f_measure: 0.5714285714285714
+solution 180: ∃ :imageContains.(:SelfConnectedObject ⊓ ¬ :Grass)
+	 coverage_score: 0.6875
+	 precision: 0.5
+	 recall: 0.6
+	 f_measure: 0.5454545454545454
+solution 181: ∃ :imageContains.(:SelfConnectedObject ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.6875
+	 precision: 0.5
+	 recall: 0.6
+	 f_measure: 0.5454545454545454
+solution 182: ∃ :imageContains.(:SelfConnectedObject ⊓ ¬ :Plant)
+	 coverage_score: 0.6875
+	 precision: 0.5
+	 recall: 0.6
+	 f_measure: 0.5454545454545454
+solution 183: ∃ :imageContains.(:SelfConnectedObject ⊓ ¬ :Organism)
+	 coverage_score: 0.6875
+	 precision: 0.5
+	 recall: 0.6
+	 f_measure: 0.5454545454545454
+solution 184: ∃ :imageContains.(:Physical ⊓ ¬ :Grass)
+	 coverage_score: 0.3125
+	 precision: 0.3125
+	 recall: 1.0
+	 f_measure: 0.47619047619047616
+solution 185: ∃ :imageContains.(:Entity ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.3125
+	 precision: 0.3125
+	 recall: 1.0
+	 f_measure: 0.47619047619047616
+solution 186: ∃ :imageContains.(:Object ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.3125
+	 precision: 0.3125
+	 recall: 1.0
+	 f_measure: 0.47619047619047616
+solution 187: ∃ :imageContains.(:Physical ⊓ ¬ :Plant)
+	 coverage_score: 0.3125
+	 precision: 0.3125
+	 recall: 1.0
+	 f_measure: 0.47619047619047616
+solution 188: ∃ :imageContains.(:Entity ⊓ ¬ :Plant)
+	 coverage_score: 0.3125
+	 precision: 0.3125
+	 recall: 1.0
+	 f_measure: 0.47619047619047616
+solution 189: ∃ :imageContains.(:Entity ⊓ ¬ :Organism)
+	 coverage_score: 0.3125
+	 precision: 0.3125
+	 recall: 1.0
+	 f_measure: 0.47619047619047616
+solution 190: ∃ :imageContains.(:Object ⊓ ¬ :Organism)
+	 coverage_score: 0.3125
+	 precision: 0.3125
+	 recall: 1.0
+	 f_measure: 0.47619047619047616
+solution 191: ∃ :imageContains.(:Object ⊓ ¬ :Plant)
+	 coverage_score: 0.3125
+	 precision: 0.3125
+	 recall: 1.0
+	 f_measure: 0.47619047619047616
+solution 192: ∃ :imageContains.(:Entity ⊓ ¬ :Grass)
+	 coverage_score: 0.3125
+	 precision: 0.3125
+	 recall: 1.0
+	 f_measure: 0.47619047619047616
+solution 193: ∃ :imageContains.(:Physical ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.3125
+	 precision: 0.3125
+	 recall: 1.0
+	 f_measure: 0.47619047619047616
+solution 194: ∃ :imageContains.(:Object ⊓ ¬ :Grass)
+	 coverage_score: 0.3125
+	 precision: 0.3125
+	 recall: 1.0
+	 f_measure: 0.47619047619047616
+solution 195: ∃ :imageContains.(:Physical ⊓ ¬ :Organism)
+	 coverage_score: 0.3125
+	 precision: 0.3125
+	 recall: 1.0
+	 f_measure: 0.47619047619047616
+solution 196: ∃ :imageContains.(:Physical)
+	 coverage_score: 0.3125
+	 precision: 0.3125
+	 recall: 1.0
+	 f_measure: 0.47619047619047616
+solution 197: ∃ :imageContains.(:Object)
+	 coverage_score: 0.3125
+	 precision: 0.3125
+	 recall: 1.0
+	 f_measure: 0.47619047619047616
+solution 198: ∃ :imageContains.(:Entity)
+	 coverage_score: 0.3125
+	 precision: 0.3125
+	 recall: 1.0
+	 f_measure: 0.47619047619047616
+solution 199: ∃ :imageContains.(:Artifact ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.5
+	 recall: 0.4
+	 f_measure: 0.4444444444444445
+solution 200: ∃ :imageContains.(:Artifact ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.5
+	 recall: 0.4
+	 f_measure: 0.4444444444444445
+solution 201: ∃ :imageContains.(:Object ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.4375
+	 precision: 0.3333333333333333
+	 recall: 0.8
+	 f_measure: 0.47058823529411764
+solution 202: ∃ :imageContains.(:Entity ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.4375
+	 precision: 0.3333333333333333
+	 recall: 0.8
+	 f_measure: 0.47058823529411764
+solution 203: ∃ :imageContains.(:Physical ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.4375
+	 precision: 0.3333333333333333
+	 recall: 0.8
+	 f_measure: 0.47058823529411764
+solution 204: ∃ :imageContains.(:Physical ⊓ ¬ :Wall)
+	 coverage_score: 0.4375
+	 precision: 0.3333333333333333
+	 recall: 0.8
+	 f_measure: 0.47058823529411764
+solution 205: ∃ :imageContains.(:Object ⊓ ¬ :Wall)
+	 coverage_score: 0.4375
+	 precision: 0.3333333333333333
+	 recall: 0.8
+	 f_measure: 0.47058823529411764
+solution 206: ∃ :imageContains.(:Entity ⊓ ¬ :Wall)
+	 coverage_score: 0.4375
+	 precision: 0.3333333333333333
+	 recall: 0.8
+	 f_measure: 0.47058823529411764
+solution 207: ∃ :imageContains.(:LocalizablePlace)
+	 coverage_score: 0.4375
+	 precision: 0.3333333333333333
+	 recall: 0.8
+	 f_measure: 0.47058823529411764
+solution 208: ∃ :imageContains.(:StationaryArtifact)
+	 coverage_score: 0.4375
+	 precision: 0.3333333333333333
+	 recall: 0.8
+	 f_measure: 0.47058823529411764
+solution 209: ∃ :imageContains.(:Region)
+	 coverage_score: 0.375
+	 precision: 0.3076923076923077
+	 recall: 0.8
+	 f_measure: 0.4444444444444444
+solution 210: ∃ :imageContains.(:SelfConnectedObject)
+	 coverage_score: 0.375
+	 precision: 0.3076923076923077
+	 recall: 0.8
+	 f_measure: 0.4444444444444444
+solution 211: ∃ :imageContains.(:GeographicArea)
+	 coverage_score: 0.375
+	 precision: 0.3076923076923077
+	 recall: 0.8
+	 f_measure: 0.4444444444444444
+solution 212: ∃ :imageContains.(:SelfConnectedObject ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 213: ∃ :imageContains.(:Object ⊓ ¬ :BodyPart)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 214: ∃ :imageContains.(:SelfConnectedObject ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 215: ∃ :imageContains.(:Entity ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 216: ∃ :imageContains.(:Object ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 217: ∃ :imageContains.(:Object ⊓ ¬ :Limb)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 218: ∃ :imageContains.(:SelfConnectedObject ⊓ ¬ :BodyPart)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 219: ∃ :imageContains.(:Entity ⊓ ¬ :Limb)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 220: ∃ :imageContains.(:SelfConnectedObject ⊓ ¬ :Limb)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 221: ∃ :imageContains.(:Entity ⊓ ¬ :BodyPart)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 222: ∃ :imageContains.(:Object ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 223: ∃ :imageContains.(:Entity ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 224: ∃ :imageContains.(:Physical ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 225: ∃ :imageContains.(:Object ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 226: ∃ :imageContains.(:SelfConnectedObject ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 227: ∃ :imageContains.(:Physical ⊓ ¬ :BodyPart)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 228: ∃ :imageContains.(:SelfConnectedObject ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 229: ∃ :imageContains.(:Entity ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 230: ∃ :imageContains.(:Physical ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 231: ∃ :imageContains.(:Physical ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 232: ∃ :imageContains.(:Entity ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 233: ∃ :imageContains.(:Physical ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 234: ∃ :imageContains.(:Object ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 235: ∃ :imageContains.(:Physical ⊓ ¬ :Limb)
+	 coverage_score: 0.625
+	 precision: 0.4
+	 recall: 0.4
+	 f_measure: 0.4000000000000001
+solution 236: ∃ :imageContains.(:Object ⊓ ¬ :DurableGood)
+	 coverage_score: 0.4375
+	 precision: 0.25
+	 recall: 0.4
+	 f_measure: 0.3076923076923077
+solution 237: ∃ :imageContains.(:Object ⊓ ¬ :ManufacturedProduct)
+	 coverage_score: 0.4375
+	 precision: 0.25
+	 recall: 0.4
+	 f_measure: 0.3076923076923077
+solution 238: ∃ :imageContains.(:Entity ⊓ ¬ :Artifact)
+	 coverage_score: 0.4375
+	 precision: 0.25
+	 recall: 0.4
+	 f_measure: 0.3076923076923077
+solution 239: ∃ :imageContains.(:Object ⊓ ¬ :Artifact)
+	 coverage_score: 0.4375
+	 precision: 0.25
+	 recall: 0.4
+	 f_measure: 0.3076923076923077
+solution 240: ∃ :imageContains.(:Physical ⊓ ¬ :Window)
+	 coverage_score: 0.4375
+	 precision: 0.25
+	 recall: 0.4
+	 f_measure: 0.3076923076923077
+solution 241: ∃ :imageContains.(:Entity ⊓ ¬ :ManufacturedProduct)
+	 coverage_score: 0.4375
+	 precision: 0.25
+	 recall: 0.4
+	 f_measure: 0.3076923076923077
+solution 242: ∃ :imageContains.(:Object ⊓ ¬ :Window)
+	 coverage_score: 0.4375
+	 precision: 0.25
+	 recall: 0.4
+	 f_measure: 0.3076923076923077
+solution 243: ∃ :imageContains.(:Physical ⊓ ¬ :Product)
+	 coverage_score: 0.4375
+	 precision: 0.25
+	 recall: 0.4
+	 f_measure: 0.3076923076923077
+solution 244: ∃ :imageContains.(:Physical ⊓ ¬ :DurableGood)
+	 coverage_score: 0.4375
+	 precision: 0.25
+	 recall: 0.4
+	 f_measure: 0.3076923076923077
+solution 245: ∃ :imageContains.(:Physical ⊓ ¬ :Artifact)
+	 coverage_score: 0.4375
+	 precision: 0.25
+	 recall: 0.4
+	 f_measure: 0.3076923076923077
+solution 246: ∃ :imageContains.(:Entity ⊓ ¬ :Window)
+	 coverage_score: 0.4375
+	 precision: 0.25
+	 recall: 0.4
+	 f_measure: 0.3076923076923077
+solution 247: ∃ :imageContains.(:Object ⊓ ¬ :Product)
+	 coverage_score: 0.4375
+	 precision: 0.25
+	 recall: 0.4
+	 f_measure: 0.3076923076923077
+solution 248: ∃ :imageContains.(:Entity ⊓ ¬ :Product)
+	 coverage_score: 0.4375
+	 precision: 0.25
+	 recall: 0.4
+	 f_measure: 0.3076923076923077
+solution 249: ∃ :imageContains.(:Physical ⊓ ¬ :ManufacturedProduct)
+	 coverage_score: 0.4375
+	 precision: 0.25
+	 recall: 0.4
+	 f_measure: 0.3076923076923077
+solution 250: ∃ :imageContains.(:Entity ⊓ ¬ :DurableGood)
+	 coverage_score: 0.4375
+	 precision: 0.25
+	 recall: 0.4
+	 f_measure: 0.3076923076923077
+solution 251: ∃ :imageContains.(:Artifact ⊓ :Region ⊓ ¬ :ManufacturedProduct)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 252: ∃ :imageContains.(:GeographicArea ⊓ :SelfConnectedObject ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 253: ∃ :imageContains.(:SelfConnectedObject ⊓ :StationaryArtifact ⊓ ¬ :Plant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 254: ∃ :imageContains.(:GeographicArea ⊓ :Product ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 255: ∃ :imageContains.(:SelfConnectedObject ⊓ :StationaryArtifact ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 256: ∃ :imageContains.(:GeographicArea ⊓ :Artifact ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 257: ∃ :imageContains.(:SelfConnectedObject ⊓ :Chair ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 258: ∃ :imageContains.(:SelfConnectedObject ⊓ :Table ⊓ ¬ :Grass)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 259: ∃ :imageContains.(:SelfConnectedObject ⊓ :Seat ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 260: ∃ :imageContains.(:GeographicArea ⊓ :SelfConnectedObject ⊓ ¬ :Limb)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 261: ∃ :imageContains.(:ManufacturedProduct ⊓ :SelfConnectedObject ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 262: ∃ :imageContains.(:Artifact ⊓ :Region ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 263: ∃ :imageContains.(:SelfConnectedObject ⊓ :DurableGood ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 264: ∃ :imageContains.(:Furniture ⊓ :SelfConnectedObject ⊓ ¬ :Organism)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 265: ∃ :imageContains.(:ManufacturedProduct ⊓ :LocalizablePlace ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 266: ∃ :imageContains.(:Product ⊓ :SelfConnectedObject ⊓ ¬ :Plant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 267: ∃ :imageContains.(:Artifact ⊓ :Region ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 268: ∃ :imageContains.(:GeographicArea ⊓ :SelfConnectedObject ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 269: ∃ :imageContains.(:Region ⊓ :SelfConnectedObject ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 270: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :BodyPart)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 271: ∃ :imageContains.(:Furniture ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 272: ∃ :imageContains.(:EngineeringComponent ⊓ :LocalizablePlace ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 273: ∃ :imageContains.(:EngineeringComponent ⊓ :SelfConnectedObject ⊓ ¬ :Organism)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 274: ∃ :imageContains.(:Product ⊓ :SelfConnectedObject ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 275: ∃ :imageContains.(:GeographicArea ⊓ :EngineeringComponent ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 276: ∃ :imageContains.(:Device ⊓ :Region ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 277: ∃ :imageContains.(:Furniture ⊓ :Region ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 278: ∃ :imageContains.(:SelfConnectedObject ⊓ :StationaryArtifact ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 279: ∃ :imageContains.(:LocalizablePlace ⊓ :Seat ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 280: ∃ :imageContains.(:GeographicArea ⊓ :SelfConnectedObject ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 281: ∃ :imageContains.(:Artifact ⊓ :LocalizablePlace ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 282: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 283: ∃ :imageContains.(:LocalizablePlace ⊓ :Chair ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 284: ∃ :imageContains.(:ManufacturedProduct ⊓ :StationaryArtifact ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 285: ∃ :imageContains.(:Region ⊓ :Chair ⊓ ¬ :GeographicArea)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 286: ∃ :imageContains.(:Region ⊓ :Seat ⊓ ¬ :GeographicArea)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 287: ∃ :imageContains.(:SelfConnectedObject ⊓ :Table ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 288: ∃ :imageContains.(:ManufacturedProduct ⊓ :LocalizablePlace ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 289: ∃ :imageContains.(:DurableGood ⊓ :Wall ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 290: ∃ :imageContains.(:ManufacturedProduct ⊓ :StationaryArtifact ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 291: ∃ :imageContains.(:LocalizablePlace ⊓ :SelfConnectedObject ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 292: ∃ :imageContains.(:Region ⊓ :SelfConnectedObject ⊓ ¬ :Organism)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 293: ∃ :imageContains.(:SelfConnectedObject ⊓ :Seat ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 294: ∃ :imageContains.(:ManufacturedProduct ⊓ :SelfConnectedObject ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 295: ∃ :imageContains.(:EngineeringComponent ⊓ :SelfConnectedObject ⊓ ¬ :BodyPart)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 296: ∃ :imageContains.(:SelfConnectedObject ⊓ :Wall ⊓ ¬ :Limb)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 297: ∃ :imageContains.(:GeographicArea ⊓ :Artifact ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 298: ∃ :imageContains.(:ManufacturedProduct ⊓ :Device ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 299: ∃ :imageContains.(:SelfConnectedObject ⊓ :Seat ⊓ ¬ :Grass)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 300: ∃ :imageContains.(:ManufacturedProduct ⊓ :Region ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 301: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 302: ∃ :imageContains.(:Product ⊓ :Wall ⊓ ¬ :ManufacturedProduct)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 303: ∃ :imageContains.(:GeographicArea ⊓ :Artifact ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 304: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 305: ∃ :imageContains.(:SelfConnectedObject ⊓ :Wall ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 306: ∃ :imageContains.(:Furniture ⊓ :SelfConnectedObject ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 307: ∃ :imageContains.(:LocalizablePlace ⊓ :Device ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 308: ∃ :imageContains.(:LocalizablePlace ⊓ :SelfConnectedObject ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 309: ∃ :imageContains.(:LocalizablePlace ⊓ :Table ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 310: ∃ :imageContains.(:GeographicArea ⊓ :SelfConnectedObject ⊓ ¬ :BodyPart)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 311: ∃ :imageContains.(:EngineeringComponent ⊓ :StationaryArtifact ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 312: ∃ :imageContains.(:SelfConnectedObject ⊓ :StationaryArtifact ⊓ ¬ :Grass)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 313: ∃ :imageContains.(:GeographicArea ⊓ :ManufacturedProduct ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 314: ∃ :imageContains.(:GeographicArea ⊓ :DurableGood ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 315: ∃ :imageContains.(:GeographicArea ⊓ :Furniture ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 316: ∃ :imageContains.(:EngineeringComponent ⊓ :SelfConnectedObject ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 317: ∃ :imageContains.(:EngineeringComponent ⊓ :Region ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 318: ∃ :imageContains.(:GeographicArea ⊓ :Artifact ⊓ ¬ :Product)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 319: ∃ :imageContains.(:Product ⊓ :StationaryArtifact ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 320: ∃ :imageContains.(:SelfConnectedObject ⊓ :DurableGood ⊓ ¬ :Grass)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 321: ∃ :imageContains.(:GeographicArea ⊓ :SelfConnectedObject ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 322: ∃ :imageContains.(:Region ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 323: ∃ :imageContains.(:Region ⊓ :SelfConnectedObject ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 324: ∃ :imageContains.(:Device ⊓ :SelfConnectedObject ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 325: ∃ :imageContains.(:Region ⊓ :SelfConnectedObject ⊓ ¬ :GeographicArea)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 326: ∃ :imageContains.(:GeographicArea ⊓ :Table ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 327: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Product)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 328: ∃ :imageContains.(:Product ⊓ :SelfConnectedObject ⊓ ¬ :Grass)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 329: ∃ :imageContains.(:Furniture ⊓ :LocalizablePlace ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 330: ∃ :imageContains.(:Artifact ⊓ :LocalizablePlace ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 331: ∃ :imageContains.(:SelfConnectedObject ⊓ :Chair ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 332: ∃ :imageContains.(:ManufacturedProduct ⊓ :Region ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 333: ∃ :imageContains.(:EngineeringComponent ⊓ :Region ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 334: ∃ :imageContains.(:Artifact ⊓ :Region ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 335: ∃ :imageContains.(:GeographicArea ⊓ :Device ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 336: ∃ :imageContains.(:Furniture ⊓ :SelfConnectedObject ⊓ ¬ :BodyPart)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 337: ∃ :imageContains.(:SelfConnectedObject ⊓ :StationaryArtifact ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 338: ∃ :imageContains.(:Region ⊓ :Table ⊓ ¬ :GeographicArea)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 339: ∃ :imageContains.(:GeographicArea ⊓ :Furniture ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 340: ∃ :imageContains.(:Furniture ⊓ :StationaryArtifact ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 341: ∃ :imageContains.(:SelfConnectedObject ⊓ :DurableGood ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 342: ∃ :imageContains.(:ManufacturedProduct ⊓ :Region ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 343: ∃ :imageContains.(:GeographicArea ⊓ :SelfConnectedObject ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 344: ∃ :imageContains.(:Artifact ⊓ :LocalizablePlace ⊓ ¬ :ManufacturedProduct)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 345: ∃ :imageContains.(:Chair ⊓ :StationaryArtifact ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 346: ∃ :imageContains.(:Artifact ⊓ :Region ⊓ ¬ :Product)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 347: ∃ :imageContains.(:GeographicArea ⊓ :Chair ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 348: ∃ :imageContains.(:EngineeringComponent ⊓ :SelfConnectedObject ⊓ ¬ :Plant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 349: ∃ :imageContains.(:SelfConnectedObject ⊓ :Seat ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 350: ∃ :imageContains.(:ManufacturedProduct ⊓ :EngineeringComponent ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 351: ∃ :imageContains.(:GeographicArea ⊓ :EngineeringComponent ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 352: ∃ :imageContains.(:Device ⊓ :SelfConnectedObject ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 353: ∃ :imageContains.(:Device ⊓ :SelfConnectedObject ⊓ ¬ :Plant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 354: ∃ :imageContains.(:Region ⊓ :Seat ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 355: ∃ :imageContains.(:EngineeringComponent ⊓ :Region ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 356: ∃ :imageContains.(:EngineeringComponent ⊓ :SelfConnectedObject ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 357: ∃ :imageContains.(:SelfConnectedObject ⊓ :Chair ⊓ ¬ :BodyPart)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 358: ∃ :imageContains.(:ManufacturedProduct ⊓ :SelfConnectedObject ⊓ ¬ :Grass)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 359: ∃ :imageContains.(:Product ⊓ :LocalizablePlace ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 360: ∃ :imageContains.(:Artifact ⊓ :Region ⊓ ¬ :Window)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 361: ∃ :imageContains.(:Device ⊓ :Region ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 362: ∃ :imageContains.(:Product ⊓ :LocalizablePlace ⊓ ¬ :ManufacturedProduct)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 363: ∃ :imageContains.(:Product ⊓ :SelfConnectedObject ⊓ ¬ :Organism)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 364: ∃ :imageContains.(:SelfConnectedObject ⊓ :Seat ⊓ ¬ :Limb)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 365: ∃ :imageContains.(:Product ⊓ :Wall ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 366: ∃ :imageContains.(:EngineeringComponent ⊓ :SelfConnectedObject ⊓ ¬ :Limb)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 367: ∃ :imageContains.(:Region ⊓ :SelfConnectedObject ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 368: ∃ :imageContains.(:SelfConnectedObject ⊓ :DurableGood ⊓ ¬ :Organism)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 369: ∃ :imageContains.(:Product ⊓ :Device ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 370: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 371: ∃ :imageContains.(:Region ⊓ :SelfConnectedObject ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 372: ∃ :imageContains.(:LocalizablePlace ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 373: ∃ :imageContains.(:SelfConnectedObject ⊓ :Wall ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 374: ∃ :imageContains.(:EngineeringComponent ⊓ :SelfConnectedObject ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 375: ∃ :imageContains.(:LocalizablePlace ⊓ :SelfConnectedObject ⊓ ¬ :Plant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 376: ∃ :imageContains.(:SelfConnectedObject ⊓ :Table ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 377: ∃ :imageContains.(:SelfConnectedObject ⊓ :Chair ⊓ ¬ :Grass)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 378: ∃ :imageContains.(:LocalizablePlace ⊓ :DurableGood ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 379: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 380: ∃ :imageContains.(:SelfConnectedObject ⊓ :Wall ⊓ ¬ :Organism)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 381: ∃ :imageContains.(:LocalizablePlace ⊓ :SelfConnectedObject ⊓ ¬ :Organism)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 382: ∃ :imageContains.(:Artifact ⊓ :Region ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 383: ∃ :imageContains.(:Region ⊓ :SelfConnectedObject ⊓ ¬ :Limb)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 384: ∃ :imageContains.(:Product ⊓ :Device ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 385: ∃ :imageContains.(:ManufacturedProduct ⊓ :Device ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 386: ∃ :imageContains.(:Furniture ⊓ :Region ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 387: ∃ :imageContains.(:ManufacturedProduct ⊓ :SelfConnectedObject ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 388: ∃ :imageContains.(:SelfConnectedObject ⊓ :Seat ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 389: ∃ :imageContains.(:SelfConnectedObject ⊓ :Table ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 390: ∃ :imageContains.(:GeographicArea ⊓ :Artifact ⊓ ¬ :Window)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 391: ∃ :imageContains.(:GeographicArea ⊓ :ManufacturedProduct ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 392: ∃ :imageContains.(:Product ⊓ :Region ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 393: ∃ :imageContains.(:ManufacturedProduct ⊓ :StationaryArtifact ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 394: ∃ :imageContains.(:Product ⊓ :LocalizablePlace ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 395: ∃ :imageContains.(:Device ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 396: ∃ :imageContains.(:Device ⊓ :SelfConnectedObject ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 397: ∃ :imageContains.(:SelfConnectedObject ⊓ :DurableGood ⊓ ¬ :Plant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 398: ∃ :imageContains.(:Product ⊓ :Wall ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 399: ∃ :imageContains.(:Furniture ⊓ :SelfConnectedObject ⊓ ¬ :Plant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 400: ∃ :imageContains.(:GeographicArea ⊓ :ManufacturedProduct ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 401: ∃ :imageContains.(:ManufacturedProduct ⊓ :SelfConnectedObject ⊓ ¬ :BodyPart)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 402: ∃ :imageContains.(:Region ⊓ :DurableGood ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 403: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Window)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 404: ∃ :imageContains.(:EngineeringComponent ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 405: ∃ :imageContains.(:Product ⊓ :Region ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 406: ∃ :imageContains.(:Artifact ⊓ :LocalizablePlace ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 407: ∃ :imageContains.(:Device ⊓ :SelfConnectedObject ⊓ ¬ :Organism)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 408: ∃ :imageContains.(:SelfConnectedObject ⊓ :StationaryArtifact ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 409: ∃ :imageContains.(:ManufacturedProduct ⊓ :EngineeringComponent ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 410: ∃ :imageContains.(:Region ⊓ :DurableGood ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 411: ∃ :imageContains.(:SelfConnectedObject ⊓ :Wall ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 412: ∃ :imageContains.(:SelfConnectedObject ⊓ :Wall ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 413: ∃ :imageContains.(:GeographicArea ⊓ :SelfConnectedObject ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 414: ∃ :imageContains.(:SelfConnectedObject ⊓ :StationaryArtifact ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 415: ∃ :imageContains.(:SelfConnectedObject ⊓ :DurableGood ⊓ ¬ :Limb)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 416: ∃ :imageContains.(:Product ⊓ :EngineeringComponent ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 417: ∃ :imageContains.(:ManufacturedProduct ⊓ :Wall ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 418: ∃ :imageContains.(:SelfConnectedObject ⊓ :Chair ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 419: ∃ :imageContains.(:Product ⊓ :StationaryArtifact ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 420: ∃ :imageContains.(:EngineeringComponent ⊓ :SelfConnectedObject ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 421: ∃ :imageContains.(:GeographicArea ⊓ :SelfConnectedObject ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 422: ∃ :imageContains.(:SelfConnectedObject ⊓ :DurableGood ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 423: ∃ :imageContains.(:ManufacturedProduct ⊓ :Wall ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 424: ∃ :imageContains.(:Product ⊓ :SelfConnectedObject ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 425: ∃ :imageContains.(:SelfConnectedObject ⊓ :StationaryArtifact ⊓ ¬ :Limb)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 426: ∃ :imageContains.(:SelfConnectedObject ⊓ :Table ⊓ ¬ :BodyPart)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 427: ∃ :imageContains.(:GeographicArea ⊓ :SelfConnectedObject ⊓ ¬ :Plant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 428: ∃ :imageContains.(:Device ⊓ :Region ⊓ ¬ :GeographicArea)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 429: ∃ :imageContains.(:SelfConnectedObject ⊓ :Seat ⊓ ¬ :Organism)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 430: ∃ :imageContains.(:LocalizablePlace ⊓ :Chair ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 431: ∃ :imageContains.(:GeographicArea ⊓ :DurableGood ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 432: ∃ :imageContains.(:LocalizablePlace ⊓ :Seat ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 433: ∃ :imageContains.(:StationaryArtifact ⊓ :Table ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 434: ∃ :imageContains.(:SelfConnectedObject ⊓ :Chair ⊓ ¬ :Organism)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 435: ∃ :imageContains.(:StationaryArtifact ⊓ :DurableGood ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 436: ∃ :imageContains.(:Device ⊓ :Region ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 437: ∃ :imageContains.(:GeographicArea ⊓ :Table ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 438: ∃ :imageContains.(:SelfConnectedObject ⊓ :StationaryArtifact ⊓ ¬ :BodyPart)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 439: ∃ :imageContains.(:EngineeringComponent ⊓ :DurableGood ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 440: ∃ :imageContains.(:Device ⊓ :SelfConnectedObject ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 441: ∃ :imageContains.(:SelfConnectedObject ⊓ :DurableGood ⊓ ¬ :BodyPart)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 442: ∃ :imageContains.(:Device ⊓ :DurableGood ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 443: ∃ :imageContains.(:Product ⊓ :SelfConnectedObject ⊓ ¬ :Limb)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 444: ∃ :imageContains.(:GeographicArea ⊓ :Chair ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 445: ∃ :imageContains.(:EngineeringComponent ⊓ :Region ⊓ ¬ :GeographicArea)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 446: ∃ :imageContains.(:Product ⊓ :EngineeringComponent ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 447: ∃ :imageContains.(:ManufacturedProduct ⊓ :Region ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 448: ∃ :imageContains.(:Region ⊓ :SelfConnectedObject ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 449: ∃ :imageContains.(:EngineeringComponent ⊓ :LocalizablePlace ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 450: ∃ :imageContains.(:Product ⊓ :Region ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 451: ∃ :imageContains.(:GeographicArea ⊓ :Seat ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 452: ∃ :imageContains.(:LocalizablePlace ⊓ :SelfConnectedObject ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 453: ∃ :imageContains.(:Furniture ⊓ :SelfConnectedObject ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 454: ∃ :imageContains.(:Product ⊓ :SelfConnectedObject ⊓ ¬ :BodyPart)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 455: ∃ :imageContains.(:GeographicArea ⊓ :SelfConnectedObject ⊓ ¬ :Grass)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 456: ∃ :imageContains.(:Region ⊓ :DurableGood ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 457: ∃ :imageContains.(:GeographicArea ⊓ :Product ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 458: ∃ :imageContains.(:SelfConnectedObject ⊓ :DurableGood ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 459: ∃ :imageContains.(:ManufacturedProduct ⊓ :SelfConnectedObject ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 460: ∃ :imageContains.(:Product ⊓ :LocalizablePlace ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 461: ∃ :imageContains.(:SelfConnectedObject ⊓ :Wall ⊓ ¬ :Plant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 462: ∃ :imageContains.(:ManufacturedProduct ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 463: ∃ :imageContains.(:LocalizablePlace ⊓ :SelfConnectedObject ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 464: ∃ :imageContains.(:SelfConnectedObject ⊓ :Table ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 465: ∃ :imageContains.(:SelfConnectedObject ⊓ :StationaryArtifact ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 466: ∃ :imageContains.(:GeographicArea ⊓ :Artifact ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 467: ∃ :imageContains.(:SelfConnectedObject ⊓ :Table ⊓ ¬ :Limb)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 468: ∃ :imageContains.(:Region ⊓ :DurableGood ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 469: ∃ :imageContains.(:Product ⊓ :Device ⊓ ¬ :ManufacturedProduct)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 470: ∃ :imageContains.(:ManufacturedProduct ⊓ :SelfConnectedObject ⊓ ¬ :Plant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 471: ∃ :imageContains.(:GeographicArea ⊓ :Product ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 472: ∃ :imageContains.(:Region ⊓ :SelfConnectedObject ⊓ ¬ :Grass)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 473: ∃ :imageContains.(:LocalizablePlace ⊓ :DurableGood ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 474: ∃ :imageContains.(:Region ⊓ :DurableGood ⊓ ¬ :GeographicArea)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 475: ∃ :imageContains.(:Device ⊓ :SelfConnectedObject ⊓ ¬ :Limb)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 476: ∃ :imageContains.(:Product ⊓ :Region ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 477: ∃ :imageContains.(:GeographicArea ⊓ :DurableGood ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 478: ∃ :imageContains.(:ManufacturedProduct ⊓ :SelfConnectedObject ⊓ ¬ :Organism)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 479: ∃ :imageContains.(:LocalizablePlace ⊓ :SelfConnectedObject ⊓ ¬ :BodyPart)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 480: ∃ :imageContains.(:Product ⊓ :SelfConnectedObject ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 481: ∃ :imageContains.(:Furniture ⊓ :LocalizablePlace ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 482: ∃ :imageContains.(:Product ⊓ :Region ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 483: ∃ :imageContains.(:Product ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 484: ∃ :imageContains.(:Furniture ⊓ :SelfConnectedObject ⊓ ¬ :Limb)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 485: ∃ :imageContains.(:LocalizablePlace ⊓ :Table ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 486: ∃ :imageContains.(:Furniture ⊓ :Region ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 487: ∃ :imageContains.(:SelfConnectedObject ⊓ :Table ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 488: ∃ :imageContains.(:LocalizablePlace ⊓ :Device ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 489: ∃ :imageContains.(:SelfConnectedObject ⊓ :Chair ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 490: ∃ :imageContains.(:Furniture ⊓ :SelfConnectedObject ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 491: ∃ :imageContains.(:Region ⊓ :SelfConnectedObject ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 492: ∃ :imageContains.(:Region ⊓ :Table ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 493: ∃ :imageContains.(:LocalizablePlace ⊓ :SelfConnectedObject ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 494: ∃ :imageContains.(:GeographicArea ⊓ :Table ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 495: ∃ :imageContains.(:SelfConnectedObject ⊓ :Wall ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 496: ∃ :imageContains.(:Device ⊓ :StationaryArtifact ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 497: ∃ :imageContains.(:Region ⊓ :Chair ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 498: ∃ :imageContains.(:Product ⊓ :EngineeringComponent ⊓ ¬ :ManufacturedProduct)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 499: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 500: ∃ :imageContains.(:SelfConnectedObject ⊓ :Seat ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 501: ∃ :imageContains.(:LocalizablePlace ⊓ :SelfConnectedObject ⊓ ¬ :Limb)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 502: ∃ :imageContains.(:GeographicArea ⊓ :ManufacturedProduct ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 503: ∃ :imageContains.(:Artifact ⊓ :LocalizablePlace ⊓ ¬ :Product)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 504: ∃ :imageContains.(:Furniture ⊓ :Region ⊓ ¬ :GeographicArea)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 505: ∃ :imageContains.(:SelfConnectedObject ⊓ :Seat ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 506: ∃ :imageContains.(:Product ⊓ :Region ⊓ ¬ :GeographicArea)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 507: ∃ :imageContains.(:Device ⊓ :SelfConnectedObject ⊓ ¬ :BodyPart)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 508: ∃ :imageContains.(:Artifact ⊓ :Region ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 509: ∃ :imageContains.(:EngineeringComponent ⊓ :SelfConnectedObject ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 510: ∃ :imageContains.(:Region ⊓ :Seat ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 511: ∃ :imageContains.(:SelfConnectedObject ⊓ :DurableGood ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 512: ∃ :imageContains.(:StationaryArtifact ⊓ :DurableGood ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 513: ∃ :imageContains.(:Region ⊓ :Chair ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 514: ∃ :imageContains.(:GeographicArea ⊓ :SelfConnectedObject ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 515: ∃ :imageContains.(:Furniture ⊓ :SelfConnectedObject ⊓ ¬ :Grass)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 516: ∃ :imageContains.(:GeographicArea ⊓ :Device ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 517: ∃ :imageContains.(:Device ⊓ :SelfConnectedObject ⊓ ¬ :Grass)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 518: ∃ :imageContains.(:LocalizablePlace ⊓ :DurableGood ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 519: ∃ :imageContains.(:Product ⊓ :StationaryArtifact ⊓ ¬ :ManufacturedProduct)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 520: ∃ :imageContains.(:GeographicArea ⊓ :Furniture ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 521: ∃ :imageContains.(:SelfConnectedObject ⊓ :Table ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 522: ∃ :imageContains.(:Furniture ⊓ :SelfConnectedObject ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 523: ∃ :imageContains.(:SelfConnectedObject ⊓ :Chair ⊓ ¬ :Plant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 524: ∃ :imageContains.(:Region ⊓ :Table ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 525: ∃ :imageContains.(:Product ⊓ :SelfConnectedObject ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 526: ∃ :imageContains.(:SelfConnectedObject ⊓ :StationaryArtifact ⊓ ¬ :FloweringPlant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 527: ∃ :imageContains.(:GeographicArea ⊓ :DurableGood ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 528: ∃ :imageContains.(:SelfConnectedObject ⊓ :Wall ⊓ ¬ :BodyPart)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 529: ∃ :imageContains.(:LocalizablePlace ⊓ :SelfConnectedObject ⊓ ¬ :Grass)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 530: ∃ :imageContains.(:GeographicArea ⊓ :Seat ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 531: ∃ :imageContains.(:GeographicArea ⊓ :Device ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 532: ∃ :imageContains.(:Product ⊓ :LocalizablePlace ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 533: ∃ :imageContains.(:GeographicArea ⊓ :EngineeringComponent ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 534: ∃ :imageContains.(:SelfConnectedObject ⊓ :Seat ⊓ ¬ :Plant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 535: ∃ :imageContains.(:SelfConnectedObject ⊓ :Chair ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 536: ∃ :imageContains.(:GeographicArea ⊓ :Seat ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 537: ∃ :imageContains.(:Product ⊓ :SelfConnectedObject ⊓ ¬ :ManufacturedProduct)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 538: ∃ :imageContains.(:Region ⊓ :Chair ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 539: ∃ :imageContains.(:SelfConnectedObject ⊓ :Table ⊓ ¬ :Organism)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 540: ∃ :imageContains.(:ManufacturedProduct ⊓ :SelfConnectedObject ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 541: ∃ :imageContains.(:Product ⊓ :SelfConnectedObject ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 542: ∃ :imageContains.(:GeographicArea ⊓ :Chair ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 543: ∃ :imageContains.(:Device ⊓ :SelfConnectedObject ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 544: ∃ :imageContains.(:SelfConnectedObject ⊓ :Seat ⊓ ¬ :BodyPart)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 545: ∃ :imageContains.(:GeographicArea ⊓ :Artifact ⊓ ¬ :ManufacturedProduct)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 546: ∃ :imageContains.(:ManufacturedProduct ⊓ :SelfConnectedObject ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 547: ∃ :imageContains.(:GeographicArea ⊓ :Product ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 548: ∃ :imageContains.(:GeographicArea ⊓ :Product ⊓ ¬ :ManufacturedProduct)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 549: ∃ :imageContains.(:SelfConnectedObject ⊓ :Chair ⊓ ¬ :Limb)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 550: ∃ :imageContains.(:SelfConnectedObject ⊓ :Wall ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 551: ∃ :imageContains.(:Artifact ⊓ :Region ⊓ ¬ :GeographicArea)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 552: ∃ :imageContains.(:Region ⊓ :SelfConnectedObject ⊓ ¬ :Plant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 553: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Limb)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 554: ∃ :imageContains.(:SelfConnectedObject ⊓ :StationaryArtifact ⊓ ¬ :Organism)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 555: ∃ :imageContains.(:SelfConnectedObject ⊓ :Chair ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 556: ∃ :imageContains.(:Artifact ⊓ :LocalizablePlace ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 557: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 558: ∃ :imageContains.(:LocalizablePlace ⊓ :SelfConnectedObject ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 559: ∃ :imageContains.(:Region ⊓ :Table ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 560: ∃ :imageContains.(:EngineeringComponent ⊓ :SelfConnectedObject ⊓ ¬ :Grass)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 561: ∃ :imageContains.(:GeographicArea ⊓ :ManufacturedProduct ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 562: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 563: ∃ :imageContains.(:Region ⊓ :SelfConnectedObject ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 564: ∃ :imageContains.(:LocalizablePlace ⊓ :SelfConnectedObject ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 565: ∃ :imageContains.(:GeographicArea ⊓ :SelfConnectedObject ⊓ ¬ :OrganicObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 566: ∃ :imageContains.(:Product ⊓ :StationaryArtifact ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 567: ∃ :imageContains.(:Product ⊓ :Region ⊓ ¬ :ManufacturedProduct)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 568: ∃ :imageContains.(:ManufacturedProduct ⊓ :SelfConnectedObject ⊓ ¬ :AnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 569: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :ManufacturedProduct)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 570: ∃ :imageContains.(:Region ⊓ :SelfConnectedObject ⊓ ¬ :BodyPart)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 571: ∃ :imageContains.(:Artifact ⊓ :LocalizablePlace ⊓ ¬ :Window)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 572: ∃ :imageContains.(:GeographicArea ⊓ :Product ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 573: ∃ :imageContains.(:Region ⊓ :SelfConnectedObject ⊓ ¬ :CorpuscularObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 574: ∃ :imageContains.(:StationaryArtifact ⊓ :Seat ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 575: ∃ :imageContains.(:ManufacturedProduct ⊓ :LocalizablePlace ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 576: ∃ :imageContains.(:SelfConnectedObject ⊓ :Wall ⊓ ¬ :Grass)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 577: ∃ :imageContains.(:Furniture ⊓ :SelfConnectedObject ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 578: ∃ :imageContains.(:ManufacturedProduct ⊓ :Region ⊓ ¬ :GeographicArea)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 579: ∃ :imageContains.(:ManufacturedProduct ⊓ :Region ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 580: ∃ :imageContains.(:Artifact ⊓ :SelfConnectedObject ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 581: ∃ :imageContains.(:Region ⊓ :Seat ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 582: ∃ :imageContains.(:SelfConnectedObject ⊓ :DurableGood ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 583: ∃ :imageContains.(:GeographicArea ⊓ :SelfConnectedObject ⊓ ¬ :Organism)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 584: ∃ :imageContains.(:Product ⊓ :SelfConnectedObject ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 585: ∃ :imageContains.(:Product ⊓ :SelfConnectedObject ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 586: ∃ :imageContains.(:ManufacturedProduct ⊓ :SelfConnectedObject ⊓ ¬ :Limb)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 587: ∃ :imageContains.(:GeographicArea ⊓ :Artifact ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 588: ∃ :imageContains.(:SelfConnectedObject ⊓ :Table ⊓ ¬ :Plant)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 589: ∃ :imageContains.(:ManufacturedProduct ⊓ :LocalizablePlace ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 590: ∃ :imageContains.(:SelfConnectedObject ⊓ :DurableGood ⊓ ¬ :AnimalAnatomicalStructure)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 591: ∃ :imageContains.(:Chair ⊓ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 592: ∃ :imageContains.(:Region ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 593: ∃ :imageContains.(:Seat ⊓ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 594: ∃ :imageContains.(:Entity ⊓ ¬ :Agent)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 595: ∃ :imageContains.(:Object ⊓ ¬ :Agent)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 596: ∃ :imageContains.(:Physical ⊓ ¬ :SelfConnectedObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 597: ∃ :imageContains.(:Physical ⊓ ¬ :Region)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 598: ∃ :imageContains.((:Seat) ⊓ (:EngineeringComponent))
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 599: ∃ :imageContains.((:EngineeringComponent) ⊓ (:Chair))
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 600: ∃ :imageContains.(:Entity ⊓ ¬ :Object)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 601: ∃ :imageContains.((:Chair) ⊓ (:Device))
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 602: ∃ :imageContains.((:Seat) ⊓ (:Device))
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 603: ∃ :imageContains.((:EngineeringComponent) ⊓ (:Wall))
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 604: ∃ :imageContains.(:StationaryArtifact ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 605: ∃ :imageContains.(:LocalizablePlace ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 606: ∃ :imageContains.(:Physical ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 607: ∃ :imageContains.(:Artifact ⊓ ¬ :Product)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 608: ∃ :imageContains.(:GeographicArea ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 609: ∃ :imageContains.(:Region ⊓ ¬ :GeographicArea)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 610: ∃ :imageContains.(:Entity ⊓ ¬ :GeographicArea)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 611: ∃ :imageContains.((:Wall) ⊓ (:Device))
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 612: ∃ :imageContains.(:Object ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 613: ∃ :imageContains.(:Object ⊓ ¬ :GeographicArea)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 614: ∃ :imageContains.((:Furniture) ⊓ (:Device))
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 615: ∃ :imageContains.(:EngineeringComponent ⊓ :Seat)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 616: ∃ :imageContains.(:Entity ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 617: ∃ :imageContains.((:Chair) ⊓ (:Table))
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 618: ∃ :imageContains.(:Artifact ⊓ ¬ :Window)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 619: ∃ :imageContains.(:Device ⊓ :Table)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 620: ∃ :imageContains.(:EngineeringComponent ⊓ :Table)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 621: ∃ :imageContains.((:EngineeringComponent) ⊓ (:Furniture))
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 622: ∃ :imageContains.(:SelfConnectedObject ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 623: ∃ :imageContains.((:Wall) ⊓ (:Furniture))
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 624: ∃ :imageContains.(:Table ⊓ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 625: ∃ :imageContains.(:Region ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 626: ∃ :imageContains.(:ManufacturedProduct ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 627: ∃ :imageContains.(:Object ⊓ ¬ :SelfConnectedObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 628: ∃ :imageContains.(:Physical ⊓ ¬ :Agent)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 629: ∃ :imageContains.((:Wall) ⊓ (:Table))
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 630: ∃ :imageContains.(:ManufacturedProduct ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 631: ∃ :imageContains.(:EngineeringComponent ⊓ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 632: ∃ :imageContains.(:Physical ⊓ ¬ :Object)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 633: ∃ :imageContains.(:Entity ⊓ ¬ :Region)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 634: ∃ :imageContains.(:Device ⊓ :Seat)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 635: ∃ :imageContains.(:Device ⊓ :Chair)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 636: ∃ :imageContains.((:Seat) ⊓ (:Wall))
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 637: ∃ :imageContains.(:Device ⊓ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 638: ∃ :imageContains.((:Chair) ⊓ (:Wall))
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 639: ∃ :imageContains.(:GeographicArea ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 640: ∃ :imageContains.(:Physical ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 641: ∃ :imageContains.(:EngineeringComponent ⊓ :Chair)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 642: ∃ :imageContains.((:Seat) ⊓ (:Table))
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 643: ∃ :imageContains.(:Seat ⊓ :Table)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 644: ∃ :imageContains.(:Entity ⊓ ¬ :SelfConnectedObject)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 645: ∃ :imageContains.(:LocalizablePlace ⊓ ¬ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 646: ∃ :imageContains.(:Entity ⊓ ¬ :Physical)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 647: ∃ :imageContains.(:Artifact ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 648: ∃ :imageContains.(:Artifact ⊓ ¬ :ManufacturedProduct)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 649: ∃ :imageContains.(:Product ⊓ ¬ :DurableGood)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 650: ∃ :imageContains.(:Product ⊓ ¬ :ManufacturedProduct)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 651: ∃ :imageContains.(:Physical ⊓ ¬ :GeographicArea)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 652: ∃ :imageContains.(:DurableGood ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 653: ∃ :imageContains.(:Entity ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 654: ∃ :imageContains.(:GeographicArea ⊓ ¬ :LocalizablePlace)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 655: ∃ :imageContains.(:Furniture ⊓ :Wall)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 656: ∃ :imageContains.((:Table) ⊓ (:Device))
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 657: ∃ :imageContains.(:Furniture ⊓ :EngineeringComponent)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 658: ∃ :imageContains.(:Object ⊓ ¬ :Region)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 659: ∃ :imageContains.(:Region ⊓ ¬ :StationaryArtifact)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 660: ∃ :imageContains.((:EngineeringComponent) ⊓ (:Table))
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 661: ∃ :imageContains.(:Chair ⊓ :Table)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 662: ∃ :imageContains.(:Object ⊓ ¬ :OrganicThing)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 663: ∃ :imageContains.(:Product ⊓ ¬ :Furniture)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+solution 664: ∃ :imageContains.(:Furniture ⊓ :Device)
+	 coverage_score: 0.6875
+	 precision: 0.0
+	 recall: 0.0
+	 f_measure: 0.0
+
+Total solutions found: 664
+
+Total solutions found: 664
+Result saved at: /Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/expr_types/induction_m_test/homeoffice_vs_non-homeoffice_v0_cp_fn_vs_tn_sumo_bkg_accuracy_hybrid_results_ecii_v2.txt
+
+Program finished.
+Program ends at: 06.30.2020  14.54.28 PM
+Program duration: 12.018 sec

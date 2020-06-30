@@ -701,8 +701,14 @@ public class Utility {
         HashMap<OWLObjectProperty, Double> objectPropertyFloatHashMap = new HashMap<>();
 
         // if starts with comment
-        String commentRegex = "^(#|\\/*|\\/\\/).*";
-        if (objPropsPortion.matches(commentRegex)) return objectPropertyFloatHashMap;
+        String commentRegex = "^(#|\\/*|\\/\\/)+.";
+        logger.info("objprop-----:"+ objectPropertyFloatHashMap.size() );
+        if (objPropsPortion.matches(commentRegex)){
+            logger.info("objprop if -----:"+ objectPropertyFloatHashMap.size() );
+            System.exit(-1);
+            return objectPropertyFloatHashMap;
+        }
+        logger.info("objprop else-----:"+ objectPropertyFloatHashMap.size() );
 
         ArrayList<IRI> objPropsIRI = extractEachEntityIRIFromTextPortion(objPropsPortion, regexEachEntity, delimeter);
 

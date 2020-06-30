@@ -89,10 +89,18 @@ public final class ConfigParams {
     /**
      * removeCommonTypes: Whether to remove those atomic types which appeared in both positive and negative inidviduals.
      * Also named as K7
-     * Boolean
-     * Default: true
+     * Boolean, Optional, Default: true
      */
     public static boolean removeCommonTypes;
+
+    /**
+     * removeCommonTypesFromOneSideOnly: remove common types from only pos or neg subset.
+     * If the concept covers more individuals from positive side than negative side then it will remove the concept from negative side.
+     * else from positive side.
+     * removeCommonTypes: must also be true to activate this one
+     * Boolean, Optional, Default: true
+     */
+    public static boolean removeCommonTypesFromOneSideOnly;
 
     /**
      * conceptLimitInNegExpr: Use only these number of top performing atomic concepts in the negative expression of a hornClause
@@ -308,11 +316,12 @@ public final class ConfigParams {
 
             conceptLimitInPosExpr = Integer.valueOf(prop.getProperty("conceptLimitInPosExpr", "2"));
             conceptLimitInNegExpr = Integer.valueOf(prop.getProperty("conceptLimitInNegExpr", "2"));
-            hornClauseLimit = 1; //Integer.valueOf(prop.getProperty("hornClauseLimit", "2"));
+            hornClauseLimit = Integer.valueOf(prop.getProperty("hornClauseLimit", "2"));
             objPropsCombinationLimit = Integer.valueOf(prop.getProperty("objPropsCombinationLimit", "2"));
             hornClausesListMaxSize = Integer.valueOf(prop.getProperty("hornClausesListMaxSize", "10"));
             candidateClassesListMaxSize = Integer.valueOf(prop.getProperty("candidateClassesListMaxSize", "10"));
             removeCommonTypes = Boolean.parseBoolean(prop.getProperty("removeCommonTypes", "true"));
+            removeCommonTypesFromOneSideOnly = Boolean.parseBoolean(prop.getProperty("removeCommonTypesFromOneSideOnly", "false"));
             validateByReasonerSize = Integer.valueOf(prop.getProperty("validateByReasonerSize", "0"));
             posClassListMaxSize = Integer.valueOf(prop.getProperty("posClassListMaxSize", "20"));
             negClassListMaxSize = Integer.valueOf(prop.getProperty("negClassListMaxSize", "20"));
@@ -374,12 +383,18 @@ public final class ConfigParams {
             if (null != posIndivsStr) {
                 if (posIndivsStr.length() > 0) {
                    HashSet<String> posIndivsStrSet = getIndivsArray(posIndivsStr);
-                   posIndivsStrSet.forEach(s -> {
-                       OWLNamedIndividual eachIndi = OWLManager.getOWLDataFactory().getOWLNamedIndividual(IRI.create(s));
-                       SharedDataHolder.posIndivs.add(eachIndi);
-                   });
+                   if(posIndivsStrSet.size()>0) {
+                       for (String s : posIndivsStrSet) {
+                           OWLNamedIndividual eachIndi = OWLManager.getOWLDataFactory().getOWLNamedIndividual(IRI.create(s));
+                           SharedDataHolder.posIndivs.add(eachIndi);
+                       }
+                   }else {
+                       logger.error("ERROR!!!!!!Positive individuals are not given. Please provide at-least 1 positive individuals.\nProgram exiting");
+                       System.exit(-1);
+                   }
                 } else {
-
+                    logger.error("ERROR!!!!!!Positive individuals are not given. Please provide at-least 1 positive individuals.\nProgram exiting");
+                    System.exit(-1);
                 }
             } else {
                 logger.error("ERROR!!!!!!!!, posIndivs portion can't be null, program exiting");

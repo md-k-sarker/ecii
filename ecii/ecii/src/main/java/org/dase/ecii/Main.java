@@ -158,7 +158,7 @@ public class Main {
         try {
             // iterate over the files of a the folder
             Files.walk(dirPath).filter(f -> f.toFile().isFile())
-                    .filter(f -> f.toFile().getAbsolutePath().endsWith(".config") && f.toFile().getAbsolutePath().contains("_sumo_bkg_"))
+                    .filter(f -> f.toFile().getAbsolutePath().endsWith(".config"))
                     .forEach(f -> {
                         // will get each file
                         String resultantFilePath = f.toString().replace(".config", ConfigParams.resultFileExtension);
@@ -510,7 +510,7 @@ public class Main {
      * @param args
      * @return boolean
      */
-    private static boolean decideOp(String[] args) {
+    public static boolean decideOp(String[] args) {
 
         StringBuilder sb = new StringBuilder();
         for (String arg : args) {

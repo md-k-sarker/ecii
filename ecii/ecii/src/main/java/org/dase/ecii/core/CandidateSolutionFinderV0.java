@@ -208,7 +208,7 @@ public class CandidateSolutionFinderV0 {
                 boolean added = addToSolutions(candidateSolutionV0);
                 if (added) {
                     // save temporarily for combination
-                    Score hornClauseScore = calculateAccuracyComplexCustom(conjunctiveHornClauseV0);
+                    Score hornClauseScore = conjunctiveHornClauseV0.calculateAccuracyComplexCustom();
                     conjunctiveHornClauseV0.setScore(hornClauseScore);
                     insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV0);
 
@@ -241,7 +241,7 @@ public class CandidateSolutionFinderV0 {
                 boolean added = addToSolutions(candidateSolutionV0);
                 if (added) {
                     // save temporarily for combination
-                    Score hornClauseScore = calculateAccuracyComplexCustom(conjunctiveHornClauseV0);
+                    Score hornClauseScore = conjunctiveHornClauseV0.calculateAccuracyComplexCustom();
                     conjunctiveHornClauseV0.setScore(hornClauseScore);
                     insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV0);
 
@@ -281,7 +281,7 @@ public class CandidateSolutionFinderV0 {
                             boolean added = addToSolutions(candidateSolutionV0);
                             if (added) {
                                 // save temporarily for combination
-                                Score hornClauseScore = calculateAccuracyComplexCustom(conjunctiveHornClauseV0);
+                                Score hornClauseScore = conjunctiveHornClauseV0.calculateAccuracyComplexCustom();
                                 conjunctiveHornClauseV0.setScore(hornClauseScore);
                                 insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV0);
 
@@ -358,7 +358,7 @@ public class CandidateSolutionFinderV0 {
                     boolean added = addToSolutions(candidateSolutionV0);
                     if (added) {
                         // save temporarily for combination
-                        Score hornClauseScore = calculateAccuracyComplexCustom(conjunctiveHornClauseV0);
+                        Score hornClauseScore = conjunctiveHornClauseV0.calculateAccuracyComplexCustom();
                         conjunctiveHornClauseV0.setScore(hornClauseScore);
                         insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV0);
 
@@ -812,9 +812,9 @@ public class CandidateSolutionFinderV0 {
     }
 
 
-    transient volatile protected int nrOfTotalIndividuals;
-    transient volatile protected int nrOfPositiveIndividuals;
-    transient volatile protected int nrOfNegativeIndividuals;
+    transient volatile protected double nrOfTotalIndividuals;
+    transient volatile protected double nrOfPositiveIndividuals;
+    transient volatile protected double nrOfNegativeIndividuals;
 
     // use double to ensure when dividing we are getting double result not integer.
     transient volatile protected double nrOfPositiveClassifiedAsPositive;
@@ -898,7 +898,7 @@ public class CandidateSolutionFinderV0 {
             // if any horn clause of this group contains this individual then the full arraylist<hornclauses> contains this individual.
             for (ConjunctiveHornClauseV0 hornClause : hornClauses) {
                 if (owlObjectProperty.equals(hornClause.getOwlObjectProperty())) {
-                    if (isContainedInHornClause(hornClause, owlNamedIndividual, isPosIndiv)) {
+                    if (hornClause.isContainedInHornClause( owlNamedIndividual, isPosIndiv)) {
                         contained = true;
                         return contained;
                     }
@@ -909,148 +909,9 @@ public class CandidateSolutionFinderV0 {
         return contained;
     }
 
-    /**
-     * Determine whether this owlnamedIndividual contained within  this hornclause.
-     *
-     * @param hornClause
-     * @param owlNamedIndividual
-     * @return
-     */
-    private boolean isContainedInHornClause(ConjunctiveHornClauseV0 hornClause, OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
-
-        boolean contained = false;
-
-        if (hornClause != null && owlNamedIndividual != null) {
-            if (SharedDataHolder.individualHasObjectTypes.containsKey(owlNamedIndividual)) {
-                HashMap<OWLObjectProperty, HashSet<OWLClassExpression>> objPropsMap = SharedDataHolder.
-                        individualHasObjectTypes.get(owlNamedIndividual);
-
-                if (objPropsMap.containsKey(hornClause.getOwlObjectProperty())) {
-
-                    if (isPosIndiv) {
-                        if (null != hornClause.getPosObjectType()) {
-                            // is in positive side  and not in negative side
-                            if (objPropsMap.get(hornClause.getOwlObjectProperty()).contains(hornClause.getPosObjectType()) &&
-                                    !isContainedInAnyClassExpressions(hornClause.getNegObjectTypes(), owlNamedIndividual, hornClause.getOwlObjectProperty())) {
-                                contained = true;
-                            }
-                        } else {
-                            // it dont have positive. so if it is excluded by negative then it is covered. TODO: check
-                        }
-                    } else {
-                        // negindivs
-                        // if any one of the negtypes contained this type then it is contained within the negTypes.
-                        if (!objPropsMap.get(hornClause.getOwlObjectProperty()).contains(hornClause.getPosObjectType())) {
-                            for (OWLClassExpression negType : hornClause.getNegObjectTypes()) {
-                                if (objPropsMap.get(hornClause.getOwlObjectProperty()).contains(negType)) {
-                                    //totalSolPartsInThisGroupCounter++;
-                                    contained = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return contained;
-    }
-
-    /**
-     * Check whether this individual contained within any of the class expressions.
-     * This is used to check positive type exclusions in negative part.
-     * classes: ¬(D1⊔···⊔Dk)
-     *
-     * @param classExpressions
-     * @param owlNamedIndividual
-     * @param owlObjectProperty
-     * @return
-     */
-    private boolean isContainedInAnyClassExpressions(ArrayList<OWLClassExpression> classExpressions,
-                                                     OWLNamedIndividual owlNamedIndividual,
-                                                     OWLObjectProperty owlObjectProperty) {
-        boolean contained = false;
-
-        if (SharedDataHolder.individualHasObjectTypes.containsKey(owlNamedIndividual)) {
-            HashMap<OWLObjectProperty, HashSet<OWLClassExpression>> objPropsMap = SharedDataHolder.
-                    individualHasObjectTypes.get(owlNamedIndividual);
-
-            if (objPropsMap.containsKey(owlObjectProperty)) {
-                for (OWLClassExpression owlClassExpression : classExpressions) {
-                    if (objPropsMap.get(owlObjectProperty).contains(owlClassExpression)) {
-                        contained = true;
-                        break;
-                    }
-                }
-            }
-        }
 
 
-        return contained;
-    }
 
-
-    /**
-     * Calculate accuracy of a hornClause.
-     *
-     * @param conjunctiveHornClauseV0
-     * @return
-     */
-    private Score calculateAccuracyComplexCustom(ConjunctiveHornClauseV0 conjunctiveHornClauseV0) {
-
-        /**
-         * Individuals covered by this hornClause
-         */
-        HashMap<OWLIndividual, Integer> coveredPosIndividualsMap = new HashMap<>();
-        /**
-         * Individuals excluded by this hornClause
-         */
-        HashMap<OWLIndividual, Integer> excludedNegIndividualsMap = new HashMap<>();
-
-        /**
-         * For positive individuals, a individual must be contained within each AND section to be added as a coveredIndividuals.
-         * I.e. each
-         */
-        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
-
-            if (isContainedInHornClause(conjunctiveHornClauseV0, thisOwlNamedIndividual, true)) {
-                insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
-            }
-        }
-
-        /**
-         * For negative individuals, a individual must be contained within any single section to be added as a excludedIndividuals.
-         * I.e. each
-         */
-        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
-
-            if (isContainedInHornClause(conjunctiveHornClauseV0, thisOwlNamedIndividual, false)) {
-                insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
-            }
-        }
-
-        nrOfPositiveClassifiedAsPositive = coveredPosIndividualsMap.size();
-        /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-        nrOfPositiveClassifiedAsNegative = SharedDataHolder.posIndivs.size() - nrOfPositiveClassifiedAsPositive;
-        nrOfNegativeClassifiedAsNegative = excludedNegIndividualsMap.size();
-        /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-        nrOfNegativeClassifiedAsPositive = SharedDataHolder.negIndivs.size() - nrOfNegativeClassifiedAsNegative;
-
-        double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
-        double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);
-        double f_measure = Heuristics.getFScore(recall, precision);
-        double coverage = Heuristics.getCoverage(nrOfPositiveClassifiedAsPositive, SharedDataHolder.posIndivs.size(),
-                nrOfNegativeClassifiedAsNegative, SharedDataHolder.negIndivs.size());
-
-        Score accScore = new Score();
-        accScore.setPrecision(precision);
-        accScore.setRecall(recall);
-        accScore.setF_measure(f_measure);
-        accScore.setCoverage(coverage);
-
-
-        return accScore;
-    }
 
     /**
      * Calculate accuracy of a candidateClassV0.

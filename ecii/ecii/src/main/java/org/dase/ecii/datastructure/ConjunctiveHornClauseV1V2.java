@@ -24,7 +24,8 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
  *  i.e. posTypes are conjuncted and negTypes are disjuncted and complemented.
  *
  *  * Implementation note:
- *  * ObjectProperty (R) is implicity kept with the hornclause. This is important to calculate the accuracy.
+ *  *   ObjectProperty (R) is implicity kept with the hornclause.
+ *  *   This is important to calculate the accuracy.
  *
  * There is a limit  on negTypes.
  *      That is called K1 or ConfigParams.conceptLimitInNegExpr.
@@ -32,17 +33,13 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
  *      That is called K4 or ConfigParams.conceptLimitInPosExpr.
  *
  * Atomic class is also represented by posObjectType/negObjectTypes.
- * If the object property is empty = SharedDataHolder.noneOWLObjProp then it is atomic class.
+ * If the object property is empty (implemented through, SharedDataHolder.noneOWLObjProp)
+ * then it is atomic class.
  *
  *
- * Difference between v0 and v1:
- * v0 allow to make hornClause without a positive concepts, v1 make sure at-least 1 positive concept exist and possibly more. there can be 0 or more negTypes
- *
- *
- *   V0 --- old stuff
- *  * where B is an atomic class (positive) and
- *  * D is a negated disjunct of negative classes, D = ¬(D1⊔···⊔Dk).
- *  * So it's form will be: B ⊓ ¬(D1⊔···⊔Dk)
+ * Difference between v0 and v1v2:
+ * v0 allow to make hornClause without a positive concepts, v1/v2 make sure at-least 1 positive concept exist and possibly more.
+ * there can be 0 or more negTypes
  *
  *  </pre>
  */
@@ -268,7 +265,7 @@ public class ConjunctiveHornClauseV1V2 {
     }
 
     /**
-     * Get this ConjunctiveHornClauseV0 as AsOWLClassExpression
+     * Get this ConjunctiveHornClauseV01/V2 as AsOWLClassExpression
      * Not filling the r filler/owlObjectProperty here.
      * V1 - fixed
      *
@@ -297,7 +294,6 @@ public class ConjunctiveHornClauseV1V2 {
 
         // pos portion
         if (null != this.posObjectTypes && this.posObjectTypes.size() > 0) {
-
             if (this.posObjectTypes.size() > 1) {
                 posPortion = SharedDataHolder.owlDataFactory.getOWLObjectIntersectionOf(new HashSet(this.posObjectTypes));
             } else {
@@ -437,8 +433,13 @@ public class ConjunctiveHornClauseV1V2 {
 
     /**
      * Calculate accuracy of a hornClause.
-     * TODO(zaman): need to fix to make compatible with v1
+     * Internally  calls individualsCoveredByThisHornClauseByReasoner() method
+     * to calculate the accuracy.
      *
+     * TODO(zaman): need to fix to make compatible with v1
+     * Difference between v0 and v1v2:
+     * In V0 it calculate the covered individuals by using set calculation, no reasoner call,
+     * In V1V2 it call the reasoner to get the covered individuals
      * @return
      */
     public Score calculateAccuracyComplexCustom() {

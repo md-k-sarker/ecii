@@ -6,13 +6,17 @@ Written at 5/18/18.
 
 import org.dase.ecii.core.Score;
 import org.dase.ecii.core.SharedDataHolder;
+import org.dase.ecii.util.Heuristics;
 import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLIndividual;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
 
@@ -153,13 +157,14 @@ public class ConjunctiveHornClauseV0 {
     }
 
     /**
-     * @return
+     * @return OWLClassExpression
      */
     public OWLClassExpression getConjunctiveHornClauseAsOWLClassExpression() {
 
         OWLClassExpression owlClassExpression = null;
         OWLClassExpression negatedPortion = null;
 
+        // negated portion
         if (null != this.negObjectTypes && this.negObjectTypes.size() > 0) {
             if (this.negObjectTypes.size() > 1) {
                 OWLClassExpression unionsPortion = SharedDataHolder.owlDataFactory.getOWLObjectUnionOf(new HashSet(this.negObjectTypes));
@@ -167,7 +172,6 @@ public class ConjunctiveHornClauseV0 {
             } else {
                 negatedPortion = SharedDataHolder.owlDataFactory.getOWLObjectComplementOf(this.negObjectTypes.get(0));
             }
-
         }
 
         if (null != this.posObjectType ) {
@@ -183,28 +187,157 @@ public class ConjunctiveHornClauseV0 {
     }
 
 
+    transient volatile protected int nrOfTotalIndividuals;
+    transient volatile protected int nrOfPositiveIndividuals;
+    transient volatile protected int nrOfNegativeIndividuals;
+
+    // use double to ensure when dividing we are getting double result not integer.
+    transient volatile protected double nrOfPositiveClassifiedAsPositive;
+    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
+    transient volatile protected double nrOfPositiveClassifiedAsNegative;
+    transient volatile protected double nrOfNegativeClassifiedAsNegative;
+    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
+    transient volatile protected double nrOfNegativeClassifiedAsPositive;
+
     /**
+     * Calculate accuracy of a hornClause.
+     * it calculate the covered individuals by using set calculation, no reasoner call
+     * @return Score
+     */
+    public Score calculateAccuracyComplexCustom() {
+
+        /**
+         * Individuals covered by this hornClause
+         */
+        HashMap<OWLIndividual, Integer> coveredPosIndividualsMap = new HashMap<>();
+        /**
+         * Individuals excluded by this hornClause
+         */
+        HashMap<OWLIndividual, Integer> excludedNegIndividualsMap = new HashMap<>();
+
+        /**
+         * For positive individuals, a individual must be contained within each AND section to be added as a coveredIndividuals.
+         * I.e. each
+         */
+        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
+
+            if (isContainedInHornClause( thisOwlNamedIndividual, true)) {
+               HashMapUtility.insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
+            }
+        }
+
+        /**
+         * For negative individuals, a individual must be contained within any single section to be added as a excludedIndividuals.
+         * I.e. each
+         */
+        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
+
+            if (isContainedInHornClause( thisOwlNamedIndividual, false)) {
+                HashMapUtility.insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
+            }
+        }
+
+        nrOfPositiveClassifiedAsPositive = coveredPosIndividualsMap.size();
+        /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
+        nrOfPositiveClassifiedAsNegative = SharedDataHolder.posIndivs.size() - nrOfPositiveClassifiedAsPositive;
+        nrOfNegativeClassifiedAsNegative = excludedNegIndividualsMap.size();
+        /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
+        nrOfNegativeClassifiedAsPositive = SharedDataHolder.negIndivs.size() - nrOfNegativeClassifiedAsNegative;
+
+        double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
+        double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);
+        double f_measure = Heuristics.getFScore(recall, precision);
+        double coverage = Heuristics.getCoverage(nrOfPositiveClassifiedAsPositive, SharedDataHolder.posIndivs.size(),
+                nrOfNegativeClassifiedAsNegative, SharedDataHolder.negIndivs.size());
+
+        Score accScore = new Score();
+        accScore.setPrecision(precision);
+        accScore.setRecall(recall);
+        accScore.setF_measure(f_measure);
+        accScore.setCoverage(coverage);
+
+
+        return accScore;
+    }
+
+    /**
+     * Determine whether this owlnamedIndividual contained within this .
+     *
+     * @param owlNamedIndividual
+     * @param isPosIndiv
+     * @return boolean
+     */
+    public boolean isContainedInHornClause( OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
+
+        boolean contained = false;
+
+        if (this != null && owlNamedIndividual != null) {
+            if (SharedDataHolder.individualHasObjectTypes.containsKey(owlNamedIndividual)) {
+                HashMap<OWLObjectProperty, HashSet<OWLClassExpression>> objPropsMap = SharedDataHolder.
+                        individualHasObjectTypes.get(owlNamedIndividual);
+
+                if (objPropsMap.containsKey(this.getOwlObjectProperty())) {
+
+                    if (isPosIndiv) {
+                        if (null != this.getPosObjectType()) {
+                            // is in positive side  and not in negative side
+                            if (objPropsMap.get(this.getOwlObjectProperty()).contains(this.getPosObjectType()) &&
+                                    !isContainedInAnyClassExpressions(this.getNegObjectTypes(), owlNamedIndividual, this.getOwlObjectProperty())) {
+                                contained = true;
+                            }
+                        } else {
+                            // it dont have positive. so if it is excluded by negative then it is covered. TODO: check
+                        }
+                    } else {
+                        // negindivs
+                        // if any one of the negtypes contained this type then it is contained within the negTypes.
+                        if (!objPropsMap.get(this.getOwlObjectProperty()).contains(this.getPosObjectType())) {
+                            for (OWLClassExpression negType : this.getNegObjectTypes()) {
+                                if (objPropsMap.get(this.getOwlObjectProperty()).contains(negType)) {
+                                    //totalSolPartsInThisGroupCounter++;
+                                    contained = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return contained;
+    }
+
+    /**
+     * Check whether this individual contained within any of the class expressions.
+     * This is used to check positive type exclusions in negative part.
+     * classes: ¬(D1⊔···⊔Dk)
+     *
+     * @param classExpressions
+     * @param owlNamedIndividual
+     * @param owlObjectProperty
      * @return
      */
-    private OWLClassExpression getConjunctiveHornClauseAsClassExpression() {
-        // make disjunction of all posTypes.
-        OWLClassExpression unionOfAllPosTypeObjects = SharedDataHolder.owlDataFactory.getOWLObjectUnionOf(posObjectType);
-        // make disjunction of all negTypes.
-        OWLClassExpression unionOfAllNegTypeObjects = SharedDataHolder.owlDataFactory.getOWLObjectUnionOf(new HashSet<>(negObjectTypes));
-        // make complementOf the disjuncted negTypes.
-        OWLClassExpression negateduUionOfAllNegTypeObjects = SharedDataHolder.owlDataFactory.getOWLObjectComplementOf(unionOfAllNegTypeObjects);
+    private boolean isContainedInAnyClassExpressions(ArrayList<OWLClassExpression> classExpressions,
+                                                     OWLNamedIndividual owlNamedIndividual,
+                                                     OWLObjectProperty owlObjectProperty) {
+        boolean contained = false;
 
-        // make conjunction of disjunctedPos and negatedDisjunctedNeg
-        OWLClassExpression conjunction = SharedDataHolder.owlDataFactory.getOWLObjectIntersectionOf(unionOfAllPosTypeObjects, negateduUionOfAllNegTypeObjects);
+        if (SharedDataHolder.individualHasObjectTypes.containsKey(owlNamedIndividual)) {
+            HashMap<OWLObjectProperty, HashSet<OWLClassExpression>> objPropsMap = SharedDataHolder.
+                    individualHasObjectTypes.get(owlNamedIndividual);
 
-        if (owlObjectProperty == SharedDataHolder.noneOWLObjProp) {
-            return conjunction;
-        } else {
-            // add r filler using r=owlObjectProperty.
-            OWLClassExpression solClass = SharedDataHolder.owlDataFactory.getOWLObjectSomeValuesFrom(owlObjectProperty, conjunction);
-            //logger.info("solClass: " + solClass);
-            return solClass;
+            if (objPropsMap.containsKey(owlObjectProperty)) {
+                for (OWLClassExpression owlClassExpression : classExpressions) {
+                    if (objPropsMap.get(owlObjectProperty).contains(owlClassExpression)) {
+                        contained = true;
+                        break;
+                    }
+                }
+            }
         }
+
+
+        return contained;
     }
 
     @Override
