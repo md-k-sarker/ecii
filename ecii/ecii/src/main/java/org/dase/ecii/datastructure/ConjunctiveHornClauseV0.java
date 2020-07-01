@@ -7,10 +7,8 @@ Written at 5/18/18.
 import org.dase.ecii.core.Score;
 import org.dase.ecii.core.SharedDataHolder;
 import org.dase.ecii.util.Heuristics;
-import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLIndividual;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.dase.ecii.util.Utility;
+import org.semanticweb.owlapi.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
+
+import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
 
 /**
  * A conjunctive Horn clause is a class expression of the form B ⊓ D,
@@ -40,7 +40,7 @@ import java.util.Objects;
  */
 public class ConjunctiveHornClauseV0 {
 
-    final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+   private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     /**
      * If the object property is empty = SharedDataHolder.noneOWLObjProp then related classes are atomic class.
@@ -86,6 +86,14 @@ public class ConjunctiveHornClauseV0 {
      * Score associated with this CandidateClassV0. This score is used to select best n hornClause (limit K5), which will be used on combination.
      */
     private Score score;
+
+    // use double to ensure when dividing we are getting double result not integer.
+    transient volatile protected double nrOfPositiveClassifiedAsPositive;
+    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
+    transient volatile protected double nrOfPositiveClassifiedAsNegative;
+    transient volatile protected double nrOfNegativeClassifiedAsNegative;
+    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
+    transient volatile protected double nrOfNegativeClassifiedAsPositive;
 
     /**
      * Public constructor
@@ -186,18 +194,52 @@ public class ConjunctiveHornClauseV0 {
         return owlClassExpression;
     }
 
+    /**
+     * Print ConjunctiveHornClauseV0  as String
+     *
+     * @return
+     */
+    public String getHornClauseAsString() {
+        StringBuilder sb = new StringBuilder();
+
+        boolean hasPositive = false;
+
+        if (null != this) {
+
+            if (null != this.getPosObjectType()) {
+                sb.append(Utility.getShortName((OWLClass) this.getPosObjectType()));
+                hasPositive = true;
+            }
+            if (null != this.getNegObjectTypes()) {
+                if (this.getNegObjectTypes().size() > 0) {
+                    if (hasPositive) {
+                        sb.append(" " + AND.toString());
+                    }
+                    sb.append(" " + NOT.toString());
+                    if (this.getNegObjectTypes().size() == 1) {
+                        sb.append(" " + Utility.getShortName((OWLClass) this.getNegObjectTypes().get(0)));
+                    } else {
+                        sb.append(" (");
+
+                        sb.append(Utility.getShortName((OWLClass) this.getNegObjectTypes().get(0)));
+
+                        for (int i = 1; i < this.getNegObjectTypes().size(); i++) {
+                            sb.append(" " + OR.toString());
+                            sb.append(" " + Utility.getShortName((OWLClass) this.getNegObjectTypes().get(i)));
+                        }
+                        sb.append(")");
+                    }
+                }
+            }
+        }
+
+        return sb.toString();
+    }
+
 
     transient volatile protected int nrOfTotalIndividuals;
     transient volatile protected int nrOfPositiveIndividuals;
     transient volatile protected int nrOfNegativeIndividuals;
-
-    // use double to ensure when dividing we are getting double result not integer.
-    transient volatile protected double nrOfPositiveClassifiedAsPositive;
-    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-    transient volatile protected double nrOfPositiveClassifiedAsNegative;
-    transient volatile protected double nrOfNegativeClassifiedAsNegative;
-    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-    transient volatile protected double nrOfNegativeClassifiedAsPositive;
 
     /**
      * Calculate accuracy of a hornClause.

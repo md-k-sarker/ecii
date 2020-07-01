@@ -11,7 +11,7 @@ import java.lang.invoke.MethodHandles;
  */
 public class Heuristics {
 
-    final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public enum HeuristicType {PRED_ACC, AMEASURE, JACCARD, FMEASURE, GEN_FMEASURE, ENTROPY, MATTHEWS_CORRELATION, YOUDEN_INDEX}
 

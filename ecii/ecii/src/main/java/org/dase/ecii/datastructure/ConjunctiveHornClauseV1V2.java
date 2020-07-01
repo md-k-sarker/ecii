@@ -43,86 +43,19 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
  *
  *  </pre>
  */
-public class ConjunctiveHornClauseV1V2 {
+public class ConjunctiveHornClauseV1V2 extends ConjunctiveHornClause {
 
-    final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    /**
-     * If the object property is empty = SharedDataHolder.noneOWLObjProp then related classes are atomic class.
-     */
-    private OWLObjectProperty owlObjectProperty;
+    private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     //@formatter:off
-    /**
-     * posObjectType must be at-least 1. it can not be empty.
-     *  Single positive Type.
-     *      1.1. Without owlObjectProperty: in that case owlObjectProperty=SharedDataHolder.noneOWLObjProp.
-     *      1.2. With owlObjectProperty:
-     */
-    private ArrayList<OWLClassExpression> posObjectTypes;
-    /**
-     * negObjectTypes represents conjuncted negated form of the horn clause.
-     * it can be:
-     * <li>
-     *  <ol>Empty</ol>
-     *  <ol>Single owlClass</ol>
-     *      <li>
-     *          <ol>With Object Property</ol>
-     *          <ol>Without Object Property. in that case owlObjectProperty=SharedDataHolder.noneOWLObjProp</ol>
-     *      </li>
-     *  <ol>Multiple owlClass (concatenated using OR)</ol>
-     *      <li>
-     *          <ol>With Object Property</ol>
-     *          <ol>Without Object Property. in that case owlObjectProperty=SharedDataHolder.noneOWLObjProp</ol>
-     *      </li>
-     * </li>
-     *
-     *
-     * We need to put negation sign when printing the class expression.
-     * It will be printed as: ¬(D1⊔···⊔Dk)
-     *
-     * There is a limit on disjunctions. That is ConfigParams.conceptLimitInNegExpr.
-     */
-    private ArrayList<OWLClassExpression> negObjectTypes;
     //@formatter:on
 
-    /**
-     * OWLClassExpression
-     */
-    private OWLClassExpression conjunctiveHornClauseAsOWLClass;
-
-    /**
-     * String
-     */
-    private String conjunctiveHornClauseAsString;
-
-    private boolean solutionChanged = false;
-
-    /**
-     * Score associated with this hornclause. This score is used to select best n hornClause (limit K5), which will be used on combination.
-     */
-    private Score score;
-    // use double to ensure when dividing we are getting double result not integer.
-    transient volatile protected double nrOfPositiveClassifiedAsPositive;
-    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-    transient volatile protected double nrOfPositiveClassifiedAsNegative;
-    transient volatile protected double nrOfNegativeClassifiedAsNegative;
-    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-    transient volatile protected double nrOfNegativeClassifiedAsPositive;
-
-
-    /**
-     * Bad design should fix it
-     */
-    private final OWLOntology ontology;
-    private final OWLDataFactory owlDataFactory;
-    private final OWLOntologyManager owlOntologyManager;
-    private OWLReasoner reasoner;
 
     /**
      * Public constructor
      */
     public ConjunctiveHornClauseV1V2(OWLObjectProperty owlObjectProperty, OWLReasoner _reasoner, OWLOntology _ontology) {
+        super();
         if (null == owlObjectProperty) {
             this.owlObjectProperty = SharedDataHolder.noneOWLObjProp;
         } else {
@@ -130,12 +63,9 @@ public class ConjunctiveHornClauseV1V2 {
         }
         this.posObjectTypes = new ArrayList<>();
         this.negObjectTypes = new ArrayList<>();
-        solutionChanged = true;
 
         this.reasoner = _reasoner;
         this.ontology = _ontology;
-        this.owlOntologyManager = this.ontology.getOWLOntologyManager();
-        this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
     }
 
     /**
@@ -144,6 +74,7 @@ public class ConjunctiveHornClauseV1V2 {
      * @param anotherConjunctiveHornClause
      */
     public ConjunctiveHornClauseV1V2(ConjunctiveHornClauseV1V2 anotherConjunctiveHornClause, OWLOntology _ontology) {
+        super();
         this.posObjectTypes = new ArrayList<>();
         this.negObjectTypes = new ArrayList<>();
         this.owlObjectProperty = anotherConjunctiveHornClause.owlObjectProperty;
@@ -154,9 +85,6 @@ public class ConjunctiveHornClauseV1V2 {
         }
         this.reasoner = anotherConjunctiveHornClause.reasoner;
         this.ontology = _ontology;
-        this.owlOntologyManager = this.ontology.getOWLOntologyManager();
-        this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
-        solutionChanged = true;
     }
 
     /**
@@ -247,30 +175,13 @@ public class ConjunctiveHornClauseV1V2 {
     }
 
     /**
-     * Score getter
-     *
-     * @return Score
-     */
-    public Score getScore() {
-        return score;
-    }
-
-    /**
-     * Score setter
-     *
-     * @param score
-     */
-    public void setScore(Score score) {
-        this.score = score;
-    }
-
-    /**
      * Get this ConjunctiveHornClauseV01/V2 as AsOWLClassExpression
      * Not filling the r filler/owlObjectProperty here.
      * V1 - fixed
      *
      * @return OWLClassExpression
      */
+    @Override
     public OWLClassExpression getConjunctiveHornClauseAsOWLClassExpression() {
 
         if (!solutionChanged && null != conjunctiveHornClauseAsOWLClass)
@@ -320,6 +231,7 @@ public class ConjunctiveHornClauseV1V2 {
      *
      * @return
      */
+    @Override
     public String getHornClauseAsString(boolean includePrefix) {
 
 //        if (!solutionChanged && null != conjunctiveHornClauseAsString)
@@ -435,13 +347,15 @@ public class ConjunctiveHornClauseV1V2 {
      * Calculate accuracy of a hornClause.
      * Internally  calls individualsCoveredByThisHornClauseByReasoner() method
      * to calculate the accuracy.
-     *
+     * <p>
      * TODO(zaman): need to fix to make compatible with v1
      * Difference between v0 and v1v2:
      * In V0 it calculate the covered individuals by using set calculation, no reasoner call,
      * In V1V2 it call the reasoner to get the covered individuals
+     *
      * @return
      */
+    @Override
     public Score calculateAccuracyComplexCustom() {
 
         /**

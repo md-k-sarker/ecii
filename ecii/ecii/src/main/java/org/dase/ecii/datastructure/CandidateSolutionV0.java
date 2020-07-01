@@ -324,14 +324,14 @@ public class CandidateSolutionV0 {
             if (candidateClassV0.getConjunctiveHornClauseV0s().size() > 0) {
                 if (candidateClassV0.getConjunctiveHornClauseV0s().size() == 1) {
                     sb.append("(");
-                    sb.append(getHornClauseAsString(candidateClassV0.getConjunctiveHornClauseV0s().get(0)));
+                    sb.append(candidateClassV0.getConjunctiveHornClauseV0s().get(0).getHornClauseAsString());
                     sb.append(")");
                 } else {
 
                     sb.append("(");
 
                     sb.append("(");
-                    sb.append(getHornClauseAsString(candidateClassV0.getConjunctiveHornClauseV0s().get(0)));
+                    sb.append(candidateClassV0.getConjunctiveHornClauseV0s().get(0).getHornClauseAsString());
                     sb.append(")");
 
                     for (int i = 1; i < candidateClassV0.getConjunctiveHornClauseV0s().size(); i++) {
@@ -341,7 +341,7 @@ public class CandidateSolutionV0 {
                         // TODO:  check with Pascal.
                         sb.append(" " + OR.toString() + " ");
                         sb.append("(");
-                        sb.append(getHornClauseAsString(candidateClassV0.getConjunctiveHornClauseV0s().get(i)));
+                        sb.append(candidateClassV0.getConjunctiveHornClauseV0s().get(i).getHornClauseAsString());
                         sb.append(")");
                     }
 
@@ -353,47 +353,6 @@ public class CandidateSolutionV0 {
         return sb.toString();
     }
 
-    /**
-     * Print ConjunctiveHornClauseV0  as String
-     *
-     * @return
-     */
-    private String getHornClauseAsString(ConjunctiveHornClauseV0 conjunctiveHornClauseV0) {
-        StringBuilder sb = new StringBuilder();
-
-        boolean hasPositive = false;
-
-        if (null != conjunctiveHornClauseV0) {
-
-            if (null != conjunctiveHornClauseV0.getPosObjectType()) {
-                sb.append(Utility.getShortName((OWLClass) conjunctiveHornClauseV0.getPosObjectType()));
-                hasPositive = true;
-            }
-            if (null != conjunctiveHornClauseV0.getNegObjectTypes()) {
-                if (conjunctiveHornClauseV0.getNegObjectTypes().size() > 0) {
-                    if (hasPositive) {
-                        sb.append(" " + AND.toString());
-                    }
-                    sb.append(" " + NOT.toString());
-                    if (conjunctiveHornClauseV0.getNegObjectTypes().size() == 1) {
-                        sb.append(" " + Utility.getShortName((OWLClass) conjunctiveHornClauseV0.getNegObjectTypes().get(0)));
-                    } else {
-                        sb.append(" (");
-
-                        sb.append(Utility.getShortName((OWLClass) conjunctiveHornClauseV0.getNegObjectTypes().get(0)));
-
-                        for (int i = 1; i < conjunctiveHornClauseV0.getNegObjectTypes().size(); i++) {
-                            sb.append(" " + OR.toString());
-                            sb.append(" " + Utility.getShortName((OWLClass) conjunctiveHornClauseV0.getNegObjectTypes().get(i)));
-                        }
-                        sb.append(")");
-                    }
-                }
-            }
-        }
-
-        return sb.toString();
-    }
 
     /**
      * Create group
