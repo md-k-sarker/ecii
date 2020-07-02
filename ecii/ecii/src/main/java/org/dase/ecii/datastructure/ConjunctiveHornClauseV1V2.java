@@ -48,7 +48,6 @@ public class ConjunctiveHornClauseV1V2 extends ConjunctiveHornClause {
     private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     //@formatter:off
-
     /**
      * Significant difference in ecii-v0 and ecii-v1/v2
      * v0:
@@ -61,6 +60,27 @@ public class ConjunctiveHornClauseV1V2 extends ConjunctiveHornClause {
      *      1.2. With owlObjectProperty:
      */
     protected ArrayList<OWLClassExpression> posObjectTypes;
+    //@formatter:on
+
+    /**
+     * Public constructor
+     */
+    public ConjunctiveHornClauseV1V2(OWLObjectProperty owlObjectProperty, OWLReasoner _reasoner, OWLOntology _ontology) {
+        super(owlObjectProperty, _reasoner, _ontology);
+        this.posObjectTypes = new ArrayList<>();
+    }
+
+    /**
+     * copy constructor
+     *
+     * @param anotherConjunctiveHornClause
+     */
+    public ConjunctiveHornClauseV1V2(ConjunctiveHornClauseV1V2 anotherConjunctiveHornClause, OWLOntology _ontology) {
+        super(anotherConjunctiveHornClause, _ontology);
+
+        this.posObjectTypes = new ArrayList<>();
+        this.posObjectTypes = anotherConjunctiveHornClause.posObjectTypes;
+    }
 
     /**
      * posObjectTypes getter
@@ -100,28 +120,6 @@ public class ConjunctiveHornClauseV1V2 extends ConjunctiveHornClause {
         this.posObjectTypes.add(posObjectType);
         solutionChanged = true;
     }
-    //@formatter:on
-
-    /**
-     * Public constructor
-     */
-    public ConjunctiveHornClauseV1V2(OWLObjectProperty owlObjectProperty, OWLReasoner _reasoner, OWLOntology _ontology) {
-        super(owlObjectProperty, _reasoner, _ontology);
-        this.posObjectTypes = new ArrayList<>();
-    }
-
-    /**
-     * copy constructor
-     *
-     * @param anotherConjunctiveHornClause
-     */
-    public ConjunctiveHornClauseV1V2(ConjunctiveHornClauseV1V2 anotherConjunctiveHornClause, OWLOntology _ontology) {
-        super(anotherConjunctiveHornClause, _ontology);
-
-        this.posObjectTypes = new ArrayList<>();
-        this.posObjectTypes = anotherConjunctiveHornClause.posObjectTypes;
-    }
-
 
     /**
      * Get this ConjunctiveHornClauseV1/V2 as AsOWLClassExpression
@@ -172,7 +170,6 @@ public class ConjunctiveHornClauseV1V2 extends ConjunctiveHornClause {
         this.conjunctiveHornClauseAsOWLClass = owlClassExpression;
         return this.conjunctiveHornClauseAsOWLClass;
     }
-
 
     /**
      * Print ConjunctiveHornClausev1/v2  as String
@@ -291,7 +288,6 @@ public class ConjunctiveHornClauseV1V2 extends ConjunctiveHornClause {
         return coveredIndividuals;
     }
 
-
     /**
      * Calculate accuracy of a hornClause.
      * Internally calls individualsCoveredByThisHornClauseByReasoner() method
@@ -382,7 +378,6 @@ public class ConjunctiveHornClauseV1V2 extends ConjunctiveHornClause {
         this.score = accScore;
         return this.score;
     }
-
 
     @Override
     public boolean equals(Object o) {

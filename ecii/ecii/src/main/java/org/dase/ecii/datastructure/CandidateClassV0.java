@@ -7,7 +7,6 @@ Written at 8/20/18.
 import org.dase.ecii.core.Score;
 import org.dase.ecii.core.SharedDataHolder;
 import org.dase.ecii.util.Heuristics;
-import org.dase.ecii.util.Utility;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
@@ -37,47 +36,14 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.OR;
  * k2 = limit of horn clauses = ConfigParams.hornClauseLimit.
  * </pre>
  */
-public class CandidateClassV0 {
+public class CandidateClassV0 extends CandidateClass{
 
     final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     /**
-     * If the object property is empty = SharedDataHolder.noneOWLObjProp then
-     * related classes are atomic class.
-     */
-    private OWLObjectProperty owlObjectProperty;
-    /**
      * Multiple conjunctive horn clause.
      */
     private ArrayList<ConjunctiveHornClauseV0> conjunctiveHornClauses;
-
-    /**
-     * Score associated with this CandidateClassV0. This score is used to select best n candidateClass (limit K6), which will be used on combination.
-     */
-    private Score score;
-
-    // use double to ensure when dividing we are getting double result not integer.
-    transient volatile protected double nrOfPositiveClassifiedAsPositive;
-    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-    transient volatile protected double nrOfPositiveClassifiedAsNegative;
-    transient volatile protected double nrOfNegativeClassifiedAsNegative;
-    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-    transient volatile protected double nrOfNegativeClassifiedAsPositive;
-
-    private OWLClassExpression candidateClassAsOWLClassEXpression;
-
-    private String candidateClassAsString;
-
-    private boolean solutionChanged = false;
-
-    /**
-     * Bad design should fix it
-     */
-    private final OWLOntology ontology;
-    private final OWLDataFactory owlDataFactory;
-    private final OWLOntologyManager owlOntologyManager;
-    private OWLReasoner reasoner;
-
 
     /**
      * @param owlObjectProperty
@@ -85,19 +51,8 @@ public class CandidateClassV0 {
      * @param _ontology
      */
     public CandidateClassV0(OWLObjectProperty owlObjectProperty, OWLReasoner _reasoner, OWLOntology _ontology) {
-        if (null == owlObjectProperty) {
-            this.owlObjectProperty = SharedDataHolder.noneOWLObjProp;
-        } else {
-            this.owlObjectProperty = owlObjectProperty;
-        }
+        super(owlObjectProperty, _reasoner, _ontology);
         this.conjunctiveHornClauses = new ArrayList<>();
-
-        this.reasoner = _reasoner;
-        this.ontology = _ontology;
-        this.owlOntologyManager = this.ontology.getOWLOntologyManager();
-        this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
-
-        solutionChanged = true;
     }
 
     /**
@@ -106,23 +61,12 @@ public class CandidateClassV0 {
      * @param _ontology
      */
     public CandidateClassV0(CandidateClassV0 anotherCandidateClass, OWLOntology _ontology) {
-        this.owlObjectProperty = anotherCandidateClass.owlObjectProperty;
+        super(anotherCandidateClass, _ontology);
         this.conjunctiveHornClauses = new ArrayList<>(anotherCandidateClass.conjunctiveHornClauses);
-
-        this.reasoner = anotherCandidateClass.reasoner;
-        this.ontology = _ontology;
-        this.owlOntologyManager = this.ontology.getOWLOntologyManager();
-        this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
-
-        solutionChanged = true;
     }
 
     public OWLObjectProperty getOwlObjectProperty() {
         return owlObjectProperty;
-    }
-
-    public void setOwlObjectProperty(OWLObjectProperty owlObjectProperty) {
-        this.owlObjectProperty = owlObjectProperty;
     }
 
     public ArrayList<ConjunctiveHornClauseV0> getConjunctiveHornClauses() {
@@ -137,13 +81,6 @@ public class CandidateClassV0 {
         this.conjunctiveHornClauses.add(conjunctiveHornClauseV0);
     }
 
-    public Score getScore() {
-        return score;
-    }
-
-    public void setScore(Score score) {
-        this.score = score;
-    }
 
     /**
      * Return the candidate class without adding the property.
@@ -152,8 +89,8 @@ public class CandidateClassV0 {
      */
     public OWLClassExpression getCandidateClassAsOWLClassExpression() {
 
-        if (!solutionChanged && null != candidateClassAsOWLClassEXpression)
-            return candidateClassAsOWLClassEXpression;
+        if (!solutionChanged && null != candidateClassAsOWLClassExpression)
+            return candidateClassAsOWLClassExpression;
 
         solutionChanged = false;
 
@@ -184,7 +121,7 @@ public class CandidateClassV0 {
             System.exit(-1);
         }
 
-        candidateClassAsOWLClassEXpression = owlClassExpression;
+        candidateClassAsOWLClassExpression = owlClassExpression;
         return owlClassExpression;
     }
 

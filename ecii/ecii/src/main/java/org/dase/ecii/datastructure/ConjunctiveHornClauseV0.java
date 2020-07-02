@@ -52,19 +52,7 @@ public class ConjunctiveHornClauseV0 extends ConjunctiveHornClause {
      *      2.2. With owlObjectProperty:
      */
     private OWLClassExpression posObjectType;
-
-    /**
-     * posObjectTypes getter
-     *
-     * @return
-     */
-    public OWLClassExpression getPosObjectType() {
-        return posObjectType;
-    }
-
-    public void setPosObjectType(OWLClassExpression posObjectType) {
-        this.posObjectType = posObjectType;
-    }
+    //@formatter:on
 
     /**
      * Public constructor
@@ -84,6 +72,23 @@ public class ConjunctiveHornClauseV0 extends ConjunctiveHornClause {
         this.posObjectType = anotherConjunctiveHornClause.posObjectType;
     }
 
+    /**
+     * posObjectTypes getter
+     *
+     * @return
+     */
+    public OWLClassExpression getPosObjectType() {
+        return posObjectType;
+    }
+
+    /**
+     * posObjectType setter
+     *
+     * @param posObjectType
+     */
+    public void setPosObjectType(OWLClassExpression posObjectType) {
+        this.posObjectType = posObjectType;
+    }
 
     /**
      * @return OWLClassExpression
@@ -303,7 +308,6 @@ public class ConjunctiveHornClauseV0 extends ConjunctiveHornClause {
 
         return accScore;
     }
-
 
     @Override
     public boolean equals(Object o) {

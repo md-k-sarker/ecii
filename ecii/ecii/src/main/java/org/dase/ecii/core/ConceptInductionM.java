@@ -203,7 +203,7 @@ public class ConceptInductionM {
         logger.info("reasoner initialized successfully");
 
         // Create a new ConceptFinder object with the given reasoner.
-        CandidateSolutionFinderV0 findConceptsObj = new CandidateSolutionFinderV0(owlReasoner, SharedDataHolder.owlOntologyStripped, outPutStream, monitor);
+        CandidateSolutionFinderV2 findConceptsObj = new CandidateSolutionFinderV2(owlReasoner, SharedDataHolder.owlOntologyStripped, outPutStream, monitor);
         //ConceptFinderComplex findConceptsObj = new ConceptFinderComplex(owlReasoner, ontology, outPutStream, monitor);
 
         logger.info("finding solutions started...............");

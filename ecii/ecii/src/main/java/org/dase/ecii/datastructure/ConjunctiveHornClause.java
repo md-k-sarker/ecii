@@ -69,6 +69,57 @@ public abstract class ConjunctiveHornClause implements IConjunctiveHornClause {
      */
     public Score score;
 
+    // use double to ensure when dividing we are getting double result not integer.
+    transient volatile protected double nrOfPositiveClassifiedAsPositive;
+    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
+    transient volatile protected double nrOfPositiveClassifiedAsNegative;
+    transient volatile protected double nrOfNegativeClassifiedAsNegative;
+    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
+    transient volatile protected double nrOfNegativeClassifiedAsPositive;
+
+    /**
+     * Bad design should fix it
+     */
+    protected OWLOntology ontology;
+    protected OWLDataFactory owlDataFactory;
+    protected OWLOntologyManager owlOntologyManager;
+    protected OWLReasoner reasoner;
+
+    /**
+     * Public constructor
+     * @param owlObjectProperty
+     * @param _reasoner
+     * @param _ontology
+     */
+    public ConjunctiveHornClause(OWLObjectProperty owlObjectProperty, OWLReasoner _reasoner, OWLOntology _ontology) {
+        if (null == owlObjectProperty) {
+            this.owlObjectProperty = SharedDataHolder.noneOWLObjProp;
+        } else {
+            this.owlObjectProperty = owlObjectProperty;
+        }
+
+        this.negObjectTypes = new ArrayList<>();
+
+        this.reasoner = _reasoner;
+        this.ontology = _ontology;
+    }
+
+    /**
+     * copy constructor
+     *
+     * @param anotherConjunctiveHornClause
+     */
+    public ConjunctiveHornClause(ConjunctiveHornClause anotherConjunctiveHornClause, OWLOntology _ontology) {
+
+        this.negObjectTypes = new ArrayList<>();
+        this.owlObjectProperty = anotherConjunctiveHornClause.owlObjectProperty;
+        this.negObjectTypes = anotherConjunctiveHornClause.negObjectTypes;
+        if (null != anotherConjunctiveHornClause.getScore()) {
+            this.score = anotherConjunctiveHornClause.getScore();
+        }
+        this.reasoner = anotherConjunctiveHornClause.reasoner;
+        this.ontology = _ontology;
+    }
 
     /**
      * negObjectTypes getter
@@ -136,52 +187,6 @@ public abstract class ConjunctiveHornClause implements IConjunctiveHornClause {
     @Override
     public void setScore(Score score) {
         this.score = score;
-    }
-
-    // use double to ensure when dividing we are getting double result not integer.
-    transient volatile protected double nrOfPositiveClassifiedAsPositive;
-    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-    transient volatile protected double nrOfPositiveClassifiedAsNegative;
-    transient volatile protected double nrOfNegativeClassifiedAsNegative;
-    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-    transient volatile protected double nrOfNegativeClassifiedAsPositive;
-
-    /**
-     * Bad design should fix it
-     */
-    protected OWLOntology ontology;
-    protected OWLDataFactory owlDataFactory;
-    protected OWLOntologyManager owlOntologyManager;
-    protected OWLReasoner reasoner;
-
-    public ConjunctiveHornClause(OWLObjectProperty owlObjectProperty, OWLReasoner _reasoner, OWLOntology _ontology) {
-        if (null == owlObjectProperty) {
-            this.owlObjectProperty = SharedDataHolder.noneOWLObjProp;
-        } else {
-            this.owlObjectProperty = owlObjectProperty;
-        }
-
-        this.negObjectTypes = new ArrayList<>();
-
-        this.reasoner = _reasoner;
-        this.ontology = _ontology;
-    }
-
-    /**
-     * copy constructor
-     *
-     * @param anotherConjunctiveHornClause
-     */
-    public ConjunctiveHornClause(ConjunctiveHornClause anotherConjunctiveHornClause, OWLOntology _ontology) {
-
-        this.negObjectTypes = new ArrayList<>();
-        this.owlObjectProperty = anotherConjunctiveHornClause.owlObjectProperty;
-        this.negObjectTypes = anotherConjunctiveHornClause.negObjectTypes;
-        if (null != anotherConjunctiveHornClause.getScore()) {
-            this.score = anotherConjunctiveHornClause.getScore();
-        }
-        this.reasoner = anotherConjunctiveHornClause.reasoner;
-        this.ontology = _ontology;
     }
 
     @Override
