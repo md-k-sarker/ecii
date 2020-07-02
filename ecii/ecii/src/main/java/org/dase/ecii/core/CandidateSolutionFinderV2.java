@@ -381,11 +381,11 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
 
 
         logger.info("solution using multiple positive and multiple negative type started...............");
+        //
         SharedDataHolder.typeOfObjectsInPosIndivs.entrySet().stream()
                 .filter(owlObjectPropertyHashMapEntry ->
                         owlObjectPropertyHashMapEntry.getValue().entrySet().size() > 0)
                 .forEach(owlObjectPropertyHashMapEntry -> {
-
 
                     OWLObjectProperty owlObjectProperty = owlObjectPropertyHashMapEntry.getKey();
                     HashMap<OWLClassExpression, Integer> hashMap = new HashMap<>(
@@ -393,129 +393,133 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
                                     .stream().filter(e -> e.getValue() > ConfigParams.typeOfObjectsInPosIndivsMinSize)
                                     .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
 
-                    logger.info("\t HashMap<OWLClassExpression, Integer> size before limiting:  " + hashMap.size());
-                    // todo(zaman): need to rewrite documentation of ConfigParams.posClassListMaxSize
-                    // we can save the limited postypes in shareddataholder and use that, as we are limiting postypes 3 times.
-                    // same for negtypes
-                    ArrayList<OWLClassExpression> limitedPosTypes = new ArrayList<>(hashMap.entrySet()
-                            .stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
-                            .limit(ConfigParams.posClassListMaxSize * ConfigParams.multiplicationConstant)
-                            .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)).keySet());
+                    if(hashMap.size() > 0) {
+                        logger.info("\t HashMap<OWLClassExpression, Integer> size before limiting:  " + hashMap.size());
+                        // todo(zaman): need to rewrite documentation of ConfigParams.posClassListMaxSize
+                        // we can save the limited postypes in shareddataholder and use that, as we are limiting postypes 3 times.
+                        // same for negtypes
+                        ArrayList<OWLClassExpression> limitedPosTypes = new ArrayList<>(hashMap.entrySet()
+                                .stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                                .limit(ConfigParams.posClassListMaxSize * ConfigParams.multiplicationConstant)
+                                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)).keySet());
 
-                    logger.info("\t HashMap<OWLClassExpression, Integer> size after limiting:  " + limitedPosTypes.size());
+                        logger.info("\t HashMap<OWLClassExpression, Integer> size after limiting:  " + limitedPosTypes.size());
 
-                    // positive portion
-                    ArrayList<ArrayList<OWLClassExpression>> listCombinationOfPosClassesForPosPortion = new ArrayList<>();
-                    // making a list of 2 item means it will consist of single item, this is to reduce the code from uppper portions.
-                    if (ConfigParams.conceptLimitInPosExpr >= 2)
-                        listCombinationOfPosClassesForPosPortion = Utility.combinationHelper(limitedPosTypes, 2);
-                    // combination of 3 to the limit
-                    for (int combinationCounter = 3; combinationCounter < ConfigParams.conceptLimitInPosExpr; combinationCounter++) {
-                        listCombinationOfPosClassesForPosPortion.addAll(Utility.combinationHelper(limitedPosTypes, combinationCounter));
-                    }
-                    logger.info("listCombinationOfPosClassesForPosPortion size: " + listCombinationOfPosClassesForPosPortion.size());
-
-                    // keep only valid listCombinationOfPosClassesForPosPortion.
-                    // a combination is valid if and only if it doesn't have self subClass.
-                    ArrayList<ArrayList<OWLClassExpression>> validListCombinationOfPosClassesForPosPortion = new ArrayList<>();
-                    listCombinationOfPosClassesForPosPortion.forEach(classExpressions -> {
-//                logger.info("debug: classExpressions.size(): " + classExpressions.size());
-                        if (isValidCombinationOfSubClasses(classExpressions)) {
-                            validListCombinationOfPosClassesForPosPortion.add(classExpressions);
+                        // positive portion
+                        ArrayList<ArrayList<OWLClassExpression>> listCombinationOfPosClassesForPosPortion = new ArrayList<>();
+                        // making a list of 2 item means it will consist of single item, this is to reduce the code from uppper portions.
+                        if (ConfigParams.conceptLimitInPosExpr >= 2)
+                            listCombinationOfPosClassesForPosPortion = Utility.combinationHelper(limitedPosTypes, 2);
+                        // combination of 3 to the limit
+                        for (int combinationCounter = 3; combinationCounter < ConfigParams.conceptLimitInPosExpr; combinationCounter++) {
+                            listCombinationOfPosClassesForPosPortion.addAll(Utility.combinationHelper(limitedPosTypes, combinationCounter));
                         }
-                    });
-                    // recover memory
-                    listCombinationOfPosClassesForPosPortion = null;
-                    logger.info("validListCombinationOfPosClassesForPosPortion size: " + validListCombinationOfPosClassesForPosPortion.size());
+                        logger.info("listCombinationOfPosClassesForPosPortion size: " + listCombinationOfPosClassesForPosPortion.size());
 
-                    // negated portion
-                    validListCombinationOfPosClassesForPosPortion.forEach(posOwlClassExpressions -> {
-
-                        HashSet<OWLClassExpression> posTypeOwlSubClassExpressions = new HashSet<>();
-
-                        for (OWLClassExpression posOwlClassExpression : posOwlClassExpressions) {
-                            posTypeOwlSubClassExpressions.addAll(
-                                    reasoner.getSubClasses(posOwlClassExpression, false)
-                                            .getFlattened().stream().collect(Collectors.toList()));
-                        }
-
-                        ArrayList<OWLClassExpression> posTypeOwlSubClassExpressionsForCombination = new ArrayList<>();
-
-                        // create combination only those which are contained in the negative type.
-                        // TODO(zaman): Can we remove this restriction?
-                        //  Probably we can allow all concept without the superclasses of postype. reasoner.getsuperclasses()
-                        posTypeOwlSubClassExpressions.forEach(subClassOwlClassExpression -> {
-                            if (SharedDataHolder.typeOfObjectsInNegIndivs.containsKey(owlObjectProperty)) {
-                                // if subclass of this class is included in the negative type
-                                if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).containsKey(subClassOwlClassExpression)
-                                        && SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty)
-                                        .get(subClassOwlClassExpression) > ConfigParams.typeOfObjectsInNegIndivsMinSize) {
-                                    posTypeOwlSubClassExpressionsForCombination.add(subClassOwlClassExpression);
-                                }
-                            }
-                        });
-                        // recover memory
-                        posTypeOwlSubClassExpressions = null;
-
-                        // todo-zaman: way to improve: we can use the top performing negative types instead of the subclass of pisitive types
-                        ArrayList<ArrayList<OWLClassExpression>> listCombinationOfSubClassesForNegPortion;
-                        // combination of 1, starting from 1 for negtypes. posTypes are at-least 2 here.
-                        listCombinationOfSubClassesForNegPortion = Utility
-                                .combinationHelper(posTypeOwlSubClassExpressionsForCombination, 1);
-                        // combination from 2 to upto ccombinationLimit
-                        for (int combinationCounter = 2; combinationCounter <= ConfigParams.conceptLimitInNegExpr; combinationCounter++) {
-                            // combination of combinationCounter
-                            listCombinationOfSubClassesForNegPortion.
-                                    addAll(Utility.combinationHelper(posTypeOwlSubClassExpressionsForCombination, combinationCounter));
-                        }
-                        logger.debug("listCombinationOfSubClassesForNegPortion size: " + listCombinationOfSubClassesForNegPortion.size());
-
-                        // keep only valid listCombinationOfSubClassesForNegPortion.
+                        // keep only valid listCombinationOfPosClassesForPosPortion.
                         // a combination is valid if and only if it doesn't have self subClass.
-                        // TODO: check with pascal. --- Okay
-                        ArrayList<ArrayList<OWLClassExpression>> validListCombinationOfSubClassesForNegPortion = new ArrayList<>();
-                        listCombinationOfSubClassesForNegPortion.forEach(classExpressions -> {
+                        ArrayList<ArrayList<OWLClassExpression>> validListCombinationOfPosClassesForPosPortion = new ArrayList<>();
+                        listCombinationOfPosClassesForPosPortion.forEach(classExpressions -> {
+//                logger.info("debug: classExpressions.size(): " + classExpressions.size());
                             if (isValidCombinationOfSubClasses(classExpressions)) {
-                                validListCombinationOfSubClassesForNegPortion.add(classExpressions);
+                                validListCombinationOfPosClassesForPosPortion.add(classExpressions);
                             }
                         });
                         // recover memory
-                        listCombinationOfSubClassesForNegPortion = null;
-                        logger.debug("validListCombinationOfSubClassesForNegPortion size: " + validListCombinationOfSubClassesForNegPortion.size());
+                        listCombinationOfPosClassesForPosPortion = null;
+                        logger.info("validListCombinationOfPosClassesForPosPortion size: " + validListCombinationOfPosClassesForPosPortion.size());
 
-                        // now combine the postypes and negtypes
-                        // null pointer because in the soutions the postypes is empty or 0
-//                logger.info("debug: posOwlClassExpressions: " + posOwlClassExpressions.size());
-                        validListCombinationOfSubClassesForNegPortion.forEach(subClasses -> {
+                        // negated portion
+                        validListCombinationOfPosClassesForPosPortion.forEach(posOwlClassExpressions -> {
 
-                            // if every class of this combination is in negative types then include this combination otherwise skip this.
-                            // this is trivially true as we are creating combination of those subclasses which are also contained in the negTypes.
+                            HashSet<OWLClassExpression> posTypeOwlSubClassExpressions = new HashSet<>();
 
-                            //create conjunctive horn clause and add positive part and negative part too
-                            ConjunctiveHornClauseV1V2 conjunctiveHornClauseV1V2 = new ConjunctiveHornClauseV1V2(owlObjectProperty, reasoner, ontology);
-                            conjunctiveHornClauseV1V2.setPosObjectTypes(posOwlClassExpressions);
-                            conjunctiveHornClauseV1V2.setNegObjectTypes(subClasses);
-
-                            // create candidate class
-                            CandidateClassV2 CandidateClassV2 = new CandidateClassV2(owlObjectProperty, reasoner, ontology);
-                            CandidateClassV2.addConjunctiveHornClauses(conjunctiveHornClauseV1V2);
-
-                            // create candidate solution
-                            CandidateSolutionV2 CandidateSolutionV2 = new CandidateSolutionV2(reasoner, ontology);
-                            CandidateSolutionV2.addCandidateClass(CandidateClassV2);
-                            boolean added = addToSolutions(CandidateSolutionV2);
-                            if (added) {
-                                // save temporarily for combination
-                                Score hornClauseScore = conjunctiveHornClauseV1V2.calculateAccuracyComplexCustom();
-                                conjunctiveHornClauseV1V2.setScore(hornClauseScore);
-                                HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1V2);
-
-                                Score candidateClassScore = CandidateClassV2.calculateAccuracyComplexCustom();
-                                CandidateClassV2.setScore(candidateClassScore);
-                                HashMapUtility.insertIntoHashMap(candidateClassesMap, owlObjectProperty, CandidateClassV2);
+                            for (OWLClassExpression posOwlClassExpression : posOwlClassExpressions) {
+                                posTypeOwlSubClassExpressions.addAll(
+                                        reasoner.getSubClasses(posOwlClassExpression, false)
+                                                .getFlattened().stream().collect(Collectors.toList()));
                             }
+
+                            ArrayList<OWLClassExpression> posTypeOwlSubClassExpressionsForCombination = new ArrayList<>();
+
+                            // create combination only those which are contained in the negative type.
+                            // TODO(zaman): Can we remove this restriction?
+                            //  Probably we can allow all concept without the superclasses of postype. reasoner.getsuperclasses()
+                            posTypeOwlSubClassExpressions.forEach(subClassOwlClassExpression -> {
+                                if (SharedDataHolder.typeOfObjectsInNegIndivs.containsKey(owlObjectProperty)) {
+                                    // if subclass of this class is included in the negative type
+                                    if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).containsKey(subClassOwlClassExpression)
+                                            && SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty)
+                                            .get(subClassOwlClassExpression) > ConfigParams.typeOfObjectsInNegIndivsMinSize) {
+                                        posTypeOwlSubClassExpressionsForCombination.add(subClassOwlClassExpression);
+                                    }
+                                }
+                            });
+                            // recover memory
+                            posTypeOwlSubClassExpressions = null;
+
+                            // todo-zaman: way to improve: we can use the top performing negative types instead of the subclass of pisitive types
+                            ArrayList<ArrayList<OWLClassExpression>> listCombinationOfSubClassesForNegPortion;
+                            // combination of 1, starting from 1 for negtypes. posTypes are at-least 2 here.
+                            listCombinationOfSubClassesForNegPortion = Utility
+                                    .combinationHelper(posTypeOwlSubClassExpressionsForCombination, 1);
+                            // combination from 2 to upto ccombinationLimit
+                            for (int combinationCounter = 2; combinationCounter <= ConfigParams.conceptLimitInNegExpr; combinationCounter++) {
+                                // combination of combinationCounter
+                                listCombinationOfSubClassesForNegPortion.
+                                        addAll(Utility.combinationHelper(posTypeOwlSubClassExpressionsForCombination, combinationCounter));
+                            }
+                            logger.debug("listCombinationOfSubClassesForNegPortion size: " + listCombinationOfSubClassesForNegPortion.size());
+
+                            // keep only valid listCombinationOfSubClassesForNegPortion.
+                            // a combination is valid if and only if it doesn't have self subClass.
+                            // TODO: check with pascal. --- Okay
+                            ArrayList<ArrayList<OWLClassExpression>> validListCombinationOfSubClassesForNegPortion = new ArrayList<>();
+                            listCombinationOfSubClassesForNegPortion.forEach(classExpressions -> {
+                                if (isValidCombinationOfSubClasses(classExpressions)) {
+                                    validListCombinationOfSubClassesForNegPortion.add(classExpressions);
+                                }
+                            });
+                            // recover memory
+                            listCombinationOfSubClassesForNegPortion = null;
+                            logger.debug("validListCombinationOfSubClassesForNegPortion size: " + validListCombinationOfSubClassesForNegPortion.size());
+
+                            // now combine the postypes and negtypes
+                            // null pointer because in the soutions the postypes is empty or 0
+//                logger.info("debug: posOwlClassExpressions: " + posOwlClassExpressions.size());
+                            validListCombinationOfSubClassesForNegPortion.forEach(subClasses -> {
+
+                                // if every class of this combination is in negative types then include this combination otherwise skip this.
+                                // this is trivially true as we are creating combination of those subclasses which are also contained in the negTypes.
+
+                                //create conjunctive horn clause and add positive part and negative part too
+                                ConjunctiveHornClauseV1V2 conjunctiveHornClauseV1V2 = new ConjunctiveHornClauseV1V2(owlObjectProperty, reasoner, ontology);
+                                conjunctiveHornClauseV1V2.setPosObjectTypes(posOwlClassExpressions);
+                                conjunctiveHornClauseV1V2.setNegObjectTypes(subClasses);
+
+                                // create candidate class
+                                CandidateClassV2 CandidateClassV2 = new CandidateClassV2(owlObjectProperty, reasoner, ontology);
+                                CandidateClassV2.addConjunctiveHornClauses(conjunctiveHornClauseV1V2);
+
+                                // create candidate solution
+                                CandidateSolutionV2 CandidateSolutionV2 = new CandidateSolutionV2(reasoner, ontology);
+                                CandidateSolutionV2.addCandidateClass(CandidateClassV2);
+                                boolean added = addToSolutions(CandidateSolutionV2);
+                                if (added) {
+                                    // save temporarily for combination
+                                    Score hornClauseScore = conjunctiveHornClauseV1V2.calculateAccuracyComplexCustom();
+                                    conjunctiveHornClauseV1V2.setScore(hornClauseScore);
+                                    HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1V2);
+
+                                    Score candidateClassScore = CandidateClassV2.calculateAccuracyComplexCustom();
+                                    CandidateClassV2.setScore(candidateClassScore);
+                                    HashMapUtility.insertIntoHashMap(candidateClassesMap, owlObjectProperty, CandidateClassV2);
+                                }
+                            });
                         });
-                    });
+                    }else {
+                        logger.warn("Limiting by ConfigParams.typeOfObjectsInPosIndivsMinSize produces 0 size hashmap!!");
+                    }
                 });
         logger.info("solution using multiple positive and multiple negative type finished. Total Solutions: "
                 + SharedDataHolder.CandidateSolutionSetV2.size());

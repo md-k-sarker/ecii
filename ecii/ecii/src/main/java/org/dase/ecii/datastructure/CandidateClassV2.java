@@ -24,11 +24,12 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.AND;
 /**
  * <pre>
  * Candidate class is multiple conjunctive horn clause with a single Object Property.
- *  horn clauses will be combined by AND/Intersection always........
- * 1. When we have none ObjectProperty or bare types, or
- * 2. When we have proper ObjectProperty, it doesn't matter
+ * Difference between V2 and V1:
+ * In V2 horn clauses will be combined by AND/Intersection always........
+ *      1. When we have none ObjectProperty or bare types, or
+ *      2. When we have proper ObjectProperty, it doesn't matter
  *
- * In V1 of Cnadidate Class we have AND for none and OR for proper object property
+ * In V1 of Candidate Class we have AND for none and OR for proper object property
  *
  * Probable Solution:
  * Solution = (A1 ¬(D1)) ⊓ (A2 ¬(D1))  ⊓  R1.((B1 ⊓ ... ⊓ Bn ⊓ ¬(D1 ⊔...⊔ Djk) ⊓ (B1 ⊓ ... ⊓ Bn ⊓ ¬(D1 ⊔...⊔ Djk) )
@@ -49,7 +50,7 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.AND;
  *
  * There is a limit on how many conjunctive horn clauses may be added.
  * That is called K2.
- * k2 = limit of horn clauses. = ConfigParams.hornClauseLimit.
+ * k2 = limit of horn clauses = ConfigParams.hornClauseLimit.
  * </pre>
  */
 public class CandidateClassV2 {
@@ -178,7 +179,10 @@ public class CandidateClassV2 {
     }
 
     /**
-     * multiple horclauses are conjuncted when we have hare object property, and unioned when we have proper object property.
+     * Return the candidate class without adding the property.
+     *
+     * Multiple horclauses are conjuncted always
+     *
      * Not filling the r filler/owlObjectProperty here.
      * v0,v1 both okay.
      *
@@ -205,16 +209,19 @@ public class CandidateClassV2 {
             if (conjunctiveHornClausesClassExpressionAList.size() > 0) {
                 if (conjunctiveHornClausesClassExpressionAList.size() == 1) {
                     owlClassExpression = conjunctiveHornClausesClassExpressionAList.get(0);
+//                    this.candidateClassAsOWLClassEXpression = owlClassExpression;
                 } else {
                     // V2 of Candidate Class
                     owlClassExpression = SharedDataHolder.owlDataFactory.getOWLObjectIntersectionOf(conjunctiveHornClausesClassExpression);
                 }
-
             }
+        }else {
+            logger.error("ERROR!!!!!! conjunctiveHornClauses is null, program exiting");
+            System.exit(-1);
         }
 
-        candidateClassAsOWLClassEXpression = owlClassExpression;
-        return candidateClassAsOWLClassEXpression;
+        this.candidateClassAsOWLClassEXpression = owlClassExpression;
+        return this.candidateClassAsOWLClassEXpression;
     }
 
     /**
@@ -234,9 +241,8 @@ public class CandidateClassV2 {
         if (null != this) {
             if (this.getConjunctiveHornClauses().size() > 0) {
 
-                // V2 of candidate class
-                String ANDOR = "";
-                ANDOR = AND.toString();
+                // V2 of candidate class, makes always AND
+                String ANDOR = AND.toString();
 
                 if (this.getConjunctiveHornClauses().size() == 1) {
                     sb.append("(");
@@ -274,18 +280,17 @@ public class CandidateClassV2 {
      * This will return all individuals covered by this complex concept from the ontology using reasoner,
      * large number of individuals may be returned.
      *
-     * @return
+     * @return HashSet<OWLNamedIndividual>
      */
     public HashSet<OWLNamedIndividual> individualsCoveredByThisCandidateClassByReasoner() {
 
-        logger.debug("calculating covered individuals by candidateClass " + this.getCandidateClassAsOWLClassExpression() + " by reasoner.........");
+        logger.debug("Calculating covered individuals by candidateClass " + this.getCandidateClassAsOWLClassExpression() + " by reasoner.........");
 
         HashSet<OWLNamedIndividual> coveredIndividuals = new HashSet<>();
         OWLClassExpression owlClassExpression = this.getCandidateClassAsOWLClassExpression();
 
-        if(null != owlClassExpression) {
+        if (null != owlClassExpression) {
             if (!this.owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
-                // null pointer exception owlClassExpression is being null
                 // v2 of candidate class using getOWLObjectAllValuesFrom instead of getOWLObjectSomeValuesFrom
                 owlClassExpression = owlDataFactory.getOWLObjectAllValuesFrom(owlObjectProperty, owlClassExpression);
             }
@@ -306,20 +311,24 @@ public class CandidateClassV2 {
 //        if (owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
             // all hornClause are conjuncted, need to make set intersection
             // V2 of candidate class
-            coveredIndividuals = conjunctiveHornClauses.get(0).individualsCoveredByThisHornClauseByReasoner();
+            coveredIndividuals = conjunctiveHornClauses.get(0).
+                    individualsCoveredByThisHornClauseByReasoner();
             for (int i = 1; i < conjunctiveHornClauses.size(); i++) {
-                coveredIndividuals.retainAll(conjunctiveHornClauses.get(i).individualsCoveredByThisHornClauseByReasoner());
+                coveredIndividuals.retainAll(conjunctiveHornClauses.get(i).
+                        individualsCoveredByThisHornClauseByReasoner());
             }
 
             // save it to cache
             SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.put(owlClassExpression, coveredIndividuals);
 
+        } else {
+            logger.error("ERROR!!!!!! owlClassExpression is null, program exiting");
+            System.exit(-1);
         }
-        logger.debug("calculating covered individuals by candidateClass " + this.getCandidateClassAsOWLClassExpression() + " by reasoner finished");
-        logger.debug("\t covered all individuals size: " + coveredIndividuals.size());
+        logger.debug("Calculating covered individuals by candidateClass " + this.getCandidateClassAsOWLClassExpression() + " by reasoner finished");
+        logger.debug("\t Covered all individuals size: " + coveredIndividuals.size());
 
         return coveredIndividuals;
-
     }
 
 
@@ -339,7 +348,8 @@ public class CandidateClassV2 {
          */
         HashMap<OWLIndividual, Integer> excludedNegIndividualsMap = new HashMap<>();
 
-        HashSet<OWLNamedIndividual> allCoveredIndividuals = this.individualsCoveredByThisCandidateClassByReasoner();
+        HashSet<OWLNamedIndividual> allCoveredIndividuals = this.
+                individualsCoveredByThisCandidateClassByReasoner();
         // calculate how many positive individuals covered.
         int posCoveredCounter = 0;
         for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
@@ -369,7 +379,6 @@ public class CandidateClassV2 {
         assert excludedNegIndividualsMap.size() == nrOfNegativeClassifiedAsNegative;
         assert coveredPosIndividualsMap.size() == nrOfPositiveClassifiedAsPositive;
 
-        // TODO(zaman): it should be logger.debug instead of logger.info
         logger.debug("candidateClass: " + this.getCandidateClassAsString(true));
         logger.debug("\tcoveredPosIndividuals_by_ecii: " + coveredPosIndividualsMap.keySet());
         logger.debug("\tcoveredPosIndividuals_by_ecii size: " + coveredPosIndividualsMap.size());

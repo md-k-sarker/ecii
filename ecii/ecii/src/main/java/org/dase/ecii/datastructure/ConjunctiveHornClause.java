@@ -5,23 +5,25 @@ Written at 6/30/20.
 */
 
 import org.dase.ecii.core.Score;
+import org.dase.ecii.core.SharedDataHolder;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.HashSet;
 
-public abstract class ConjunctiveHornClause {
+public abstract class ConjunctiveHornClause implements IConjunctiveHornClause {
+
+    private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     /**
      * If the object property is empty = SharedDataHolder.noneOWLObjProp then related classes are atomic class.
      */
-    protected OWLObjectProperty owlObjectProperty;
-    /**
-     * posObjectType must be at-least 1. it can not be empty.
-     *  Single positive Type.
-     *      1.1. Without owlObjectProperty: in that case owlObjectProperty=SharedDataHolder.noneOWLObjProp.
-     *      1.2. With owlObjectProperty:
-     */
-    protected ArrayList<OWLClassExpression> posObjectTypes;
+    public OWLObjectProperty owlObjectProperty;
+
     /**
      * negObjectTypes represents conjuncted negated form of the horn clause.
      * it can be:
@@ -38,46 +40,82 @@ public abstract class ConjunctiveHornClause {
      *          <ol>Without Object Property. in that case owlObjectProperty=SharedDataHolder.noneOWLObjProp</ol>
      *      </li>
      * </li>
-     *
-     *
+     * <p>
+     * <p>
      * We need to put negation sign when printing the class expression.
      * It will be printed as: ¬(D1⊔···⊔Dk)
-     *
+     * <p>
      * There is a limit on disjunctions. That is ConfigParams.conceptLimitInNegExpr.
      */
-    protected ArrayList<OWLClassExpression> negObjectTypes;
+    public ArrayList<OWLClassExpression> negObjectTypes;
+
     /**
      * OWLClassExpression
      */
-    protected OWLClassExpression conjunctiveHornClauseAsOWLClass;
+    public OWLClassExpression conjunctiveHornClauseAsOWLClass;
+
     /**
      * String
      */
-    protected String conjunctiveHornClauseAsString;
-    protected boolean solutionChanged = false;
+    public String conjunctiveHornClauseAsString;
+    /**
+     * Checker to check whether solution changed or not,
+     * so we can use cached solution score and solutionAsString
+     */
+    public boolean solutionChanged = false;
+
     /**
      * Score associated with this hornclause. This score is used to select best n hornClause (limit K5), which will be used on combination.
      */
-    protected Score score;
-    // use double to ensure when dividing we are getting double result not integer.
-    transient volatile protected double nrOfPositiveClassifiedAsPositive;
-    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-    transient volatile protected double nrOfPositiveClassifiedAsNegative;
-    transient volatile protected double nrOfNegativeClassifiedAsNegative;
-    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-    transient volatile protected double nrOfNegativeClassifiedAsPositive;
-    /**
-     * Bad design should fix it
-     */
-    protected OWLOntology ontology;
-    protected OWLDataFactory owlDataFactory;
-    protected OWLOntologyManager owlOntologyManager;
-    protected OWLReasoner reasoner;
+    public Score score;
 
-    public ConjunctiveHornClause() {
+
+    /**
+     * negObjectTypes getter
+     *
+     * @return
+     */
+    public ArrayList<OWLClassExpression> getNegObjectTypes() {
+        return negObjectTypes;
+    }
+
+    /**
+     * negObjectTypes setter
+     *
+     * @param negObjectTypes
+     */
+    public void setNegObjectTypes(HashSet<OWLClassExpression> negObjectTypes) {
+        setNegObjectTypes(new ArrayList<OWLClassExpression>(negObjectTypes));
         solutionChanged = true;
-        this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
-        this.owlOntologyManager = this.ontology.getOWLOntologyManager();
+    }
+
+    /**
+     * negObjectTypes setter
+     *
+     * @param negObjectTypes
+     */
+    public void setNegObjectTypes(ArrayList<OWLClassExpression> negObjectTypes) {
+        this.negObjectTypes = negObjectTypes;
+        solutionChanged = true;
+    }
+
+    /**
+     * add negObjectTypes
+     *
+     * @param negObjectType
+     */
+    public void addNegObjectType(OWLClassExpression negObjectType) {
+        this.negObjectTypes.add(negObjectType);
+        solutionChanged = true;
+    }
+
+    /**
+     * owlObjectProperty getter
+     *
+     * @return OWLObjectProperty
+     */
+    public OWLObjectProperty getOwlObjectProperty() {
+        return owlObjectProperty;
     }
 
     /**
@@ -85,6 +123,7 @@ public abstract class ConjunctiveHornClause {
      *
      * @return Score
      */
+    @Override
     public Score getScore() {
         return score;
     }
@@ -94,19 +133,61 @@ public abstract class ConjunctiveHornClause {
      *
      * @param score
      */
+    @Override
     public void setScore(Score score) {
         this.score = score;
     }
 
-    public abstract OWLClassExpression getConjunctiveHornClauseAsOWLClassExpression();
+    // use double to ensure when dividing we are getting double result not integer.
+    transient volatile protected double nrOfPositiveClassifiedAsPositive;
+    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
+    transient volatile protected double nrOfPositiveClassifiedAsNegative;
+    transient volatile protected double nrOfNegativeClassifiedAsNegative;
+    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
+    transient volatile protected double nrOfNegativeClassifiedAsPositive;
 
-    public abstract String getHornClauseAsString(boolean includePrefix);
+    /**
+     * Bad design should fix it
+     */
+    protected OWLOntology ontology;
+    protected OWLDataFactory owlDataFactory;
+    protected OWLOntologyManager owlOntologyManager;
+    protected OWLReasoner reasoner;
 
-    public abstract Score calculateAccuracyComplexCustom();
+    public ConjunctiveHornClause(OWLObjectProperty owlObjectProperty, OWLReasoner _reasoner, OWLOntology _ontology) {
+        if (null == owlObjectProperty) {
+            this.owlObjectProperty = SharedDataHolder.noneOWLObjProp;
+        } else {
+            this.owlObjectProperty = owlObjectProperty;
+        }
+
+        this.negObjectTypes = new ArrayList<>();
+
+        this.reasoner = _reasoner;
+        this.ontology = _ontology;
+    }
+
+    /**
+     * copy constructor
+     *
+     * @param anotherConjunctiveHornClause
+     */
+    public ConjunctiveHornClause(ConjunctiveHornClause anotherConjunctiveHornClause, OWLOntology _ontology) {
+
+        this.negObjectTypes = new ArrayList<>();
+        this.owlObjectProperty = anotherConjunctiveHornClause.owlObjectProperty;
+        this.negObjectTypes = anotherConjunctiveHornClause.negObjectTypes;
+        if (null != anotherConjunctiveHornClause.getScore()) {
+            this.score = anotherConjunctiveHornClause.getScore();
+        }
+        this.reasoner = anotherConjunctiveHornClause.reasoner;
+        this.ontology = _ontology;
+    }
 
     @Override
     public abstract boolean equals(Object o);
 
     @Override
     public abstract int hashCode();
+
 }

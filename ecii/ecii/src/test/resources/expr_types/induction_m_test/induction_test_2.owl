@@ -1,0 +1,278 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.daselab.com/sarker/test1#"
+     xml:base="http://www.daselab.com/sarker/test1"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:test1="http://www.daselab.com/sarker/test1#">
+    <owl:Ontology rdf:about="http://www.daselab.com/sarker/test1"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#imageContains -->
+
+    <owl:ObjectProperty rdf:about="http://www.daselab.com/sarker/test1#imageContains"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#Animal -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#Animal">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#Entity"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#Artificial -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#Artificial"/>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#Birds -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#Birds">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#Animal"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#Cat -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#Cat">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#Mammal"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#Cow -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#Cow">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#Mammal"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#Entity -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#Entity"/>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#Fish -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#Fish">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#Animal"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#Human -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#Human">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#Mammal"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#Mammal -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#Mammal">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#Animal"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#Mountain -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#Mountain">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#NaturalObject"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#NaturalObject -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#NaturalObject">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#Entity"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#Plant -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#Plant">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#Entity"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#Reptiles -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#Reptiles">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#Animal"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#River -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#River">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#NaturalObject"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#clsA -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#clsA">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#Artificial"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#clsB -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#clsB">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#Artificial"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#clsC -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#clsC">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#Artificial"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#clsD -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#clsD">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#clsA"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#clsE -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#clsE">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#clsD"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#clsF -->
+
+    <owl:Class rdf:about="http://www.daselab.com/sarker/test1#clsF">
+        <rdfs:subClassOf rdf:resource="http://www.daselab.com/sarker/test1#clsE"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#David -->
+
+    <owl:NamedIndividual rdf:about="http://www.daselab.com/sarker/test1#David">
+        <rdf:type rdf:resource="http://www.daselab.com/sarker/test1#Animal"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#Ilish -->
+
+    <owl:NamedIndividual rdf:about="http://www.daselab.com/sarker/test1#Ilish">
+        <rdf:type rdf:resource="http://www.daselab.com/sarker/test1#Fish"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#Okra -->
+
+    <owl:NamedIndividual rdf:about="http://www.daselab.com/sarker/test1#Okra">
+        <rdf:type rdf:resource="http://www.daselab.com/sarker/test1#Plant"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#indi1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.daselab.com/sarker/test1#indi1">
+        <rdf:type rdf:resource="http://www.daselab.com/sarker/test1#clsE"/>
+        <imageContains rdf:resource="http://www.daselab.com/sarker/test1#obj1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#indi2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.daselab.com/sarker/test1#indi2">
+        <rdf:type rdf:resource="http://www.daselab.com/sarker/test1#clsB"/>
+        <imageContains rdf:resource="http://www.daselab.com/sarker/test1#obj2"/>
+        <imageContains rdf:resource="http://www.daselab.com/sarker/test1#obj3"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#obj1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.daselab.com/sarker/test1#obj1">
+        <rdf:type rdf:resource="http://www.daselab.com/sarker/test1#clsF"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#obj2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.daselab.com/sarker/test1#obj2">
+        <rdf:type rdf:resource="http://www.daselab.com/sarker/test1#clsE"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.daselab.com/sarker/test1#obj3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.daselab.com/sarker/test1#obj3">
+        <rdf:type rdf:resource="http://www.daselab.com/sarker/test1#clsB"/>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

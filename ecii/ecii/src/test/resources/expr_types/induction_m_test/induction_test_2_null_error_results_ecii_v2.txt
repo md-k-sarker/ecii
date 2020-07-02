@@ -1,0 +1,208 @@
+Program started.............
+Program starts at: 07.01.2020  23.37.21 PM
+Working with confFile: induction_test_2_null_error.config
+
+User defined parameters:
+K1/negExprTypeLimit: 1
+K2/hornClauseLimit: 2
+K3/objPropsCombinationLimit: 1
+K4/posExprTypeLimit: 3
+K5/hornClausesListMaxSize: 20
+K6/candidateClassesListMaxSize: 3
+K7/removeCommonTypes: false
+DefaultScoreType: HYBRID
+ReasonerName: pellet
+k8/ValidateByReasonerSize: 0
+k9/posClassListMaxSize: 20
+k10/negClassListMaxSize: 15
+posIndivs from conf:
+	David
+negIndivs from conf:
+	Okra
+objProps from conf:
+	imageContains
+	__%!dop%!__
+Algorithm starts at: 07.01.2020  23.37.21 PM
+
+Algorithm ends at: 07.01.2020  23.37.21 PM
+
+Algorithm duration: 0.61 sec
+
+####################Solutions####################:
+solution 1: ((Animal) ⊔ ( ¬ Plant))
+	solution pretty-printed by reasoner: Animal ⊔ (¬Plant)
+	 coverage_score: 1.0
+	 f_measure: 1.0
+	 precision: 1.0
+	 recall: 1.0
+solution 2: ((Animal) ⊔ ( ¬ Entity))
+	solution pretty-printed by reasoner: Animal ⊔ (¬Entity)
+	 coverage_score: 1.0
+	 f_measure: 1.0
+	 precision: 1.0
+	 recall: 1.0
+solution 3: (( ¬ Plant) ⊔ (Entity))
+	solution pretty-printed by reasoner: Entity ⊔ (¬Plant)
+	 coverage_score: 1.0
+	 f_measure: 1.0
+	 precision: 1.0
+	 recall: 1.0
+solution 4: (( ¬ Entity) ⊔ (Mammal))
+	solution pretty-printed by reasoner: Mammal ⊔ (¬Entity)
+	 coverage_score: 1.0
+	 f_measure: 1.0
+	 precision: 1.0
+	 recall: 1.0
+solution 5: ((Human) ⊔ ( ¬ Entity))
+	solution pretty-printed by reasoner: Human ⊔ (¬Entity)
+	 coverage_score: 1.0
+	 f_measure: 1.0
+	 precision: 1.0
+	 recall: 1.0
+solution 6: (( ¬ Entity) ⊔ (Entity))
+	solution pretty-printed by reasoner: Entity ⊔ (¬Entity)
+	 coverage_score: 1.0
+	 f_measure: 1.0
+	 precision: 1.0
+	 recall: 1.0
+solution 7: (( ¬ Plant) ⊔ (Mammal))
+	solution pretty-printed by reasoner: Mammal ⊔ (¬Plant)
+	 coverage_score: 1.0
+	 f_measure: 1.0
+	 precision: 1.0
+	 recall: 1.0
+solution 8: ((Human) ⊔ ( ¬ Plant))
+	solution pretty-printed by reasoner: Human ⊔ (¬Plant)
+	 coverage_score: 1.0
+	 f_measure: 1.0
+	 precision: 1.0
+	 recall: 1.0
+solution 9: ((Entity ⊓ ¬ Plant) ⊔ ( ¬ Entity))
+	solution pretty-printed by reasoner: (Entity ⊓ (¬Plant)) ⊔ (¬Entity)
+	 coverage_score: 1.0
+	 f_measure: 1.0
+	 precision: 1.0
+	 recall: 1.0
+solution 10: ((Entity ⊓ ¬ Plant) ⊔ ( ¬ Plant))
+	solution pretty-printed by reasoner: (Entity ⊓ (¬Plant)) ⊔ (¬Plant)
+	 coverage_score: 1.0
+	 f_measure: 1.0
+	 precision: 1.0
+	 recall: 1.0
+solution 11: (Mammal)
+	solution pretty-printed by reasoner: Mammal
+	 coverage_score: 0.5
+	 f_measure: 0.6666666666666666
+	 precision: 0.5
+	 recall: 1.0
+solution 12: (Entity)
+	solution pretty-printed by reasoner: Entity
+	 coverage_score: 0.5
+	 f_measure: 0.6666666666666666
+	 precision: 0.5
+	 recall: 1.0
+solution 13: (Animal)
+	solution pretty-printed by reasoner: Animal
+	 coverage_score: 0.5
+	 f_measure: 0.6666666666666666
+	 precision: 0.5
+	 recall: 1.0
+solution 14: (Human)
+	solution pretty-printed by reasoner: Human
+	 coverage_score: 0.5
+	 f_measure: 0.6666666666666666
+	 precision: 0.5
+	 recall: 1.0
+solution 15: ((Entity) ⊔ (Mammal))
+	solution pretty-printed by reasoner: Entity ⊔ Mammal
+	 coverage_score: 0.5
+	 f_measure: 0.6666666666666666
+	 precision: 0.5
+	 recall: 1.0
+solution 16: ((Human) ⊔ (Mammal))
+	solution pretty-printed by reasoner: Human ⊔ Mammal
+	 coverage_score: 0.5
+	 f_measure: 0.6666666666666666
+	 precision: 0.5
+	 recall: 1.0
+solution 17: (Entity ⊓ ¬ Plant)
+	solution pretty-printed by reasoner: Entity ⊓ (¬Plant)
+	 coverage_score: 0.5
+	 f_measure: 0.6666666666666666
+	 precision: 0.5
+	 recall: 1.0
+solution 18: ((Animal) ⊔ (Mammal))
+	solution pretty-printed by reasoner: Animal ⊔ Mammal
+	 coverage_score: 0.5
+	 f_measure: 0.6666666666666666
+	 precision: 0.5
+	 recall: 1.0
+solution 19: ((Human) ⊔ (Animal))
+	solution pretty-printed by reasoner: Animal ⊔ Human
+	 coverage_score: 0.5
+	 f_measure: 0.6666666666666666
+	 precision: 0.5
+	 recall: 1.0
+solution 20: ((Animal) ⊔ (Entity))
+	solution pretty-printed by reasoner: Animal ⊔ Entity
+	 coverage_score: 0.5
+	 f_measure: 0.6666666666666666
+	 precision: 0.5
+	 recall: 1.0
+solution 21: ((Human) ⊔ (Entity))
+	solution pretty-printed by reasoner: Entity ⊔ Human
+	 coverage_score: 0.5
+	 f_measure: 0.6666666666666666
+	 precision: 0.5
+	 recall: 1.0
+solution 22: ((Human) ⊔ (Entity ⊓ ¬ Plant))
+	solution pretty-printed by reasoner: Human ⊔ (Entity ⊓ (¬Plant))
+	 coverage_score: 0.5
+	 f_measure: 0.6666666666666666
+	 precision: 0.5
+	 recall: 1.0
+solution 23: ((Entity ⊓ ¬ Plant) ⊔ (Mammal))
+	solution pretty-printed by reasoner: Mammal ⊔ (Entity ⊓ (¬Plant))
+	 coverage_score: 0.5
+	 f_measure: 0.6666666666666666
+	 precision: 0.5
+	 recall: 1.0
+solution 24: ((Entity ⊓ ¬ Plant) ⊔ (Animal))
+	solution pretty-printed by reasoner: Animal ⊔ (Entity ⊓ (¬Plant))
+	 coverage_score: 0.5
+	 f_measure: 0.6666666666666666
+	 precision: 0.5
+	 recall: 1.0
+solution 25: ((Entity ⊓ ¬ Plant) ⊔ (Entity))
+	solution pretty-printed by reasoner: Entity ⊔ (Entity ⊓ (¬Plant))
+	 coverage_score: 0.5
+	 f_measure: 0.6666666666666666
+	 precision: 0.5
+	 recall: 1.0
+solution 26: ( ¬ Plant)
+	solution pretty-printed by reasoner: ¬Plant
+	 coverage_score: 0.5
+	 f_measure: 0.0
+	 precision: 0.0
+	 recall: 0.0
+solution 27: ( ¬ Entity)
+	solution pretty-printed by reasoner: ¬Entity
+	 coverage_score: 0.5
+	 f_measure: 0.0
+	 precision: 0.0
+	 recall: 0.0
+solution 28: (( ¬ Plant) ⊔ ( ¬ Entity))
+	solution pretty-printed by reasoner: (¬Entity) ⊔ (¬Plant)
+	 coverage_score: 0.5
+	 f_measure: 0.0
+	 precision: 0.0
+	 recall: 0.0
+
+Total solutions found: 28
+
+Total solutions found: 0
+Result saved at: /Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/expr_types/induction_m_test/induction_test_2_null_error_results_ecii_v2.txt
+
+Program finished.
+Program ends at: 07.01.2020  23.37.21 PM
+Program duration: 0.627 sec

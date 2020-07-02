@@ -9,6 +9,7 @@ import org.dase.ecii.core.SharedDataHolder;
 import org.dase.ecii.util.Heuristics;
 import org.dase.ecii.util.Utility;
 import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,14 +39,9 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
  * For conjunctive horn clause at_most 1 positive atomic class (here B) can exist and
  * any number of negative class can exist.
  */
-public class ConjunctiveHornClauseV0 {
+public class ConjunctiveHornClauseV0 extends ConjunctiveHornClause {
 
-   private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    /**
-     * If the object property is empty = SharedDataHolder.noneOWLObjProp then related classes are atomic class.
-     */
-    private OWLObjectProperty owlObjectProperty;
+    private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     //@formatter:off
     /**
@@ -56,68 +52,6 @@ public class ConjunctiveHornClauseV0 {
      *      2.2. With owlObjectProperty:
      */
     private OWLClassExpression posObjectType;
-    /**
-     * negObjectTypes represents conjuncted negated form of the horn clause.
-     * it can be:
-     * <li>
-     *  <ol>Empty</ol>
-     *  <ol>Single owlClass</ol>
-     *      <li>
-     *          <ol>With Object Property</ol>
-     *          <ol>Without Object Property. in that case owlObjectProperty=SharedDataHolder.noneOWLObjProp</ol>
-     *      </li>
-     *  <ol>Multiple owlClass (concatenated using OR)</ol>
-     *      <li>
-     *          <ol>With Object Property</ol>
-     *          <ol>Without Object Property. in that case owlObjectProperty=SharedDataHolder.noneOWLObjProp</ol>
-     *      </li>
-     * </li>
-     *
-     *
-     * We need to put negation sign when printing the class expression.
-     * It will be printed as: ¬(D1⊔···⊔Dk)
-     *
-     * There is a limit on disjunctions. That is ConfigParams.conceptLimitInNegExpr.
-     */
-    private ArrayList<OWLClassExpression> negObjectTypes;
-    //@formatter:on
-
-    /**
-     * Score associated with this CandidateClassV0. This score is used to select best n hornClause (limit K5), which will be used on combination.
-     */
-    private Score score;
-
-    // use double to ensure when dividing we are getting double result not integer.
-    transient volatile protected double nrOfPositiveClassifiedAsPositive;
-    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-    transient volatile protected double nrOfPositiveClassifiedAsNegative;
-    transient volatile protected double nrOfNegativeClassifiedAsNegative;
-    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-    transient volatile protected double nrOfNegativeClassifiedAsPositive;
-
-    /**
-     * Public constructor
-     */
-    public ConjunctiveHornClauseV0(OWLObjectProperty owlObjectProperty) {
-        if (null == owlObjectProperty) {
-            this.owlObjectProperty = SharedDataHolder.noneOWLObjProp;
-        } else {
-            this.owlObjectProperty = owlObjectProperty;
-        }
-        this.negObjectTypes = new ArrayList<>();
-    }
-
-    /**
-     * copy constructor
-     *
-     * @param anotherSolutionPart
-     */
-    public ConjunctiveHornClauseV0(ConjunctiveHornClauseV0 anotherSolutionPart) {
-        this.negObjectTypes = new ArrayList<>();
-        this.owlObjectProperty = anotherSolutionPart.owlObjectProperty;
-        this.posObjectType = anotherSolutionPart.posObjectType;
-        this.negObjectTypes.addAll(anotherSolutionPart.negObjectTypes);
-    }
 
     /**
      * posObjectTypes getter
@@ -128,45 +62,33 @@ public class ConjunctiveHornClauseV0 {
         return posObjectType;
     }
 
-
     public void setPosObjectType(OWLClassExpression posObjectType) {
         this.posObjectType = posObjectType;
     }
 
-    public ArrayList<OWLClassExpression> getNegObjectTypes() {
-        return negObjectTypes;
-    }
-
-    public void setNegObjectTypes(HashSet<OWLClassExpression> negObjectTypes) {
-        setNegObjectTypes(new ArrayList<OWLClassExpression>(negObjectTypes));
-    }
-
-    public void setNegObjectTypes(ArrayList<OWLClassExpression> negObjectTypes) {
-        this.negObjectTypes = negObjectTypes;
-    }
-
-    public void addNegObjectType(OWLClassExpression negObjectType) {
-        this.negObjectTypes.add(negObjectType);
+    /**
+     * Public constructor
+     */
+    public ConjunctiveHornClauseV0(OWLObjectProperty owlObjectProperty, OWLReasoner _reasoner, OWLOntology _ontology) {
+        super(owlObjectProperty, _reasoner, _ontology);
     }
 
     /**
-     * @return
+     * copy constructor
+     *
+     * @param anotherConjunctiveHornClause
      */
-    public OWLObjectProperty getOwlObjectProperty() {
-        return owlObjectProperty;
+    public ConjunctiveHornClauseV0(ConjunctiveHornClauseV0 anotherConjunctiveHornClause, OWLOntology _ontology) {
+        super(anotherConjunctiveHornClause, _ontology);
+
+        this.posObjectType = anotherConjunctiveHornClause.posObjectType;
     }
 
-    public Score getScore() {
-        return score;
-    }
-
-    public void setScore(Score score) {
-        this.score = score;
-    }
 
     /**
      * @return OWLClassExpression
      */
+    @Override
     public OWLClassExpression getConjunctiveHornClauseAsOWLClassExpression() {
 
         OWLClassExpression owlClassExpression = null;
@@ -199,7 +121,8 @@ public class ConjunctiveHornClauseV0 {
      *
      * @return
      */
-    public String getHornClauseAsString() {
+    @Override
+    public String getHornClauseAsString(boolean includePrefix) {
         StringBuilder sb = new StringBuilder();
 
         boolean hasPositive = false;
@@ -236,71 +159,9 @@ public class ConjunctiveHornClauseV0 {
         return sb.toString();
     }
 
-
     transient volatile protected int nrOfTotalIndividuals;
     transient volatile protected int nrOfPositiveIndividuals;
     transient volatile protected int nrOfNegativeIndividuals;
-
-    /**
-     * Calculate accuracy of a hornClause.
-     * it calculate the covered individuals by using set calculation, no reasoner call
-     * @return Score
-     */
-    public Score calculateAccuracyComplexCustom() {
-
-        /**
-         * Individuals covered by this hornClause
-         */
-        HashMap<OWLIndividual, Integer> coveredPosIndividualsMap = new HashMap<>();
-        /**
-         * Individuals excluded by this hornClause
-         */
-        HashMap<OWLIndividual, Integer> excludedNegIndividualsMap = new HashMap<>();
-
-        /**
-         * For positive individuals, a individual must be contained within each AND section to be added as a coveredIndividuals.
-         * I.e. each
-         */
-        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
-
-            if (isContainedInHornClause( thisOwlNamedIndividual, true)) {
-               HashMapUtility.insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
-            }
-        }
-
-        /**
-         * For negative individuals, a individual must be contained within any single section to be added as a excludedIndividuals.
-         * I.e. each
-         */
-        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
-
-            if (isContainedInHornClause( thisOwlNamedIndividual, false)) {
-                HashMapUtility.insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
-            }
-        }
-
-        nrOfPositiveClassifiedAsPositive = coveredPosIndividualsMap.size();
-        /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-        nrOfPositiveClassifiedAsNegative = SharedDataHolder.posIndivs.size() - nrOfPositiveClassifiedAsPositive;
-        nrOfNegativeClassifiedAsNegative = excludedNegIndividualsMap.size();
-        /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-        nrOfNegativeClassifiedAsPositive = SharedDataHolder.negIndivs.size() - nrOfNegativeClassifiedAsNegative;
-
-        double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
-        double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);
-        double f_measure = Heuristics.getFScore(recall, precision);
-        double coverage = Heuristics.getCoverage(nrOfPositiveClassifiedAsPositive, SharedDataHolder.posIndivs.size(),
-                nrOfNegativeClassifiedAsNegative, SharedDataHolder.negIndivs.size());
-
-        Score accScore = new Score();
-        accScore.setPrecision(precision);
-        accScore.setRecall(recall);
-        accScore.setF_measure(f_measure);
-        accScore.setCoverage(coverage);
-
-
-        return accScore;
-    }
 
     /**
      * Determine whether this owlnamedIndividual contained within this .
@@ -381,6 +242,68 @@ public class ConjunctiveHornClauseV0 {
 
         return contained;
     }
+
+    /**
+     * Calculate accuracy of a hornClause.
+     * it calculate the covered individuals by using set calculation, no reasoner call
+     * @return Score
+     */
+    public Score calculateAccuracyComplexCustom() {
+
+        /**
+         * Individuals covered by this hornClause
+         */
+        HashMap<OWLIndividual, Integer> coveredPosIndividualsMap = new HashMap<>();
+        /**
+         * Individuals excluded by this hornClause
+         */
+        HashMap<OWLIndividual, Integer> excludedNegIndividualsMap = new HashMap<>();
+
+        /**
+         * For positive individuals, a individual must be contained within each AND section to be added as a coveredIndividuals.
+         * I.e. each
+         */
+        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
+
+            if (isContainedInHornClause( thisOwlNamedIndividual, true)) {
+               HashMapUtility.insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
+            }
+        }
+
+        /**
+         * For negative individuals, a individual must be contained within any single section to be added as a excludedIndividuals.
+         * I.e. each
+         */
+        for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
+
+            if (isContainedInHornClause( thisOwlNamedIndividual, false)) {
+                HashMapUtility.insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
+            }
+        }
+
+        nrOfPositiveClassifiedAsPositive = coveredPosIndividualsMap.size();
+        /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
+        nrOfPositiveClassifiedAsNegative = SharedDataHolder.posIndivs.size() - nrOfPositiveClassifiedAsPositive;
+        nrOfNegativeClassifiedAsNegative = excludedNegIndividualsMap.size();
+        /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
+        nrOfNegativeClassifiedAsPositive = SharedDataHolder.negIndivs.size() - nrOfNegativeClassifiedAsNegative;
+
+        double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
+        double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);
+        double f_measure = Heuristics.getFScore(recall, precision);
+        double coverage = Heuristics.getCoverage(nrOfPositiveClassifiedAsPositive, SharedDataHolder.posIndivs.size(),
+                nrOfNegativeClassifiedAsNegative, SharedDataHolder.negIndivs.size());
+
+        Score accScore = new Score();
+        accScore.setPrecision(precision);
+        accScore.setRecall(recall);
+        accScore.setF_measure(f_measure);
+        accScore.setCoverage(coverage);
+
+
+        return accScore;
+    }
+
 
     @Override
     public boolean equals(Object o) {

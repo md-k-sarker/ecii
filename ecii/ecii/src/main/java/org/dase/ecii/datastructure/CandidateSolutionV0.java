@@ -8,7 +8,6 @@ Written at 8/20/18.
 import org.dase.ecii.core.Score;
 import org.dase.ecii.core.SharedDataHolder;
 import org.dase.ecii.util.Utility;
-import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 
@@ -241,7 +240,7 @@ public class CandidateSolutionV0 {
      *
      * @return
      */
-    public String getSolutionAsString() {
+    public String getSolutionAsString(boolean includePrefix) {
         if (null == groupedCandidateClasses) {
             createGroup();
         }
@@ -258,14 +257,14 @@ public class CandidateSolutionV0 {
                     // we expect atomic class size will be one but it is not the case always.
                     bareTypeSize = candidateClassV0s.size();
                     if (candidateClassV0s.size() == 1) {
-                        sb.append(getCandidateClassAsString(candidateClassV0s.get(0)));
+                        sb.append(candidateClassV0s.get(0).getCandidateClassAsString(includePrefix));
                     } else {
                         sb.append("(");
-                        sb.append(getCandidateClassAsString(candidateClassV0s.get(0)));
+                        sb.append(candidateClassV0s.get(0).getCandidateClassAsString(includePrefix));
 
                         for (int i = 1; i < candidateClassV0s.size(); i++) {
                             sb.append(" " + OR.toString() + " ");
-                            sb.append(getCandidateClassAsString(candidateClassV0s.get(i)));
+                            sb.append(candidateClassV0s.get(i).getCandidateClassAsString(includePrefix));
                         }
                         sb.append(")");
                     }
@@ -291,61 +290,21 @@ public class CandidateSolutionV0 {
                         }
                         sb.append(EXISTS + Utility.getShortName(owlObjectProperty) + ".");
                         if (candidateClassV0s.size() == 1) {
-                            sb.append(getCandidateClassAsString(candidateClassV0s.get(0)));
+                            sb.append(candidateClassV0s.get(0).
+                                    getCandidateClassAsString(includePrefix));
                         } else {
                             sb.append("(");
-                            sb.append(getCandidateClassAsString(candidateClassV0s.get(0)));
+                            sb.append(candidateClassV0s.get(0).
+                                    getCandidateClassAsString(includePrefix));
 
                             for (int i = 1; i < candidateClassV0s.size(); i++) {
                                 sb.append(" " + OR.toString() + " ");
-                                sb.append(getCandidateClassAsString(candidateClassV0s.get(i)));
+                                sb.append(candidateClassV0s.get(i).
+                                        getCandidateClassAsString(includePrefix));
                             }
                             sb.append(")");
                         }
                     }
-                }
-            }
-        }
-
-        return sb.toString();
-    }
-
-    /**
-     * Print candidate class as String
-     *
-     * @return
-     */
-    private String getCandidateClassAsString(CandidateClassV0 candidateClassV0) {
-
-        StringBuilder sb = new StringBuilder();
-
-        if (null != candidateClassV0) {
-
-            if (candidateClassV0.getConjunctiveHornClauseV0s().size() > 0) {
-                if (candidateClassV0.getConjunctiveHornClauseV0s().size() == 1) {
-                    sb.append("(");
-                    sb.append(candidateClassV0.getConjunctiveHornClauseV0s().get(0).getHornClauseAsString());
-                    sb.append(")");
-                } else {
-
-                    sb.append("(");
-
-                    sb.append("(");
-                    sb.append(candidateClassV0.getConjunctiveHornClauseV0s().get(0).getHornClauseAsString());
-                    sb.append(")");
-
-                    for (int i = 1; i < candidateClassV0.getConjunctiveHornClauseV0s().size(); i++) {
-                        // should we use OR or AND between multiple hornClauses of same object property ?
-                        // This is especially important when we have only bare type, i.e. no R-Filled type.
-                        // If changed here changes must reflect in accuracy measure too.
-                        // TODO:  check with Pascal.
-                        sb.append(" " + OR.toString() + " ");
-                        sb.append("(");
-                        sb.append(candidateClassV0.getConjunctiveHornClauseV0s().get(i).getHornClauseAsString());
-                        sb.append(")");
-                    }
-
-                    sb.append(")");
                 }
             }
         }

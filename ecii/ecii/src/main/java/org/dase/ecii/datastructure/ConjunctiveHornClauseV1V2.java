@@ -48,44 +48,19 @@ public class ConjunctiveHornClauseV1V2 extends ConjunctiveHornClause {
     private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     //@formatter:off
-    //@formatter:on
-
 
     /**
-     * Public constructor
-     */
-    public ConjunctiveHornClauseV1V2(OWLObjectProperty owlObjectProperty, OWLReasoner _reasoner, OWLOntology _ontology) {
-        super();
-        if (null == owlObjectProperty) {
-            this.owlObjectProperty = SharedDataHolder.noneOWLObjProp;
-        } else {
-            this.owlObjectProperty = owlObjectProperty;
-        }
-        this.posObjectTypes = new ArrayList<>();
-        this.negObjectTypes = new ArrayList<>();
-
-        this.reasoner = _reasoner;
-        this.ontology = _ontology;
-    }
-
-    /**
-     * copy constructor
+     * Significant difference in ecii-v0 and ecii-v1/v2
+     * v0:
+     *  posObjectType can be be at most 1. or it can be empty.
+     * V1/V2:
+     *  posObjectType must be at-least 1. it can not be empty.
      *
-     * @param anotherConjunctiveHornClause
+     *  Single positive Type.
+     *      1.1. Without owlObjectProperty: in that case owlObjectProperty=SharedDataHolder.noneOWLObjProp.
+     *      1.2. With owlObjectProperty:
      */
-    public ConjunctiveHornClauseV1V2(ConjunctiveHornClauseV1V2 anotherConjunctiveHornClause, OWLOntology _ontology) {
-        super();
-        this.posObjectTypes = new ArrayList<>();
-        this.negObjectTypes = new ArrayList<>();
-        this.owlObjectProperty = anotherConjunctiveHornClause.owlObjectProperty;
-        this.posObjectTypes = anotherConjunctiveHornClause.posObjectTypes;
-        this.negObjectTypes = anotherConjunctiveHornClause.negObjectTypes;
-        if (null != anotherConjunctiveHornClause.getScore()) {
-            this.score = anotherConjunctiveHornClause.getScore();
-        }
-        this.reasoner = anotherConjunctiveHornClause.reasoner;
-        this.ontology = _ontology;
-    }
+    protected ArrayList<OWLClassExpression> posObjectTypes;
 
     /**
      * posObjectTypes getter
@@ -117,36 +92,7 @@ public class ConjunctiveHornClauseV1V2 extends ConjunctiveHornClause {
     }
 
     /**
-     * negObjectTypes getter
-     *
-     * @return
-     */
-    public ArrayList<OWLClassExpression> getNegObjectTypes() {
-        return negObjectTypes;
-    }
-
-    /**
-     * negObjectTypes setter
-     *
-     * @param negObjectTypes
-     */
-    public void setNegObjectTypes(HashSet<OWLClassExpression> negObjectTypes) {
-        setNegObjectTypes(new ArrayList<OWLClassExpression>(negObjectTypes));
-        solutionChanged = true;
-    }
-
-    /**
-     * negObjectTypes setter
-     *
-     * @param negObjectTypes
-     */
-    public void setNegObjectTypes(ArrayList<OWLClassExpression> negObjectTypes) {
-        this.negObjectTypes = negObjectTypes;
-        solutionChanged = true;
-    }
-
-    /**
-     * add negObjectTypes
+     * add posObjectTypes
      *
      * @param posObjectType
      */
@@ -154,28 +100,31 @@ public class ConjunctiveHornClauseV1V2 extends ConjunctiveHornClause {
         this.posObjectTypes.add(posObjectType);
         solutionChanged = true;
     }
+    //@formatter:on
 
     /**
-     * add negObjectTypes
-     *
-     * @param negObjectType
+     * Public constructor
      */
-    public void addNegObjectType(OWLClassExpression negObjectType) {
-        this.negObjectTypes.add(negObjectType);
-        solutionChanged = true;
+    public ConjunctiveHornClauseV1V2(OWLObjectProperty owlObjectProperty, OWLReasoner _reasoner, OWLOntology _ontology) {
+        super(owlObjectProperty, _reasoner, _ontology);
+        this.posObjectTypes = new ArrayList<>();
     }
 
     /**
-     * owlObjectProperty getter
+     * copy constructor
      *
-     * @return OWLObjectProperty
+     * @param anotherConjunctiveHornClause
      */
-    public OWLObjectProperty getOwlObjectProperty() {
-        return owlObjectProperty;
+    public ConjunctiveHornClauseV1V2(ConjunctiveHornClauseV1V2 anotherConjunctiveHornClause, OWLOntology _ontology) {
+        super(anotherConjunctiveHornClause, _ontology);
+
+        this.posObjectTypes = new ArrayList<>();
+        this.posObjectTypes = anotherConjunctiveHornClause.posObjectTypes;
     }
 
+
     /**
-     * Get this ConjunctiveHornClauseV01/V2 as AsOWLClassExpression
+     * Get this ConjunctiveHornClauseV1/V2 as AsOWLClassExpression
      * Not filling the r filler/owlObjectProperty here.
      * V1 - fixed
      *
@@ -220,13 +169,13 @@ public class ConjunctiveHornClauseV1V2 extends ConjunctiveHornClause {
             owlClassExpression = negatedPortion;
         }
 
-        conjunctiveHornClauseAsOWLClass = owlClassExpression;
-        return conjunctiveHornClauseAsOWLClass;
+        this.conjunctiveHornClauseAsOWLClass = owlClassExpression;
+        return this.conjunctiveHornClauseAsOWLClass;
     }
 
 
     /**
-     * Print ConjunctiveHornClauseV0  as String
+     * Print ConjunctiveHornClausev1/v2  as String
      * TODO(Zaman) : need to modify the method to cope v1, v1 fixed now.
      *
      * @return
@@ -296,8 +245,8 @@ public class ConjunctiveHornClauseV1V2 extends ConjunctiveHornClause {
             }
         }
 
-        conjunctiveHornClauseAsString = sb.toString();
-        return conjunctiveHornClauseAsString;
+        this.conjunctiveHornClauseAsString = sb.toString();
+        return this.conjunctiveHornClauseAsString;
     }
 
     /**
@@ -345,18 +294,32 @@ public class ConjunctiveHornClauseV1V2 extends ConjunctiveHornClause {
 
     /**
      * Calculate accuracy of a hornClause.
-     * Internally  calls individualsCoveredByThisHornClauseByReasoner() method
+     * Internally calls individualsCoveredByThisHornClauseByReasoner() method
      * to calculate the accuracy.
      * <p>
-     * TODO(zaman): need to fix to make compatible with v1
      * Difference between v0 and v1v2:
      * In V0 it calculate the covered individuals by using set calculation, no reasoner call,
      * In V1V2 it call the reasoner to get the covered individuals
      *
-     * @return
+     * @return Score
      */
     @Override
     public Score calculateAccuracyComplexCustom() {
+
+        /**
+         * Empty concept covers half of all individuals!!!
+         * Probably owl-reasoner is treating empty concept as OWL:Thing
+         */
+        if (this.posObjectTypes.size() == 0 && this.negObjectTypes.size() == 0) {
+            Score accScore = new Score();
+            accScore.setPrecision(0);
+            accScore.setRecall(0);
+            accScore.setF_measure(0);
+            accScore.setCoverage(0);
+
+            this.score = accScore;
+            return this.score;
+        }
 
         /**
          * Individuals covered by all parts of solution

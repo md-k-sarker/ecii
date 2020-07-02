@@ -1,5 +1,5 @@
 Program started.............
-Program starts at: 06.30.2020  16.11.52 PM
+Program starts at: 07.01.2020  20.11.47 PM
 Working with confFile: induction_test_1_human_vs_plant.config
 
 User defined parameters:
@@ -22,44 +22,4 @@ negIndivs from conf:
 objProps from conf:
 	imageContains
 	__%!dop%!__
-Algorithm starts at: 06.30.2020  16.11.52 PM
-
-Algorithm ends at: 06.30.2020  16.11.53 PM
-
-Algorithm duration: 0.728 sec
-
-####################Solutions####################:
-solution 1: (:Mammal)
-	 coverage_score: 1.0
-	 precision: 1.0
-	 recall: 1.0
-	 f_measure: 1.0
-solution 2: (:Animal)
-	 coverage_score: 1.0
-	 precision: 1.0
-	 recall: 1.0
-	 f_measure: 1.0
-solution 3: (:Human)
-	 coverage_score: 1.0
-	 precision: 1.0
-	 recall: 1.0
-	 f_measure: 1.0
-solution 4: (:Entity)
-	 coverage_score: 0.5
-	 precision: 0.5
-	 recall: 1.0
-	 f_measure: 0.6666666666666666
-solution 5: ()
-	 coverage_score: 0.5
-	 precision: 0.0
-	 recall: 0.0
-	 f_measure: 0.0
-
-Total solutions found: 5
-
-Total solutions found: 5
-Result saved at: /Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/expr_types/induction_m_test/induction_test_1_human_vs_plant_results_ecii_v2.txt
-
-Program finished.
-Program ends at: 06.30.2020  16.11.53 PM
-Program duration: 0.737 sec
+Algorithm starts at: 07.01.2020  20.11.47 PM
