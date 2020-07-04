@@ -4,6 +4,7 @@ Written by sarker.
 Written at 5/18/18.
 */
 
+import org.dase.ecii.core.HashMapUtility;
 import org.dase.ecii.core.Score;
 import org.dase.ecii.core.SharedDataHolder;
 import org.dase.ecii.util.Heuristics;

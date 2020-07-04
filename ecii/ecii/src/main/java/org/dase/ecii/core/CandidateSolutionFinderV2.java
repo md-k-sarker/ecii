@@ -610,7 +610,7 @@ public class CandidateSolutionFinderV2 {
         /**
          * Select top k5 hornClauses to make combination. This function reduces the hornClauseMap size.
          */
-        sortAndFilterHornClauseMap(ConfigParams.hornClausesListMaxSize);
+        SortingUtility.sortAndFilterHornClauseV1V2Map(hornClausesMap, ConfigParams.hornClausesListMaxSize);
 
         /**
          * combination of horn clause. (upto K2/hornClauseLimit limit).
@@ -682,7 +682,7 @@ public class CandidateSolutionFinderV2 {
         /**
          * Select top k6 CandidateClasses to make combination. This function reduces the candidate Classes size.
          */
-        sortAndFilterCandidateClassMap(ConfigParams.candidateClassesListMaxSize);
+        SortingUtility.sortAndFilterCandidateClassV2Map(candidateClassesMap,ConfigParams.candidateClassesListMaxSize);
 
         /**
          * combination of candidateClass/objectproperties. (upto K3/objPropsCombinationLimit limit)
@@ -873,168 +873,168 @@ public class CandidateSolutionFinderV2 {
     }
 
     // temporary variables for using inside lambda
-    transient volatile private List<ConjunctiveHornClauseV1V2> conjunctiveHornClausesList = new ArrayList<>();
-    transient volatile private List<CandidateClassV2> candidateClassesList = new ArrayList<>();
+//    transient volatile private List<ConjunctiveHornClauseV1V2> conjunctiveHornClausesList = new ArrayList<>();
+//    transient volatile private List<CandidateClassV2> candidateClassesList = new ArrayList<>();
 
-    /**
-     * Select top k5 hornCluases from the hornClausesMap.
-     *
-     * @param limit
-     * @return
-     */
-    private HashMap<OWLObjectProperty, HashSet<ConjunctiveHornClauseV1V2>> sortAndFilterHornClauseMap(int limit) {
+//    /**
+//     * Select top k5 hornCluases from the hornClausesMap.
+//     *
+//     * @param limit
+//     * @return
+//     */
+//    private HashMap<OWLObjectProperty, HashSet<ConjunctiveHornClauseV1V2>> sortAndFilterHornClauseV1V2Map(int limit) {
+//
+//        // make a list
+//        conjunctiveHornClausesList.clear();
+//        hornClausesMap.forEach((owlObjectProperty, conjunctiveHornClauses) -> {
+//            conjunctiveHornClausesList.addAll(conjunctiveHornClauses);
+//            logger.info("conjunctiveHornClauses size:  " + conjunctiveHornClauses.size());
+//        });
+//
+//        if (conjunctiveHornClausesList.size() > 0) {
+//
+//            // sort the list
+//            // todo(zaman): need to use the unified sorting algorithm, instead of this local one
+//            logger.info("horn clauses map  will be filtered, initial size: " + conjunctiveHornClausesList.size());
+//            conjunctiveHornClausesList.sort((o1, o2) -> {
+//                if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
+//                    return -1;
+//                } else if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
+//                    // compare length
+//                    o1Length = 0;
+//                    o2Length = 0;
+//
+//                    if (null != o1.getPosObjectTypes())
+//                        o1Length += o1.getPosObjectTypes().size();
+//                    if (null != o1.getNegObjectTypes()) {
+//                        o1Length += o1.getNegObjectTypes().size();
+//                    }
+//                    if (null != o2.getPosObjectTypes())
+//                        o2Length += o2.getPosObjectTypes().size();
+//                    if (null != o2.getNegObjectTypes()) {
+//                        o2Length += o2.getNegObjectTypes().size();
+//                    }
+//                    if (o1Length - o2Length > 0) {
+//                        return 1;
+//                    }
+//                    if (o1Length == o2Length) {
+//                        return 0;
+//                    } else {
+//                        return -1;
+//                    }
+//                } else {
+//                    return 1;
+//                }
+//            });
+//
+//            // todo(zaman): there is significant error in coverage score of a conjunctivehornclause. for china vs syria experiment developedAsia(China) shows coverage score of 0.5, but it must be 1.0 -- fixed
+//            // test sorting
+//            logger.info("Score of first hornClause:  " + conjunctiveHornClausesList.get(0).getScore().getDefaultScoreValue());
+//            logger.info("Score of last hornClause:  " + conjunctiveHornClausesList.get(conjunctiveHornClausesList.size() - 1).getScore().getDefaultScoreValue());
+//
+//            // filter/select top n (upto limit)
+//            if (conjunctiveHornClausesList.size() > limit + 1) {
+//                conjunctiveHornClausesList = conjunctiveHornClausesList.subList(0, limit + 1);
+//            }
+//
+//            // make group again.
+//            hornClausesMap.clear();
+//            conjunctiveHornClausesList.forEach(conjunctiveHornClause -> {
+//                HashMapUtility.insertIntoHashMap(hornClausesMap, conjunctiveHornClause.getOwlObjectProperty(), conjunctiveHornClause);
+//            });
+//
+//            // make sure cconjunctivehornclausemap size is upto limit.
+//            if (conjunctiveHornClausesList.size() <= limit + 1) {
+//                logger.info("horn clauses map filtered and now size: " + conjunctiveHornClausesList.size());
+//            } else {
+//                logger.error("!!!!!!!!!!!!!horn clause map didn't filter perfectly. !!!!!!!!!!!!!");
+//                monitor.stopSystem("!!!!!!!!!!!!!horn clause map didn't filter perfectly. !!!!!!!!!!!!!", true);
+//            }
+//        } else {
+//            logger.info("No filtering done. hornClause map empty.");
+//        }
+//        return hornClausesMap;
+//    }
 
-        // make a list
-        conjunctiveHornClausesList.clear();
-        hornClausesMap.forEach((owlObjectProperty, conjunctiveHornClauses) -> {
-            conjunctiveHornClausesList.addAll(conjunctiveHornClauses);
-            logger.info("conjunctiveHornClauses size:  " + conjunctiveHornClauses.size());
-        });
-
-        if (conjunctiveHornClausesList.size() > 0) {
-
-            // sort the list
-            // todo(zaman): need to use the unified sorting algorithm, instead of this local one
-            logger.info("horn clauses map  will be filtered, initial size: " + conjunctiveHornClausesList.size());
-            conjunctiveHornClausesList.sort((o1, o2) -> {
-                if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
-                    return -1;
-                } else if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
-                    // compare length
-                    o1Length = 0;
-                    o2Length = 0;
-
-                    if (null != o1.getPosObjectTypes())
-                        o1Length += o1.getPosObjectTypes().size();
-                    if (null != o1.getNegObjectTypes()) {
-                        o1Length += o1.getNegObjectTypes().size();
-                    }
-                    if (null != o2.getPosObjectTypes())
-                        o2Length += o2.getPosObjectTypes().size();
-                    if (null != o2.getNegObjectTypes()) {
-                        o2Length += o2.getNegObjectTypes().size();
-                    }
-                    if (o1Length - o2Length > 0) {
-                        return 1;
-                    }
-                    if (o1Length == o2Length) {
-                        return 0;
-                    } else {
-                        return -1;
-                    }
-                } else {
-                    return 1;
-                }
-            });
-
-            // todo(zaman): there is significant error in coverage score of a conjunctivehornclause. for china vs syria experiment developedAsia(China) shows coverage score of 0.5, but it must be 1.0 -- fixed
-            // test sorting
-            logger.info("Score of first hornClause:  " + conjunctiveHornClausesList.get(0).getScore().getDefaultScoreValue());
-            logger.info("Score of last hornClause:  " + conjunctiveHornClausesList.get(conjunctiveHornClausesList.size() - 1).getScore().getDefaultScoreValue());
-
-            // filter/select top n (upto limit)
-            if (conjunctiveHornClausesList.size() > limit + 1) {
-                conjunctiveHornClausesList = conjunctiveHornClausesList.subList(0, limit + 1);
-            }
-
-            // make group again.
-            hornClausesMap.clear();
-            conjunctiveHornClausesList.forEach(conjunctiveHornClause -> {
-                HashMapUtility.insertIntoHashMap(hornClausesMap, conjunctiveHornClause.getOwlObjectProperty(), conjunctiveHornClause);
-            });
-
-            // make sure cconjunctivehornclausemap size is upto limit.
-            if (conjunctiveHornClausesList.size() <= limit + 1) {
-                logger.info("horn clauses map filtered and now size: " + conjunctiveHornClausesList.size());
-            } else {
-                logger.error("!!!!!!!!!!!!!horn clause map didn't filter perfectly. !!!!!!!!!!!!!");
-                monitor.stopSystem("!!!!!!!!!!!!!horn clause map didn't filter perfectly. !!!!!!!!!!!!!", true);
-            }
-        } else {
-            logger.info("No filtering done. hornClause map empty.");
-        }
-        return hornClausesMap;
-    }
-
-    /**
-     * Select top k6 CandidateClassV2 from the candidateClassMap.
-     *
-     * @param limit
-     * @return
-     */
-    private HashMap<OWLObjectProperty, HashSet<CandidateClassV2>> sortAndFilterCandidateClassMap(int limit) {
-        // make a list
-        candidateClassesList.clear();
-        candidateClassesMap.forEach((owlObjectProperty, candidateClasses) -> {
-            candidateClassesList.addAll(candidateClasses);
-        });
-
-        if (candidateClassesList.size() > 0) {
-            // sort the list
-            logger.info("candidate classes map  will be filtered. initial size: " + candidateClassesList.size());
-            candidateClassesList.sort((o1, o2) -> {
-                if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
-                    return -1;
-                } else if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
-                    // compare length
-                    o1Length = 0;
-                    o2Length = 0;
-
-                    o1.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
-                        if (null != conjunctiveHornClause.getPosObjectTypes())
-                            o1Length += conjunctiveHornClause.getPosObjectTypes().size();
-                        if (null != conjunctiveHornClause.getNegObjectTypes())
-                            o1Length += conjunctiveHornClause.getNegObjectTypes().size();
-                    });
-
-                    o2.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
-                        if (null != conjunctiveHornClause.getPosObjectTypes())
-                            o2Length += conjunctiveHornClause.getPosObjectTypes().size();
-                        if (null != conjunctiveHornClause.getNegObjectTypes())
-                            o2Length += conjunctiveHornClause.getNegObjectTypes().size();
-                    });
-
-                    if (o1Length - o2Length > 0) {
-                        return 1;
-                    }
-                    if (o1Length == o2Length) {
-                        return 0;
-                    } else {
-                        return -1;
-                    }
-                } else {
-                    return 1;
-                }
-            });
-
-            // test sorting
-            logger.info("Score of first candidate class:  " + candidateClassesList.get(0).getScore().getDefaultScoreValue());
-            logger.info("Score of last candidate class:  " + candidateClassesList.get(candidateClassesList.size() - 1).getScore().getDefaultScoreValue());
-
-            // filter/select top n (upto limit)
-            if (candidateClassesList.size() > limit + 1) {
-                candidateClassesList = candidateClassesList.subList(0, limit + 1);
-            }
-
-            // make group again.
-            candidateClassesMap.clear();
-            candidateClassesList.forEach(conjunctiveHornClause -> {
-                HashMapUtility.insertIntoHashMap(candidateClassesMap, conjunctiveHornClause.getOwlObjectProperty(), conjunctiveHornClause);
-            });
-
-            // make sure cconjunctivehornclausemap size is upto limit.
-            if (candidateClassesList.size() <= limit + 1) {
-                logger.info("candidate classes map filtered and now size: " + candidateClassesList.size());
-            } else {
-                logger.error("!!!!!!!!!!!!!candidate classes map didn't filter perfectly. !!!!!!!!!!!!!");
-                monitor.stopSystem("!!!!!!!!!!!!!candidate classes map didn't filter perfectly. !!!!!!!!!!!!!", true);
-            }
-        } else {
-            logger.info("No filtering done. candidateClasses map empty");
-        }
-
-        return candidateClassesMap;
-    }
+//    /**
+//     * Select top k6 CandidateClassV2 from the candidateClassMap.
+//     *
+//     * @param limit
+//     * @return
+//     */
+//    private HashMap<OWLObjectProperty, HashSet<CandidateClassV2>> sortAndFilterCandidateClassMap(int limit) {
+//        // make a list
+//        candidateClassesList.clear();
+//        candidateClassesMap.forEach((owlObjectProperty, candidateClasses) -> {
+//            candidateClassesList.addAll(candidateClasses);
+//        });
+//
+//        if (candidateClassesList.size() > 0) {
+//            // sort the list
+//            logger.info("candidate classes map  will be filtered. initial size: " + candidateClassesList.size());
+//            candidateClassesList.sort((o1, o2) -> {
+//                if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
+//                    return -1;
+//                } else if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
+//                    // compare length
+//                    o1Length = 0;
+//                    o2Length = 0;
+//
+//                    o1.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
+//                        if (null != conjunctiveHornClause.getPosObjectTypes())
+//                            o1Length += conjunctiveHornClause.getPosObjectTypes().size();
+//                        if (null != conjunctiveHornClause.getNegObjectTypes())
+//                            o1Length += conjunctiveHornClause.getNegObjectTypes().size();
+//                    });
+//
+//                    o2.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
+//                        if (null != conjunctiveHornClause.getPosObjectTypes())
+//                            o2Length += conjunctiveHornClause.getPosObjectTypes().size();
+//                        if (null != conjunctiveHornClause.getNegObjectTypes())
+//                            o2Length += conjunctiveHornClause.getNegObjectTypes().size();
+//                    });
+//
+//                    if (o1Length - o2Length > 0) {
+//                        return 1;
+//                    }
+//                    if (o1Length == o2Length) {
+//                        return 0;
+//                    } else {
+//                        return -1;
+//                    }
+//                } else {
+//                    return 1;
+//                }
+//            });
+//
+//            // test sorting
+//            logger.info("Score of first candidate class:  " + candidateClassesList.get(0).getScore().getDefaultScoreValue());
+//            logger.info("Score of last candidate class:  " + candidateClassesList.get(candidateClassesList.size() - 1).getScore().getDefaultScoreValue());
+//
+//            // filter/select top n (upto limit)
+//            if (candidateClassesList.size() > limit + 1) {
+//                candidateClassesList = candidateClassesList.subList(0, limit + 1);
+//            }
+//
+//            // make group again.
+//            candidateClassesMap.clear();
+//            candidateClassesList.forEach(conjunctiveHornClause -> {
+//                HashMapUtility.insertIntoHashMap(candidateClassesMap, conjunctiveHornClause.getOwlObjectProperty(), conjunctiveHornClause);
+//            });
+//
+//            // make sure cconjunctivehornclausemap size is upto limit.
+//            if (candidateClassesList.size() <= limit + 1) {
+//                logger.info("candidate classes map filtered and now size: " + candidateClassesList.size());
+//            } else {
+//                logger.error("!!!!!!!!!!!!!candidate classes map didn't filter perfectly. !!!!!!!!!!!!!");
+//                monitor.stopSystem("!!!!!!!!!!!!!candidate classes map didn't filter perfectly. !!!!!!!!!!!!!", true);
+//            }
+//        } else {
+//            logger.info("No filtering done. candidateClasses map empty");
+//        }
+//
+//        return candidateClassesMap;
+//    }
 
     public OWLOntology ontology;
     public OWLDataFactory owlDataFactory;
@@ -1048,89 +1048,89 @@ public class CandidateSolutionFinderV2 {
     transient volatile protected int nrOfPositiveIndividuals;
     transient volatile protected int nrOfNegativeIndividuals;
 
-    /**
-     * Sort the solutions, in place.
-     *
-     * @param ascendingOfStringLength
-     * @return
-     */
-    public boolean sortSolutionsCustom( boolean ascendingOfStringLength) {
-
-        ArrayList<CandidateSolutionV2> solutionList = new ArrayList<>(
-                SharedDataHolder.CandidateSolutionSetV2);
-
-        solutionList.sort(new Comparator<CandidateSolutionV2>() {
-            @Override
-            public int compare(CandidateSolutionV2 o1, CandidateSolutionV2 o2) {
-                if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
-                    return -1;
-                }
-                if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
-                    // compare length
-                    o1Length = 0;
-                    o2Length = 0;
-
-                    //o1Length += o1.getAtomicPosOwlClasses().size();
-                    o1.getCandidateClasses().forEach(candidateClass -> {
-                        candidateClass.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
-                            if (null != conjunctiveHornClause.getPosObjectTypes())
-                                o1Length += conjunctiveHornClause.getPosObjectTypes().size();
-                            if (null != conjunctiveHornClause.getNegObjectTypes())
-                                o1Length += conjunctiveHornClause.getNegObjectTypes().size();
-                        });
-                    });
-                    //o2Length += o2.getAtomicPosOwlClasses().size();
-                    o2.getCandidateClasses().forEach(candidateClass -> {
-                        candidateClass.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
-                            if (null != conjunctiveHornClause.getPosObjectTypes())
-                                o2Length += conjunctiveHornClause.getPosObjectTypes().size();
-                            if (null != conjunctiveHornClause.getNegObjectTypes())
-                                o2Length += conjunctiveHornClause.getNegObjectTypes().size();
-                        });
-                    });
-                    // small to large of solution length
-                    if (ascendingOfStringLength) {
-                        if (o1Length - o2Length > 0) {
-                            return 1;
-                        }
-                        if (o1Length == o2Length) {
-                            return 0;
-                        } else {
-                            return -1;
-                        }
-                    } else {
-                        if (o1Length - o2Length > 0) {
-                            return -1;
-                        }
-                        if (o1Length == o2Length) {
-                            return 0;
-                        } else {
-                            return 1;
-                        }
-                    }
-                } else {
-                    return 1;
-                }
-            }
-        });
-
-//        try {
-//            // save in shared data holder
-//            if (candidateSolutions.get(0) instanceof CandidateSolutionV0) {
-//                SharedDataHolder.SortedCandidateSolutionListV0 = (ArrayList<CandidateSolutionV0>) (ArrayList<?>) candidateSolutions;
-//            } else if (candidateSolutions.get(0) instanceof CandidateSolutionV1) {
-//                SharedDataHolder.SortedCandidateSolutionListV1V2 = (ArrayList<CandidateSolutionV1>) (ArrayList<?>) candidateSolutions;
+//    /**
+//     * Sort the solutions, in place.
+//     *
+//     * @param ascendingOfStringLength
+//     * @return
+//     */
+//    public boolean sortSolutionsCustom( boolean ascendingOfStringLength) {
+//
+//        ArrayList<CandidateSolutionV2> solutionList = new ArrayList<>(
+//                SharedDataHolder.CandidateSolutionSetV2);
+//
+//        solutionList.sort(new Comparator<CandidateSolutionV2>() {
+//            @Override
+//            public int compare(CandidateSolutionV2 o1, CandidateSolutionV2 o2) {
+//                if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
+//                    return -1;
+//                }
+//                if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
+//                    // compare length
+//                    o1Length = 0;
+//                    o2Length = 0;
+//
+//                    //o1Length += o1.getAtomicPosOwlClasses().size();
+//                    o1.getCandidateClasses().forEach(candidateClass -> {
+//                        candidateClass.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
+//                            if (null != conjunctiveHornClause.getPosObjectTypes())
+//                                o1Length += conjunctiveHornClause.getPosObjectTypes().size();
+//                            if (null != conjunctiveHornClause.getNegObjectTypes())
+//                                o1Length += conjunctiveHornClause.getNegObjectTypes().size();
+//                        });
+//                    });
+//                    //o2Length += o2.getAtomicPosOwlClasses().size();
+//                    o2.getCandidateClasses().forEach(candidateClass -> {
+//                        candidateClass.getConjunctiveHornClauses().forEach(conjunctiveHornClause -> {
+//                            if (null != conjunctiveHornClause.getPosObjectTypes())
+//                                o2Length += conjunctiveHornClause.getPosObjectTypes().size();
+//                            if (null != conjunctiveHornClause.getNegObjectTypes())
+//                                o2Length += conjunctiveHornClause.getNegObjectTypes().size();
+//                        });
+//                    });
+//                    // small to large of solution length
+//                    if (ascendingOfStringLength) {
+//                        if (o1Length - o2Length > 0) {
+//                            return 1;
+//                        }
+//                        if (o1Length == o2Length) {
+//                            return 0;
+//                        } else {
+//                            return -1;
+//                        }
+//                    } else {
+//                        if (o1Length - o2Length > 0) {
+//                            return -1;
+//                        }
+//                        if (o1Length == o2Length) {
+//                            return 0;
+//                        } else {
+//                            return 1;
+//                        }
+//                    }
+//                } else {
+//                    return 1;
+//                }
 //            }
-//        } catch (ClassCastException classCastException) {
-//            classCastException.printStackTrace();
-//            logger.error("Class cast exception, program exiting");
-//            System.exit(-1);
-//        }
-
-        SharedDataHolder.SortedCandidateSolutionListV2 = solutionList;
-
-        return true;
-    }
+//        });
+//
+////        try {
+////            // save in shared data holder
+////            if (candidateSolutions.get(0) instanceof CandidateSolutionV0) {
+////                SharedDataHolder.SortedCandidateSolutionListV0 = (ArrayList<CandidateSolutionV0>) (ArrayList<?>) candidateSolutions;
+////            } else if (candidateSolutions.get(0) instanceof CandidateSolutionV1) {
+////                SharedDataHolder.SortedCandidateSolutionListV1V2 = (ArrayList<CandidateSolutionV1>) (ArrayList<?>) candidateSolutions;
+////            }
+////        } catch (ClassCastException classCastException) {
+////            classCastException.printStackTrace();
+////            logger.error("Class cast exception, program exiting");
+////            System.exit(-1);
+////        }
+//
+//        SharedDataHolder.SortedCandidateSolutionListV2 = solutionList;
+//
+//        return true;
+//    }
 
 
     /**

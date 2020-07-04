@@ -1,4 +1,4 @@
-package org.dase.ecii.datastructure;
+package org.dase.ecii.core;
 /*
 Written by sarker.
 Written at 12/13/19.

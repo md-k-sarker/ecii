@@ -4,6 +4,7 @@ Written by sarker.
 Written at 6/17/20.
 */
 
+import org.dase.ecii.datastructure.CandidateSolutionV2;
 import org.dase.ecii.exceptions.MalFormedIRIException;
 import org.dase.ecii.ontofactory.DLSyntaxRendererExt;
 import org.dase.ecii.ontofactory.StripDownOntology;
@@ -213,8 +214,8 @@ public class ConceptInductionM {
         logger.info("\nfinding solutions finished.");
 
         logger.info("sorting solutions................");
-        findConceptsObj.sortSolutionsCustom(ConfigParams.ascendingOfStringLength);
-        //findConceptsObj.sortSolutions(false);
+        SharedDataHolder.SortedCandidateSolutionListV2 = SortingUtility.sortSolutionsV2Custom(SharedDataHolder.CandidateSolutionSetV2,
+                ConfigParams.ascendingOfStringLength);
         logger.info("sorting solutions finished.");
 
         logger.info("calculating accuracy using reasoner for top k6 solutions................");

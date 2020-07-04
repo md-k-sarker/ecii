@@ -3,7 +3,6 @@ package org.dase.ecii.core;
 import org.dase.ecii.datastructure.CandidateClassV0;
 import org.dase.ecii.datastructure.CandidateSolutionV0;
 import org.dase.ecii.datastructure.ConjunctiveHornClauseV0;
-import org.dase.ecii.datastructure.HashMapUtility;
 import org.dase.ecii.ontofactory.DLSyntaxRendererExt;
 import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Monitor;
@@ -375,7 +374,7 @@ public class CandidateSolutionFinderV0 {
         /**
          * Select top k5 hornClauses to make combination. This function reduces the hornClauseMap size.
          */
-        sortAndFilterHornClauseMap(ConfigParams.hornClausesListMaxSize);
+        SortingUtility.sortAndFilterHornClauseV0Map(hornClausesMap,ConfigParams.hornClausesListMaxSize);
 
         /**
          * combination of horn clause. (upto K2/hornClauseLimit limit).
@@ -424,7 +423,7 @@ public class CandidateSolutionFinderV0 {
         /**
          * Select top k6 CandidateClasses to make combination. This function reduces the candidate Classes size.
          */
-        sortAndFilterCandidateClassMap(ConfigParams.candidateClassesListMaxSize);
+        SortingUtility.sortAndFilterCandidateClassV0Map(candidateClassesMap,ConfigParams.candidateClassesListMaxSize);
 
         /**
          * combination of candidateClass/objectproperties. (upto K3/objPropsCombinationLimit limit)
@@ -672,22 +671,6 @@ public class CandidateSolutionFinderV0 {
         return listCombination;
     }
 
-    /**
-     * @param typeOfPosIndivs
-     * @param typeOfNegIndivs
-     */
-    private void restoreBackup(HashMap<OWLObjectProperty, HashMap<OWLClassExpression, Integer>> typeOfPosIndivs,
-                               HashMap<OWLObjectProperty, HashMap<OWLClassExpression, Integer>> typeOfNegIndivs) {
-        logger.info("\nBefore restoring, SharedDataHolder.typeOfObjectsInPosIndivs.size(): " + SharedDataHolder.typeOfObjectsInPosIndivs.size());
-        logger.info("\nBefore restoring, SharedDataHolder.typeOfObjectsInPosIndivs.size(): " + SharedDataHolder.typeOfObjectsInNegIndivs.size());
-
-        // restore the backup versions to use in the negType replacement.
-        SharedDataHolder.typeOfObjectsInPosIndivs = typeOfPosIndivs;
-        SharedDataHolder.typeOfObjectsInNegIndivs = typeOfNegIndivs;
-        logger.info("\nAfter restoring, SharedDataHolder.typeOfObjectsInPosIndivs.size(): " + SharedDataHolder.typeOfObjectsInPosIndivs.size());
-        logger.info("\nAfter restoring, SharedDataHolder.typeOfObjectsInNegIndivs.size(): " + SharedDataHolder.typeOfObjectsInNegIndivs.size());
-    }
-
 
     transient volatile protected double nrOfTotalIndividuals;
     transient volatile protected double nrOfPositiveIndividuals;
@@ -706,269 +689,6 @@ public class CandidateSolutionFinderV0 {
                 SharedDataHolder.SortedCandidateSolutionListV0.get(i).calculateAccuracyByReasoner();
             }
         }
-    }
-
-
-    transient volatile private int o1Length = 0;
-    transient volatile private int o2Length = 0;
-
-    // temporary variables for using inside lambda
-    transient volatile private List<ConjunctiveHornClauseV0> conjunctiveHornClausesListV0 = new ArrayList<>();
-    transient volatile private List<CandidateClassV0> candidateClassesListV0 = new ArrayList<>();
-
-    /**
-     * Select top k5 hornCluases from the hornClausesMap.
-     *
-     * @param limit
-     * @return
-     */
-    private HashMap<OWLObjectProperty, HashSet<ConjunctiveHornClauseV0>> sortAndFilterHornClauseMap(int limit) {
-
-        // make a list
-        conjunctiveHornClausesListV0.clear();
-        hornClausesMap.forEach((owlObjectProperty, conjunctiveHornClauses) -> {
-            conjunctiveHornClausesListV0.addAll(conjunctiveHornClauses);
-            logger.info("conjunctiveHornClauses size:  " + conjunctiveHornClauses.size());
-        });
-
-        if (conjunctiveHornClausesListV0.size() > 0) {
-
-            // sort the list
-            logger.info("horn clauses map  will be filtered initial size: " + conjunctiveHornClausesListV0.size());
-            conjunctiveHornClausesListV0.sort((o1, o2) -> {
-                if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
-                    return -1;
-                } else if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
-                    // compare length
-                    o1Length = 0;
-                    o2Length = 0;
-
-                    if (null != o1.getPosObjectType())
-                        o1Length++;
-                    if (null != o1.getNegObjectTypes()) {
-                        // bug-fix: o2 to o1
-                        o1Length += o1.getNegObjectTypes().size();
-                    }
-                    if (null != o2.getPosObjectType())
-                        o2Length++;
-                    if (null != o2.getNegObjectTypes()) {
-                        o2Length += o2.getNegObjectTypes().size();
-                    }
-                    if (o1Length - o2Length > 0) {
-                        return 1;
-                    }
-                    if (o1Length == o2Length) {
-                        return 0;
-                    } else {
-                        return -1;
-                    }
-                } else {
-                    return 1;
-                }
-            });
-
-            // test sorting
-            logger.info("Score of first hornClause:  " + conjunctiveHornClausesListV0.get(0).getScore().getDefaultScoreValue());
-            logger.info("Score of last hornClause:  " + conjunctiveHornClausesListV0.get(conjunctiveHornClausesListV0.size() - 1).getScore().getDefaultScoreValue());
-
-            // filter/select top n (upto limit)
-            if (conjunctiveHornClausesListV0.size() > limit + 1) {
-                conjunctiveHornClausesListV0 = conjunctiveHornClausesListV0.subList(0, limit + 1);
-            }
-
-            // make group again.
-            hornClausesMap.clear();
-            conjunctiveHornClausesListV0.forEach(conjunctiveHornClauseV0 -> {
-                HashMapUtility.insertIntoHashMap(hornClausesMap, conjunctiveHornClauseV0.getOwlObjectProperty(), conjunctiveHornClauseV0);
-            });
-
-            // make sure cconjunctivehornclausemap size is upto limit.
-            if (conjunctiveHornClausesListV0.size() <= limit + 1) {
-                logger.info("horn clauses map filtered and now size: " + conjunctiveHornClausesListV0.size());
-            } else {
-                logger.error("!!!!!!!!!!!!!horn clause map didn't filter perfectly. !!!!!!!!!!!!!");
-                monitor.stopSystem("!!!!!!!!!!!!!horn clause map didn't filter perfectly. !!!!!!!!!!!!!", true);
-            }
-        } else {
-            logger.info("No filtering done. hornClause map empty.");
-        }
-        return hornClausesMap;
-    }
-
-    /**
-     * Select top k6 CandidateClassV0 from the candidateClassMap.
-     *
-     * @param limit
-     * @return
-     */
-    private HashMap<OWLObjectProperty, HashSet<CandidateClassV0>> sortAndFilterCandidateClassMap(int limit) {
-        // make a list
-        candidateClassesListV0.clear();
-        candidateClassesMap.forEach((owlObjectProperty, candidateClasses) -> {
-            candidateClassesListV0.addAll(candidateClasses);
-        });
-
-        if (candidateClassesListV0.size() > 0) {
-            // sort the list
-            logger.info("horn clauses map  will be filtered initial size: " + candidateClassesListV0.size());
-            candidateClassesListV0.sort((o1, o2) -> {
-                if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
-                    return -1;
-                } else if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
-                    // compare length
-                    o1Length = 0;
-                    o2Length = 0;
-
-                    o1.getConjunctiveHornClauses().forEach(conjunctiveHornClauseV0 -> {
-                        if (null != conjunctiveHornClauseV0.getPosObjectType()) o1Length++;
-                        o1Length += conjunctiveHornClauseV0.getNegObjectTypes().size();
-                    });
-
-                    o2.getConjunctiveHornClauses().forEach(conjunctiveHornClauseV0 -> {
-                        if (null != conjunctiveHornClauseV0.getPosObjectType()) o2Length++;
-                        o2Length += conjunctiveHornClauseV0.getNegObjectTypes().size();
-                    });
-
-                    if (o1Length - o2Length > 0) {
-                        return 1;
-                    }
-                    if (o1Length == o2Length) {
-                        return 0;
-                    } else {
-                        return -1;
-                    }
-                } else {
-                    return 1;
-                }
-            });
-
-            // test sorting
-            logger.info("Score of first candidate class:  " + candidateClassesListV0.get(0).getScore().getDefaultScoreValue());
-            logger.info("Score of last candidate class:  " + candidateClassesListV0.get(candidateClassesListV0.size() - 1).getScore().getDefaultScoreValue());
-
-            // filter/select top n (upto limit)
-            if (candidateClassesListV0.size() > limit + 1) {
-                candidateClassesListV0 = candidateClassesListV0.subList(0, limit + 1);
-            }
-
-            // make group again.
-            candidateClassesMap.clear();
-            candidateClassesListV0.forEach(conjunctiveHornClause -> {
-                HashMapUtility.insertIntoHashMap(candidateClassesMap, conjunctiveHornClause.getOwlObjectProperty(), conjunctiveHornClause);
-            });
-
-            // make sure cconjunctivehornclausemap size is upto limit.
-            if (candidateClassesListV0.size() <= limit + 1) {
-                logger.info("horn clauses map filtered and now size: " + candidateClassesListV0.size());
-            } else {
-                logger.error("!!!!!!!!!!!!!horn clause map didn't filter perfectly. !!!!!!!!!!!!!");
-                monitor.stopSystem("!!!!!!!!!!!!!horn clause map didn't filter perfectly. !!!!!!!!!!!!!", true);
-            }
-        } else {
-            logger.info("No filtering done. candidateClasses map empty");
-        }
-
-
-        return candidateClassesMap;
-    }
-
-    /**
-     * Sort the solutions
-     *
-     * @param ascending
-     * @return
-     */
-    public boolean sortSolutionsCustom(boolean ascending) {
-
-        ArrayList<CandidateSolutionV0> solutionList = new ArrayList<>(
-                SharedDataHolder.candidateSolutionV0Set);
-
-        // small to large
-        if (ascending) {
-            solutionList.sort(new Comparator<CandidateSolutionV0>() {
-                @Override
-                public int compare(CandidateSolutionV0 o1, CandidateSolutionV0 o2) {
-                    if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
-                        return 1;
-                    }
-                    if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
-                        // compare length, shorter length will be chosen first
-                        o1Length = 0;
-                        o2Length = 0;
-
-                        //o1Length += o1.getAtomicPosOwlClasses().size();
-                        o1.getCandidateClasses().forEach(candidateClassV0 -> {
-                            candidateClassV0.getConjunctiveHornClauses().forEach(conjunctiveHornClauseV0 -> {
-                                if (null != conjunctiveHornClauseV0.getPosObjectType()) o1Length++;
-                                o1Length += conjunctiveHornClauseV0.getNegObjectTypes().size();
-                            });
-                        });
-                        //o2Length += o2.getAtomicPosOwlClasses().size();
-                        o2.getCandidateClasses().forEach(candidateClassV0 -> {
-                            candidateClassV0.getConjunctiveHornClauses().forEach(conjunctiveHornClauseV0 -> {
-                                if (null != conjunctiveHornClauseV0.getPosObjectType()) o2Length++;
-                                o2Length += conjunctiveHornClauseV0.getNegObjectTypes().size();
-                            });
-                        });
-                        if (o1Length - o2Length > 0) {
-                            return -1;
-                        }
-                        if (o1Length == o2Length) {
-                            return 0;
-                        } else {
-                            return 1;
-                        }
-                    } else {
-                        return -1;
-                    }
-                }
-            });
-        } else {
-            solutionList.sort(new Comparator<CandidateSolutionV0>() {
-                @Override
-                public int compare(CandidateSolutionV0 o1, CandidateSolutionV0 o2) {
-                    if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
-                        return -1;
-                    }
-                    if (o1.getScore().getDefaultScoreValue() == o2.getScore().getDefaultScoreValue()) {
-                        // compare length
-                        o1Length = 0;
-                        o2Length = 0;
-
-                        //o1Length += o1.getAtomicPosOwlClasses().size();
-                        o1.getCandidateClasses().forEach(candidateClassV0 -> {
-                            candidateClassV0.getConjunctiveHornClauses().forEach(conjunctiveHornClauseV0 -> {
-                                if (null != conjunctiveHornClauseV0.getPosObjectType()) o1Length++;
-                                o1Length += conjunctiveHornClauseV0.getNegObjectTypes().size();
-                            });
-                        });
-                        //o2Length += o2.getAtomicPosOwlClasses().size();
-                        o2.getCandidateClasses().forEach(candidateClassV0 -> {
-                            candidateClassV0.getConjunctiveHornClauses().forEach(conjunctiveHornClauseV0 -> {
-                                if (null != conjunctiveHornClauseV0.getPosObjectType()) o2Length++;
-                                o2Length += conjunctiveHornClauseV0.getNegObjectTypes().size();
-                            });
-                        });
-
-                        if (o1Length - o2Length > 0) {
-                            return 1;
-                        }
-                        if (o1Length == o2Length) {
-                            return 0;
-                        } else {
-                            return -1;
-                        }
-                    } else {
-                        return 1;
-                    }
-                }
-            });
-        }
-
-        // save in shared data holder
-        SharedDataHolder.SortedCandidateSolutionListV0 = solutionList;
-
-        return true;
     }
 
 
