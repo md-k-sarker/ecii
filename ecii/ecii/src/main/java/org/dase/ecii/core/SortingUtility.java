@@ -46,9 +46,6 @@ public class SortingUtility {
 
         if (conjunctiveHornClausesList.size() > 0) {
 
-            // sort the list
-            // todo(zaman): need to use the unified sorting algorithm, instead of this local one
-            // unifying
             logger.info("horn clauses map  will be filtered, initial size: " + conjunctiveHornClausesList.size());
             conjunctiveHornClausesList.sort((o1, o2) -> {
                 if (o1.getScore().getDefaultScoreValue() - o2.getScore().getDefaultScoreValue() > 0) {
@@ -81,8 +78,9 @@ public class SortingUtility {
                 }
             });
 
-            // todo(zaman): there is significant error in coverage score of a conjunctivehornclause. for china vs syria experiment developedAsia(China) shows coverage score of 0.5, but it must be 1.0 -- fixed
-            // test sorting
+            // todo(zaman): there exist a possibility of error in coverage score of a conjunctivehornclause.
+            //  for china vs syria experiment developedAsia(China) shows coverage score of 0.5, but it must be 1.0 -- fixed
+            // need to test the sorting
             logger.info("Score of first hornClause:  " + conjunctiveHornClausesList.get(0).getScore().getDefaultScoreValue());
             logger.info("Score of last hornClause:  " + conjunctiveHornClausesList.get(conjunctiveHornClausesList.size() - 1).getScore().getDefaultScoreValue());
 
@@ -107,7 +105,6 @@ public class SortingUtility {
         } else {
             logger.info("No filtering done. hornClause map empty.");
         }
-
     }
 
     /**

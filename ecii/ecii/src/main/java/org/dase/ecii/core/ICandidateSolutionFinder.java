@@ -1,7 +1,20 @@
 package org.dase.ecii.core;
 
+import org.dase.ecii.datastructure.CandidateSolution;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 
+import java.util.ArrayList;
+
 public interface ICandidateSolutionFinder {
-    public void removeCommonTypesFromPosAndNeg(OWLObjectProperty owlObjectProperty);
+    abstract void initVariables();
+
+    abstract void findConcepts(double tolerance, int combinationLimit);
+
+    void extractObjectTypes(double tolerance, OWLObjectProperty owlObjectProperty);
+
+    abstract void removeCommonTypesFromPosAndNeg(OWLObjectProperty owlObjectProperty);
+
+    void saveInitialSolutionsCustom();
+
+    void calculateAccuracyOfTopK6ByReasoner(ArrayList<? extends CandidateSolution> sortedCandidateSolutionList, int K6);
 }

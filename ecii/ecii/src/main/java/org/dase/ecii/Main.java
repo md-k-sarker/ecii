@@ -2,9 +2,9 @@ package org.dase.ecii;
 
 
 import org.apache.commons.io.FilenameUtils;
-import org.dase.ecii.core.*;
+import org.dase.ecii.core.ConceptInductionM;
+import org.dase.ecii.core.SharedDataHolder;
 import org.dase.ecii.ontofactory.CreateOWLFromCSV;
-import org.dase.ecii.ontofactory.DLSyntaxRendererExt;
 import org.dase.ecii.ontofactory.OntoCombiner;
 import org.dase.ecii.ontofactory.StripDownOntology;
 import org.dase.ecii.ontofactory.strip.ListofObjPropAndIndiv;
@@ -12,8 +12,6 @@ import org.dase.ecii.ontofactory.strip.ListofObjPropAndIndivTextualName;
 import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Monitor;
 import org.dase.ecii.util.Utility;
-import org.dase.ecii.exceptions.MalFormedIRIException;
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
@@ -22,13 +20,18 @@ import org.slf4j.LoggerFactory;
 import sun.misc.Unsafe;
 
 import javax.swing.*;
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 /**
  * Main class to initiate the different processes

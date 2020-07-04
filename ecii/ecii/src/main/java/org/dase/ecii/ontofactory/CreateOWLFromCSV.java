@@ -100,41 +100,41 @@ public class CreateOWLFromCSV {
      * Create a proper IRI from the given string.
      * Entity name can be full name or short name
      * Full name example:
-     *      www.http://hcbd.org#indi or
-     *      www.http://hcbd.org/indi or
-     *      www.http://hcbd.org:indi
+     * www.http://hcbd.org#indi or
+     * www.http://hcbd.org/indi or
+     * www.http://hcbd.org:indi
      * short name example:
-     *      indi
-     *
+     * indi
+     * <p>
      * This method uses the instance variable
-     *      providingEntityFullName to check either full name is given or not
-     *
-     *  if providingEntityFullName is true it just create the iri.
-     *  if providingEntityFullName is false it create iri by combing other information
-     *      delimeter and ontoIRI to create full iri. ontoIRI + delimeter + entityName
+     * providingEntityFullName to check either full name is given or not
+     * <p>
+     * if providingEntityFullName is true it just create the iri.
+     * if providingEntityFullName is false it create iri by combing other information
+     * delimeter and ontoIRI to create full iri. ontoIRI + delimeter + entityName
      *
      * @param entityName
      * @return
      */
-    private IRI getProperIRI(String entityName){
+    private IRI getProperIRI(String entityName) {
         String new_name = "";
 
-        if(null != entityName){
-            if(providingEntityFullName){
+        if (null != entityName) {
+            if (providingEntityFullName) {
                 new_name = entityName;
-            }else {
-                if(null != ontoIRI && null != delimeter){
-                    if(entityName.startsWith(delimeter)){
+            } else {
+                if (null != ontoIRI && null != delimeter) {
+                    if (entityName.startsWith(delimeter)) {
                         new_name = ontoIRI + entityName;
-                    }else {
+                    } else {
                         new_name = ontoIRI + delimeter + entityName;
                     }
-                }else {
+                } else {
                     logger.error("ERROR!!!!!!!!entityName is null");
                     return null;
                 }
             }
-        }else {
+        } else {
             logger.error("ERROR!!!!!!!!entityName is null");
             return null;
         }
@@ -153,10 +153,10 @@ public class CreateOWLFromCSV {
         IRI iri = getProperIRI(objPropName);
         logger.debug("objPropName-Proper: " + objPropName);
 
-        if(null != iri){
+        if (null != iri) {
             OWLObjectProperty owlObjectProperty = owlDataFactory.getOWLObjectProperty(iri);
             return owlObjectProperty;
-        }else {
+        } else {
             logger.error("ERROR!!!!!!!!!!!iri is null");
             return null;
         }
@@ -173,10 +173,10 @@ public class CreateOWLFromCSV {
         IRI iri = getProperIRI(className);
         logger.debug("className-Proper: " + className);
 
-        if(null != iri){
+        if (null != iri) {
             OWLClass owlClass = owlDataFactory.getOWLClass(iri);
             return owlClass;
-        }else {
+        } else {
             logger.error("ERROR!!!!!!!!!!!iri is null");
             return null;
         }
@@ -184,7 +184,7 @@ public class CreateOWLFromCSV {
 
     /**
      * Create OWLNamedIndividual using the name
-     *  When creating individual we may have extra prefix like indiv_
+     * When creating individual we may have extra prefix like indiv_
      *
      * @param indivName
      * @return OWLNamedIndividual
@@ -194,10 +194,10 @@ public class CreateOWLFromCSV {
         IRI iri = getProperIRI(indivName);
         logger.debug("indivName-Proper: " + indivName);
 
-        if(null != iri){
+        if (null != iri) {
             OWLNamedIndividual owlNamedIndividual = owlDataFactory.getOWLNamedIndividual(iri);
             return owlNamedIndividual;
-        }else {
+        } else {
             logger.error("ERROR!!!!!!!!!!!iri is null");
             return null;
         }
@@ -288,7 +288,7 @@ public class CreateOWLFromCSV {
             logger.info("Saving ontology..........");
             Utility.saveOntology(outputOntology, outputOntoPath);
             logger.info("Saving ontology finished.");
-            logger.info("Ontology saved at: "+ outputOntoPath);
+            logger.info("Ontology saved at: " + outputOntoPath);
         } catch (OWLOntologyStorageException e) {
             e.printStackTrace();
         }
@@ -376,7 +376,7 @@ public class CreateOWLFromCSV {
             logger.info("Saving ontology..........");
             Utility.saveOntology(outputOntology, outputOntoPath);
             logger.info("Saving ontology finished.");
-            logger.info("Ontology saved at: "+ outputOntoPath);
+            logger.info("Ontology saved at: " + outputOntoPath);
         } catch (OWLOntologyStorageException e) {
             e.printStackTrace();
         }

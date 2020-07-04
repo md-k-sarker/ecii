@@ -88,6 +88,7 @@ public abstract class ConjunctiveHornClause implements IConjunctiveHornClause {
 
     /**
      * Public constructor
+     *
      * @param owlObjectProperty
      * @param _reasoner
      * @param _ontology

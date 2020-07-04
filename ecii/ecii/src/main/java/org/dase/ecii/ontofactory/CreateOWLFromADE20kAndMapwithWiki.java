@@ -201,7 +201,6 @@ public class CreateOWLFromADE20kAndMapwithWiki {
     }
 
     /**
-     *
      * @param filePath
      * @throws Exception
      */

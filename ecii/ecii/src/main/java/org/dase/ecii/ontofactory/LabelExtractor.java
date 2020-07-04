@@ -35,43 +35,43 @@ public class LabelExtractor implements OWLAnnotationObjectVisitor {
 
     @Override
     public void visit(OWLAnnotationAssertionAxiom axiom) {
-        
+
 
     }
 
     @Override
     public void visit(OWLSubAnnotationPropertyOfAxiom axiom) {
-        
+
 
     }
 
     @Override
     public void visit(OWLAnnotationPropertyDomainAxiom axiom) {
-        
+
 
     }
 
     @Override
     public void visit(OWLAnnotationPropertyRangeAxiom axiom) {
-        
+
 
     }
 
     @Override
     public void visit(IRI iri) {
-        
+
 
     }
 
     @Override
     public void visit(OWLAnonymousIndividual individual) {
-        
+
 
     }
 
     @Override
     public void visit(OWLLiteral literal) {
-        
+
 
     }
 }

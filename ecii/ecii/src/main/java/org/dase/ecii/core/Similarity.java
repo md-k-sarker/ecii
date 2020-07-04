@@ -4,7 +4,6 @@ Written by sarker.
 Written at 4/23/20.
 */
 
-import org.dase.ecii.datastructure.CandidateSolutionV1;
 import org.dase.ecii.datastructure.CandidateSolutionV2;
 import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Monitor;
@@ -62,7 +61,7 @@ public class Similarity {
      * <p>
      * option 2 is implemented
      */
-    public double findSimilarityIndivWithAnotherIndiv(OWLNamedIndividual posOwlNamedIndividual, OWLNamedIndividual negOwlNamedIndividual)  {
+    public double findSimilarityIndivWithAnotherIndiv(OWLNamedIndividual posOwlNamedIndividual, OWLNamedIndividual negOwlNamedIndividual) {
 
         if (null == posOwlNamedIndividual || null == negOwlNamedIndividual)
             return -1;
@@ -78,7 +77,7 @@ public class Similarity {
 
         ArrayList<CandidateSolutionV2> solutions_with_max_accuracy = new ArrayList<>(
                 SharedDataHolder.SortedCandidateSolutionListV2.stream().filter(
-                        candidateSolutionV1V2  -> candidateSolutionV1V2.getScore().getDefaultScoreValue() == defaultAccuracyInitialMax)
+                        candidateSolutionV1V2 -> candidateSolutionV1V2.getScore().getDefaultScoreValue() == defaultAccuracyInitialMax)
                         .collect(Collectors.toList()));
         monitor.displayMessage("\nTotal solutions with accuracy (" + ConfigParams.scoreTypeNameRaw + ") "
                 + defaultAccuracyInitialMax + " are " + solutions_with_max_accuracy.size(), true);
@@ -134,7 +133,7 @@ public class Similarity {
 //        logger.debug("Looking subsumed for individual " + posOwlNamedIndividual.getIRI() + " finished ");
 
         monitor.displayMessage("\n\n##################################", true);
-        monitor.displayMessage("Similarity score of posOwlNamedIndividual " + Utility.getShortName(posOwlNamedIndividual) + " with IFP : " + Utility.getShortName(negOwlNamedIndividual) + ": "+ similarity, true);
+        monitor.displayMessage("Similarity score of posOwlNamedIndividual " + Utility.getShortName(posOwlNamedIndividual) + " with IFP : " + Utility.getShortName(negOwlNamedIndividual) + ": " + similarity, true);
         monitor.displayMessage("##################################\n\n", true);
 
         logger.info("Finding similarity of posOwlNamedIndividual: " + Utility.getShortName(posOwlNamedIndividual) + " finished");

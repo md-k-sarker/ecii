@@ -513,12 +513,12 @@ public class CandidateSolutionV3 {
                     }
                 } else {
                     if (owlObjectPropertyArrayListHashMap.getValue().size() > 0) {
-                        logger.debug("debug: "+ owlObjectPropertyArrayListHashMap.getKey());
-                        logger.debug("debug: "+ owlObjectPropertyArrayListHashMap.getValue());
-                        logger.debug("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getCandidateClassAsString(true));
-                        logger.debug("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().size());
-                        logger.debug("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().get(0).getPosObjectTypes().size());
-                        logger.debug("debug: "+ owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().get(0).getNegObjectTypes().get(0));
+                        logger.debug("debug: " + owlObjectPropertyArrayListHashMap.getKey());
+                        logger.debug("debug: " + owlObjectPropertyArrayListHashMap.getValue());
+                        logger.debug("debug: " + owlObjectPropertyArrayListHashMap.getValue().get(0).getCandidateClassAsString(true));
+                        logger.debug("debug: " + owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().size());
+                        logger.debug("debug: " + owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().get(0).getPosObjectTypes().size());
+                        logger.debug("debug: " + owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().get(0).getNegObjectTypes().get(0));
                         coveredIndividualsInThisGroup = owlObjectPropertyArrayListHashMap.getValue().get(0).individualsCoveredByThisCandidateClassByReasoner();
                         // each candidateclass are concatenated
                         for (int i = 1; i < owlObjectPropertyArrayListHashMap.getValue().size(); i++) {
@@ -553,7 +553,7 @@ public class CandidateSolutionV3 {
      * is only being used to claculate the hornClause score. Then we are using set calculation for
      * candidateClass and candidateSolution's score.
      * So significantly faster than using reasoner all the time.
-     *
+     * <p>
      * Reasoner chokes up/takes long time if ontology contains lot of individuals.
      * even though the individuals are not related to our experiment!!!!!!!!!!!
      *

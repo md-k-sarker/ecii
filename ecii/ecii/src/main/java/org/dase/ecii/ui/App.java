@@ -167,13 +167,13 @@ public class App {
                 runnable.run();
 
             } else if (e.getSource() == btnOpenResultFile) {
-               if(Desktop.isDesktopSupported()){
-                   try {
-                       Desktop.getDesktop().edit( new File(ConfigParams.outputResultPath));
-                   } catch (IOException e1) {
-                       //e1.printStackTrace();
-                   }
-               }
+                if (Desktop.isDesktopSupported()) {
+                    try {
+                        Desktop.getDesktop().edit(new File(ConfigParams.outputResultPath));
+                    } catch (IOException e1) {
+                        //e1.printStackTrace();
+                    }
+                }
             }
         }
     }

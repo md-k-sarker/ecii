@@ -4,7 +4,6 @@ Written by sarker.
 Written at 7/31/18.
 */
 
-import org.semanticweb.owlapi.model.OWLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -7,14 +7,13 @@ Written at 6/8/18.
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 /**
  * Class to copy image/any file from one directory to another directory.
  * This is primarily used to copy image files of ade20k dataset.
+ *
  * @deprecated, we are using now python copier
  */
 public class CopyImageFiles {
@@ -54,12 +53,12 @@ public class CopyImageFiles {
             Files.walk(dir.toPath()).filter(f -> f.toFile().isFile() && f.toFile().getAbsolutePath().endsWith(imageFileName)).forEach(f -> {
                 System.out.println("imgFile found: " + f.toFile());
 
-                String dstPath = copyToFolder +parentClassname+"_"+ imageFileName;
+                String dstPath = copyToFolder + parentClassname + "_" + imageFileName;
 
                 System.out.println("copyFile: " + f.toAbsolutePath());
                 System.out.println("copyToFolder: " + copyToFolder);
 
-                 copySingleFile(f.toString(), dstPath);
+                copySingleFile(f.toString(), dstPath);
             });
         } catch (Exception ex) {
             ex.printStackTrace();

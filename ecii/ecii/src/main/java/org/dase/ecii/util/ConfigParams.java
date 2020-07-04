@@ -382,16 +382,16 @@ public final class ConfigParams {
 
             if (null != posIndivsStr) {
                 if (posIndivsStr.length() > 0) {
-                   HashSet<String> posIndivsStrSet = getIndivsArray(posIndivsStr);
-                   if(posIndivsStrSet.size()>0) {
-                       for (String s : posIndivsStrSet) {
-                           OWLNamedIndividual eachIndi = OWLManager.getOWLDataFactory().getOWLNamedIndividual(IRI.create(s));
-                           SharedDataHolder.posIndivs.add(eachIndi);
-                       }
-                   }else {
-                       logger.error("ERROR!!!!!!Positive individuals are not given. Please provide at-least 1 positive individuals.\nProgram exiting");
-                       System.exit(-1);
-                   }
+                    HashSet<String> posIndivsStrSet = getIndivsArray(posIndivsStr);
+                    if (posIndivsStrSet.size() > 0) {
+                        for (String s : posIndivsStrSet) {
+                            OWLNamedIndividual eachIndi = OWLManager.getOWLDataFactory().getOWLNamedIndividual(IRI.create(s));
+                            SharedDataHolder.posIndivs.add(eachIndi);
+                        }
+                    } else {
+                        logger.error("ERROR!!!!!!Positive individuals are not given. Please provide at-least 1 positive individuals.\nProgram exiting");
+                        System.exit(-1);
+                    }
                 } else {
                     logger.error("ERROR!!!!!!Positive individuals are not given. Please provide at-least 1 positive individuals.\nProgram exiting");
                     System.exit(-1);
@@ -419,8 +419,8 @@ public final class ConfigParams {
             }
 
             logger.info("Parsing positive and negative individuals finished");
-            logger.info("Positive individuals size: "+ SharedDataHolder.posIndivs.size());
-            logger.info("Negative individuals size: "+ SharedDataHolder.negIndivs.size());
+            logger.info("Positive individuals size: " + SharedDataHolder.posIndivs.size());
+            logger.info("Negative individuals size: " + SharedDataHolder.negIndivs.size());
 
             return true;
         } catch (Exception ex) {
@@ -446,7 +446,7 @@ public final class ConfigParams {
                     if (eachIndivsStr.length() > 0) {
                         indivsName.add(eachIndivsStr);
                     }
-                }else {
+                } else {
 
                 }
             }

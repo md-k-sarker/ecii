@@ -55,7 +55,7 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.OR;
  * k2 = limit of horn clauses = ConfigParams.hornClauseLimit.
  * </pre>
  */
-public class CandidateClassV1 extends CandidateClass{
+public class CandidateClassV1 extends CandidateClass {
 
     final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -66,6 +66,7 @@ public class CandidateClassV1 extends CandidateClass{
 
     /**
      * Public constructor
+     *
      * @param owlObjectProperty
      * @param _reasoner
      * @param _ontology
@@ -77,6 +78,7 @@ public class CandidateClassV1 extends CandidateClass{
 
     /**
      * Copy constructor
+     *
      * @param anotherCandidateClass
      * @param _ontology
      */
@@ -110,9 +112,9 @@ public class CandidateClassV1 extends CandidateClass{
 
     /**
      * Return the candidate class without adding the property.
-     *
+     * <p>
      * Multiple horclauses are conjuncted when we have hare object property,
-     *      and unioned when we have proper object property.
+     * and unioned when we have proper object property.
      * Not filling the r filler/owlObjectProperty here.
      * v0,v1 both okay.
      *
@@ -152,7 +154,7 @@ public class CandidateClassV1 extends CandidateClass{
                     }
                 }
             }
-        }else {
+        } else {
             logger.error("ERROR!!!!!! conjunctiveHornClauses is null, program exiting");
             System.exit(-1);
         }

@@ -33,7 +33,7 @@ public class HashMapUtility {
      */
     //@formatter:on
     public static <T> void insertIntoHashMap(HashMap<OWLObjectProperty, HashMap<T, Integer>> hashMap, OWLObjectProperty objProp, T data) {
-        if (null == hashMap || null == objProp || null == data ) {
+        if (null == hashMap || null == objProp || null == data) {
             logger.error("Null key or value is now allowed in hashMap in insertIntoHashMap(HashMap<OWLObjectProperty, HashMap<T, Integer>> hashMap, OWLObjectProperty objProp, T data)");
             return;
         }
@@ -143,7 +143,7 @@ public class HashMapUtility {
      */
     //@formatter:on
     public static <T> void modifyHashMap(HashMap<OWLObjectProperty, HashMap<T, Integer>> hashMap, OWLObjectProperty objProp, T data) {
-        if (null == hashMap || null == objProp || null == data ) {
+        if (null == hashMap || null == objProp || null == data) {
             logger.error("Null key or value is now allowed in hashmap in modifyHashMap(HashMap<OWLObjectProperty, HashMap<T, Integer>> hashMap, OWLObjectProperty objProp, T data)");
             return;
         }

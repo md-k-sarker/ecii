@@ -5,19 +5,20 @@ Written at 5/22/18.
 */
 
 import org.apache.commons.csv.CSVParser;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.logging.impl.Log4JLogger;
 import org.dase.ecii.util.Monitor;
 import org.dase.ecii.util.Utility;
 import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLAxiom;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -254,8 +255,9 @@ public class OntoCombiner {
     /**
      * This function takes the raw entity names (images names of ADE20K or text entity names for ifp) which are written in csv file.
      * Then search for the corresponding owl files matching the raw entity names and create hashmap of the owlfilespath
-     *
+     * <p>
      * Then it just call the combineOntologies(outputPath, owl_files_path) to combine the ontologies
+     *
      * @param outputPath
      * @param traversingRootPath
      * @param csvPath
@@ -341,9 +343,9 @@ public class OntoCombiner {
         if (null != this.outputOntoIRIString) {
             saveOntology(outputPath, outputOntoIRIString);
         } else {
-            if(null != outputOntoIRIString_) {
+            if (null != outputOntoIRIString_) {
                 saveOntology(outputPath, this.outputOntoIRIString_);
-            }else {
+            } else {
                 logger.error("Error!!!!!! Can't save ontology as ontology iri is null");
             }
         }

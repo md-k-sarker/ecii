@@ -4,7 +4,6 @@ Written by sarker.
 Written at 6/17/20.
 */
 
-import org.dase.ecii.datastructure.CandidateSolutionV2;
 import org.dase.ecii.exceptions.MalFormedIRIException;
 import org.dase.ecii.ontofactory.DLSyntaxRendererExt;
 import org.dase.ecii.ontofactory.StripDownOntology;
@@ -22,7 +21,10 @@ import java.io.PrintStream;
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Paths;
 import java.text.DateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Map;
 
 /**
  * Driver Class to call/start concept induction or measure similarity operations.
@@ -51,7 +53,6 @@ public class ConceptInductionM {
     public ConceptInductionM(Monitor monitor) {
         this.monitor = monitor;
     }
-
 
     /**
      * Load ontology and save the reference to SharedDataHolder
@@ -140,18 +141,9 @@ public class ConceptInductionM {
     }
 
     /**
-     * Start the single induction process.
-     *
-     * @throws OWLOntologyCreationException
-     * @throws IOException
+     * Write the parameters of ecci to result file
      */
-    public void doOpsConceptInductionM() throws
-            OWLOntologyCreationException, IOException, MalFormedIRIException {
-
-        logger.info("Working with confFile: " + ConfigParams.confFilePath);
-        monitor.writeMessage("Working with confFile: " + Paths.get(ConfigParams.confFilePath).getFileName());
-
-        // write user defined values to resultFile
+    private void writeUserDefinedValuesToResultFile(){
         monitor.writeMessage("\nUser defined parameters:");
         monitor.writeMessage("K1/negExprTypeLimit: " + ConfigParams.conceptLimitInNegExpr);
         monitor.writeMessage("K2/hornClauseLimit: " + ConfigParams.hornClauseLimit);
@@ -165,6 +157,22 @@ public class ConceptInductionM {
         monitor.writeMessage("k8/ValidateByReasonerSize: " + ConfigParams.validateByReasonerSize);
         monitor.writeMessage("k9/posClassListMaxSize: " + ConfigParams.posClassListMaxSize);
         monitor.writeMessage("k10/negClassListMaxSize: " + ConfigParams.negClassListMaxSize);
+    }
+
+    /**
+     * Start the single induction process.
+     *
+     * @throws OWLOntologyCreationException
+     * @throws IOException
+     */
+    public void doOpsConceptInductionM() throws
+            OWLOntologyCreationException, IOException, MalFormedIRIException {
+
+        logger.info("Working with confFile: " + ConfigParams.confFilePath);
+        monitor.writeMessage("Working with confFile: " + Paths.get(ConfigParams.confFilePath).getFileName());
+
+        // write user defined values to resultFile
+        writeUserDefinedValuesToResultFile();
 
         logger.info("posIndivs from conf:");
         monitor.writeMessage("posIndivs from conf:");
@@ -204,13 +212,11 @@ public class ConceptInductionM {
         logger.info("reasoner initialized successfully");
 
         // Create a new ConceptFinder object with the given reasoner.
-        CandidateSolutionFinderV0 findConceptsObj = new CandidateSolutionFinderV0(owlReasoner, SharedDataHolder.owlOntologyStripped, outPutStream, monitor);
+        CandidateSolutionFinderV2 findConceptsObj = new CandidateSolutionFinderV2(owlReasoner, SharedDataHolder.owlOntologyStripped, outPutStream, monitor);
         //ConceptFinderComplex findConceptsObj = new ConceptFinderComplex(owlReasoner, ontology, outPutStream, monitor);
 
         logger.info("finding solutions started...............");
-        // SharedDataHolder.objPropImageContains,
         findConceptsObj.findConcepts(0, 0);
-        //findConceptsObj.findConcepts(ConfigParams.tolerance, SharedDataHolder.objPropImageContains, ConfigParams.conceptsCombinationLimit);
         logger.info("\nfinding solutions finished.");
 
         logger.info("sorting solutions................");
@@ -219,7 +225,7 @@ public class ConceptInductionM {
         logger.info("sorting solutions finished.");
 
         logger.info("calculating accuracy using reasoner for top k6 solutions................");
-        findConceptsObj.calculateAccuracyOfTopK6ByReasoner(ConfigParams.validateByReasonerSize);
+        findConceptsObj.calculateAccuracyOfTopK6ByReasoner(SharedDataHolder.SortedCandidateSolutionListV2, ConfigParams.validateByReasonerSize);
         logger.info("calculating accuracy using reasoner for top k6 solutions................");
 
         Long algoEndTime = System.currentTimeMillis();
@@ -239,7 +245,6 @@ public class ConceptInductionM {
             logger.info("Finding similarity finished");
         }
     }
-
 
     public void measurePairwiseSimilarity() {
         if (SharedDataHolder.posIndivs.size() != SharedDataHolder.negIndivs.size()) {

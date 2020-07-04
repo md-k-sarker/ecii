@@ -3,6 +3,7 @@
  */
 package org.dase.ecii.util;
 
+import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
 import com.google.common.collect.Lists;
 import com.wcohen.ss.Levenstein;
 import org.apache.commons.csv.CSVFormat;
@@ -14,6 +15,7 @@ import org.dase.ecii.core.SharedDataHolder;
 import org.dase.ecii.exceptions.MalFormedIRIException;
 import org.dase.ecii.ontofactory.LabelExtractor;
 import org.semanticweb.HermiT.Configuration;
+import org.semanticweb.elk.owlapi.ElkReasonerFactory;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.profiles.OWLProfileReport;
@@ -23,14 +25,11 @@ import org.semanticweb.owlapi.search.EntitySearcher;
 import org.semanticweb.owlapi.util.OWLEntityRenamer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.manchester.cs.jfact.JFactFactory;
-import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
-import org.semanticweb.elk.owlapi.ElkReasonerFactory;
 import uk.ac.manchester.cs.factplusplus.owlapiv3.FaCTPlusPlusReasonerFactory;
+import uk.ac.manchester.cs.jfact.JFactFactory;
 
-
-import java.io.*;
 import java.io.Writer;
+import java.io.*;
 import java.lang.invoke.MethodHandles;
 import java.net.URLEncoder;
 import java.nio.file.Files;
@@ -702,13 +701,13 @@ public class Utility {
 
         // if starts with comment
         String commentRegex = "^(#|\\/*|\\/\\/)+.";
-        logger.info("objprop-----:"+ objectPropertyFloatHashMap.size() );
-        if (objPropsPortion.matches(commentRegex)){
-            logger.info("objprop if -----:"+ objectPropertyFloatHashMap.size() );
+        logger.info("objprop-----:" + objectPropertyFloatHashMap.size());
+        if (objPropsPortion.matches(commentRegex)) {
+            logger.info("objprop if -----:" + objectPropertyFloatHashMap.size());
             System.exit(-1);
             return objectPropertyFloatHashMap;
         }
-        logger.info("objprop else-----:"+ objectPropertyFloatHashMap.size() );
+        logger.info("objprop else-----:" + objectPropertyFloatHashMap.size());
 
         ArrayList<IRI> objPropsIRI = extractEachEntityIRIFromTextPortion(objPropsPortion, regexEachEntity, delimeter);
 
@@ -974,8 +973,8 @@ public class Utility {
         SharedDataHolder.negIndivs = negIndivs;
 
         logger.info("Reading positive and negative individuals from csv finished");
-        logger.info("Positive individuals size: "+ SharedDataHolder.posIndivs.size());
-        logger.info("Negative individuals size: "+ SharedDataHolder.negIndivs.size());
+        logger.info("Positive individuals size: " + SharedDataHolder.posIndivs.size());
+        logger.info("Negative individuals size: " + SharedDataHolder.negIndivs.size());
 
     }
 

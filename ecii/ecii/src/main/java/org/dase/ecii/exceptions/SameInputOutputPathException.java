@@ -14,13 +14,21 @@ public class SameInputOutputPathException extends Exception {
     // log level: ALL < DEBUG < INFO < WARN < ERROR < FATAL < OFF
 
 
-    public SameInputOutputPathException() { super(); }
+    public SameInputOutputPathException() {
+        super();
+    }
 
-    public SameInputOutputPathException(String message) { super(message); }
+    public SameInputOutputPathException(String message) {
+        super(message);
+    }
 
-    public SameInputOutputPathException(String message, Throwable cause) { super(message, cause); }
+    public SameInputOutputPathException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-    public SameInputOutputPathException(Throwable cause) { super(cause); }
+    public SameInputOutputPathException(Throwable cause) {
+        super(cause);
+    }
 
     protected SameInputOutputPathException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);

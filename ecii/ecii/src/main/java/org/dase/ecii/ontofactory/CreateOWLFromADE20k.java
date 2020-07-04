@@ -51,6 +51,7 @@ public class CreateOWLFromADE20k {
 
     /**
      * Main method
+     *
      * @param args
      */
     public static void main(String[] args) {
@@ -447,7 +448,6 @@ public class CreateOWLFromADE20k {
     }
 
     /**
-     *
      * @param filePath
      * @param owl_class_name
      * @param shouldCreateSuperClass

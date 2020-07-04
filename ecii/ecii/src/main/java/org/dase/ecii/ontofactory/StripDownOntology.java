@@ -96,16 +96,17 @@ public class StripDownOntology {
 
     /**
      * Public constructor
+     *
      * @param owlOntology
      */
-    public StripDownOntology(OWLOntology owlOntology){
+    public StripDownOntology(OWLOntology owlOntology) {
         try {
-            if(null != owlOntology){
+            if (null != owlOntology) {
                 inputOntology = owlOntology;
                 inputOntoManager = inputOntology.getOWLOntologyManager();
                 ontoDataFacotry = inputOntoManager.getOWLDataFactory();
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             logger.error("Initiating ontology related resources failed!!!!!!!!!!!!!");
             ex.printStackTrace();
         }
@@ -342,11 +343,11 @@ public class StripDownOntology {
 
     /**
      * Process/search indirect indivs from the ontology.
-     *
+     * <p>
      * Essentially this function takes:
      * ListofObjPropAndIndiv.objPropsofInterest
      * ListofObjPropAndIndiv.directIndivs
-     *      and search for indirectIndiv and save it inside
+     * and search for indirectIndiv and save it inside
      * ListofObjPropAndIndiv.inDirectIndivs
      *
      * @param listofObjPropAndIndiv
@@ -453,10 +454,11 @@ public class StripDownOntology {
     /**
      * keep all superclasses of owlClass by using the recursive call,
      * constraint: if an owlclass is only subclass of owl:Thing then and has some individual as instance, then
-     *      inputOntology.getAxioms(owlClass) doesn't return any axioms!!!!
-     * @deprecated
+     * inputOntology.getAxioms(owlClass) doesn't return any axioms!!!!
+     *
      * @param owlClasses
      * @return
+     * @deprecated
      */
     public HashSet<OWLAxiom> extractAxiomsRelatedToOWLClasses(HashSet<OWLClass> owlClasses) {
         HashSet<OWLAxiom> owlAxiomsRelatedToClasses = new HashSet<>();
@@ -475,12 +477,12 @@ public class StripDownOntology {
     /**
      * Extract axioms related to an individual and stores those axioms to the
      * axiomsToKeep field of this class.
-     *
+     * <p>
      * Steps to extract:
-     *      1. Extract axioms related to this individual
-     *      2. Find types of this individual
-     *      3. Extract axioms related to that types
-     *      4. Find super types of that type recursively and extract axioms related to them.
+     * 1. Extract axioms related to this individual
+     * 2. Find types of this individual
+     * 3. Extract axioms related to that types
+     * 4. Find super types of that type recursively and extract axioms related to them.
      *
      * @param owlNamedIndividual
      * @return
@@ -510,9 +512,9 @@ public class StripDownOntology {
 
     /**
      * constraint: if an owlclass is only subclass of owl:Thing then and has some individual as instance, then
-     *      inputOntology.getAxioms(owlClass) doesn't return any axioms!!!!
-     *  but inputOntology.getAxioms(owlNamedIndividual) returns axioms
-     *
+     * inputOntology.getAxioms(owlClass) doesn't return any axioms!!!!
+     * but inputOntology.getAxioms(owlNamedIndividual) returns axioms
+     * <p>
      * so we should use this function instead of function extractAxiomsRelatedToOWLClasses() whenever possible.
      *
      * @param referredDirectEntities
@@ -676,7 +678,6 @@ public class StripDownOntology {
     }
 
 
-
     /**
      * inputs
      * 1. Input Ontology path
@@ -690,6 +691,7 @@ public class StripDownOntology {
 
     /**
      * Being used to test different methods easily
+     *
      * @param args
      */
     public static void main(String[] args) {

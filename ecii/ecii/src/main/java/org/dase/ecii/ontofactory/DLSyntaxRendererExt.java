@@ -8,7 +8,7 @@ import org.semanticweb.owlapi.dlsyntax.renderer.DLSyntaxObjectRenderer;
 
 public class DLSyntaxRendererExt extends DLSyntaxObjectRenderer {
 
-    public DLSyntaxRendererExt(){
+    public DLSyntaxRendererExt() {
         super();
     }
 }

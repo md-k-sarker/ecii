@@ -20,7 +20,8 @@ import org.slf4j.LoggerFactory;
 import java.lang.invoke.MethodHandles;
 import java.util.*;
 
-import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
+import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.AND;
+import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.EXISTS;
 
 /**
  * <pre>
@@ -278,7 +279,6 @@ public class CandidateSolutionV2 extends CandidateSolution {
                                 rFilledPortionForThisGroup = rFilledcandidateClassesAsOWLClassExpressionAList.get(0);
                             } else {
                                 // make OR between candidate classes
-                                // why OR ?
                                 rFilledPortionForThisGroup = SharedDataHolder.owlDataFactory.getOWLObjectIntersectionOf(rFilledcandidateClassesAsOWLClassExpression);
                             }
                         }

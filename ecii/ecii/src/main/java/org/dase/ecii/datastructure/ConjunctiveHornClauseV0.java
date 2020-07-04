@@ -110,7 +110,7 @@ public class ConjunctiveHornClauseV0 extends ConjunctiveHornClause {
             }
         }
 
-        if (null != this.posObjectType ) {
+        if (null != this.posObjectType) {
             if (null != negatedPortion) {
                 owlClassExpression = SharedDataHolder.owlDataFactory.getOWLObjectIntersectionOf(this.posObjectType, negatedPortion);
             } else {
@@ -176,7 +176,7 @@ public class ConjunctiveHornClauseV0 extends ConjunctiveHornClause {
      * @param isPosIndiv
      * @return boolean
      */
-    public boolean isContainedInHornClause( OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
+    public boolean isContainedInHornClause(OWLNamedIndividual owlNamedIndividual, boolean isPosIndiv) {
 
         boolean contained = false;
 
@@ -252,6 +252,7 @@ public class ConjunctiveHornClauseV0 extends ConjunctiveHornClause {
     /**
      * Calculate accuracy of a hornClause.
      * it calculate the covered individuals by using set calculation, no reasoner call
+     *
      * @return Score
      */
     public Score calculateAccuracyComplexCustom() {
@@ -271,8 +272,8 @@ public class ConjunctiveHornClauseV0 extends ConjunctiveHornClause {
          */
         for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
 
-            if (isContainedInHornClause( thisOwlNamedIndividual, true)) {
-               HashMapUtility.insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
+            if (isContainedInHornClause(thisOwlNamedIndividual, true)) {
+                HashMapUtility.insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
             }
         }
 
@@ -282,7 +283,7 @@ public class ConjunctiveHornClauseV0 extends ConjunctiveHornClause {
          */
         for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
 
-            if (isContainedInHornClause( thisOwlNamedIndividual, false)) {
+            if (isContainedInHornClause(thisOwlNamedIndividual, false)) {
                 HashMapUtility.insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
             }
         }

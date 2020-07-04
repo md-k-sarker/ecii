@@ -276,7 +276,8 @@ public class CandidateSolutionV0 extends CandidateSolution {
             complexClassExpression = rFilledPortion;
         }
 
-        return complexClassExpression;
+        this.candidateSolutionAsOWLClass = complexClassExpression;
+        return this.candidateSolutionAsOWLClass;
     }
 
     /**
@@ -431,25 +432,13 @@ public class CandidateSolutionV0 extends CandidateSolution {
                 OWLObjectProperty owlObjectProperty = entry.getKey();
                 ArrayList<CandidateClassV0> candidateClasses = entry.getValue();
                 if (candidateClasses.size() > 0) {
-                    if (candidateClasses.get(0) instanceof CandidateClassV0) {
-                        try {
-                            // https://stackoverflow.com/questions/933447/how-do-you-cast-a-list-of-supertypes-to-a-list-of-subtypes
-                            ArrayList<CandidateClassV0> candidateClassV0List = (ArrayList<CandidateClassV0>) (ArrayList<?>) candidateClasses;
-                            if (!isContainedInCandidateClasses(candidateClassV0List, thisOwlNamedIndividual, true)) {
-                                // this individual is not contained in this arraylist of candidate classes.
-                                // so this individual is not covered.
-                                // we need to start iterating with next individual
-                                continue nextPosIndivIter;
-                            } else {
-                                containedInTotalGroups++;
-                            }
-                        } catch (ClassCastException ex) {
-                            ex.printStackTrace();
-                            logger.error("Class cast exception, program exiting");
-                            System.exit(-1);
-                        }
-
-
+                    if (!isContainedInCandidateClasses(candidateClasses, thisOwlNamedIndividual, true)) {
+                        // this individual is not contained in this arraylist of candidate classes.
+                        // so this individual is not covered.
+                        // we need to start iterating with next individual
+                        continue nextPosIndivIter;
+                    } else {
+                        containedInTotalGroups++;
                     }
                 }
             }
@@ -473,23 +462,13 @@ public class CandidateSolutionV0 extends CandidateSolution {
                 // not passing object property here, because we can recover object property from candidate class
                 ArrayList<CandidateClassV0> candidateClasses = entry.getValue();
                 if (candidateClasses.size() > 0) {
-                    if (candidateClasses.get(0) instanceof CandidateClassV0) {
-                        try {
-                            ArrayList<CandidateClassV0> candidateClassV0List = (ArrayList<CandidateClassV0>) (ArrayList<?>) candidateClasses;
-                            if (!isContainedInCandidateClasses(candidateClassV0List, thisOwlNamedIndividual, false)) {
-                                // this individual is not contained in this arraylist of candidate classes.
-                                // so this individual is not covered.
-                                // we need to start iterating with next individual
-                                continue nextNegIndivIter;
-                            } else {
-                                containedInTotalGroups++;
-                            }
-                        } catch (ClassCastException ex) {
-                            ex.printStackTrace();
-                            logger.error("Class cast exception, program exiting");
-                            System.exit(-1);
-                        }
-
+                    if (!isContainedInCandidateClasses(candidateClasses, thisOwlNamedIndividual, false)) {
+                        // this individual is not contained in this arraylist of candidate classes.
+                        // so this individual is not covered.
+                        // we need to start iterating with next individual
+                        continue nextNegIndivIter;
+                    } else {
+                        containedInTotalGroups++;
                     }
                 }
             }
@@ -555,6 +534,13 @@ public class CandidateSolutionV0 extends CandidateSolution {
         for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.posIndivs) {
             if (posIndivsByReasoner.contains(thisOwlNamedIndividual)) {
                 HashMapUtility.insertIntoHashMap(coveredPosIndividualsMap, thisOwlNamedIndividual);
+                logger.debug("Pos indiv " + Utility.getShortNameWithPrefix(thisOwlNamedIndividual)
+                        + " covered by owlClass: " + this.getSolutionAsString(true)
+                        + " by owlreasoner. \n\tsize of covered indivs by this class: " + posIndivsByReasoner.size());
+            } else {
+                logger.debug("Pos indiv " + Utility.getShortNameWithPrefix(thisOwlNamedIndividual)
+                        + " --not-- covered by owlClass: " + this.getSolutionAsString(true) +
+                        " by owlreasoner. \n\tsize of covered indivs by this class: " + posIndivsByReasoner.size());
             }
         }
 
@@ -566,6 +552,13 @@ public class CandidateSolutionV0 extends CandidateSolution {
         for (OWLNamedIndividual thisOwlNamedIndividual : SharedDataHolder.negIndivs) {
             if (negIndivsByReasoner.contains(thisOwlNamedIndividual)) {
                 HashMapUtility.insertIntoHashMap(excludedNegIndividualsMap, thisOwlNamedIndividual);
+                logger.debug("Neg indiv " + Utility.getShortNameWithPrefix(thisOwlNamedIndividual)
+                        + " covered by owlClass: " + this.getSolutionAsString(true)
+                        + " by owlreasoner. \n\tsize of covered indivs by this class: " + negIndivsByReasoner.size());
+            } else {
+                logger.debug("Neg indiv " + Utility.getShortNameWithPrefix(thisOwlNamedIndividual)
+                        + " --not-- covered by owlClass: " + this.getSolutionAsString(true) +
+                        " by owlreasoner. \n\tsize of covered indivs by this class: " + negIndivsByReasoner.size());
             }
         }
 
@@ -583,8 +576,8 @@ public class CandidateSolutionV0 extends CandidateSolution {
         /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
         nrOfNegativeClassifiedAsPositive = nrOfNegativeClassifiedAsNegative;
 
-        logger.debug("nrOfPositiveClassifiedAsPositive size: " + nrOfPositiveClassifiedAsPositive);
-        logger.debug("nrOfNegativeClassifiedAsNegative size: " + nrOfNegativeClassifiedAsNegative);
+        logger.debug("nrOfPositiveClassifiedAsPositive size by reasoner: " + nrOfPositiveClassifiedAsPositive);
+        logger.debug("nrOfNegativeClassifiedAsNegative size by reasoner: " + nrOfNegativeClassifiedAsNegative);
 
         double precision = Heuristics.getPrecision(nrOfPositiveClassifiedAsPositive, nrOfNegativeClassifiedAsPositive);
         double recall = Heuristics.getRecall(nrOfPositiveClassifiedAsPositive, nrOfPositiveClassifiedAsNegative);

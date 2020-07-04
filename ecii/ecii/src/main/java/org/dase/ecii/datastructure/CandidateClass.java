@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
 
 public abstract class CandidateClass implements ICandidateClass {
 
@@ -62,6 +61,7 @@ public abstract class CandidateClass implements ICandidateClass {
 
     /**
      * Public constructor
+     *
      * @param owlObjectProperty
      * @param _reasoner
      * @param _ontology
@@ -83,10 +83,11 @@ public abstract class CandidateClass implements ICandidateClass {
 
     /**
      * Copy constructor
+     *
      * @param anotherCandidateClass
      * @param _ontology
      */
-    public CandidateClass(CandidateClass anotherCandidateClass, OWLOntology _ontology){
+    public CandidateClass(CandidateClass anotherCandidateClass, OWLOntology _ontology) {
 
         this.owlObjectProperty = anotherCandidateClass.owlObjectProperty;
         this.reasoner = anotherCandidateClass.reasoner;
