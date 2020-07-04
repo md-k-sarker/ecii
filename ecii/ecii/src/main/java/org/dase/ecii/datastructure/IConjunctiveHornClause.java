@@ -4,6 +4,7 @@ import org.dase.ecii.core.Score;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 
 public interface IConjunctiveHornClause {
+
     Score getScore();
 
     void setScore(Score score);

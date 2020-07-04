@@ -212,7 +212,6 @@ public class CandidateSolutionV1 extends CandidateSolution {
         return added;
     }
 
-
     /**
      * @return OWLClassExpression
      */

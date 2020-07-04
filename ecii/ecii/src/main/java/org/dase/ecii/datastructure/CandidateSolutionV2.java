@@ -85,7 +85,7 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
  * Bare types group must be printed first.
  *  </pre>
  */
-public class CandidateSolutionV2 {
+public class CandidateSolutionV2 extends CandidateSolution{
 
     private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -104,47 +104,11 @@ public class CandidateSolutionV2 {
     private HashMap<OWLObjectProperty, ArrayList<CandidateClassV2>> groupedCandidateClasses;
 
     /**
-     * candidate solution
-     */
-    private OWLClassExpression candidateSolutionAsOWLClass = null;
-
-    /**
-     * candidate solution as String
-     */
-    private String candidateSolutionAsString = null;
-
-    private boolean solutionChanged = true;
-
-    // Score associated with this solution
-    private Score score;
-
-    // use double to ensure when dividing we are getting double result not integer.
-    transient volatile protected double nrOfPositiveClassifiedAsPositive;
-    /* nrOfPositiveClassifiedAsNegative = nrOfPositiveIndividuals - nrOfPositiveClassifiedAsPositive */
-    transient volatile protected double nrOfPositiveClassifiedAsNegative;
-    transient volatile protected double nrOfNegativeClassifiedAsNegative;
-    /* nrOfNegativeClassifiedAsPositive = nrOfNegativeIndividuals - nrOfNegativeClassifiedAsNegative */
-    transient volatile protected double nrOfNegativeClassifiedAsPositive;
-
-    /**
-     * Bad design should fix it
-     */
-    private final OWLOntology ontology;
-    private final OWLDataFactory owlDataFactory;
-    private final OWLOntologyManager owlOntologyManager;
-    private OWLReasoner reasoner;
-
-    /**
      * public constructor
      */
     public CandidateSolutionV2(OWLReasoner _reasoner, OWLOntology _ontology) {
-        solutionChanged = true;
+        super(_reasoner, _ontology);
         this.candidateClasses = new ArrayList<>();
-
-        this.reasoner = _reasoner;
-        this.ontology = _ontology;
-        this.owlOntologyManager = this.ontology.getOWLOntologyManager();
-        this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
     }
 
     /**
@@ -153,24 +117,9 @@ public class CandidateSolutionV2 {
      * @param anotherCandidateSolution
      */
     public CandidateSolutionV2(CandidateSolutionV2 anotherCandidateSolution, OWLOntology _ontology) {
-
-        this.candidateClasses = new ArrayList<>(anotherCandidateSolution.candidateClasses);
-
-        if (null != anotherCandidateSolution.candidateSolutionAsOWLClass) {
-            this.candidateSolutionAsOWLClass = anotherCandidateSolution.candidateSolutionAsOWLClass;
-        }
-        if (null != anotherCandidateSolution.candidateSolutionAsString) {
-            this.candidateSolutionAsString = anotherCandidateSolution.candidateSolutionAsString;
-        }
-        if (null != anotherCandidateSolution.score) {
-            this.score = anotherCandidateSolution.score;
-        }
-        solutionChanged = false;
-
-        this.reasoner = anotherCandidateSolution.reasoner;
-        this.ontology = _ontology;
-        this.owlOntologyManager = this.ontology.getOWLOntologyManager();
-        this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
+        super(anotherCandidateSolution, _ontology);
+        if (null != anotherCandidateSolution && null != anotherCandidateSolution.candidateClasses)
+            this.candidateClasses = new ArrayList<>(anotherCandidateSolution.candidateClasses);
     }
 
     /**
@@ -203,21 +152,20 @@ public class CandidateSolutionV2 {
     }
 
     /**
-     * Getter
-     *
-     * @return
+     * Create group
      */
-    public Score getScore() {
-        return score;
-    }
+    private void createGroup() {
+        groupedCandidateClasses = new HashMap<>();
 
-    /**
-     * Score setter
-     *
-     * @param score
-     */
-    public void setScore(Score score) {
-        this.score = score;
+        candidateClasses.forEach(candidateClass -> {
+            if (groupedCandidateClasses.containsKey(candidateClass.getOwlObjectProperty())) {
+                groupedCandidateClasses.get(candidateClass.getOwlObjectProperty()).add(candidateClass);
+            } else {
+                ArrayList<CandidateClassV2> candidateClassArrayList = new ArrayList<>();
+                candidateClassArrayList.add(candidateClass);
+                groupedCandidateClasses.put(candidateClass.getOwlObjectProperty(), candidateClassArrayList);
+            }
+        });
     }
 
     /**
@@ -714,23 +662,6 @@ public class CandidateSolutionV2 {
         this.getScore().setRecall_by_reasoner(recall);
         this.getScore().setF_measure_by_reasoner(f_measure);
         this.getScore().setCoverage_by_reasoner(coverage);
-    }
-
-    /**
-     * Create group
-     */
-    private void createGroup() {
-        groupedCandidateClasses = new HashMap<>();
-
-        candidateClasses.forEach(candidateClass -> {
-            if (groupedCandidateClasses.containsKey(candidateClass.getOwlObjectProperty())) {
-                groupedCandidateClasses.get(candidateClass.getOwlObjectProperty()).add(candidateClass);
-            } else {
-                ArrayList<CandidateClassV2> candidateClassArrayList = new ArrayList<>();
-                candidateClassArrayList.add(candidateClass);
-                groupedCandidateClasses.put(candidateClass.getOwlObjectProperty(), candidateClassArrayList);
-            }
-        });
     }
 
     @Override

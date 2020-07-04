@@ -5,6 +5,7 @@ import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 
 public interface ICandidateClass {
+
     OWLObjectProperty getOwlObjectProperty();
 
     Score getScore();

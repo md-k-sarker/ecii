@@ -27,10 +27,12 @@ public abstract class CandidateClass implements ICandidateClass {
      * OWLClassExpression
      */
     public OWLClassExpression candidateClassAsOWLClassExpression;
+
     /**
      * String
      */
     public String candidateClassAsString;
+
     /**
      * Checker to check whether solution changed or not,
      * so we can use cached solution score and solutionAsString
@@ -96,6 +98,16 @@ public abstract class CandidateClass implements ICandidateClass {
     }
 
     /**
+     * owlObjectProperty getter
+     *
+     * @return OWLObjectProperty
+     */
+    @Override
+    public OWLObjectProperty getOwlObjectProperty() {
+        return owlObjectProperty;
+    }
+
+    /**
      * @return
      */
     @Override
@@ -109,16 +121,6 @@ public abstract class CandidateClass implements ICandidateClass {
     @Override
     public void setScore(Score score) {
         this.score = score;
-    }
-
-    /**
-     * owlObjectProperty getter
-     *
-     * @return OWLObjectProperty
-     */
-    @Override
-    public OWLObjectProperty getOwlObjectProperty() {
-        return owlObjectProperty;
     }
 
     @Override

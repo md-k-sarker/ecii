@@ -58,6 +58,7 @@ public abstract class ConjunctiveHornClause implements IConjunctiveHornClause {
      * String
      */
     public String conjunctiveHornClauseAsString;
+
     /**
      * Checker to check whether solution changed or not,
      * so we can use cached solution score and solutionAsString
