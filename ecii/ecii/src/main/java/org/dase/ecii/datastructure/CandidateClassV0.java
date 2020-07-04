@@ -36,14 +36,14 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.OR;
  * k2 = limit of horn clauses = ConfigParams.hornClauseLimit.
  * </pre>
  */
-public class CandidateClassV0 extends CandidateClass{
+public class CandidateClassV0 extends CandidateClass {
 
     final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     /**
      * Multiple conjunctive horn clause.
      */
-    private ArrayList<ConjunctiveHornClauseV0> conjunctiveHornClauses;
+    public ArrayList<ConjunctiveHornClauseV0> conjunctiveHornClauses;
 
     /**
      * @param owlObjectProperty
@@ -57,6 +57,7 @@ public class CandidateClassV0 extends CandidateClass{
 
     /**
      * Copy constructor
+     *
      * @param anotherCandidateClass
      * @param _ontology
      */
@@ -80,7 +81,6 @@ public class CandidateClassV0 extends CandidateClass{
     public void addConjunctiveHornClauses(ConjunctiveHornClauseV0 conjunctiveHornClauseV0) {
         this.conjunctiveHornClauses.add(conjunctiveHornClauseV0);
     }
-
 
     /**
      * Return the candidate class without adding the property.

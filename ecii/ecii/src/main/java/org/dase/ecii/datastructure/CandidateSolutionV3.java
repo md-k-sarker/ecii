@@ -19,17 +19,17 @@ import org.slf4j.LoggerFactory;
 import java.lang.invoke.MethodHandles;
 import java.util.*;
 
-import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
+import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.AND;
+import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.EXISTS;
 
 /**
  * <pre>
  * Candidate solution consists of multiple candidate classes. Multiple candidate classes are grouped by owlObjectproperty.
  * Each groups are combined by AND/Intersection.
  *
- * Difference between V2 and V1V2 on how we combining candidate classes
- * Inside the group (Significantly different than V0, and V1V2):
+ * Difference between V3 and V2 on how we combining candidate classes
+ * Inside the group (Significantly different than V0, and V2):
  *   Candidate classes will be combined by AND/Intersection always:
- *
  *  While in V1V2:
  *  Candidate classes will be:
  *      * 1. Combined by AND/Intersection when we have none objectProperty or bare types
@@ -85,7 +85,7 @@ import static org.semanticweb.owlapi.dlsyntax.renderer.DLSyntax.*;
  * Bare types group must be printed first.
  *  </pre>
  */
-public class CandidateSolutionV2 {
+public class CandidateSolutionV3 {
 
     private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -137,7 +137,7 @@ public class CandidateSolutionV2 {
     /**
      * public constructor
      */
-    public CandidateSolutionV2(OWLReasoner _reasoner, OWLOntology _ontology) {
+    public CandidateSolutionV3(OWLReasoner _reasoner, OWLOntology _ontology) {
         solutionChanged = true;
         this.candidateClasses = new ArrayList<>();
 
@@ -152,7 +152,7 @@ public class CandidateSolutionV2 {
      *
      * @param anotherCandidateSolution
      */
-    public CandidateSolutionV2(CandidateSolutionV2 anotherCandidateSolution, OWLOntology _ontology) {
+    public CandidateSolutionV3(CandidateSolutionV3 anotherCandidateSolution, OWLOntology _ontology) {
 
         this.candidateClasses = new ArrayList<>(anotherCandidateSolution.candidateClasses);
 
@@ -737,7 +737,7 @@ public class CandidateSolutionV2 {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CandidateSolutionV2 that = (CandidateSolutionV2) o;
+        CandidateSolutionV3 that = (CandidateSolutionV3) o;
         return Objects.equals(new HashSet<>(candidateClasses), new HashSet<>(that.candidateClasses));
     }
 

@@ -94,15 +94,6 @@ public abstract class CandidateClass implements ICandidateClass {
 
         solutionChanged = true;
     }
-    /**
-     * owlObjectProperty getter
-     *
-     * @return OWLObjectProperty
-     */
-    @Override
-    public OWLObjectProperty getOwlObjectProperty() {
-        return owlObjectProperty;
-    }
 
     /**
      * @return
@@ -120,4 +111,19 @@ public abstract class CandidateClass implements ICandidateClass {
         this.score = score;
     }
 
+    /**
+     * owlObjectProperty getter
+     *
+     * @return OWLObjectProperty
+     */
+    @Override
+    public OWLObjectProperty getOwlObjectProperty() {
+        return owlObjectProperty;
+    }
+
+    @Override
+    public abstract boolean equals(Object o);
+
+    @Override
+    public abstract int hashCode();
 }

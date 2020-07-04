@@ -1,9 +1,6 @@
 package org.dase.ecii.core;
 
-import org.dase.ecii.datastructure.CandidateClassV2;
-import org.dase.ecii.datastructure.CandidateSolutionV2;
-import org.dase.ecii.datastructure.ConjunctiveHornClauseV1V2;
-import org.dase.ecii.datastructure.HashMapUtility;
+import org.dase.ecii.datastructure.*;
 import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Monitor;
 import org.dase.ecii.util.Utility;
@@ -27,16 +24,9 @@ import static java.util.stream.Collectors.toMap;
  * Algorithm version: V4
  *
  */
-public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
+public class CandidateSolutionFinderV2 {
 
     private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-//    private final OWLOntology ontology;
-//    private final OWLDataFactory owlDataFactory;
-//    private final OWLOntologyManager owlOntologyManager;
-//    private OWLReasoner reasoner;
-//    private final PrintStream out;
-//    private final Monitor monitor;
 
     private int solutionCounter = 0;
 
@@ -58,15 +48,12 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
      */
     public CandidateSolutionFinderV2(OWLReasoner _reasoner, OWLOntology _ontology, PrintStream _printStream, Monitor _monitor) {
 
-        super(_reasoner, _ontology, _printStream, _monitor);
-
-//        this.reasoner = _reasoner;
-//        this.ontology = _ontology;
-//        this.owlOntologyManager = this.ontology.getOWLOntologyManager();
-//        this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
-//        this.out = _printStream;
-//        this.monitor = _monitor;
-
+        this.reasoner = _reasoner;
+        this.ontology = _ontology;
+        this.owlOntologyManager = this.ontology.getOWLOntologyManager();
+        this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
+        this.out = _printStream;
+        this.monitor = _monitor;
         this.hornClausesMap = new HashMap<>();
         this.candidateClassesMap = new HashMap<>();
     }
@@ -132,19 +119,118 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
     }
 
     /**
+     * Remove common types which appeared both in positive types and negative types.
+     * Specifically, if removeCommonTypesFromOneSideOnly== true
+     * remove from either pos-set or neg-set which have less individuals
+     * not removing from both
+     * else
+     * remove from both side
+     *
+     * @param owlObjectProperty
+     */
+    public void removeCommonTypesFromPosAndNeg(OWLObjectProperty owlObjectProperty) {
+
+        logger.info("Before removing types (types which appeared in both pos and neg images): ");
+        if (SharedDataHolder.typeOfObjectsInPosIndivs.containsKey(owlObjectProperty)) {
+            logger.info("pos types: ");
+            SharedDataHolder.typeOfObjectsInPosIndivs.get(owlObjectProperty).keySet().forEach(type -> {
+                logger.info("\t" + Utility.getShortName((OWLClass) type));
+            });
+        }
+        if (SharedDataHolder.typeOfObjectsInNegIndivs.containsKey(owlObjectProperty)) {
+            logger.info("neg types: ");
+            SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).keySet().forEach(type -> {
+                logger.info("\t" + Utility.getShortName((OWLClass) type));
+            });
+        }
+
+        logger.debug("Removing types which appeared both in pos and neg: ");
+        HashSet<OWLClassExpression> removeFromPosType = new HashSet<>();
+        HashSet<OWLClassExpression> removeFromNegType = new HashSet<>();
+        HashSet<OWLClassExpression> removeFromBothType = new HashSet<>();
+
+        //HashSet<OWLClassExpression> typesBothInPosAndNeg = new HashSet<>();
+        // remove those posTypes which also appeared in negTypes using some kind of accuracy/tolerance measure.
+        if (SharedDataHolder.typeOfObjectsInPosIndivs.containsKey(owlObjectProperty)) {
+            for (OWLClassExpression owlClassExpr : SharedDataHolder.typeOfObjectsInPosIndivs.get(owlObjectProperty).keySet()) {
+                // use tolerance measure
+                // need to exclude types which appear in neg images
+                if (SharedDataHolder.typeOfObjectsInNegIndivs.containsKey(owlObjectProperty)) {
+                    if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).containsKey(owlClassExpr)) {
+
+                        // remove from that which have less individuals
+                        double posRatio = SharedDataHolder.typeOfObjectsInPosIndivs.get(owlObjectProperty).
+                                get(owlClassExpr) / SharedDataHolder.posIndivs.size();
+                        double negRatio = SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).
+                                get(owlClassExpr) / SharedDataHolder.negIndivs.size();
+
+                        if (posRatio >= negRatio) {
+                            // remove from negative
+                            removeFromNegType.add(owlClassExpr);
+                            logger.debug("\t" + Utility.getShortName((OWLClass) owlClassExpr) + " will be removed from negativeTypes");
+                        } else {
+                            // remove from positive
+                            removeFromPosType.add(owlClassExpr);
+                            logger.debug("\t" + Utility.getShortName((OWLClass) owlClassExpr) + " will be removed from positiveTypes");
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!ConfigParams.removeCommonTypesFromOneSideOnly) {
+            removeFromBothType.addAll(removeFromPosType);
+            removeFromBothType.addAll(removeFromNegType);
+        }
+
+        // remove those and owl:Thing and owl:Nothing
+        if (SharedDataHolder.typeOfObjectsInPosIndivs.containsKey(owlObjectProperty)) {
+            if (!ConfigParams.removeCommonTypesFromOneSideOnly) {
+                SharedDataHolder.typeOfObjectsInPosIndivs.get(owlObjectProperty).keySet().removeAll(removeFromBothType);
+            } else
+                SharedDataHolder.typeOfObjectsInPosIndivs.get(owlObjectProperty).keySet().removeAll(removeFromPosType);
+            SharedDataHolder.typeOfObjectsInPosIndivs.get(owlObjectProperty).remove(owlDataFactory.getOWLThing());
+            SharedDataHolder.typeOfObjectsInPosIndivs.get(owlObjectProperty).remove(owlDataFactory.getOWLNothing());
+        }
+        if (SharedDataHolder.typeOfObjectsInNegIndivs.containsKey(owlObjectProperty)) {
+            if (!ConfigParams.removeCommonTypesFromOneSideOnly) {
+                SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).keySet().removeAll(removeFromBothType);
+            } else
+                SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).keySet().removeAll(removeFromNegType);
+            SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).remove(owlDataFactory.getOWLThing());
+            SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).remove(owlDataFactory.getOWLNothing());
+        }
+
+        logger.info("After removing types (types which appeared in both pos and neg images): ");
+        if (SharedDataHolder.typeOfObjectsInPosIndivs.containsKey(owlObjectProperty)) {
+            logger.info("pos types: ");
+            SharedDataHolder.typeOfObjectsInPosIndivs.get(owlObjectProperty).keySet().forEach(type -> {
+                logger.info("\t" + Utility.getShortName((OWLClass) type));
+            });
+        }
+        if (SharedDataHolder.typeOfObjectsInNegIndivs.containsKey(owlObjectProperty)) {
+            logger.info("neg types: ");
+            SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).keySet().forEach(type -> {
+                logger.info("\t" + Utility.getShortName((OWLClass) type));
+            });
+        }
+    }
+
+
+    /**
      * Utility/Helper method to add solution to solutionsSet.
      *
-     * @param CandidateSolutionV2
+     * @param candidateSolutionV2
      */
-    private boolean addToSolutions(CandidateSolutionV2 CandidateSolutionV2) {
+    private boolean addToSolutions(CandidateSolutionV2 candidateSolutionV2) {
 
-        if (!SharedDataHolder.CandidateSolutionSetV2.contains(CandidateSolutionV2)) {
+        if (!SharedDataHolder.CandidateSolutionSetV2.contains(candidateSolutionV2)) {
             // calculate score
-            Score accScore = CandidateSolutionV2.calculateAccuracyComplexCustom();
+            Score accScore = candidateSolutionV2.calculateAccuracyComplexCustom();
             if (accScore.getDefaultScoreValue() > 0) {
-                CandidateSolutionV2.setScore(accScore);
+                candidateSolutionV2.setScore(accScore);
                 // save to shared data holder
-                SharedDataHolder.CandidateSolutionSetV2.add(CandidateSolutionV2);
+                SharedDataHolder.CandidateSolutionSetV2.add(candidateSolutionV2);
                 return true;
             }
             return false;
@@ -333,8 +419,6 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
                         reasoner.getSubClasses(posOwlClassExpression, false).getFlattened().stream().collect(Collectors.toList()));
 
                 posTypeOwlSubClassExpressions.forEach(subClassOwlClassExpression -> {
-
-
                     if (SharedDataHolder.typeOfObjectsInNegIndivs.containsKey(owlObjectProperty)) {
                         // if subclass of this class is included in the negative type
                         if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).containsKey(subClassOwlClassExpression)
@@ -346,29 +430,29 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
                             conjunctiveHornClause.addNegObjectType(subClassOwlClassExpression);
 
                             // create candidate class
-                            CandidateClassV2 candidateClass = new CandidateClassV2(owlObjectProperty, reasoner, ontology);
-                            candidateClass.addConjunctiveHornClauses(conjunctiveHornClause);
+                            CandidateClassV2 candidateClassV2 = new CandidateClassV2(owlObjectProperty, reasoner, ontology);
+                            candidateClassV2.addConjunctiveHornClauses(conjunctiveHornClause);
 
                             // create candidate solution
-                            CandidateSolutionV2 candidateSolution = new CandidateSolutionV2(reasoner, ontology);
-                            candidateSolution.addCandidateClass(candidateClass);
+                            CandidateSolutionV2 candidateSolutionV2 = new CandidateSolutionV2(reasoner, ontology);
+                            candidateSolutionV2.addCandidateClass(candidateClassV2);
                             ////////////////////////////////////////
                             ///// this will take long time if, we have a large number of individuals in the ontology.
                             // this is because we calculate the hornclause's accuracy by reasoner
                             logger.debug("addToSolutions() started.............");
-                            boolean added = addToSolutions(candidateSolution);
+                            boolean added = addToSolutions(candidateSolutionV2);
                             logger.debug("addToSolutions() finished");
                             /////////////////////////////////////
-                            logger.debug("creating candidate solution finished: " + candidateSolution.getSolutionAsString(false));
+                            logger.debug("creating candidate solution finished: " + candidateSolutionV2.getSolutionAsString(false));
                             if (added) {
                                 // save temporarily for combination
                                 Score hornClauseScore = conjunctiveHornClause.calculateAccuracyComplexCustom();
                                 conjunctiveHornClause.setScore(hornClauseScore);
                                 HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClause);
 
-                                Score candidateClassScore = candidateClass.calculateAccuracyComplexCustom();
-                                candidateClass.setScore(candidateClassScore);
-                                HashMapUtility.insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClass);
+                                Score candidateClassScore = candidateClassV2.calculateAccuracyComplexCustom();
+                                candidateClassV2.setScore(candidateClassScore);
+                                HashMapUtility.insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClassV2);
                             }
                             logger.debug("adding candidate solution finished: " + candidateClassesMap.size());
                         }
@@ -473,7 +557,6 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
 
                             // keep only valid listCombinationOfSubClassesForNegPortion.
                             // a combination is valid if and only if it doesn't have self subClass.
-                            // TODO: check with pascal. --- Okay
                             ArrayList<ArrayList<OWLClassExpression>> validListCombinationOfSubClassesForNegPortion = new ArrayList<>();
                             listCombinationOfSubClassesForNegPortion.forEach(classExpressions -> {
                                 if (isValidCombinationOfSubClasses(classExpressions)) {
@@ -498,22 +581,22 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
                                 conjunctiveHornClauseV1V2.setNegObjectTypes(subClasses);
 
                                 // create candidate class
-                                CandidateClassV2 CandidateClassV2 = new CandidateClassV2(owlObjectProperty, reasoner, ontology);
-                                CandidateClassV2.addConjunctiveHornClauses(conjunctiveHornClauseV1V2);
+                                CandidateClassV2 candidateClassV2 = new CandidateClassV2(owlObjectProperty, reasoner, ontology);
+                                candidateClassV2.addConjunctiveHornClauses(conjunctiveHornClauseV1V2);
 
                                 // create candidate solution
-                                CandidateSolutionV2 CandidateSolutionV2 = new CandidateSolutionV2(reasoner, ontology);
-                                CandidateSolutionV2.addCandidateClass(CandidateClassV2);
-                                boolean added = addToSolutions(CandidateSolutionV2);
+                                CandidateSolutionV2 candidateSolutionV2 = new CandidateSolutionV2(reasoner, ontology);
+                                candidateSolutionV2.addCandidateClass(candidateClassV2);
+                                boolean added = addToSolutions(candidateSolutionV2);
                                 if (added) {
                                     // save temporarily for combination
                                     Score hornClauseScore = conjunctiveHornClauseV1V2.calculateAccuracyComplexCustom();
                                     conjunctiveHornClauseV1V2.setScore(hornClauseScore);
                                     HashMapUtility.insertIntoHashMap(hornClausesMap, owlObjectProperty, conjunctiveHornClauseV1V2);
 
-                                    Score candidateClassScore = CandidateClassV2.calculateAccuracyComplexCustom();
-                                    CandidateClassV2.setScore(candidateClassScore);
-                                    HashMapUtility.insertIntoHashMap(candidateClassesMap, owlObjectProperty, CandidateClassV2);
+                                    Score candidateClassScore = candidateClassV2.calculateAccuracyComplexCustom();
+                                    candidateClassV2.setScore(candidateClassScore);
+                                    HashMapUtility.insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClassV2);
                                 }
                             });
                         });
@@ -561,7 +644,8 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
             }
             logger.info("listCombinationOfHornClauses size: " + listCombinationOfHornClauses.size());
             //  Valid combination of hornClauses.
-            //  TODO: check with pascal. -- Okay -- Pascal said okay, but it seems not okay really.
+            //  It's producing (Human and Mammal) And (Human and Animal)
+            // which is weird, it can be reduced to (Human and Mammal and Animal)
             ArrayList<ArrayList<ConjunctiveHornClauseV1V2>> validListCombinationOfHornClauses = new ArrayList<>();
             listCombinationOfHornClauses.forEach(classExpressions -> {
                 if (isValidCombinationOfHornClauses(classExpressions)) {
@@ -576,9 +660,9 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
                 candidateClass.setConjunctiveHornClauses(conjunctiveHornClausesCombination);
 
                 // create candidate solution
-                CandidateSolutionV2 CandidateSolutionV2 = new CandidateSolutionV2(reasoner, ontology);
-                CandidateSolutionV2.addCandidateClass(candidateClass);
-                boolean added = addToSolutions(CandidateSolutionV2);
+                CandidateSolutionV2 candidateSolutionV2 = new CandidateSolutionV2(reasoner, ontology);
+                candidateSolutionV2.addCandidateClass(candidateClass);
+                boolean added = addToSolutions(candidateSolutionV2);
                 if (added) {
                     // save temporarily for combination
                     Score candidateClassScore = candidateClass.calculateAccuracyComplexCustom();
@@ -616,13 +700,12 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
             Collection<List<CandidateClassV2>> objPropsCombination = Utility.restrictedCombinationHelper(origList);
 
             //  Valid combination of ObjectProperties.
-            //  TODO: check with pascal. -- Okay.
-            objPropsCombination.forEach(candidateClasses -> {
+            objPropsCombination.forEach(candidateClassV2s -> {
 
                 // create candidate solution
-                CandidateSolutionV2 candidateSolution = new CandidateSolutionV2(reasoner, ontology);
-                candidateSolution.setCandidateClasses(new ArrayList<>(candidateClasses));
-                addToSolutions(candidateSolution);
+                CandidateSolutionV2 candidateSolutionV2 = new CandidateSolutionV2(reasoner, ontology);
+                candidateSolutionV2.setCandidateClasses(new ArrayList<>(candidateClassV2s));
+                addToSolutions(candidateSolutionV2);
             });
         });
         logger.info("solution using combination of object proeprties/candidateClass finished. " +
@@ -630,7 +713,7 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
     }
 
     /**
-     * extract all objects reffered by the direct individuals and find their types.
+     * Extract all objects reffered by the direct individuals and find their types.
      * <p>
      * Some ontology dont have object properties. So we need to use direct types without r filler for that case.
      * Implementation note: for no object property or direct/bare types we used SharedDataHolder.noneOWLObjProp.
@@ -754,7 +837,6 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
         });
     }
 
-
     /**
      * Create combination of object properties. this is done just one time.
      */
@@ -776,26 +858,6 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
     }
 
     /**
-     * @param typeOfPosIndivs
-     * @param typeOfNegIndivs
-     */
-    private void restoreBackup(HashMap<OWLObjectProperty, HashMap<OWLClassExpression, Integer>> typeOfPosIndivs,
-                               HashMap<OWLObjectProperty, HashMap<OWLClassExpression, Integer>> typeOfNegIndivs) {
-        logger.info("\nBefore restoring, SharedDataHolder.typeOfObjectsInPosIndivs.size(): " + SharedDataHolder.typeOfObjectsInPosIndivs.size());
-        logger.info("\nBefore restoring, SharedDataHolder.typeOfObjectsInPosIndivs.size(): " + SharedDataHolder.typeOfObjectsInNegIndivs.size());
-
-        // restore the backup versions to use in the negType replacement.
-        SharedDataHolder.typeOfObjectsInPosIndivs = typeOfPosIndivs;
-        SharedDataHolder.typeOfObjectsInNegIndivs = typeOfNegIndivs;
-        logger.info("\nAfter restoring, SharedDataHolder.typeOfObjectsInPosIndivs.size(): " + SharedDataHolder.typeOfObjectsInPosIndivs.size());
-        logger.info("\nAfter restoring, SharedDataHolder.typeOfObjectsInNegIndivs.size(): " + SharedDataHolder.typeOfObjectsInNegIndivs.size());
-    }
-
-    transient volatile protected int nrOfTotalIndividuals;
-    transient volatile protected int nrOfPositiveIndividuals;
-    transient volatile protected int nrOfNegativeIndividuals;
-
-    /**
      * @param K6
      */
     public void calculateAccuracyOfTopK6ByReasoner(int K6) {
@@ -809,9 +871,6 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
             }
         }
     }
-
-    transient volatile private int o1Length = 0;
-    transient volatile private int o2Length = 0;
 
     // temporary variables for using inside lambda
     transient volatile private List<ConjunctiveHornClauseV1V2> conjunctiveHornClausesList = new ArrayList<>();
@@ -898,7 +957,7 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
     }
 
     /**
-     * Select top k6 CandidateClassV0 from the candidateClassMap.
+     * Select top k6 CandidateClassV2 from the candidateClassMap.
      *
      * @param limit
      * @return
@@ -977,13 +1036,25 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
         return candidateClassesMap;
     }
 
+    public OWLOntology ontology;
+    public OWLDataFactory owlDataFactory;
+    public OWLOntologyManager owlOntologyManager;
+    public OWLReasoner reasoner;
+    public PrintStream out;
+    public Monitor monitor;
+    protected transient volatile int o1Length = 0;
+    protected transient volatile int o2Length = 0;
+    transient volatile protected int nrOfTotalIndividuals;
+    transient volatile protected int nrOfPositiveIndividuals;
+    transient volatile protected int nrOfNegativeIndividuals;
+
     /**
-     * Sort the solutions
+     * Sort the solutions, in place.
      *
      * @param ascendingOfStringLength
      * @return
      */
-    public boolean sortSolutionsCustom(boolean ascendingOfStringLength) {
+    public boolean sortSolutionsCustom( boolean ascendingOfStringLength) {
 
         ArrayList<CandidateSolutionV2> solutionList = new ArrayList<>(
                 SharedDataHolder.CandidateSolutionSetV2);
@@ -1043,11 +1114,24 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder{
             }
         });
 
-        // save in shared data holder
+//        try {
+//            // save in shared data holder
+//            if (candidateSolutions.get(0) instanceof CandidateSolutionV0) {
+//                SharedDataHolder.SortedCandidateSolutionListV0 = (ArrayList<CandidateSolutionV0>) (ArrayList<?>) candidateSolutions;
+//            } else if (candidateSolutions.get(0) instanceof CandidateSolutionV1) {
+//                SharedDataHolder.SortedCandidateSolutionListV1V2 = (ArrayList<CandidateSolutionV1>) (ArrayList<?>) candidateSolutions;
+//            }
+//        } catch (ClassCastException classCastException) {
+//            classCastException.printStackTrace();
+//            logger.error("Class cast exception, program exiting");
+//            System.exit(-1);
+//        }
+
         SharedDataHolder.SortedCandidateSolutionListV2 = solutionList;
 
         return true;
     }
+
 
     /**
      * Print the solutions

@@ -61,7 +61,7 @@ public class CandidateClassV2 extends CandidateClass {
     /**
      * Multiple conjunctive horn clause.
      */
-    private ArrayList<ConjunctiveHornClauseV1V2> conjunctiveHornClauses;
+    public ArrayList<ConjunctiveHornClauseV1V2> conjunctiveHornClauses;
 
     /**
      * Public constructor
@@ -70,6 +70,7 @@ public class CandidateClassV2 extends CandidateClass {
      */
     public CandidateClassV2(OWLObjectProperty owlObjectProperty, OWLReasoner _reasoner, OWLOntology _ontology) {
         super(owlObjectProperty, _reasoner, _ontology);
+
         this.conjunctiveHornClauses = new ArrayList<>();
     }
 
@@ -80,9 +81,9 @@ public class CandidateClassV2 extends CandidateClass {
      */
     public CandidateClassV2(CandidateClassV2 anotherCandidateClass, OWLOntology _ontology) {
         super(anotherCandidateClass, _ontology);
+
         this.conjunctiveHornClauses = new ArrayList<>(anotherCandidateClass.conjunctiveHornClauses);
     }
-
 
     /**
      * @return ArrayList<ConjunctiveHornClauseV1V2>

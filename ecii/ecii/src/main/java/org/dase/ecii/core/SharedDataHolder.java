@@ -137,7 +137,7 @@ public class SharedDataHolder {
     // to support both v0 and v1
     public static HashSet<CandidateSolutionV2> CandidateSolutionSetV2 = new HashSet<>();
 
-    public static ArrayList<CandidateSolutionV0> sortedCandidateSolutionV0List = new ArrayList<>();
+    public static ArrayList<CandidateSolutionV0> SortedCandidateSolutionListV0 = new ArrayList<>();
     // to support both v0 and v1 and v2
     public static ArrayList<CandidateSolutionV1> SortedCandidateSolutionListV1 = new ArrayList<>();
     // to support both v0 and v1 and v2
@@ -186,7 +186,7 @@ public class SharedDataHolder {
 
         SharedDataHolder.candidateSolutionV0Set.clear();
         // HashMap<Solution:solution,Boolean:shouldTraverse> SolutionsMap
-        SharedDataHolder.sortedCandidateSolutionV0List.clear();
+        SharedDataHolder.SortedCandidateSolutionListV0.clear();
 
         SharedDataHolder.CandidateSolutionSetV1.clear();
         SharedDataHolder.SortedCandidateSolutionListV1.clear();

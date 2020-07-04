@@ -254,7 +254,7 @@ public class ConjunctiveHornClauseV1V2 extends ConjunctiveHornClause {
      */
     public HashSet<OWLNamedIndividual> individualsCoveredByThisHornClauseByReasoner() {
 
-        logger.debug("calculating covered individuals by hornClause " + this.getConjunctiveHornClauseAsOWLClassExpression() + " by reasoner.........");
+        logger.debug("Calculating covered individuals by hornClause " + this.getConjunctiveHornClauseAsOWLClassExpression() + " by reasoner.........");
         HashSet<OWLNamedIndividual> coveredIndividuals = new HashSet<>();
         OWLClassExpression owlClassExpression = this.getConjunctiveHornClauseAsOWLClassExpression();
 

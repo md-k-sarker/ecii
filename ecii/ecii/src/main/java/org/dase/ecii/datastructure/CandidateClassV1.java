@@ -61,7 +61,7 @@ public class CandidateClassV1 extends CandidateClass{
     /**
      * Multiple conjunctive horn clause.
      */
-    private ArrayList<ConjunctiveHornClauseV1V2> conjunctiveHornClauses;
+    public ArrayList<ConjunctiveHornClauseV1V2> conjunctiveHornClauses;
 
     /**
      * Public constructor

@@ -4,12 +4,12 @@ Written by sarker.
 Written at 4/23/20.
 */
 
+import org.dase.ecii.datastructure.CandidateSolutionV1;
 import org.dase.ecii.datastructure.CandidateSolutionV2;
 import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Monitor;
 import org.dase.ecii.util.Utility;
 import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
@@ -25,7 +25,8 @@ import java.util.HashSet;
 import java.util.stream.Collectors;
 
 /**
- * Class to compute the similarity
+ * Class to compute the similarity,
+ * V2 is implemented till now.
  */
 public class Similarity {
 
@@ -77,7 +78,7 @@ public class Similarity {
 
         ArrayList<CandidateSolutionV2> solutions_with_max_accuracy = new ArrayList<>(
                 SharedDataHolder.SortedCandidateSolutionListV2.stream().filter(
-                        CandidateSolutionV2 -> CandidateSolutionV2.getScore().getDefaultScoreValue() == defaultAccuracyInitialMax)
+                        candidateSolutionV1V2  -> candidateSolutionV1V2.getScore().getDefaultScoreValue() == defaultAccuracyInitialMax)
                         .collect(Collectors.toList()));
         monitor.displayMessage("\nTotal solutions with accuracy (" + ConfigParams.scoreTypeNameRaw + ") "
                 + defaultAccuracyInitialMax + " are " + solutions_with_max_accuracy.size(), true);
@@ -89,23 +90,23 @@ public class Similarity {
         double accuracy_probability_for_pos_indiv = 0;
         double accuracy_probability_for_neg_indiv = 0;
 
-        for (CandidateSolutionV2 CandidateSolutionV2 : solutions_with_max_accuracy) {
+        for (CandidateSolutionV2 candidateSolutionV2 : solutions_with_max_accuracy) {
 
-            if (null != CandidateSolutionV2.getSolutionAsOWLClassExpression()) {
-                logger.debug("started looking subsumed by candidate solution: " + CandidateSolutionV2.getSolutionAsString(true));
+            if (null != candidateSolutionV2.getSolutionAsOWLClassExpression()) {
+                logger.debug("started looking subsumed by candidate solution: " + candidateSolutionV2.getSolutionAsString(true));
 
                 HashSet<OWLNamedIndividual> namedIndividualHashSet = new HashSet<>(owlReasoner.getInstances(
-                        CandidateSolutionV2.getSolutionAsOWLClassExpression(), false).getFlattened());
+                        candidateSolutionV2.getSolutionAsOWLClassExpression(), false).getFlattened());
 
                 if (namedIndividualHashSet.contains(posOwlNamedIndividual)) {
                     logger.debug(Utility.getShortNameWithPrefix(posOwlNamedIndividual) +
-                            " is subsumed by solution " + CandidateSolutionV2.getSolutionAsString(true));
-                    accuracy_total_for_pos_indiv += CandidateSolutionV2.getScore().getDefaultScoreValue();
+                            " is subsumed by solution " + candidateSolutionV2.getSolutionAsString(true));
+                    accuracy_total_for_pos_indiv += candidateSolutionV2.getScore().getDefaultScoreValue();
                 }
                 if (namedIndividualHashSet.contains(negOwlNamedIndividual)) {
                     logger.debug(Utility.getShortNameWithPrefix(posOwlNamedIndividual) +
-                            " is subsumed by solution " + CandidateSolutionV2.getSolutionAsString(true));
-                    accuracy_total_for_neg_indiv += CandidateSolutionV2.getScore().getDefaultScoreValue();
+                            " is subsumed by solution " + candidateSolutionV2.getSolutionAsString(true));
+                    accuracy_total_for_neg_indiv += candidateSolutionV2.getScore().getDefaultScoreValue();
                 }
             } else {
                 nullClassCounter++;
@@ -203,10 +204,10 @@ public class Similarity {
         logger.info("Caching of subsumed Indivs started...........");
         // cache the subsumed individuals
         HashMap<CandidateSolutionV2, HashSet<OWLNamedIndividual>> subsumedIndivsCache = new HashMap<>();
-        for (CandidateSolutionV2 CandidateSolutionV2 : solutions_with_max_accuracy) {
+        for (CandidateSolutionV2 candidateSolutionV2 : solutions_with_max_accuracy) {
             HashSet<OWLNamedIndividual> subsumedIndivs = new HashSet<>(owlReasoner.getInstances(
-                    CandidateSolutionV2.getSolutionAsOWLClassExpression(), false).getFlattened());
-            subsumedIndivsCache.put(CandidateSolutionV2, subsumedIndivs);
+                    candidateSolutionV2.getSolutionAsOWLClassExpression(), false).getFlattened());
+            subsumedIndivsCache.put(candidateSolutionV2, subsumedIndivs);
         }
         logger.info("Caching of subsumed Indivs finished");
 
@@ -215,13 +216,13 @@ public class Similarity {
             logger.debug("Started looking subsumed for individual: " + individual.getIRI());
             double accuracy_total_for_single_indiv = 0;
             double accuracy_avg_for_single_indiv = 0;
-            for (CandidateSolutionV2 CandidateSolutionV2 : solutions_with_max_accuracy) {
-                logger.debug("started looking subsumed by candidate solution: " + CandidateSolutionV2.getSolutionAsString(true));
+            for (CandidateSolutionV2 candidateSolutionV2 : solutions_with_max_accuracy) {
+                logger.debug("started looking subsumed by candidate solution: " + candidateSolutionV2.getSolutionAsString(true));
 
-                if (subsumedIndivsCache.get(CandidateSolutionV2).contains(individual)) {
+                if (subsumedIndivsCache.get(candidateSolutionV2).contains(individual)) {
                     logger.debug(Utility.getShortNameWithPrefix(individual) +
-                            " is subsumed by solution " + CandidateSolutionV2.getSolutionAsString(true));
-                    accuracy_total_for_single_indiv += CandidateSolutionV2.getScore().getDefaultScoreValue();
+                            " is subsumed by solution " + candidateSolutionV2.getSolutionAsString(true));
+                    accuracy_total_for_single_indiv += candidateSolutionV2.getScore().getDefaultScoreValue();
                 }
 
             }
