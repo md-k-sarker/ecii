@@ -1,4 +1,4 @@
-package org.dase.ecii.ontofactory;
+package org.dase.ecii.ontofactory.create;
 
 import org.dase.ecii.util.ConfigParams;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -221,8 +221,9 @@ public class CreateOWLFromADE20k {
 
     /*
      * Generate OWL File with with respect to score in annotations
+     * Hard coded to work for atribute files matching with ADE20K images attributes
      */
-    public static void createOWL(Path filePath) throws Exception {
+    public static void createOWL(Path filePath, String ontoIRI) throws Exception {
 
         File f = filePath.toFile();
         String imageName = f.getName().replaceAll("_atr.txt", "");
@@ -242,7 +243,7 @@ public class CreateOWLFromADE20k {
 
         OWLDataFactory owlDataFactory = owlManager.getOWLDataFactory();
 
-        IRI ontologyIRI = IRI.create(ConfigParams.ontologyIRI + imageName);
+        IRI ontologyIRI = IRI.create(ontoIRI + imageName);
 
         String temp = f.getAbsolutePath().replaceAll("_atr.txt", ".owl");
         // for windows os

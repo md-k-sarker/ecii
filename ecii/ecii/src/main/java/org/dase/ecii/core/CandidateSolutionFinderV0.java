@@ -61,13 +61,13 @@ public class CandidateSolutionFinderV0 extends CandidateSolutionFinder {
      */
     private boolean addToSolutions(CandidateSolutionV0 candidateSolutionV0) {
 
-        if (!SharedDataHolder.candidateSolutionSetV0.contains(candidateSolutionV0)) {
+        if (!SharedDataHolder.CandidateSolutionSetV0.contains(candidateSolutionV0)) {
             // calculate score
             Score accScore = candidateSolutionV0.calculateAccuracyComplexCustom();
             if (accScore.getCoverage() > 0) {
                 candidateSolutionV0.setScore(accScore);
                 // save to shared data holder
-                SharedDataHolder.candidateSolutionSetV0.add(candidateSolutionV0);
+                SharedDataHolder.CandidateSolutionSetV0.add(candidateSolutionV0);
                 return true;
             }
             return false;
@@ -78,13 +78,40 @@ public class CandidateSolutionFinderV0 extends CandidateSolutionFinder {
     /**
      * save the initial solutions into SharedDataHolder.candidateSolutionV0Set object.
      */
-    public void saveInitialSolutionsCustom() {
+    public void createAndSaveSolutions() {
 
         // for rfilled types and for bare types. for no object property or direct types we used SharedDataHolder.noneOWLObjProp
 
-        // create solution using just one class expression.
-
         // solution using only a single positive type
+        createSolutionUsingSinglePosTypes();
+
+        // should we use only negative type without a single positive type in Conjunctive Horn Clauses?
+        // ref: https://en.wikipedia.org/wiki/Horn_clause
+        // solution using only a single negative type is only okay for V0 hornClauses,
+        // essentially only for ecii_V0 solution.
+        createSolutionUsingSingleNegTypes();
+
+        // create solution using both positive and negative of class expressions.
+        // single positive and single negative.
+        createSolutionUsingSinglePosAndNegTypes();
+
+        // single positive and multiple negative (upto K1 limit).
+        createSolutionUsingSinglePosAndMultiNegTypes();
+
+        // create solution by combining hornClause
+        createSolutionByCombiningHornClause();
+
+        // create solution by combining candidateClass
+        createSolutionByCombiningCandidateClass();
+
+
+    }
+
+    /**
+     * Create solutions using single positive types.
+     * Positive types include direct positive types and indirect positive types
+     */
+    private void createSolutionUsingSinglePosTypes() {
         logger.info("solution using only a single positive type started...............");
         SharedDataHolder.typeOfObjectsInPosIndivs.forEach((owlObjectProperty, hashMap) -> {
             hashMap.forEach((posOwlClassExpression, integer) -> {
@@ -114,12 +141,13 @@ public class CandidateSolutionFinderV0 extends CandidateSolutionFinder {
                 }
             });
         });
-        logger.info("solution using only a single positive type finished. Total solutions: " + SharedDataHolder.candidateSolutionSetV0.size());
+        logger.info("solution using only a single positive type finished. Total solutions: " + SharedDataHolder.CandidateSolutionSetV0.size());
+    }
 
-        // should we use only negative type without a single positive type in Conjunctive Horn Clauses?
-        // ref: https://en.wikipedia.org/wiki/Horn_clause
-        // solution using only a single negative type is only okay for V0 hornClauses,
-        // essentially only for ecii_V0 solution.
+    /**
+     * Create solutions using single negative types.
+     */
+    private void createSolutionUsingSingleNegTypes() {
         logger.info("solution using only a single negative type started...............");
         SharedDataHolder.typeOfObjectsInNegIndivs.forEach((owlObjectProperty, hashMap) -> {
             hashMap.forEach((negOwlClassExpression, integer) -> {
@@ -148,10 +176,13 @@ public class CandidateSolutionFinderV0 extends CandidateSolutionFinder {
                 }
             });
         });
-        logger.info("solution using only a single negative type finished. Total solutions: " + SharedDataHolder.candidateSolutionSetV0.size());
+        logger.info("solution using only a single negative type finished. Total solutions: " + SharedDataHolder.CandidateSolutionSetV0.size());
+    }
 
-        // create solution using both positive and negative of class expressions.
-        // single positive and single negative.
+    /**
+     * Create solutions using single positive types and single negative types.
+     */
+    private void createSolutionUsingSinglePosAndNegTypes() {
         logger.info("solution using only a single positive and single negative type started...............");
         SharedDataHolder.typeOfObjectsInPosIndivs.forEach((owlObjectProperty, hashMap) -> {
             hashMap.forEach((posOwlClassExpression, integer) -> {
@@ -193,8 +224,12 @@ public class CandidateSolutionFinderV0 extends CandidateSolutionFinder {
             });
         });
         logger.info("solution using only a single positive and single negative type finished. Total Solutions: " + SharedDataHolder.CandidateSolutionSetV1.size());
+    }
 
-        // single positive and multiple negative (upto K1 limit).
+    /**
+     * Create solutions using single positive types and single negative types.
+     */
+    private void createSolutionUsingSinglePosAndMultiNegTypes() {
         logger.info("solution using only a single positive and multiple negative type started...............");
         SharedDataHolder.typeOfObjectsInPosIndivs.forEach((owlObjectProperty, hashMap) -> {
             hashMap.forEach((posOwlClassExpression, integer) -> {
@@ -267,8 +302,15 @@ public class CandidateSolutionFinderV0 extends CandidateSolutionFinder {
                 });
             });
         });
-        logger.info("solution using only a single positive and multiple negative type finished. Total Solutions: " + SharedDataHolder.candidateSolutionSetV0.size());
+        logger.info("solution using only a single positive and multiple negative type finished. Total Solutions: " + SharedDataHolder.CandidateSolutionSetV0.size());
+    }
 
+    /**
+     * Create solutions using the combination of hornClauses.
+     * This function at first select the top K5 hornClauses and,
+     * make combination of them to produce solutions
+     */
+    private void createSolutionByCombiningHornClause() {
         /**
          * Select top k5 hornClauses to make combination. This function reduces the hornClauseMap size.
          */
@@ -312,12 +354,18 @@ public class CandidateSolutionFinderV0 extends CandidateSolutionFinder {
                     HashMapUtility.insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClassV0);
                 }
             });
-            logger.info("\tcombination of horn clause using object property " + Utility.getShortName(owlObjectProperty) + " finished. Total solutions: " + SharedDataHolder.candidateSolutionSetV0.size());
+            logger.info("\tcombination of horn clause using object property " + Utility.getShortName(owlObjectProperty) + " finished. Total solutions: " + SharedDataHolder.CandidateSolutionSetV0.size());
 
         });
-        logger.info("solution using combination of horn clause finished. Total solutions: " + SharedDataHolder.candidateSolutionSetV0.size());
+        logger.info("solution using combination of horn clause finished. Total solutions: " + SharedDataHolder.CandidateSolutionSetV0.size());
+    }
 
-
+    /**
+     * Create solutions using the combination of candidateClasses.
+     * This function at first select the top K6 candidateClass and,
+     * make combination of them to produce solutions
+     */
+    private void createSolutionByCombiningCandidateClass() {
         /**
          * Select top k6 CandidateClasses to make combination. This function reduces the candidate Classes size.
          */
@@ -347,7 +395,7 @@ public class CandidateSolutionFinderV0 extends CandidateSolutionFinder {
                 addToSolutions(candidateSolutionV0);
             });
         });
-        logger.info("solution using combination of object proeprties finished. Total solutions: " + SharedDataHolder.candidateSolutionSetV0.size());
+        logger.info("solution using combination of object proeprties finished. Total solutions: " + SharedDataHolder.CandidateSolutionSetV0.size());
     }
 
     /**

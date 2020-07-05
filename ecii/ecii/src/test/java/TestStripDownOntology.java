@@ -3,7 +3,7 @@ Written by sarker.
 Written at 4/21/20.
 */
 
-import org.dase.ecii.ontofactory.StripDownOntology;
+import org.dase.ecii.ontofactory.strip.StripDownOntology;
 import org.dase.ecii.ontofactory.strip.ListofObjPropAndIndiv;
 import org.dase.ecii.ontofactory.strip.ListofObjPropAndIndivTextualName;
 import org.dase.ecii.util.Utility;

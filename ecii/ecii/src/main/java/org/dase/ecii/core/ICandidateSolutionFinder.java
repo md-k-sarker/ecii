@@ -14,7 +14,9 @@ public interface ICandidateSolutionFinder {
 
     abstract void removeCommonTypesFromPosAndNeg(OWLObjectProperty owlObjectProperty);
 
-    void saveInitialSolutionsCustom();
+    void createAndSaveSolutions();
 
     void calculateAccuracyOfTopK6ByReasoner(ArrayList<? extends CandidateSolution> sortedCandidateSolutionList, int K6);
+
+    void printSolutions(int K6);
 }

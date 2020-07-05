@@ -3,7 +3,7 @@ Written by sarker.
 Written at 4/22/20.
 */
 
-import org.dase.ecii.ontofactory.CreateOWLFromCSV;
+import org.dase.ecii.ontofactory.create.CreateOWLFromCSV;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -108,10 +108,10 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
 
         // save initial solutions
         logger.info("saveInitialSolutions started...............");
-        saveInitialSolutionsCustom();
+        createAndSaveSolutions();
         logger.info("saveInitialSolutions finished");
 
-        // using candidatesolutionfinder.saveInitialSolutionsCustom() we are creating all initial combination.
+        // using candidatesolutionfinder.createAndSaveSolutions() we are creating all initial combination.
         // as we have used psoitive type and it's super classes and negative types and it's super classes, we are only left with refining with subClass.
         // For negative type no need to refine with subClass.
         // For positive type we can refine with subClass. TODO.
@@ -502,4 +502,6 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
             }
         }
     }
+
+
 }

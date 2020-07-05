@@ -1,4 +1,4 @@
-package org.dase.ecii.ontofactory;
+package org.dase.ecii.ontofactory.create;
 
 import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Utility;

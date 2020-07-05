@@ -131,7 +131,7 @@ public class SharedDataHolder {
 
     // score is inside of a solution
     // i.e. solution class contains the score also.
-    public static HashSet<CandidateSolutionV0> candidateSolutionSetV0 = new HashSet<>();
+    public static HashSet<CandidateSolutionV0> CandidateSolutionSetV0 = new HashSet<>();
     public static HashSet<CandidateSolutionV1> CandidateSolutionSetV1 = new HashSet<>();
     public static HashSet<CandidateSolutionV2> CandidateSolutionSetV2 = new HashSet<>();
 
@@ -139,7 +139,7 @@ public class SharedDataHolder {
     public static ArrayList<CandidateSolutionV1> SortedCandidateSolutionListV1 = new ArrayList<>();
     public static ArrayList<CandidateSolutionV2> SortedCandidateSolutionListV2 = new ArrayList<>();
 
-    public static ArrayList<CandidateSolutionV0> sortedByReasonerCandidateSolutionListV0 = new ArrayList<>();
+    public static ArrayList<CandidateSolutionV0> SortedByReasonerCandidateSolutionListV0 = new ArrayList<>();
 
 
     // cache all reasoner calls, specifically finding individuals of an owlClassExpression must be cached.
@@ -178,9 +178,9 @@ public class SharedDataHolder {
         SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.clear();
         SharedDataHolder.IndividualsOfThisOWLClassExpressionByECII.clear();
 
-        SharedDataHolder.sortedByReasonerCandidateSolutionListV0.clear();
+        SharedDataHolder.SortedByReasonerCandidateSolutionListV0.clear();
 
-        SharedDataHolder.candidateSolutionSetV0.clear();
+        SharedDataHolder.CandidateSolutionSetV0.clear();
         // HashMap<Solution:solution,Boolean:shouldTraverse> SolutionsMap
         SharedDataHolder.SortedCandidateSolutionListV0.clear();
 

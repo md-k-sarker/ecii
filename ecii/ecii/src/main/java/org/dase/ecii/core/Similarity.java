@@ -126,11 +126,11 @@ public class Similarity {
         }
 
         double similarity = 1 - Math.abs((accuracy_probability_for_pos_indiv - accuracy_probability_for_neg_indiv));
-//        logger.debug("Subsumed avg of accuracy for ifp: " + posOwlNamedIndividual + ": " + accuracy_probability_for_pos_indiv);
-//        monitor.displayMessage("Subsumed average sum of accuracy (" + ConfigParams.scoreTypeNameRaw + ") for ifp: "
-//                + posOwlNamedIndividual + ": " + accuracy_probability_for_pos_indiv, true);
-//
-//        logger.debug("Looking subsumed for individual " + posOwlNamedIndividual.getIRI() + " finished ");
+        logger.debug("Subsumed avg of accuracy for ifp: " + posOwlNamedIndividual + ": " + accuracy_probability_for_pos_indiv);
+        logger.debug("Subsumed average sum of accuracy (" + ConfigParams.scoreTypeNameRaw + ") for ifp: "
+                + posOwlNamedIndividual + ": " + accuracy_probability_for_pos_indiv, true);
+
+        logger.debug("Looking subsumed for individual " + posOwlNamedIndividual.getIRI() + " finished ");
 
         monitor.displayMessage("\n\n##################################", true);
         monitor.displayMessage("Similarity score of posOwlNamedIndividual " + Utility.getShortName(posOwlNamedIndividual) + " with IFP : " + Utility.getShortName(negOwlNamedIndividual) + ": " + similarity, true);
@@ -166,7 +166,6 @@ public class Similarity {
     public void findSimilarityMultipleIFPsWithASetOfIFPs(String new_indivs_path) throws IOException {
 
         logger.info("Finding similarity started...............");
-//        String ifps_path = "/Users/sarker/Workspaces/Jetbrains/residue/experiments/KG-based similarity/IFP_Categories/ifps_to_compare.txt";
 
         monitor.displayMessage("\nFinding similarity of individuals ", true);
         FileReader fileReader = new FileReader(new_indivs_path);
@@ -241,6 +240,4 @@ public class Similarity {
         logger.info("Finding similarity finished");
         monitor.displayMessage("Finding similarity finished. ", true);
     }
-
-
 }

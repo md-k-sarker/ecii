@@ -1,4 +1,4 @@
-package org.dase.ecii.ontofactory;
+package org.dase.ecii.ontofactory.create;
 /*
 Written by sarker.
 Written at 4/22/20.

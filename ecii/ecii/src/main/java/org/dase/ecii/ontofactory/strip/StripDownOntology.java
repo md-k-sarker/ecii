@@ -1,4 +1,4 @@
-package org.dase.ecii.ontofactory;
+package org.dase.ecii.ontofactory.strip;
 /*
 Written by sarker.
 Written at 3/7/20.

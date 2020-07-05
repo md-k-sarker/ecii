@@ -678,7 +678,7 @@ public class Utility {
      */
     public static HashMap<OWLObjectProperty, Double> readObjectPropsFromConf(String confFileFullContent, String delimeter) throws IOException, MalFormedIRIException {
 
-        //logger.debug("Reading object properties from full content: " + confFileFullContent);
+        logger.debug("Reading object properties from full content: " + confFileFullContent);
 
         String inputText = confFileFullContent;
 
@@ -686,28 +686,27 @@ public class Utility {
         Pattern pattern = Pattern.compile(regexText);
         Matcher matcher = pattern.matcher(inputText);
 
-        //logger.debug("inputText: " + inputText);
-        //logger.debug("regexText: " + regexText);
+        logger.debug("inputText: " + inputText);
+        logger.debug("regexText: " + regexText);
 
         String objPropsPortion = "";
         if (matcher.find()) {
             objPropsPortion = matcher.group();
-            //logger.debug("objPropsPortion: " + objPropsPortion);
+            logger.debug("objPropsPortion: " + objPropsPortion);
         }
 
         String regexEachEntity = "\"{1}([^\"])*\"{1}";
-        logger.info("objPropsPortion: " + objPropsPortion);
+        logger.debug("objPropsPortion: " + objPropsPortion);
         HashMap<OWLObjectProperty, Double> objectPropertyFloatHashMap = new HashMap<>();
 
         // if starts with comment
         String commentRegex = "^(#|\\/*|\\/\\/)+.";
-        logger.info("objprop-----:" + objectPropertyFloatHashMap.size());
         if (objPropsPortion.matches(commentRegex)) {
             logger.info("objprop if -----:" + objectPropertyFloatHashMap.size());
             System.exit(-1);
             return objectPropertyFloatHashMap;
         }
-        logger.info("objprop else-----:" + objectPropertyFloatHashMap.size());
+        logger.debug("objprops size:" + objectPropertyFloatHashMap.size());
 
         ArrayList<IRI> objPropsIRI = extractEachEntityIRIFromTextPortion(objPropsPortion, regexEachEntity, delimeter);
 

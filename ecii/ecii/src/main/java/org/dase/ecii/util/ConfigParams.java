@@ -1,5 +1,6 @@
 package org.dase.ecii.util;
 
+import org.dase.ecii.core.ECIIVersion;
 import org.dase.ecii.core.Score;
 import org.dase.ecii.core.ScoreType;
 import org.dase.ecii.core.SharedDataHolder;
@@ -31,39 +32,54 @@ public final class ConfigParams {
      */
     private static Properties prop;
 
-    // properties needed
+    // properties to run ecii algorithm
+    /**
+     * Ecii algorithm version.
+     * There are 3 different versions of ecii algorithm
+     * V0, V1 and V2.
+     * String, Optional, Default: V2
+     */
+    public static ECIIVersion ECIIAlgorithmVersion;
+
     /**
      * Configuration file path. For concept induction or similarity measurement lot's of settings are required.
      * So those are written in a config file and config file path are given as a parameter to the program.
      */
     public static String confFilePath;
+
     /**
      * For batch running we can provide the directory of config files  and the system will run for all config files.
+     * String,
      */
     public static String confFileDir;
+
     /**
      * Ontology reasoner name
      * Possible reasoners: hermit, elk, fact, jfact, pellet
      * Default: pellet
      */
     public static String reasonerName;
+
     /**
      * Type of metric to calculate accuracy/score of a solution.
      * Possible metrices: coverage, precision, recall, f_measure, hybrid (precision+recall+f_measure)
      * Default: f_measure
      */
     public static String scoreTypeNameRaw;
+
     /**
      * Ontology path, for batch running it will be different for multiple operation
+     * String, Required
      */
     public static String ontoPath;
+
     /*
      * outputResultPath will always be at the same directory of the confFile.
      */
     public static String outputResultPath;
 
     /**
-     * default prefix.
+     * Default prefix.
      */
     public static String namespace;
 
@@ -105,16 +121,14 @@ public final class ConfigParams {
     /**
      * conceptLimitInNegExpr: Use only these number of top performing atomic concepts in the negative expression of a hornClause
      * Also named as K1
-     * Integer
-     * Default: 2
+     * Integer, Optional, Default: 2
      */
     public static int conceptLimitInNegExpr;
 
     /**
      * hornClauseLimit: Number of allowable hornClause inside of a candidateClass.
      * Also named as K2
-     * Integer
-     * Default: 2
+     * Integer, Optional, Default: 2
      */
     public static int hornClauseLimit;
 
@@ -122,8 +136,7 @@ public final class ConfigParams {
      * objPropsCombinationLimit: Use this number of objectproperties in a single solution If we have more than 1 then it
      * will combine those objectProperties to make a solution.
      * Also named as K3.
-     * Integer
-     * Default: 2
+     * Integer, Optional, Default: 2
      */
     public static int objPropsCombinationLimit;
 
@@ -133,8 +146,7 @@ public final class ConfigParams {
      * Also named as K4.
      * ecii-v0: not used.
      * ecii-v2: being used.
-     * Integer
-     * Default: 2
+     * Integer, Optional, Default: 2
      */
     public static int conceptLimitInPosExpr;
 
@@ -144,8 +156,7 @@ public final class ConfigParams {
      * We use this combination to make the positive expression of hornClause.
      * size of combination would be nCr or posClassListMaxSize--C--conceptLimitInPosExpr
      * Also named as K9
-     * Integer
-     * Default 20
+     * Integer, Optional, Default 20
      */
     public static int posClassListMaxSize;
 
@@ -155,8 +166,7 @@ public final class ConfigParams {
      * We use this combination to make the negative expression of hornClause.
      * size would be nCr or negClassListMaxSize--C--conceptLimitInNegExpr
      * Also named as k10
-     * Integer
-     * Default: 20
+     * Integer, Optional, Default: 20
      */
     public static int negClassListMaxSize;
 
@@ -164,8 +174,7 @@ public final class ConfigParams {
      * hornClausesListMaxSize: Select these numbers of top performing hornClauses, to combine them in candidateClasses
      * size would be nCr or hornClausesListMaxSize--C--hornClauseLimit
      * Also named as K5
-     * Integer
-     * Default: 10
+     * Integer, Optional, Default: 10
      */
     public static int hornClausesListMaxSize;
 
@@ -173,24 +182,21 @@ public final class ConfigParams {
      * candidateClassesListMaxSize: Select these numbers of top performing candidateClasses, to combine them in candidateSolution
      * size would be nCr or candidateClassesListMaxSize--C--objPropsCombinationLimit
      * Also named as K6
-     * Integer
-     * Default: 10
+     * Integer, Optional, Default: 10
      */
     public static int candidateClassesListMaxSize;
 
     /**
-     * validateByReasonerSize: Validate the accuracy of top solutions by reasoner upto this number of solutions
+     * validateByReasonerSize: Validate the accuracy of top n solutions by reasoner upto this number of solutions
      * Also named as k8
-     * Integer
-     * Default: 0
+     * Integer, Optional, Default: 0
      */
     public static int validateByReasonerSize;
 
     /**
      * ascendingOfStringLength: To sort the solution whether use string length from small to large or large to small.
      * If true, use small to large, if false use large to small
-     * Boolean
-     * Default: false
+     * Boolean, Optional, Default: false
      */
     public static boolean ascendingOfStringLength;
 
@@ -198,31 +204,44 @@ public final class ConfigParams {
      * When printing solutions, use rdfs:label annotations instead of name.
      * if no rdfs label is given, it will print the gerShortNameWithPrefix
      * If this is true, it will override the gerShortNameWithPrefix options, will just print the rdfs label.
-     * Boolean, Optional
-     * Default: false
+     * Boolean, Optional, Default: false
      */
     public static boolean printLabelInsteadOfName = false;
 
-    //public static double combinationThreshold;
-    public static boolean batch;
-    public static String batchStartingPath;
-
-    // used in CreateOWLFromADE20k.java class
-    public static final String ontologyIRI = "http://www.daselab.org/ontologies/ADE20K/hcbdwsu/";
 
     /**
-     * whether to measure the parwise similarity or not.
+     * Run mutiple operations in batch or a single operation
+     * Will be overridden by program parameter -b or .config
+     * Boolean, Optional, Default: false
+     */
+    public static boolean batch;
+
+    /**
+     * Run all the config files in this directory.
+     * It is required when batch operation is prescribed
+     * String, Required
+     */
+    public static String batchStartingPath;
+
+
+    /**
+     * Whether to measure the parwise similarity or not.
      * Will be overridden by the program parameter -m or -e
+     * Boolean, Optional, Default: false
      */
     public static boolean runPairwiseSimilarity = false;
 
     /**
-     * Experimental: instead of typeOfObjectsInPosIndivsMaxSize, posClassListMaxSize is multiplied by multiplicationConstant in limiting the positive types list.
+     * Experimental: instead of typeOfObjectsInPosIndivsMaxSize, posClassListMaxSize is multiplied by
+     * multiplicationConstant in limiting the positive types list.
      * This limits the solution size severely!! need to check. todo(zaman)
-     * Integer
-     * Default 1
+     * <p>
+     * Only applies to ecii-v2
+     * Integer, Optional, Default: 1
      */
     public static int multiplicationConstant = 1;
+
+
     //@formatter:off
     /**
      * Experimental, maximum positive individuals (positive objects connected through some property) size, it was used to limit
@@ -233,30 +252,39 @@ public final class ConfigParams {
      *                         .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
      */
     //    public static int typeOfObjectsInPosIndivsMaxSize = 100;
+    //@formatter:on
 
     /**
      * Experimental
      * This is being used inside: solution using multiple positive and multiple negative type
      * need to check. todo(zaman)
+     * <p>
+     * Only applies to ecii-v2
+     * Integer, Optional, Default: 5
      */
     public static int typeOfObjectsInPosIndivsMinSize = 5;
 
     /**
      * Experimental
      * need to check. todo(zaman)
+     * Only applies to ecii-v2
+     * Integer, Optional, Default: 5
      */
     public static int typeOfObjectsInNegIndivsMinSize = 5;
     //@formatter:on
 
     /**
-     * Parse the default config.properties
+     * Parse the config file
+     * <p>
+     * Config file must end with .config
+     * <p>
+     * config file's comment must only contain #, can't start with // or /*
+     * (weird!) java properties doesn't allow multiline comment
      *
-     * @return
+     * @param _confFilePath
      */
     public static void parseConfigParams(String _confFilePath) {
 
-        // config file's comment must only contain #, can't start with // or /*
-        // java properties doesn't allow multiline comment
         confFilePath = Utility.getCorrectPath(SharedDataHolder.programStartingDir, _confFilePath);
         prop = new Properties();
 
@@ -284,6 +312,10 @@ public final class ConfigParams {
 
             SharedDataHolder.confFileFullContent = readAllContent(confFilePath);
 
+            // ecii algorithm version
+            String eciiVersionRawName = prop.getProperty("eccAlgorithmVersion", "v2");
+            setECIIVersion(eciiVersionRawName);
+
             prefixes = Utility.extractPrefixesFromConf(SharedDataHolder.confFileFullContent);
             // default prefix is the namespace
             namespace = prop.getProperty("namespace");
@@ -293,7 +325,6 @@ public final class ConfigParams {
 
             // pos and neg indivs
             parsePosAndNegIndivTypes(prop, "lp.positiveExamples", "lp.negativeExamples");
-
 
             // score type
             // allowable names: coverage,precision,recall,f_measure,coverage_by_reasoner,
@@ -309,10 +340,6 @@ public final class ConfigParams {
             SharedDataHolder.objProperties = Utility.readObjectPropsFromConf(SharedDataHolder.confFileFullContent, delimeterOntoEntityIRI);
             // add none object property
             SharedDataHolder.objProperties.put(SharedDataHolder.noneOWLObjProp, 1.0);
-
-            // posIndivs
-
-            // negIndivs
 
             conceptLimitInPosExpr = Integer.valueOf(prop.getProperty("conceptLimitInPosExpr", "2"));
             conceptLimitInNegExpr = Integer.valueOf(prop.getProperty("conceptLimitInNegExpr", "2"));
@@ -349,20 +376,9 @@ public final class ConfigParams {
 
     /**
      * This method should be used for large number of individuals processing.
-     * It puts a restriction on the input config file, as this function is executed before parsing the prefixes and namespaces,
-     * individuals must have full name. It will just create individual by the name it finds there.
-     *
-     * For example, input should't be like this......
-     *  lp.positiveExamples = {"ex:indi_GO_0005737","ex:indi_GO_0005739"}
-     * input should be like this....
-     *  lp.positiveExamples = {"http://purl.obolibrary.org/obo/indi_GO_0005737","http://purl.obolibrary.org/obo/indi_GO_0005739"
-     *
-     * @return
-     */
-    /**
-     * This method should be used for large number of individuals processing.
-     * It puts a restriction on the input config file, as this function is executed before parsing the prefixes and namespaces,
-     * individuals must have full name. It will just create individual by the name it finds there.
+     * <p>
+     * As this function is executed before parsing the prefixes and namespaces, individuals must have full name.
+     * It will just create individual by the name it finds there.
      * <p>
      * For example, input should't be like this......
      * lp.positiveExamples = {"ex:indi_GO_0005737","ex:indi_GO_0005739"}
@@ -433,7 +449,7 @@ public final class ConfigParams {
      * Expected text: {"http://purl.obolibrary.org/obo/indi_GO_0005737","http://purl.obolibrary.org/obo/indi_GO_0005739"}
      *
      * @param indivsPortion
-     * @return
+     * @return HashSet<String>
      */
     private static HashSet<String> getIndivsArray(String indivsPortion) {
         HashSet<String> indivsName = new HashSet<>();
@@ -498,9 +514,29 @@ public final class ConfigParams {
     }
 
     /**
+     * Set ecii version
+     * default is v2
+     * @param ecciAlgorithmVersionName
+     */
+    private static void setECIIVersion(String ecciAlgorithmVersionName) {
+        if (null == ecciAlgorithmVersionName) {
+            ECIIAlgorithmVersion = ECIIVersion.V2;
+            return;
+        }
+        if (ecciAlgorithmVersionName.equalsIgnoreCase("v0")) {
+            ECIIAlgorithmVersion = ECIIVersion.V0;
+        } else if (ecciAlgorithmVersionName.equalsIgnoreCase("v1")) {
+            ECIIAlgorithmVersion = ECIIVersion.V1;
+        } else {
+            ECIIAlgorithmVersion = ECIIVersion.V2;
+        }
+    }
+
+    /**
      * Utility method to print configparams
      */
     private static void printConfigProperties() {
+        logger.info("\tECIIAlgorithmVersion: " + ECIIAlgorithmVersion);
         logger.info("\tconfFilePath: " + confFilePath);
         logger.info("\tontoPath: " + ontoPath);
         logger.info("\toutputResultPath: " + outputResultPath);
@@ -532,7 +568,5 @@ public final class ConfigParams {
 
     // private constructor, no instantiation
     private ConfigParams() {
-
     }
-
 }

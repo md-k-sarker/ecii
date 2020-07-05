@@ -77,13 +77,35 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
     }
 
     /**
-     * save the initial solutions into SharedDataHolder.candidateSolutionV0Set object.
+     * save the initial solutions into SharedDataHolder.candidateSolutionV2Set object.
      */
-    public void saveInitialSolutionsCustom() {
+    public void createAndSaveSolutions() {
 
         // for rfilled types and for bare types. for no object property/direct/bare types we used SharedDataHolder.noneOWLObjProp
 
         // solution using only a single positive type
+        createSolutionUsingSinglePosTypes();
+
+        // create solution using both positive and negative of class expressions.
+        // single positive and single negative.
+        createSolutionUsingSinglePosAndNegTypes();
+
+        // multiple positive and multiple negative.
+        createSolutionUsingMultiplePosAndNegTypes();
+
+        // create solution by combining hornClause
+        createSolutionByCombiningHornClause();
+
+        // create solution by combining candidateClass
+        createSolutionByCombiningCandidateClass();
+
+    }
+
+    /**
+     * Create solutions using single positive types.
+     * Positive types include direct positive types and indirect positive types
+     */
+    private void createSolutionUsingSinglePosTypes() {
         logger.info("\nSolution using only a single positive type started...............");
         SharedDataHolder.typeOfObjectsInPosIndivs.forEach((owlObjectProperty, hashMap) -> {
 
@@ -119,14 +141,15 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
                     candidateClassV2.setScore(candidateClassScore);
                     HashMapUtility.insertIntoHashMap(candidateClassesMap, owlObjectProperty, candidateClassV2);
                 }
-
             });
         });
         logger.info("solution using only a single positive type finished. Total solutions: " + SharedDataHolder.CandidateSolutionSetV2.size());
+    }
 
-
-        // create solution using both positive and negative of class expressions.
-        // single positive and single negative.
+    /**
+     * Create solutions using single positive types and single negative types.
+     */
+    private void createSolutionUsingSinglePosAndNegTypes() {
         logger.info("solution using only a single positive and single negative type started...............");
         SharedDataHolder.typeOfObjectsInPosIndivs.forEach((owlObjectProperty, hashMap) -> {
 
@@ -189,9 +212,13 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
         logger.info("solution using only a single positive and single negative type finished." +
                 " Total Solutions: " + SharedDataHolder.CandidateSolutionSetV2.size());
 
+    }
 
+    /**
+     * Create solutions using multiple positive types and multiple negative types.
+     */
+    private void createSolutionUsingMultiplePosAndNegTypes() {
         logger.info("solution using multiple positive and multiple negative type started...............");
-        //
         SharedDataHolder.typeOfObjectsInPosIndivs.entrySet().stream()
                 .filter(owlObjectPropertyHashMapEntry ->
                         owlObjectPropertyHashMapEntry.getValue().entrySet().size() > 0)
@@ -332,7 +359,14 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
                 });
         logger.info("solution using multiple positive and multiple negative type finished. Total Solutions: "
                 + SharedDataHolder.CandidateSolutionSetV2.size());
+    }
 
+    /**
+     * Create solutions using the combination of hornClauses.
+     * This function at first select the top K5 hornClauses and,
+     * make combination of them to produce solutions
+     */
+    private void createSolutionByCombiningHornClause(){
         /**
          * Select top k5 hornClauses to make combination. This function reduces the hornClauseMap size.
          */
@@ -404,7 +438,14 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
         logger.info("solution using combination of horn clause finished. " +
                 "Total solutions: " + SharedDataHolder.CandidateSolutionSetV2.size());
 
+    }
 
+    /**
+     * Create solutions using the combination of candidateClasses.
+     * This function at first select the top K6 candidateClass and,
+     * make combination of them to produce solutions
+     */
+    private void createSolutionByCombiningCandidateClass(){
         /**
          * Select top k6 CandidateClasses to make combination. This function reduces the candidate Classes size.
          */

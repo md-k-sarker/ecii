@@ -6,7 +6,7 @@ Written at 6/17/20.
 
 import org.dase.ecii.exceptions.MalFormedIRIException;
 import org.dase.ecii.ontofactory.DLSyntaxRendererExt;
-import org.dase.ecii.ontofactory.StripDownOntology;
+import org.dase.ecii.ontofactory.strip.StripDownOntology;
 import org.dase.ecii.ontofactory.strip.ListofObjPropAndIndiv;
 import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Monitor;
@@ -35,7 +35,6 @@ public class ConceptInductionM {
 
     private OWLOntology ontology;
     //private static OWLOntologyManager manager;
-    //private static OWLDataFactory dataFacotry;
     private OWLReasoner owlReasoner;
     private PrintStream outPutStream;
     private Monitor monitor;
@@ -61,7 +60,7 @@ public class ConceptInductionM {
      * @throws OWLOntologyCreationException
      */
     public void loadOntoAndSaveReference() throws IOException, OWLOntologyCreationException {
-        // load ontotology
+        // load ontology
         ontology = Utility.loadOntology(ConfigParams.ontoPath);
 
         // make sure ontology is loaded before init.
@@ -125,7 +124,7 @@ public class ConceptInductionM {
             try {
                 SharedDataHolder.owlOntologyStripped = SharedDataHolder.owlOntologyManager.createOntology(axiomsToKeep);
             } catch (OWLOntologyCreationException e) {
-                logger.error("Fatar error!!!!!!!!");
+                logger.error("Fatal error!!!!!!!!");
                 e.printStackTrace();
                 logger.error("program exiting");
                 monitor.stopSystem("", true);
@@ -143,8 +142,10 @@ public class ConceptInductionM {
     /**
      * Write the parameters of ecci to result file
      */
-    private void writeUserDefinedValuesToResultFile(){
+    private void writeUserDefinedValuesToResultFile() {
         monitor.writeMessage("\nUser defined parameters:");
+        monitor.writeMessage("ecciAlgorithmVersion: " + ConfigParams.ECIIAlgorithmVersion);
+        monitor.writeMessage("scoreType: " + ConfigParams.scoreTypeNameRaw);
         monitor.writeMessage("K1/negExprTypeLimit: " + ConfigParams.conceptLimitInNegExpr);
         monitor.writeMessage("K2/hornClauseLimit: " + ConfigParams.hornClauseLimit);
         monitor.writeMessage("K3/objPropsCombinationLimit: " + ConfigParams.objPropsCombinationLimit);
@@ -212,21 +213,23 @@ public class ConceptInductionM {
         logger.info("reasoner initialized successfully");
 
         // Create a new ConceptFinder object with the given reasoner.
-        CandidateSolutionFinderV2 findConceptsObj = new CandidateSolutionFinderV2(owlReasoner, SharedDataHolder.owlOntologyStripped, outPutStream, monitor);
-        //ConceptFinderComplex findConceptsObj = new ConceptFinderComplex(owlReasoner, ontology, outPutStream, monitor);
+        CandidateSolutionFinder findConceptsObj;
+        if (ConfigParams.ECIIAlgorithmVersion == ECIIVersion.V0)
+            findConceptsObj = new CandidateSolutionFinderV0(owlReasoner, SharedDataHolder.owlOntologyStripped, outPutStream, monitor);
+        else if (ConfigParams.ECIIAlgorithmVersion == ECIIVersion.V1)
+            findConceptsObj = new CandidateSolutionFinderV1(owlReasoner, SharedDataHolder.owlOntologyStripped, outPutStream, monitor);
+        else
+            findConceptsObj = new CandidateSolutionFinderV2(owlReasoner, SharedDataHolder.owlOntologyStripped, outPutStream, monitor);
 
         logger.info("finding solutions started...............");
         findConceptsObj.findConcepts(0, 0);
         logger.info("\nfinding solutions finished.");
 
-        logger.info("sorting solutions................");
-        SharedDataHolder.SortedCandidateSolutionListV2 = SortingUtility.sortSolutionsV2Custom(SharedDataHolder.CandidateSolutionSetV2,
-                ConfigParams.ascendingOfStringLength);
-        logger.info("sorting solutions finished.");
+        // sort solutions
+        sortSolutions();
 
-        logger.info("calculating accuracy using reasoner for top k6 solutions................");
-        findConceptsObj.calculateAccuracyOfTopK6ByReasoner(SharedDataHolder.SortedCandidateSolutionListV2, ConfigParams.validateByReasonerSize);
-        logger.info("calculating accuracy using reasoner for top k6 solutions................");
+        // calculate/validate accuracy by reasoner if user want
+        calculateByReasoner(findConceptsObj);
 
         Long algoEndTime = System.currentTimeMillis();
         monitor.displayMessage("\nAlgorithm ends at: " + dateFormat.format(new Date()), true);
@@ -234,15 +237,80 @@ public class ConceptInductionM {
         monitor.displayMessage("\nAlgorithm duration: " + (algoEndTime - algoStartTime) / 1000.0 + " sec", true);
         logger.info("Algorithm duration: " + (algoEndTime - algoStartTime) / 1000.0 + " sec", true);
 
-        logger.info("printing solutions started...............");
-        findConceptsObj.printSolutions(ConfigParams.validateByReasonerSize);
-        logger.info("printing solutions finished.");
-        monitor.writeMessage("\nTotal solutions found: " + SharedDataHolder.SortedCandidateSolutionListV2.size());
+        // print/write solutions
+        writeSolutions(findConceptsObj);
 
         if (ConfigParams.runPairwiseSimilarity) {
             logger.info("\nFinding similarity started...............");
             measurePairwiseSimilarity();
             logger.info("Finding similarity finished");
+        }
+    }
+
+    /**
+     * Sort the solutions
+     */
+    private void sortSolutions() {
+        logger.info("sorting solutions................");
+        if (ConfigParams.ECIIAlgorithmVersion == ECIIVersion.V2) {
+            SharedDataHolder.SortedCandidateSolutionListV2 = SortingUtility.
+                    sortSolutionsV2Custom(SharedDataHolder.CandidateSolutionSetV2,
+                            ConfigParams.ascendingOfStringLength);
+        } else if (ConfigParams.ECIIAlgorithmVersion == ECIIVersion.V1) {
+            SharedDataHolder.SortedCandidateSolutionListV1 = SortingUtility.
+                    sortSolutionsV1Custom(SharedDataHolder.CandidateSolutionSetV1,
+                            ConfigParams.ascendingOfStringLength);
+        } else if (ConfigParams.ECIIAlgorithmVersion == ECIIVersion.V0) {
+            SharedDataHolder.SortedCandidateSolutionListV0 = SortingUtility.
+                    sortSolutionsV0Custom(SharedDataHolder.CandidateSolutionSetV0,
+                            ConfigParams.ascendingOfStringLength);
+        }
+        logger.info("sorting solutions finished.");
+    }
+
+    /**
+     * Calculate accuracy by reasoner
+     */
+    private void calculateByReasoner(CandidateSolutionFinder findConceptsObj) {
+        logger.info("calculating accuracy using reasoner for top k6 solutions................");
+        if (ConfigParams.ECIIAlgorithmVersion == ECIIVersion.V2 &&
+                findConceptsObj instanceof CandidateSolutionFinderV2) {
+            findConceptsObj.calculateAccuracyOfTopK6ByReasoner(
+                    SharedDataHolder.SortedCandidateSolutionListV2,
+                    ConfigParams.validateByReasonerSize);
+        } else if (ConfigParams.ECIIAlgorithmVersion == ECIIVersion.V1 &&
+                findConceptsObj instanceof CandidateSolutionFinderV1) {
+            findConceptsObj.calculateAccuracyOfTopK6ByReasoner(
+                    SharedDataHolder.SortedCandidateSolutionListV1,
+                    ConfigParams.validateByReasonerSize);
+        } else if (ConfigParams.ECIIAlgorithmVersion == ECIIVersion.V0 &&
+                findConceptsObj instanceof CandidateSolutionFinderV0) {
+            findConceptsObj.calculateAccuracyOfTopK6ByReasoner(
+                    SharedDataHolder.SortedCandidateSolutionListV0,
+                    ConfigParams.validateByReasonerSize);
+        }
+
+        logger.info("calculating accuracy using reasoner for top k6 solutions................");
+    }
+
+    /**
+     * Write/print solutions
+     *
+     * @param findConceptsObj
+     */
+    private void writeSolutions(CandidateSolutionFinder findConceptsObj) {
+        logger.info("printing solutions started...............");
+        findConceptsObj.printSolutions(ConfigParams.validateByReasonerSize);
+        logger.info("printing solutions finished.");
+        if (ConfigParams.ECIIAlgorithmVersion == ECIIVersion.V2 &&
+                findConceptsObj instanceof CandidateSolutionFinderV2) {
+            monitor.writeMessage("\nTotal solutions found: " + SharedDataHolder.SortedCandidateSolutionListV2.size());
+        } else if (ConfigParams.ECIIAlgorithmVersion == ECIIVersion.V1 &&
+                findConceptsObj instanceof CandidateSolutionFinderV1) {
+            monitor.writeMessage("\nTotal solutions found: " + SharedDataHolder.SortedCandidateSolutionListV1.size());
+        } else if (ConfigParams.ECIIAlgorithmVersion == ECIIVersion.V0 &&
+                findConceptsObj instanceof CandidateSolutionFinderV0) {
+            monitor.writeMessage("\nTotal solutions found: " + SharedDataHolder.SortedCandidateSolutionListV0.size());
         }
     }
 
