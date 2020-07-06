@@ -70,7 +70,7 @@ public class RawTest {
         }
     }
 
-    public static final String noneObjPropStr = "__%!dop%!__";
+    public static final String noneObjPropStr = "__%!empty%!__";
     public static final OWLObjectProperty noneOWLObjProp = OWLManager.getOWLDataFactory().getOWLObjectProperty(IRI.create(noneObjPropStr));
 
 

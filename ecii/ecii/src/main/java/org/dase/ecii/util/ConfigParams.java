@@ -119,7 +119,8 @@ public final class ConfigParams {
     public static boolean removeCommonTypesFromOneSideOnly;
 
     /**
-     * conceptLimitInNegExpr: Use only these number of top performing atomic concepts in the negative expression of a hornClause
+     * conceptLimitInNegExpr: Number of allowable atomic concepts in the negative expression of a hornClause
+     * Limits the number of concepts in negative/disjunction part of hornClause
      * Also named as K1
      * Integer, Optional, Default: 2
      */
@@ -151,10 +152,26 @@ public final class ConfigParams {
     public static int conceptLimitInPosExpr;
 
     /**
-     * posClassListMaxSize: Select these numbers of top performing positiveClasses, from the list of positiveClasses (if more exist)
-     * to combine them.
-     * We use this combination to make the positive expression of hornClause.
-     * size of combination would be nCr or posClassListMaxSize--C--conceptLimitInPosExpr
+     * limitPosTypes: Whether to limit the positive types or not.
+     * After limiting the posTypes we will only use the limited number of posTypes and not the all posTypes.
+     * Boolean, Optional, Default: False
+     */
+    public static boolean limitPosTypes;
+
+    /**
+     * posClassListMaxSize: Select these numbers of top performing positiveClasses (for a single objProperty), from the list of positiveClasses (if more exist)
+     *
+     * It will be activate if and only if limitPosTypes == True
+     *
+     * After limiting the posTypes we will only use these number of posTypes and not the all posTypes.
+     * So the accuracy may decrease, as we are not using all posTypes, only a subset of them,
+     *      which essentially making some individuals uncoverable (individual not having any covering types in the posTypes list)
+     *
+     * If we have m objectPorperty it will keep m*n posTypes.
+     *
+     * We use these to make the positive expression of hornClause.
+     * --Size of combination would be (m*n)Cr or (m*posClassListMaxSize)--C--conceptLimitInPosExpr
+     *
      * Also named as K9
      * Integer, Optional, Default 20
      */
@@ -167,6 +184,7 @@ public final class ConfigParams {
      * size would be nCr or negClassListMaxSize--C--conceptLimitInNegExpr
      * Also named as k10
      * Integer, Optional, Default: 20
+     * @not-implemented
      */
     public static int negClassListMaxSize;
 
@@ -231,46 +249,40 @@ public final class ConfigParams {
      */
     public static boolean runPairwiseSimilarity = false;
 
-    /**
-     * Experimental: instead of typeOfObjectsInPosIndivsMaxSize, posClassListMaxSize is multiplied by
-     * multiplicationConstant in limiting the positive types list.
-     * This limits the solution size severely!! need to check. todo(zaman)
-     * <p>
-     * Only applies to ecii-v2
-     * Integer, Optional, Default: 1
-     */
-    public static int multiplicationConstant = 1;
-
-
     //@formatter:off
     /**
-     * Experimental, maximum positive individuals (positive objects connected through some property) size, it was used to limit
+     * Experimental
      *
-     *             if (hashMap.size() > ConfigParams.typeOfObjectsInPosIndivsMaxSize) {
-     *                 hashMap = new HashMap<>(hashMap.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
-     *                         .limit(ConfigParams.typeOfObjectsInPosIndivsMaxSize)
-     *                         .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
-     */
-    //    public static int typeOfObjectsInPosIndivsMaxSize = 100;
-    //@formatter:on
-
-    /**
-     * Experimental
-     * This is being used inside: solution using multiple positive and multiple negative type
-     * need to check. todo(zaman)
+     * This filters the posTypes. It keeps only those postypes which covers at-least n individuals,
+     * where n = posTypeMinCoverIndivsSize
+     *
+     * Only applies to ecii-v2 and
+     * also only being used inside: solution using multiple positive and multiple negative type
+     *
      * <p>
-     * Only applies to ecii-v2
-     * Integer, Optional, Default: 5
+     * if (hashMap.size() > ConfigParams.typeOfObjectsInPosIndivsMaxSize) {
+     * hashMap = new HashMap<>(hashMap.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+     * .limit(ConfigParams.typeOfObjectsInPosIndivsMaxSize)
+     * .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
+     * }
+     * <p>
+     *
+     * Integer, Optional, Default: 1
      */
-    public static int typeOfObjectsInPosIndivsMinSize = 5;
+    public static int posTypeMinCoverIndivsSize = 1;
 
     /**
      * Experimental
-     * need to check. todo(zaman)
-     * Only applies to ecii-v2
-     * Integer, Optional, Default: 5
+     *
+     * This filters the negTypes. It keeps only those negTypes which covers at-least n individuals,
+     * where n = negTypeMinCoverIndivsSize
+     *
+     * Only applies to ecii-v2 and
+     * also only being used inside: solution using multiple positive and multiple negative type
+     *
+     * Integer, Optional, Default: 1
      */
-    public static int typeOfObjectsInNegIndivsMinSize = 5;
+    public static int negTypeMinCoverIndivsSize = 1;
     //@formatter:on
 
     /**
@@ -313,7 +325,7 @@ public final class ConfigParams {
             SharedDataHolder.confFileFullContent = readAllContent(confFilePath);
 
             // ecii algorithm version
-            String eciiVersionRawName = prop.getProperty("eccAlgorithmVersion", "v2");
+            String eciiVersionRawName = prop.getProperty("eccAlgorithmVersion", "v0");
             setECIIVersion(eciiVersionRawName);
 
             prefixes = Utility.extractPrefixesFromConf(SharedDataHolder.confFileFullContent);
@@ -350,6 +362,7 @@ public final class ConfigParams {
             removeCommonTypes = Boolean.parseBoolean(prop.getProperty("removeCommonTypes", "true"));
             removeCommonTypesFromOneSideOnly = Boolean.parseBoolean(prop.getProperty("removeCommonTypesFromOneSideOnly", "false"));
             validateByReasonerSize = Integer.valueOf(prop.getProperty("validateByReasonerSize", "0"));
+            limitPosTypes = Boolean.parseBoolean(prop.getProperty("limitPosTypes", "false"));
             posClassListMaxSize = Integer.valueOf(prop.getProperty("posClassListMaxSize", "20"));
             negClassListMaxSize = Integer.valueOf(prop.getProperty("negClassListMaxSize", "20"));
             runPairwiseSimilarity = Boolean.parseBoolean(prop.getProperty("runPairwiseSimilarity", "false"));
@@ -516,6 +529,7 @@ public final class ConfigParams {
     /**
      * Set ecii version
      * default is v2
+     *
      * @param ecciAlgorithmVersionName
      */
     private static void setECIIVersion(String ecciAlgorithmVersionName) {

@@ -175,17 +175,17 @@ public class ConceptInductionM {
         // write user defined values to resultFile
         writeUserDefinedValuesToResultFile();
 
-        logger.info("posIndivs from conf:");
+        logger.info("posIndivs from conf size: "+ SharedDataHolder.posIndivs.size());
         monitor.writeMessage("posIndivs from conf:");
         SharedDataHolder.posIndivs.forEach(owlNamedIndividual -> {
-            logger.info("\t" + Utility.getShortName(owlNamedIndividual));
+            logger.debug("\t" + Utility.getShortName(owlNamedIndividual));
             monitor.writeMessage("\t" + Utility.getShortName(owlNamedIndividual));
         });
 
-        logger.info("negIndivs from conf:");
+        logger.info("negIndivs from conf: "+ SharedDataHolder.negIndivs.size());
         monitor.writeMessage("negIndivs from conf:");
         SharedDataHolder.negIndivs.forEach(owlNamedIndividual -> {
-            logger.info("\t" + Utility.getShortName(owlNamedIndividual));
+            logger.debug("\t" + Utility.getShortName(owlNamedIndividual));
             monitor.writeMessage("\t" + Utility.getShortName(owlNamedIndividual));
         });
 

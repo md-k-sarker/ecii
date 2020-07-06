@@ -700,10 +700,10 @@ public class Utility {
         HashMap<OWLObjectProperty, Double> objectPropertyFloatHashMap = new HashMap<>();
 
         // if starts with comment
+        // not working properly, todo(zaman)
         String commentRegex = "^(#|\\/*|\\/\\/)+.";
         if (objPropsPortion.matches(commentRegex)) {
             logger.info("objprop if -----:" + objectPropertyFloatHashMap.size());
-            System.exit(-1);
             return objectPropertyFloatHashMap;
         }
         logger.debug("objprops size:" + objectPropertyFloatHashMap.size());

@@ -19,8 +19,6 @@ import java.lang.invoke.MethodHandles;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toMap;
-
 @SuppressWarnings("Duplicates")
 
 
@@ -107,15 +105,8 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
      */
     private void createSolutionUsingSinglePosTypes() {
         logger.info("\nSolution using only a single positive type started...............");
-        SharedDataHolder.typeOfObjectsInPosIndivs.forEach((owlObjectProperty, hashMap) -> {
 
-            logger.info(" \t size of typeOfObjectsInPosIndivs hashMap: " + hashMap.size());
-            if (hashMap.size() > ConfigParams.posClassListMaxSize) {
-                hashMap = new HashMap<>(hashMap.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
-                        .limit(ConfigParams.posClassListMaxSize * ConfigParams.multiplicationConstant)
-                        .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
-                logger.info(" \t size of typeOfObjectsInPosIndivs hashMap after limiting: " + hashMap.size());
-            }
+        SharedDataHolder.typeOfObjectsInPosIndivs.forEach((owlObjectProperty, hashMap) -> {
 
             hashMap.forEach((posOwlClassExpression, integer) -> {
 
@@ -143,35 +134,32 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
                 }
             });
         });
-        logger.info("solution using only a single positive type finished. Total solutions: " + SharedDataHolder.CandidateSolutionSetV2.size());
+        logger.info("solution using only a single positive type finished. Total solutions: " +
+                SharedDataHolder.CandidateSolutionSetV2.size());
     }
 
     /**
      * Create solutions using single positive types and single negative types.
      */
     private void createSolutionUsingSinglePosAndNegTypes() {
-        logger.info("solution using only a single positive and single negative type started...............");
+
+        // use the limited posTypes
         SharedDataHolder.typeOfObjectsInPosIndivs.forEach((owlObjectProperty, hashMap) -> {
 
-            logger.info(" \t size of typeOfObjectsInPosIndivs hashMap: " + hashMap.size());
-            if (hashMap.size() > ConfigParams.posClassListMaxSize) {
-                hashMap = new HashMap<>(hashMap.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
-                        .limit(ConfigParams.posClassListMaxSize * ConfigParams.multiplicationConstant)
-                        .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
-                logger.info(" \t size of typeOfObjectsInPosIndivs hashMap after limiting: " + hashMap.size());
-            }
-
-            logger.info(" \t size of typeOfObjectsInPosIndivs hashMap after limiting: " + hashMap.size());
             hashMap.forEach((posOwlClassExpression, integer) -> {
                 logger.info("posOwlClassExpression: " + posOwlClassExpression);
+                // take subclasses
                 ArrayList<OWLClassExpression> posTypeOwlSubClassExpressions = new ArrayList<>(
                         reasoner.getSubClasses(posOwlClassExpression, false).getFlattened().stream().collect(Collectors.toList()));
 
                 posTypeOwlSubClassExpressions.forEach(subClassOwlClassExpression -> {
                     if (SharedDataHolder.typeOfObjectsInNegIndivs.containsKey(owlObjectProperty)) {
-                        // if subclass of this class is included in the negative type
+                        // if subclass of this class is included in the negative type &&
+                        // is negType object covers at-least n negIndividuals
+                        // where n = ConfigParams.typeOfObjectsInNegIndivsMinSize
                         if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).containsKey(subClassOwlClassExpression)
-                                && SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).get(subClassOwlClassExpression) > ConfigParams.typeOfObjectsInNegIndivsMinSize) {
+                                && SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).get(subClassOwlClassExpression)
+                                > ConfigParams.negTypeMinCoverIndivsSize) {
 
                             //create conjunctive horn clause and add positive part and negative part too
                             ConjunctiveHornClauseV1V2 conjunctiveHornClause = new ConjunctiveHornClauseV1V2(owlObjectProperty, reasoner, ontology);
@@ -187,7 +175,7 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
                             candidateSolutionV2.addCandidateClass(candidateClassV2);
                             ////////////////////////////////////////
                             ///// this will take long time if, we have a large number of individuals in the ontology.
-                            // this is because we calculate the hornclause's accuracy by reasoner
+                            // this is because we calculate the hornclause's accuracy by reasoner in ecii-v2 and ecii-v1
                             logger.debug("addToSolutions() started.............");
                             boolean added = addToSolutions(candidateSolutionV2);
                             logger.debug("addToSolutions() finished");
@@ -224,23 +212,15 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
                         owlObjectPropertyHashMapEntry.getValue().entrySet().size() > 0)
                 .forEach(owlObjectPropertyHashMapEntry -> {
 
+                    // filter hashmap
                     OWLObjectProperty owlObjectProperty = owlObjectPropertyHashMapEntry.getKey();
                     HashMap<OWLClassExpression, Integer> hashMap = new HashMap<>(
                             owlObjectPropertyHashMapEntry.getValue().entrySet()
-                                    .stream().filter(e -> e.getValue() > ConfigParams.typeOfObjectsInPosIndivsMinSize)
+                                    .stream().filter(e -> e.getValue() > ConfigParams.posTypeMinCoverIndivsSize)
                                     .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
 
                     if (hashMap.size() > 0) {
-                        logger.info("\t HashMap<OWLClassExpression, Integer> size before limiting:  " + hashMap.size());
-                        // todo(zaman): need to rewrite documentation of ConfigParams.posClassListMaxSize
-                        // we can save the limited postypes in shareddataholder and use that, as we are limiting postypes 3 times.
-                        // same for negtypes
-                        ArrayList<OWLClassExpression> limitedPosTypes = new ArrayList<>(hashMap.entrySet()
-                                .stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
-                                .limit(ConfigParams.posClassListMaxSize * ConfigParams.multiplicationConstant)
-                                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)).keySet());
-
-                        logger.info("\t HashMap<OWLClassExpression, Integer> size after limiting:  " + limitedPosTypes.size());
+                        ArrayList<OWLClassExpression> limitedPosTypes = new ArrayList<>(hashMap.keySet());
 
                         // positive portion
                         ArrayList<ArrayList<OWLClassExpression>> listCombinationOfPosClassesForPosPortion = new ArrayList<>();
@@ -257,7 +237,7 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
                         // a combination is valid if and only if it doesn't have self subClass.
                         ArrayList<ArrayList<OWLClassExpression>> validListCombinationOfPosClassesForPosPortion = new ArrayList<>();
                         listCombinationOfPosClassesForPosPortion.forEach(classExpressions -> {
-//                logger.info("debug: classExpressions.size(): " + classExpressions.size());
+                            logger.debug("debug: classExpressions.size(): " + classExpressions.size());
                             if (isValidCombinationOfSubClasses(classExpressions)) {
                                 validListCombinationOfPosClassesForPosPortion.add(classExpressions);
                             }
@@ -287,7 +267,7 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
                                     // if subclass of this class is included in the negative type
                                     if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).containsKey(subClassOwlClassExpression)
                                             && SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty)
-                                            .get(subClassOwlClassExpression) > ConfigParams.typeOfObjectsInNegIndivsMinSize) {
+                                            .get(subClassOwlClassExpression) > ConfigParams.negTypeMinCoverIndivsSize) {
                                         posTypeOwlSubClassExpressionsForCombination.add(subClassOwlClassExpression);
                                     }
                                 }
@@ -322,7 +302,7 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
 
                             // now combine the postypes and negtypes
                             // null pointer because in the soutions the postypes is empty or 0
-//                logger.info("debug: posOwlClassExpressions: " + posOwlClassExpressions.size());
+                            logger.debug("debug: posOwlClassExpressions: " + posOwlClassExpressions.size());
                             validListCombinationOfSubClassesForNegPortion.forEach(subClasses -> {
 
                                 // if every class of this combination is in negative types then include this combination otherwise skip this.
@@ -354,7 +334,7 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
                             });
                         });
                     } else {
-                        logger.warn("Limiting by ConfigParams.typeOfObjectsInPosIndivsMinSize produces 0 size hashmap!!");
+                        logger.warn("Filtering by ConfigParams.typeOfObjectsInPosIndivsMinSize produces 0 size hashmap!!");
                     }
                 });
         logger.info("solution using multiple positive and multiple negative type finished. Total Solutions: "
@@ -366,7 +346,7 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
      * This function at first select the top K5 hornClauses and,
      * make combination of them to produce solutions
      */
-    private void createSolutionByCombiningHornClause(){
+    private void createSolutionByCombiningHornClause() {
         /**
          * Select top k5 hornClauses to make combination. This function reduces the hornClauseMap size.
          */
@@ -445,7 +425,7 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
      * This function at first select the top K6 candidateClass and,
      * make combination of them to produce solutions
      */
-    private void createSolutionByCombiningCandidateClass(){
+    private void createSolutionByCombiningCandidateClass() {
         /**
          * Select top k6 CandidateClasses to make combination. This function reduces the candidate Classes size.
          */

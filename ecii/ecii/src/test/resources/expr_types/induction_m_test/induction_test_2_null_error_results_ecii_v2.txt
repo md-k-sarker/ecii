@@ -1,5 +1,5 @@
 Program started.............
-Program starts at: 07.05.2020  12.52.20 PM
+Program starts at: 07.06.2020  00.54.37 AM
 Working with confFile: induction_test_2_null_error.config
 
 User defined parameters:
@@ -24,11 +24,11 @@ negIndivs from conf:
 objProps from conf:
 	imageContains
 	__%!dop%!__
-Algorithm starts at: 07.05.2020  12.52.20 PM
+Algorithm starts at: 07.06.2020  00.54.37 AM
 
-Algorithm ends at: 07.05.2020  12.52.21 PM
+Algorithm ends at: 07.06.2020  00.54.38 AM
 
-Algorithm duration: 0.596 sec
+Algorithm duration: 0.585 sec
 
 ####################Solutions####################:
 solution 1: ((Entity ⊓ ¬ Plant) ⊔ ( ¬ Entity))
@@ -206,5 +206,5 @@ Total solutions found: 28
 Result saved at: /Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/expr_types/induction_m_test/induction_test_2_null_error_results_ecii_v2.txt
 
 Program finished.
-Program ends at: 07.05.2020  12.52.21 PM
-Program duration: 0.619 sec
+Program ends at: 07.06.2020  00.54.38 AM
+Program duration: 0.609 sec

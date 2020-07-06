@@ -17,10 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.PrintStream;
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -83,12 +80,13 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
         // find Object Types for each of the object property
         logger.info("extractObjectTypes started...............");
         for (Map.Entry<OWLObjectProperty, Double> entry : SharedDataHolder.objProperties.entrySet()) {
-            logger.info("Extracting objectTypes using objectProperty: " + Utility.getShortName(entry.getKey()));
+            logger.info("\tExtracting objectTypes using objectProperty: " + Utility.getShortName(entry.getKey()));
             extractObjectTypes(tolerance, entry.getKey());
         }
         logger.info("extractObjectTypes finished.");
         //debugExtractObjectTypes();
 
+        // remove common types if specified
         if (ConfigParams.removeCommonTypes) {
             logger.info("Remove common types from positive and negative started.............");
             for (Map.Entry<OWLObjectProperty, Double> entry : SharedDataHolder.objProperties.entrySet()) {
@@ -96,6 +94,13 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
                 removeCommonTypesFromPosAndNeg(entry.getKey());
             }
             logger.info("Remove common types from positive and negative finished.");
+        }
+
+        // limit postypes if specified
+        // Select upto n postypes for a single objectProperty, sorted by number of individuals a posType covers
+        // where n = ConfigParams.posClassListMaxSize * ConfigParams.multiplicationConstant
+        if (ConfigParams.limitPosTypes) {
+            limitPosTypes();
         }
 
         // create combination of objectproperties
@@ -107,9 +112,9 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
         initVariables();
 
         // save initial solutions
-        logger.info("saveInitialSolutions started...............");
+        logger.info("createAndSaveSolutions started...............");
         createAndSaveSolutions();
-        logger.info("saveInitialSolutions finished");
+        logger.info("createAndSaveSolutions finished");
 
         // using candidatesolutionfinder.createAndSaveSolutions() we are creating all initial combination.
         // as we have used psoitive type and it's super classes and negative types and it's super classes, we are only left with refining with subClass.
@@ -137,20 +142,20 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
      */
     @Override
     public void extractObjectTypes(double tolerance, OWLObjectProperty owlObjectProperty) {
-        logger.info("\tGiven obj property: " + Utility.getShortName(owlObjectProperty));
+        logger.info("\t\tGiven obj property: " + Utility.getShortName(owlObjectProperty));
 
 
         // find the indivs and corresponding types of indivs which appeared in the positive individuals
-        logger.info("\tSharedDataHolder.posIndivs.size(): " + SharedDataHolder.posIndivs.size());
+        logger.info("\t\tSharedDataHolder.posIndivs.size(): " + SharedDataHolder.posIndivs.size());
         for (OWLNamedIndividual posIndiv : SharedDataHolder.posIndivs) {
             //bare type/direct type --------- indiv type using obj-prop
             if (owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
                 //for no object property or direct types we used SharedDataHolder.noneOWLObjProp
                 logger.debug("Below concepts are type/supertype of positive " + posIndiv.getIRI().toString() + " individual.");
                 HashSet<OWLClass> classHashSet = new HashSet<>(reasoner.getTypes(posIndiv, false).getFlattened());
-                logger.debug("object count: " + classHashSet.size());
+                logger.debug("\t\tobject count: " + classHashSet.size());
                 classHashSet.forEach(posType -> {
-                    logger.debug("posType: " + posType.toString());
+                    logger.debug("\t\tposType: " + posType.toString());
                     if (!posType.equals(owlDataFactory.getOWLThing()) && !posType.equals(owlDataFactory.getOWLNothing())) {
                         // insert into individualObject's type count
                         HashMapUtility.insertIntoHashMap(SharedDataHolder.typeOfObjectsInPosIndivs, owlObjectProperty, posType);
@@ -161,13 +166,13 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
                 });
             } else {
 
-                logger.debug("Below concepts are type/supertype of positive "
+                logger.debug("\t\tBelow concepts are type/supertype of positive "
                         + posIndiv.getIRI().toString() + " individual through objProp " + owlObjectProperty.getIRI());
                 HashSet<OWLNamedIndividual> objectsHashSet = new HashSet<>(
                         reasoner.getObjectPropertyValues(posIndiv, owlObjectProperty).getFlattened());
-                logger.debug("object count: " + objectsHashSet.size());
+                logger.debug("\t\tobject count: " + objectsHashSet.size());
                 objectsHashSet.forEach(eachIndi -> {
-                    logger.debug("\tindi: " + eachIndi.getIRI());
+                    logger.debug("\t\tindi: " + eachIndi.getIRI());
 
                     // insert into individuals count
                     HashMapUtility.insertIntoHashMap(SharedDataHolder.objectsInPosIndivs, owlObjectProperty, eachIndi);
@@ -191,9 +196,9 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
 
             if (owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
                 //for no object property or direct types we used SharedDataHolder.noneOWLObjProp
-                logger.debug("Below concepts are type/supertype of negative " + negIndiv.getIRI().toString() + " individual.");
+                logger.debug("\t\tBelow concepts are type/supertype of negative " + negIndiv.getIRI().toString() + " individual.");
                 HashSet<OWLClass> classHashSet = new HashSet<>(reasoner.getTypes(negIndiv, false).getFlattened());
-                logger.debug("object count: " + classHashSet.size());
+                logger.debug("\t\tobject count: " + classHashSet.size());
                 classHashSet.forEach(negType -> {
                     logger.debug("\t\tnegType: " + negType.toString());
                     if (!negType.equals(owlDataFactory.getOWLThing()) && !negType.equals(owlDataFactory.getOWLNothing())) {
@@ -205,11 +210,11 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
                     }
                 });
             } else {
-                logger.debug("Below concepts are type/supertype of negative " +
+                logger.debug("\t\tBelow concepts are type/supertype of negative " +
                         negIndiv.getIRI().toString() + " individual through objProp " + owlObjectProperty.getIRI());
                 HashSet<OWLNamedIndividual> objectsHashSet = new HashSet<>
                         (reasoner.getObjectPropertyValues(negIndiv, owlObjectProperty).getFlattened());
-                logger.debug("object count: " + objectsHashSet.size());
+                logger.debug("\t\tobject count: " + objectsHashSet.size());
                 objectsHashSet.forEach(eachIndi -> {
 
                     // insert into individualObject count
@@ -249,6 +254,62 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
                 logger.debug("\t" + Utility.getShortName((OWLClass) owlClassExpression));
             });
         });
+    }
+
+    /**
+     * Select upto n postypes for a single objectProperty, sorted by number of individuals a posType covers
+     * where n = ConfigParams.posClassListMaxSize.
+     * <p>
+     * It stores the limited posTypes in SharedDataHolder.typeOfObjectsInPosIndivsLimited
+     * So if we have 3 objectPorperty it will keep 3n posTypes.
+     * Only being used in ecii-v2 as of 7/5/2020
+     */
+    public void limitPosTypes() {
+        logger.info("Limiting postypes...........");
+
+        HashMap<OWLObjectProperty, HashMap<OWLClassExpression, Integer>> typeOfObjectsInPosIndivsLimited = new HashMap<>();
+
+        boolean limtedForAny = false;
+
+        for (Map.Entry<OWLObjectProperty, HashMap<OWLClassExpression, Integer>> entry : SharedDataHolder.typeOfObjectsInPosIndivs.entrySet()) {
+            OWLObjectProperty owlObjectProperty = entry.getKey();
+            HashMap<OWLClassExpression, Integer> hashMap = entry.getValue();
+
+            if (hashMap.size() > ConfigParams.posClassListMaxSize) {
+                logger.info(" \t size of typeOfObjectsInPosIndivs hashMap for objProp " + owlObjectProperty + " before limiting: " + hashMap.size());
+                HashMap<OWLClassExpression, Integer> expressionIntegerHashMap = new HashMap<>();
+                expressionIntegerHashMap = new HashMap<>(hashMap
+                        .entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                        .limit(ConfigParams.posClassListMaxSize)
+                        .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
+
+                limtedForAny = true;
+                typeOfObjectsInPosIndivsLimited.put(owlObjectProperty, expressionIntegerHashMap);
+                logger.info(" \t size of typeOfObjectsInPosIndivs hashMap for objProp " + owlObjectProperty + " after limiting: "
+                        + expressionIntegerHashMap.size());
+            } else {
+                typeOfObjectsInPosIndivsLimited.put(owlObjectProperty, hashMap);
+            }
+
+        }
+
+        if (limtedForAny) {
+            SharedDataHolder.typeOfObjectsInPosIndivs.clear();
+            // will SharedDataHolder.typeOfObjectsInPosIndivs be garbage-collected, as typeOfObjectsInPosIndivsLimited is local variable?
+            // It shouldn't be, as we are keeping it's reference inside SharedDataHolder.typeOfObjectsInPosIndivs
+            SharedDataHolder.typeOfObjectsInPosIndivs.putAll(typeOfObjectsInPosIndivsLimited);
+        }
+//        // try to see, whether it's being garbage collected or not
+//        logger.info("---size: SharedDataHolder.typeOfObjectsInPosIndivs: " + SharedDataHolder.typeOfObjectsInPosIndivs.size());
+//        typeOfObjectsInPosIndivsLimited.clear();
+//        try {
+//            Thread.sleep(6000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        logger.info("---size: SharedDataHolder.typeOfObjectsInPosIndivs: " + SharedDataHolder.typeOfObjectsInPosIndivs.size());
+
+        logger.info("Limiting postypes finished.");
     }
 
     /**

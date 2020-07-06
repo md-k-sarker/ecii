@@ -39,7 +39,7 @@ public class SharedDataHolder {
      * Combination of objectProperties.
      */
     public static ArrayList<ArrayList<OWLObjectProperty>> objPropertiesCombination;
-    public static final String noneObjPropStr = "__%!dop%!__";
+    public static final String noneObjPropStr = "__%!empty%!__";
     public static final OWLObjectProperty noneOWLObjProp = OWLManager.getOWLDataFactory().getOWLObjectProperty(IRI.create(noneObjPropStr));
 
     /**
@@ -51,23 +51,21 @@ public class SharedDataHolder {
      */
     public static HashSet<OWLNamedIndividual> negIndivs = new HashSet<>();
 
-
     /**
      * Objects which are mentioned in the positive individuls using some object property.
      */
     public static HashMap<OWLObjectProperty, HashMap<OWLNamedIndividual, Integer>> objectsInPosIndivs = new HashMap<>();
+
     /**
      * Objects which are mentioned in the negative individuls using some object property.
      */
     public static HashMap<OWLObjectProperty, HashMap<OWLNamedIndividual, Integer>> objectsInNegIndivs = new HashMap<>();
-
 
     /**
      * Types of those objects which are mentioned in the positive individuals using some object property.
      * This is used to create the solution or to refine the solution.
      */
     public static HashMap<OWLObjectProperty, HashMap<OWLClassExpression, Integer>> typeOfObjectsInPosIndivs = new HashMap<>();
-
 
     /**
      * Sorted by integer
