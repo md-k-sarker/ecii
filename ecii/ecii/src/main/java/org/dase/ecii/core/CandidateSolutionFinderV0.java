@@ -433,8 +433,6 @@ public class CandidateSolutionFinderV0 extends CandidateSolutionFinder {
                     } else {
                         //logger.info("\t coverage_score: " + solution.getScore().getCoverage());
                         monitor.writeMessage("\t coverage_score: " + solution.getScore().getCoverage());
-
-                        //logger.info("\t f_measure: " + solution.getScore().getF_measure());
                         monitor.writeMessage("\t f_measure: " + solution.getScore().getF_measure());
                         monitor.writeMessage("\t precision: " + solution.getScore().getPrecision());
                         monitor.writeMessage("\t recall: " + solution.getScore().getRecall());

@@ -142,12 +142,13 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
      * Create solutions using single positive types and single negative types.
      */
     private void createSolutionUsingSinglePosAndNegTypes() {
+        logger.info("\nSolution using only a single positive and single negative type started...............");
 
         // use the limited posTypes
         SharedDataHolder.typeOfObjectsInPosIndivs.forEach((owlObjectProperty, hashMap) -> {
 
             hashMap.forEach((posOwlClassExpression, integer) -> {
-                logger.info("posOwlClassExpression: " + posOwlClassExpression);
+                logger.debug("posOwlClassExpression: " + posOwlClassExpression);
                 // take subclasses
                 ArrayList<OWLClassExpression> posTypeOwlSubClassExpressions = new ArrayList<>(
                         reasoner.getSubClasses(posOwlClassExpression, false).getFlattened().stream().collect(Collectors.toList()));
@@ -159,7 +160,7 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
                         // where n = ConfigParams.typeOfObjectsInNegIndivsMinSize
                         if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).containsKey(subClassOwlClassExpression)
                                 && SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).get(subClassOwlClassExpression)
-                                > ConfigParams.negTypeMinCoverIndivsSize) {
+                                >= ConfigParams.negTypeMinCoverIndivsSize) {
 
                             //create conjunctive horn clause and add positive part and negative part too
                             ConjunctiveHornClauseV1V2 conjunctiveHornClause = new ConjunctiveHornClauseV1V2(owlObjectProperty, reasoner, ontology);
@@ -216,7 +217,7 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
                     OWLObjectProperty owlObjectProperty = owlObjectPropertyHashMapEntry.getKey();
                     HashMap<OWLClassExpression, Integer> hashMap = new HashMap<>(
                             owlObjectPropertyHashMapEntry.getValue().entrySet()
-                                    .stream().filter(e -> e.getValue() > ConfigParams.posTypeMinCoverIndivsSize)
+                                    .stream().filter(e -> e.getValue() >= ConfigParams.posTypeMinCoverIndivsSize)
                                     .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
 
                     if (hashMap.size() > 0) {
@@ -267,7 +268,7 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
                                     // if subclass of this class is included in the negative type
                                     if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).containsKey(subClassOwlClassExpression)
                                             && SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty)
-                                            .get(subClassOwlClassExpression) > ConfigParams.negTypeMinCoverIndivsSize) {
+                                            .get(subClassOwlClassExpression) >= ConfigParams.negTypeMinCoverIndivsSize) {
                                         posTypeOwlSubClassExpressionsForCombination.add(subClassOwlClassExpression);
                                     }
                                 }

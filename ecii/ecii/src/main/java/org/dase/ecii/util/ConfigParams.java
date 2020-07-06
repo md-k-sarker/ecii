@@ -178,8 +178,19 @@ public final class ConfigParams {
     public static int posClassListMaxSize;
 
     /**
+     * limitNegTypes: Whether to limit the negative types or not.
+     * After limiting the posTypes we will only use the limited number of posTypes and not the all posTypes.
+     * Boolean, Optional, Default: False
+     * @not-implemented
+     */
+    public static boolean limitNegTypes;
+
+    /**
      * negClassListMaxSize: Select these numbers of top performing negativeClasses, from the list of negativeClasses (if more exist)
      * to combine them.
+     *
+     * It will be activate if and only if limitNegTypes == True
+     *
      * We use this combination to make the negative expression of hornClause.
      * size would be nCr or negClassListMaxSize--C--conceptLimitInNegExpr
      * Also named as k10
@@ -325,7 +336,7 @@ public final class ConfigParams {
             SharedDataHolder.confFileFullContent = readAllContent(confFilePath);
 
             // ecii algorithm version
-            String eciiVersionRawName = prop.getProperty("eccAlgorithmVersion", "v0");
+            String eciiVersionRawName = prop.getProperty("ECIIAlgorithmVersion", "v2");
             setECIIVersion(eciiVersionRawName);
 
             prefixes = Utility.extractPrefixesFromConf(SharedDataHolder.confFileFullContent);
@@ -360,10 +371,11 @@ public final class ConfigParams {
             hornClausesListMaxSize = Integer.valueOf(prop.getProperty("hornClausesListMaxSize", "10"));
             candidateClassesListMaxSize = Integer.valueOf(prop.getProperty("candidateClassesListMaxSize", "10"));
             removeCommonTypes = Boolean.parseBoolean(prop.getProperty("removeCommonTypes", "true"));
-            removeCommonTypesFromOneSideOnly = Boolean.parseBoolean(prop.getProperty("removeCommonTypesFromOneSideOnly", "false"));
+            removeCommonTypesFromOneSideOnly = Boolean.parseBoolean(prop.getProperty("removeCommonTypesFromOneSideOnly", "true"));
             validateByReasonerSize = Integer.valueOf(prop.getProperty("validateByReasonerSize", "0"));
             limitPosTypes = Boolean.parseBoolean(prop.getProperty("limitPosTypes", "false"));
             posClassListMaxSize = Integer.valueOf(prop.getProperty("posClassListMaxSize", "20"));
+            limitNegTypes = Boolean.parseBoolean(prop.getProperty("limitNegTypes", "false"));
             negClassListMaxSize = Integer.valueOf(prop.getProperty("negClassListMaxSize", "20"));
             runPairwiseSimilarity = Boolean.parseBoolean(prop.getProperty("runPairwiseSimilarity", "false"));
             ascendingOfStringLength = Boolean.parseBoolean(prop.getProperty("ascendingOfStringLength", "false"));

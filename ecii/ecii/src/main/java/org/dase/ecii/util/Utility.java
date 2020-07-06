@@ -523,9 +523,13 @@ public class Utility {
      * @return OWLReasoner
      */
     private static OWLReasoner precomputeInference(OWLReasoner owlReasoner) {
+        logger.info("reasoner precomputing inferences........");
         // precompute inference
         owlReasoner.precomputeInferences(InferenceType.CLASS_ASSERTIONS);
+        logger.info("reasoner precomputing inferences finished partially CLASS_ASSERTIONS.");
         owlReasoner.precomputeInferences(InferenceType.CLASS_HIERARCHY);
+        logger.info("reasoner precomputing inferences finished partially CLASS_HIERARCHY.");
+
         owlReasoner.precomputeInferences(InferenceType.DISJOINT_CLASSES);
 
         owlReasoner.precomputeInferences(InferenceType.OBJECT_PROPERTY_ASSERTIONS);
@@ -534,9 +538,11 @@ public class Utility {
         owlReasoner.precomputeInferences(InferenceType.DIFFERENT_INDIVIDUALS);
         owlReasoner.precomputeInferences(InferenceType.SAME_INDIVIDUAL);
 
-        owlReasoner.precomputeInferences(InferenceType.DATA_PROPERTY_ASSERTIONS);
-        owlReasoner.precomputeInferences(InferenceType.DATA_PROPERTY_HIERARCHY);
+        // ecii dont do anything with data-property
+        // owlReasoner.precomputeInferences(InferenceType.DATA_PROPERTY_ASSERTIONS);
+        // owlReasoner.precomputeInferences(InferenceType.DATA_PROPERTY_HIERARCHY);
 
+        logger.info("reasoner precomputing inferences finished");
         return owlReasoner;
     }
 
@@ -586,7 +592,6 @@ public class Utility {
             // output will be very large
             org.apache.log4j.Logger pelletLogger = org.apache.log4j.Logger.getLogger("org.mindswap.pellet");
             pelletLogger.setLevel(Level.WARN);
-
         }
 
         if (null != reasonerFactory) {
