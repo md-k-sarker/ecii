@@ -137,9 +137,9 @@ public final class ConfigParams {
      * objPropsCombinationLimit: Use this number of objectproperties in a single solution If we have more than 1 then it
      * will combine those objectProperties to make a solution.
      * Specifically it determines how many candidateClass will be in a single solution.
-     *
+     * <p>
      * If we have it's value as more than 1, we will get solution like:
-     *      ∃ :imageContains.((:Artifact ⊓ ¬ (:Substance) ⊓ (:Artifact ⊓ ¬ (:Plant)))
+     * ∃ :imageContains.((:Artifact ⊓ ¬ (:Substance) ⊓ (:Artifact ⊓ ¬ (:Plant)))
      * Setting this to 1 will fix this kind of problem
      * Also named as K3.
      * Integer, Optional, Default: 1
@@ -165,18 +165,18 @@ public final class ConfigParams {
 
     /**
      * posClassListMaxSize: Select these numbers of top performing positiveClasses (for a single objProperty), from the list of positiveClasses (if more exist)
-     *
+     * <p>
      * It will be activate if and only if limitPosTypes == True
-     *
+     * <p>
      * After limiting the posTypes we will only use these number of posTypes and not the all posTypes.
      * So the accuracy may decrease, as we are not using all posTypes, only a subset of them,
-     *      which essentially making some individuals uncoverable (individual not having any covering types in the posTypes list)
-     *
+     * which essentially making some individuals uncoverable (individual not having any covering types in the posTypes list)
+     * <p>
      * If we have m objectPorperty it will keep m*n posTypes.
-     *
+     * <p>
      * We use these to make the positive expression of hornClause.
      * --Size of combination would be (m*n)Cr or (m*posClassListMaxSize)--C--conceptLimitInPosExpr
-     *
+     * <p>
      * Also named as K9
      * Integer, Optional, Default 20
      */
@@ -191,18 +191,18 @@ public final class ConfigParams {
 
     /**
      * negClassListMaxSize: Select these numbers of top performing negativeClasses (for a single objProperty), from the list of negativeClasses (if more exist)
-     *
+     * <p>
      * It will be activate if and only if limitNegTypes == True
-     *
+     * <p>
      * After limiting the negTypes we will only use these number of negTypes and not the all negTypes.
      * So the accuracy may decrease, as we are not using all negTypes, only a subset of them,
-     *      which essentially making some individuals uncoverable (individual not having any covering types in the negTypes list)
-     *
+     * which essentially making some individuals uncoverable (individual not having any covering types in the negTypes list)
+     * <p>
      * If we have m objectPorperty it will keep m*n negTypes.
-     *
+     * <p>
      * We use this combination to make the negative expression of hornClause.
      * size would be nCr or negClassListMaxSize--C--conceptLimitInNegExpr
-     *
+     * <p>
      * Also named as k10
      * Integer, Optional, Default: 20
      */
@@ -287,6 +287,10 @@ public final class ConfigParams {
      * }
      * <p>
      *
+     * If total positive individual is less than the provided value it will take the
+     * minimum of half of SharedDataHolder.posIndivs.size() or provided value.
+     * posTypeMinCoverIndivsSize = Math.min(posTypeMinCoverIndivsSize, SharedDataHolder.posIndivs.size()/2)
+     *
      * Integer, Optional, Default: 1
      */
     public static int posTypeMinCoverIndivsSize = 1;
@@ -300,6 +304,9 @@ public final class ConfigParams {
      * Only applies to ecii-v2 and
      * also only being used inside: solution using multiple positive and multiple negative type
      *
+     * If total negative individual is less than the provided value it will take the minimum of those.
+     * negTypeMinCoverIndivsSize = Math.min(negTypeMinCoverIndivsSize, SharedDataHolder.negIndivs.size())
+     * for posTypeMinCoverIndivsSize it's half of the posIndivs size.
      * Integer, Optional, Default: 1
      */
     public static int negTypeMinCoverIndivsSize = 1;
@@ -385,12 +392,16 @@ public final class ConfigParams {
             limitPosTypes = Boolean.parseBoolean(prop.getProperty("limitPosTypes", "false"));
             posClassListMaxSize = Integer.valueOf(prop.getProperty("posClassListMaxSize", "20"));
             posTypeMinCoverIndivsSize = Integer.valueOf(prop.getProperty("posTypeMinCoverIndivsSize", "1"));
+            // override the min value
+            posTypeMinCoverIndivsSize = Math.min(posTypeMinCoverIndivsSize, SharedDataHolder.posIndivs.size() / 2);
             limitNegTypes = Boolean.parseBoolean(prop.getProperty("limitNegTypes", "false"));
             negClassListMaxSize = Integer.valueOf(prop.getProperty("negClassListMaxSize", "20"));
             negTypeMinCoverIndivsSize = Integer.valueOf(prop.getProperty("negTypeMinCoverIndivsSize", "1"));
+            // override the min value
+            negTypeMinCoverIndivsSize = Math.min(negTypeMinCoverIndivsSize, SharedDataHolder.negIndivs.size());
             runPairwiseSimilarity = Boolean.parseBoolean(prop.getProperty("runPairwiseSimilarity", "false"));
             ascendingOfStringLength = Boolean.parseBoolean(prop.getProperty("ascendingOfStringLength", "false"));
-            resultFileExtension = prop.getProperty("resultFileExtension", "_results_ecii_"+ECIIAlgorithmVersion+".txt");
+            resultFileExtension = prop.getProperty("resultFileExtension", "_results_ecii_" + ECIIAlgorithmVersion + ".txt");
             printLabelInsteadOfName = Boolean.parseBoolean(prop.getProperty("printLabelInsteadOfName", "false"));
 
             confFileDir = Paths.get(confFilePath).getParent().toString();
