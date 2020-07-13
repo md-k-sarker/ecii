@@ -84,6 +84,21 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
             extractObjectTypes(tolerance, entry.getKey());
         }
         logger.info("extractObjectTypes finished.");
+        SharedDataHolder.TotalPosTypes = 0;
+        for (Map.Entry<OWLObjectProperty, HashMap<OWLClassExpression, Integer>> e : SharedDataHolder.typeOfObjectsInPosIndivs.entrySet()) {
+            HashMap<OWLClassExpression, Integer> owlClassExpressionIntegerHashMap = e.getValue();
+            SharedDataHolder.TotalPosTypes += owlClassExpressionIntegerHashMap.size();
+        }
+        logger.info("Total positive types (direct+indirect) found using all objectProperty: " + SharedDataHolder.TotalPosTypes);
+        monitor.writeMessage("Total positive types (direct+indirect) found using all objectProperty: " + SharedDataHolder.TotalPosTypes);
+
+        SharedDataHolder.TotalNegTypes = 0;
+        for (Map.Entry<OWLObjectProperty, HashMap<OWLClassExpression, Integer>> e : SharedDataHolder.typeOfObjectsInNegIndivs.entrySet()) {
+            HashMap<OWLClassExpression, Integer> owlClassExpressionIntegerHashMap = e.getValue();
+            SharedDataHolder.TotalNegTypes += owlClassExpressionIntegerHashMap.size();
+        }
+        logger.info("Total negative types (direct+indirect) found using all objectProperty: " + SharedDataHolder.TotalNegTypes);
+        monitor.writeMessage("Total negative types (direct+indirect) found using all objectProperty: " + SharedDataHolder.TotalNegTypes);
         //debugExtractObjectTypes();
 
         // remove common types if specified
@@ -94,19 +109,30 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
                 removeCommonTypesFromPosAndNeg(entry.getKey());
             }
             logger.info("Remove common types from positive and negative finished.");
+            monitor.displayMessage("Total positive types (direct+indirect) after removing common types using all objectProperty: "
+                    + SharedDataHolder.TotalPosTypesAfterRemoval, true);
+            monitor.displayMessage("Total negative types (direct+indirect) after removing common types using all objectProperty: "
+                    + SharedDataHolder.TotalNegTypesAfterRemoval, true);
         }
 
         // limit postypes if specified
         // Select upto n postypes for a single objectProperty, sorted by number of individuals a posType covers
-        // where n = ConfigParams.posClassListMaxSize * ConfigParams.multiplicationConstant
+        // where n = ConfigParams.posClassListMaxSize
         if (ConfigParams.limitPosTypes) {
             limitPosTypes();
+        }
+
+        // limit negtypes if specified
+        // Select upto n negtypes for a single objectProperty, sorted by number of individuals a negType covers
+        // where n = ConfigParams.negClassListMaxSize
+        if (ConfigParams.limitNegTypes) {
+            limitNegTypes();
         }
 
         // create combination of objectproperties
         logger.info("createCombination of Objectproperties started...............");
         SharedDataHolder.objPropertiesCombination = createCombinationOfObjectProperties();
-        logger.info("createCombination of Objectproperties finished.");
+        logger.info("createCombination of Objectproperties finished. size: "+ SharedDataHolder.objPropertiesCombination.size());
 
         // init variables
         initVariables();
@@ -143,7 +169,6 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
     @Override
     public void extractObjectTypes(double tolerance, OWLObjectProperty owlObjectProperty) {
         logger.info("\t\tGiven obj property: " + Utility.getShortName(owlObjectProperty));
-
 
         // find the indivs and corresponding types of indivs which appeared in the positive individuals
         logger.info("\t\tSharedDataHolder.posIndivs.size(): " + SharedDataHolder.posIndivs.size());
@@ -260,7 +285,6 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
      * Select upto n postypes for a single objectProperty, sorted by number of individuals a posType covers
      * where n = ConfigParams.posClassListMaxSize.
      * <p>
-     * It stores the limited posTypes in SharedDataHolder.typeOfObjectsInPosIndivsLimited
      * So if we have 3 objectPorperty it will keep 3n posTypes.
      * Only being used in ecii-v2 as of 7/5/2020
      */
@@ -313,6 +337,62 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
     }
 
     /**
+     * Select upto n negtypes for a single objectProperty, sorted by number of individuals a negType covers
+     * where n = ConfigParams.negClassListMaxSize.
+     * <p>
+     * So if we have 3 objectPorperty it will keep 3n posTypes.
+     * Only being used in ecii-v2 as of 7/5/2020
+     */
+    public void limitNegTypes() {
+        logger.info("Limiting negtypes...........");
+
+        HashMap<OWLObjectProperty, HashMap<OWLClassExpression, Integer>> typeOfObjectsInNegIndivsLimited = new HashMap<>();
+
+        boolean limtedForAny = false;
+
+        for (Map.Entry<OWLObjectProperty, HashMap<OWLClassExpression, Integer>> entry : SharedDataHolder.typeOfObjectsInNegIndivs.entrySet()) {
+            OWLObjectProperty owlObjectProperty = entry.getKey();
+            HashMap<OWLClassExpression, Integer> hashMap = entry.getValue();
+
+            if (hashMap.size() > ConfigParams.negClassListMaxSize) {
+                logger.info(" \t size of typeOfObjectsInNegIndivs hashMap for objProp " + owlObjectProperty + " before limiting: " + hashMap.size());
+                HashMap<OWLClassExpression, Integer> expressionIntegerHashMap = new HashMap<>();
+                expressionIntegerHashMap = new HashMap<>(hashMap
+                        .entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                        .limit(ConfigParams.negClassListMaxSize)
+                        .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
+
+                limtedForAny = true;
+                typeOfObjectsInNegIndivsLimited.put(owlObjectProperty, expressionIntegerHashMap);
+                logger.info(" \t size of typeOfObjectsInNegIndivs hashMap for objProp " + owlObjectProperty + " after limiting: "
+                        + expressionIntegerHashMap.size());
+            } else {
+                typeOfObjectsInNegIndivsLimited.put(owlObjectProperty, hashMap);
+            }
+
+        }
+
+        if (limtedForAny) {
+            SharedDataHolder.typeOfObjectsInNegIndivs.clear();
+            // will SharedDataHolder.typeOfObjectsInNegIndivs be garbage-collected, as typeOfObjectsInNegIndivsLimited is local variable?
+            // It shouldn't be, as we are keeping it's reference inside SharedDataHolder.typeOfObjectsInPosIndivs
+            SharedDataHolder.typeOfObjectsInNegIndivs.putAll(typeOfObjectsInNegIndivsLimited);
+        }
+//        // try to see, whether it's being garbage collected or not
+//        logger.info("---size: SharedDataHolder.typeOfObjectsInPosIndivs: " + SharedDataHolder.typeOfObjectsInPosIndivs.size());
+//        typeOfObjectsInNegIndivsLimited.clear();
+//        try {
+//            Thread.sleep(6000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        logger.info("---size: SharedDataHolder.typeOfObjectsInPosIndivs: " + SharedDataHolder.typeOfObjectsInPosIndivs.size());
+
+        logger.info("Limiting negtypes finished.");
+    }
+
+
+    /**
      * Remove common types which appeared both in positive types and negative types.
      * Specifically, if removeCommonTypesFromOneSideOnly== true
      * remove from either pos-set or neg-set which have less individuals
@@ -325,17 +405,18 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
     @Override
     public void removeCommonTypesFromPosAndNeg(OWLObjectProperty owlObjectProperty) {
 
-        logger.info("Before removing types (types which appeared in both pos and neg images): ");
+        logger.debug("Before removing types (types which appeared in both pos and neg images) using objProp: "
+                + Utility.getShortNameWithPrefix(owlObjectProperty));
         if (SharedDataHolder.typeOfObjectsInPosIndivs.containsKey(owlObjectProperty)) {
-            logger.info("pos types: ");
+            logger.debug("pos types: ");
             SharedDataHolder.typeOfObjectsInPosIndivs.get(owlObjectProperty).keySet().forEach(type -> {
-                logger.info("\t" + Utility.getShortName((OWLClass) type));
+                logger.debug("\t" + Utility.getShortName((OWLClass) type));
             });
         }
         if (SharedDataHolder.typeOfObjectsInNegIndivs.containsKey(owlObjectProperty)) {
-            logger.info("neg types: ");
+            logger.debug("neg types: ");
             SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).keySet().forEach(type -> {
-                logger.info("\t" + Utility.getShortName((OWLClass) type));
+                logger.debug("\t" + Utility.getShortName((OWLClass) type));
             });
         }
 
@@ -354,9 +435,9 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
                     if (SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).containsKey(owlClassExpr)) {
 
                         // remove from that which have less individuals
-                        double posRatio = SharedDataHolder.typeOfObjectsInPosIndivs.get(owlObjectProperty).
+                        double posRatio = (double) SharedDataHolder.typeOfObjectsInPosIndivs.get(owlObjectProperty).
                                 get(owlClassExpr) / SharedDataHolder.posIndivs.size();
-                        double negRatio = SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).
+                        double negRatio = (double) SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).
                                 get(owlClassExpr) / SharedDataHolder.negIndivs.size();
 
                         if (posRatio >= negRatio) {
@@ -396,18 +477,32 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
             SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).remove(owlDataFactory.getOWLNothing());
         }
 
-        logger.info("After removing types (types which appeared in both pos and neg images): ");
+        logger.debug("After removing types (types which appeared in both pos and neg images) using objProp: "
+                + Utility.getShortNameWithPrefix(owlObjectProperty));
         if (SharedDataHolder.typeOfObjectsInPosIndivs.containsKey(owlObjectProperty)) {
-            logger.info("pos types: ");
+            logger.debug("pos types: ");
             SharedDataHolder.typeOfObjectsInPosIndivs.get(owlObjectProperty).keySet().forEach(type -> {
-                logger.info("\t" + Utility.getShortName((OWLClass) type));
+                logger.debug("\t" + Utility.getShortName((OWLClass) type));
             });
         }
         if (SharedDataHolder.typeOfObjectsInNegIndivs.containsKey(owlObjectProperty)) {
-            logger.info("neg types: ");
+            logger.debug("neg types: ");
             SharedDataHolder.typeOfObjectsInNegIndivs.get(owlObjectProperty).keySet().forEach(type -> {
-                logger.info("\t" + Utility.getShortName((OWLClass) type));
+                logger.debug("\t" + Utility.getShortName((OWLClass) type));
             });
+        }
+
+        // save some statistics
+        SharedDataHolder.TotalPosTypesAfterRemoval = 0;
+        for (Map.Entry<OWLObjectProperty, HashMap<OWLClassExpression, Integer>> e : SharedDataHolder.typeOfObjectsInPosIndivs.entrySet()) {
+            HashMap<OWLClassExpression, Integer> owlClassExpressionIntegerHashMap = e.getValue();
+            SharedDataHolder.TotalPosTypesAfterRemoval += owlClassExpressionIntegerHashMap.size();
+        }
+        // save some statistics
+        SharedDataHolder.TotalNegTypesAfterRemoval = 0;
+        for (Map.Entry<OWLObjectProperty, HashMap<OWLClassExpression, Integer>> e : SharedDataHolder.typeOfObjectsInNegIndivs.entrySet()) {
+            HashMap<OWLClassExpression, Integer> owlClassExpressionIntegerHashMap = e.getValue();
+            SharedDataHolder.TotalNegTypesAfterRemoval += owlClassExpressionIntegerHashMap.size();
         }
     }
 

@@ -104,6 +104,10 @@ public abstract class ConjunctiveHornClause implements IConjunctiveHornClause {
 
         this.reasoner = _reasoner;
         this.ontology = _ontology;
+        this.owlOntologyManager = this.ontology.getOWLOntologyManager();
+        this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
+
+        solutionChanged = true;
     }
 
     /**

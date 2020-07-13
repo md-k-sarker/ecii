@@ -6,8 +6,8 @@ Written at 6/17/20.
 
 import org.dase.ecii.exceptions.MalFormedIRIException;
 import org.dase.ecii.ontofactory.DLSyntaxRendererExt;
-import org.dase.ecii.ontofactory.strip.StripDownOntology;
 import org.dase.ecii.ontofactory.strip.ListofObjPropAndIndiv;
+import org.dase.ecii.ontofactory.strip.StripDownOntology;
 import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Monitor;
 import org.dase.ecii.util.Utility;
@@ -145,19 +145,74 @@ public class ConceptInductionM {
     private void writeUserDefinedValuesToResultFile() {
         monitor.writeMessage("\nUser defined parameters:");
         monitor.writeMessage("ecciAlgorithmVersion: " + ConfigParams.ECIIAlgorithmVersion);
-        monitor.writeMessage("scoreType: " + ConfigParams.scoreTypeNameRaw);
-        monitor.writeMessage("K1/negExprTypeLimit: " + ConfigParams.conceptLimitInNegExpr);
+        monitor.writeMessage("K1/conceptLimitInNegExpr: " + ConfigParams.conceptLimitInNegExpr);
         monitor.writeMessage("K2/hornClauseLimit: " + ConfigParams.hornClauseLimit);
         monitor.writeMessage("K3/objPropsCombinationLimit: " + ConfigParams.objPropsCombinationLimit);
-        monitor.writeMessage("K4/posExprTypeLimit: " + ConfigParams.conceptLimitInPosExpr);
+        monitor.writeMessage("K4/conceptLimitInPosExpr: " + ConfigParams.conceptLimitInPosExpr);
         monitor.writeMessage("K5/hornClausesListMaxSize: " + ConfigParams.hornClausesListMaxSize);
         monitor.writeMessage("K6/candidateClassesListMaxSize: " + ConfigParams.candidateClassesListMaxSize);
         monitor.writeMessage("K7/removeCommonTypes: " + ConfigParams.removeCommonTypes);
+        if (ConfigParams.removeCommonTypes)
+            monitor.writeMessage("removeCommonTypesFromOneSideOnly: " + ConfigParams.removeCommonTypesFromOneSideOnly);
+        monitor.writeMessage("limitPosTypes: " + ConfigParams.limitPosTypes);
+        if (ConfigParams.limitPosTypes)
+            monitor.writeMessage("k9/posClassListMaxSize: " + ConfigParams.posClassListMaxSize);
+        monitor.writeMessage("posTypeMinCoverIndivsSize: " + ConfigParams.posTypeMinCoverIndivsSize);
+        monitor.writeMessage("limitNegTypes: " + ConfigParams.limitNegTypes);
+        if (ConfigParams.limitNegTypes)
+            monitor.writeMessage("k10/negClassListMaxSize: " + ConfigParams.negClassListMaxSize);
+        monitor.writeMessage("negTypeMinCoverIndivsSize: " + ConfigParams.negTypeMinCoverIndivsSize);
         monitor.writeMessage("DefaultScoreType: " + Score.defaultScoreType);
         monitor.writeMessage("ReasonerName: " + ConfigParams.reasonerName);
         monitor.writeMessage("k8/ValidateByReasonerSize: " + ConfigParams.validateByReasonerSize);
-        monitor.writeMessage("k9/posClassListMaxSize: " + ConfigParams.posClassListMaxSize);
-        monitor.writeMessage("k10/negClassListMaxSize: " + ConfigParams.negClassListMaxSize);
+    }
+
+    /**
+     * Check whether the posIndivs, negIndivs and objprops exist in the ontology
+     * Does not check on the imported module of the ontology
+     *
+     * @param owlOntology
+     * @param posIndivs
+     * @param negIndivs
+     * @param objProps
+     * @return
+     */
+    private boolean isEntitiesExist(OWLOntology owlOntology, HashSet<OWLNamedIndividual> posIndivs,
+                                    HashSet<OWLNamedIndividual> negIndivs, HashSet<OWLObjectProperty> objProps) {
+        logger.info("Checking positive individuals exists in the ontology.......");
+        HashSet<OWLNamedIndividual> ontoIndivs = new HashSet<>(owlOntology.getIndividualsInSignature());
+        for (OWLNamedIndividual eachIndi : posIndivs) {
+            if (!ontoIndivs.contains(eachIndi)) {
+                logger.error("Positive individual " + eachIndi + " not found in the provided ontology. \n\tProgram exiting...");
+                monitor.stopSystem("Positive individual " + eachIndi + " not found in the provided ontology." +
+                        " \n\tProgram exiting...", true);
+            }
+        }
+        logger.info("Checking positive individuals exists in the ontology finished successfully, all individuals found.");
+
+        logger.info("Checking negative individuals exists in the ontology.......");
+        for (OWLNamedIndividual eachIndi : negIndivs) {
+            if (!ontoIndivs.contains(eachIndi)) {
+                logger.error("Negative individual " + eachIndi + " not found in the provided ontology. \n\tProgram exiting...");
+                monitor.stopSystem("Negative individual " + eachIndi + " not found in the provided ontology." +
+                        " \n\tProgram exiting...", true);
+            }
+        }
+        logger.info("Checking negative individuals exists in the ontology finished successfully, all individuals found.");
+
+        logger.info("Checking input object properties exists in the ontology........");
+        HashSet<OWLObjectProperty> ontoProps = new HashSet<>(owlOntology.getObjectPropertiesInSignature());
+        for (OWLObjectProperty eachProp : objProps) {
+            if (!eachProp.equals(SharedDataHolder.noneOWLObjProp)) {
+                if (!ontoProps.contains(eachProp)) {
+                    logger.error("Object property " + eachProp + " not found in the provided ontology. \n\tProgram exiting...");
+                    monitor.stopSystem("Object property " + eachProp + " not found in the provided ontology." +
+                            " \n\tProgram exiting...", true);
+                }
+            }
+        }
+        logger.info("Checking input object properties exists in the ontology finished successfully, all object properties found.");
+        return true;
     }
 
     /**
@@ -175,14 +230,14 @@ public class ConceptInductionM {
         // write user defined values to resultFile
         writeUserDefinedValuesToResultFile();
 
-        logger.info("posIndivs from conf size: "+ SharedDataHolder.posIndivs.size());
+        logger.info("posIndivs from conf size: " + SharedDataHolder.posIndivs.size());
         monitor.writeMessage("posIndivs from conf:");
         SharedDataHolder.posIndivs.forEach(owlNamedIndividual -> {
             logger.debug("\t" + Utility.getShortName(owlNamedIndividual));
             monitor.writeMessage("\t" + Utility.getShortName(owlNamedIndividual));
         });
 
-        logger.info("negIndivs from conf: "+ SharedDataHolder.negIndivs.size());
+        logger.info("negIndivs from conf: " + SharedDataHolder.negIndivs.size());
         monitor.writeMessage("negIndivs from conf:");
         SharedDataHolder.negIndivs.forEach(owlNamedIndividual -> {
             logger.debug("\t" + Utility.getShortName(owlNamedIndividual));
@@ -203,6 +258,10 @@ public class ConceptInductionM {
 
         //load Onto
         loadOntoAndSaveReference();
+
+        // check if individuals and objProps exist in the ontology, if anything not found program will exit immediately
+        isEntitiesExist(ontology, SharedDataHolder.posIndivs, SharedDataHolder.negIndivs,
+                new HashSet<>(SharedDataHolder.objProperties.keySet()));
 
         // strip down the ontology
         stripOnto();

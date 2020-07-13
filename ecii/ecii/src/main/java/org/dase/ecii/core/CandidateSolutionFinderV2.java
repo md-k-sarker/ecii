@@ -92,10 +92,12 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
         createSolutionUsingMultiplePosAndNegTypes();
 
         // create solution by combining hornClause
-        createSolutionByCombiningHornClause();
+        if (ConfigParams.hornClauseLimit > 1)
+            createSolutionByCombiningHornClause();
 
         // create solution by combining candidateClass
-        createSolutionByCombiningCandidateClass();
+        if (ConfigParams.objPropsCombinationLimit > 1)
+            createSolutionByCombiningCandidateClass();
 
     }
 
@@ -144,7 +146,7 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
     private void createSolutionUsingSinglePosAndNegTypes() {
         logger.info("\nSolution using only a single positive and single negative type started...............");
 
-        // use the limited posTypes
+
         SharedDataHolder.typeOfObjectsInPosIndivs.forEach((owlObjectProperty, hashMap) -> {
 
             hashMap.forEach((posOwlClassExpression, integer) -> {
@@ -465,8 +467,8 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
      */
     public void printSolutions(int K6) {
 
-        logger.info("####################Solutions####################:");
-        monitor.writeMessage("\n####################Solutions####################:");
+        logger.info("####################Solutions (sorted by "+ Score.defaultScoreType+")####################:");
+        monitor.writeMessage("\n####################Solutions (sorted by "+ Score.defaultScoreType+")####################:");
         solutionCounter = 0;
 
         SharedDataHolder.SortedCandidateSolutionListV2.forEach((solution) -> {

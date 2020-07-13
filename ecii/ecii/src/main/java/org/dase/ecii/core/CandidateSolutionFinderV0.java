@@ -403,8 +403,8 @@ public class CandidateSolutionFinderV0 extends CandidateSolutionFinder {
      */
     public void printSolutions(int K6) {
 
-        logger.info("####################Solutions####################:");
-        monitor.writeMessage("\n####################Solutions####################:");
+        logger.info("\n####################Solutions (sorted by "+ Score.defaultScoreType+")####################:");
+        monitor.writeMessage("\n####################Solutions (sorted by "+ Score.defaultScoreType+")####################:");
         solutionCounter = 0;
 
         SharedDataHolder.SortedCandidateSolutionListV0.forEach((solution) -> {

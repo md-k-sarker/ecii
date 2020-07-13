@@ -465,8 +465,6 @@ public class CandidateSolutionV2 extends CandidateSolution {
                         logger.debug("debug: " + owlObjectPropertyArrayListHashMap.getValue());
                         logger.debug("debug: " + owlObjectPropertyArrayListHashMap.getValue().get(0).getCandidateClassAsString(true));
                         logger.debug("debug: " + owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().size());
-                        logger.debug("debug: " + owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().get(0).getPosObjectTypes().size());
-                        logger.debug("debug: " + owlObjectPropertyArrayListHashMap.getValue().get(0).getConjunctiveHornClauses().get(0).getNegObjectTypes().get(0));
                         coveredIndividualsInThisGroup = owlObjectPropertyArrayListHashMap.getValue().get(0).individualsCoveredByThisCandidateClassByReasoner();
                         // each candidateclass are concatenated
                         for (int i = 1; i < owlObjectPropertyArrayListHashMap.getValue().size(); i++) {

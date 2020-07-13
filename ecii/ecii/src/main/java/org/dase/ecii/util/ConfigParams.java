@@ -136,8 +136,13 @@ public final class ConfigParams {
     /**
      * objPropsCombinationLimit: Use this number of objectproperties in a single solution If we have more than 1 then it
      * will combine those objectProperties to make a solution.
+     * Specifically it determines how many candidateClass will be in a single solution.
+     *
+     * If we have it's value as more than 1, we will get solution like:
+     *      ∃ :imageContains.((:Artifact ⊓ ¬ (:Substance) ⊓ (:Artifact ⊓ ¬ (:Plant)))
+     * Setting this to 1 will fix this kind of problem
      * Also named as K3.
-     * Integer, Optional, Default: 2
+     * Integer, Optional, Default: 1
      */
     public static int objPropsCombinationLimit;
 
@@ -179,23 +184,27 @@ public final class ConfigParams {
 
     /**
      * limitNegTypes: Whether to limit the negative types or not.
-     * After limiting the posTypes we will only use the limited number of posTypes and not the all posTypes.
+     * After limiting the negTypes we will only use the limited number of negTypes and not the all negTypes.
      * Boolean, Optional, Default: False
-     * @not-implemented
      */
     public static boolean limitNegTypes;
 
     /**
-     * negClassListMaxSize: Select these numbers of top performing negativeClasses, from the list of negativeClasses (if more exist)
-     * to combine them.
+     * negClassListMaxSize: Select these numbers of top performing negativeClasses (for a single objProperty), from the list of negativeClasses (if more exist)
      *
      * It will be activate if and only if limitNegTypes == True
      *
+     * After limiting the negTypes we will only use these number of negTypes and not the all negTypes.
+     * So the accuracy may decrease, as we are not using all negTypes, only a subset of them,
+     *      which essentially making some individuals uncoverable (individual not having any covering types in the negTypes list)
+     *
+     * If we have m objectPorperty it will keep m*n negTypes.
+     *
      * We use this combination to make the negative expression of hornClause.
      * size would be nCr or negClassListMaxSize--C--conceptLimitInNegExpr
+     *
      * Also named as k10
      * Integer, Optional, Default: 20
-     * @not-implemented
      */
     public static int negClassListMaxSize;
 
@@ -367,7 +376,7 @@ public final class ConfigParams {
             conceptLimitInPosExpr = Integer.valueOf(prop.getProperty("conceptLimitInPosExpr", "2"));
             conceptLimitInNegExpr = Integer.valueOf(prop.getProperty("conceptLimitInNegExpr", "2"));
             hornClauseLimit = Integer.valueOf(prop.getProperty("hornClauseLimit", "2"));
-            objPropsCombinationLimit = Integer.valueOf(prop.getProperty("objPropsCombinationLimit", "2"));
+            objPropsCombinationLimit = Integer.valueOf(prop.getProperty("objPropsCombinationLimit", "1"));
             hornClausesListMaxSize = Integer.valueOf(prop.getProperty("hornClausesListMaxSize", "10"));
             candidateClassesListMaxSize = Integer.valueOf(prop.getProperty("candidateClassesListMaxSize", "10"));
             removeCommonTypes = Boolean.parseBoolean(prop.getProperty("removeCommonTypes", "true"));
@@ -375,11 +384,13 @@ public final class ConfigParams {
             validateByReasonerSize = Integer.valueOf(prop.getProperty("validateByReasonerSize", "0"));
             limitPosTypes = Boolean.parseBoolean(prop.getProperty("limitPosTypes", "false"));
             posClassListMaxSize = Integer.valueOf(prop.getProperty("posClassListMaxSize", "20"));
+            posTypeMinCoverIndivsSize = Integer.valueOf(prop.getProperty("posTypeMinCoverIndivsSize", "1"));
             limitNegTypes = Boolean.parseBoolean(prop.getProperty("limitNegTypes", "false"));
             negClassListMaxSize = Integer.valueOf(prop.getProperty("negClassListMaxSize", "20"));
+            negTypeMinCoverIndivsSize = Integer.valueOf(prop.getProperty("negTypeMinCoverIndivsSize", "1"));
             runPairwiseSimilarity = Boolean.parseBoolean(prop.getProperty("runPairwiseSimilarity", "false"));
             ascendingOfStringLength = Boolean.parseBoolean(prop.getProperty("ascendingOfStringLength", "false"));
-            resultFileExtension = prop.getProperty("resultFileExtension", "_results_ecii_v2.txt");
+            resultFileExtension = prop.getProperty("resultFileExtension", "_results_ecii_"+ECIIAlgorithmVersion+".txt");
             printLabelInsteadOfName = Boolean.parseBoolean(prop.getProperty("printLabelInsteadOfName", "false"));
 
             confFileDir = Paths.get(confFilePath).getParent().toString();
@@ -576,6 +587,12 @@ public final class ConfigParams {
         logger.info("\thornClausesListMaxSize: " + hornClausesListMaxSize);
         logger.info("\tcandidateClassesListMaxSize: " + candidateClassesListMaxSize);
         logger.info("\tremoveCommonTypes: " + removeCommonTypes);
+        logger.info("\tremoveCommonTypesFromOneSideOnly: " + removeCommonTypesFromOneSideOnly);
+        logger.info("\tlimitPosTypes: " + limitPosTypes);
+        logger.info("\tposTypeMinCoverIndivsSize: " + posTypeMinCoverIndivsSize);
+        logger.info("\tlimitNegTypes: " + limitNegTypes);
+        logger.info("\tnegTypeMinCoverIndivsSize: " + negTypeMinCoverIndivsSize);
+
         logger.info("\tscoreTypeNameRaw: " + scoreTypeNameRaw);
         logger.info("\tvalidateByReasonerSize: " + validateByReasonerSize);
     }

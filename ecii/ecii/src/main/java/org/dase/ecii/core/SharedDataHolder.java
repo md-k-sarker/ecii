@@ -151,6 +151,37 @@ public class SharedDataHolder {
      */
     public static int newIRICounter = 0;
 
+    /**
+     * Size of positive types (direct+indirect)
+     * Being used to calculate the size of solution,
+     * so we can have an estimate of time to generate the solutions.
+     */
+    public static int TotalPosTypes = 0;
+
+    /**
+     * Size of negative types (direct+indirect)
+     * Being used to calculate the size of solution,
+     * so we can have an estimate of time to generate the solutions.
+     */
+    public static int TotalNegTypes = 0;
+
+    /**
+     * Size of positive types (direct+indirect) after removing the common types.
+     * If we dont remove then it's size is 0
+     * <p>
+     * Being used to calculate the size of solution,
+     * so we can have an estimate of time to generate the solutions.
+     */
+    public static int TotalPosTypesAfterRemoval = 0;
+
+    /**
+     * Size of negative types (direct+indirect) after removing the common types.
+     * If we dont remove then it's size is 0
+     * <p>
+     * Being used to calculate the size of solution,
+     * so we can have an estimate of time to generate the solutions.
+     */
+    public static int TotalNegTypesAfterRemoval = 0;
 
     /**
      * clean the shared data holders.

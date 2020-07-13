@@ -264,7 +264,7 @@ public class ConjunctiveHornClauseV1V2 extends ConjunctiveHornClause {
 
         if (null != owlClassExpression) {
             if (!this.owlObjectProperty.equals(SharedDataHolder.noneOWLObjProp)) {
-                owlClassExpression = owlDataFactory.getOWLObjectSomeValuesFrom(owlObjectProperty, owlClassExpression);
+                owlClassExpression = owlDataFactory.getOWLObjectSomeValuesFrom(this.owlObjectProperty, owlClassExpression);
             }
 
             // if we have calculated previously then just retrieve it from cache and return it.
@@ -280,8 +280,7 @@ public class ConjunctiveHornClauseV1V2 extends ConjunctiveHornClause {
 
             // not found in cache, now expensive reasoner calls.
             coveredIndividuals = (HashSet<OWLNamedIndividual>) reasoner.getInstances(owlClassExpression, false).getFlattened();
-
-
+            
             // save it to cache
             SharedDataHolder.IndividualsOfThisOWLClassExpressionByReasoner.put(owlClassExpression, coveredIndividuals);
 
