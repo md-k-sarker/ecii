@@ -467,12 +467,27 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
      */
     public void printSolutions(int K6) {
 
-        logger.info("####################Solutions (sorted by "+ Score.defaultScoreType+")####################:");
-        monitor.writeMessage("\n####################Solutions (sorted by "+ Score.defaultScoreType+")####################:");
+        logger.info("####################Solutions (sorted by " + Score.defaultScoreType + ")####################:");
+        monitor.writeMessage("\n####################Solutions (sorted by " + Score.defaultScoreType + ")####################:");
         solutionCounter = 0;
 
-        SharedDataHolder.SortedCandidateSolutionListV2.forEach((solution) -> {
+        /// sum, max and average of all accuracy
+        double f1Total = 0;
+        double precisionTotal = 0;
+        double recallTotal = 0;
+        double coverageTotal = 0;
+        
+        double f1Max = 0;
+        double precisionMax = 0;
+        double recallMax = 0;
+        double coverageMax = 0;
+        
+        double f1Average = 0;
+        double precisionAverage = 0;
+        double recallAverage = 0;
+        double coverageAverage = 0;
 
+        for (CandidateSolutionV2 solution : SharedDataHolder.SortedCandidateSolutionListV2) {
             if (solution.getGroupedCandidateClasses().size() > 0) {
                 solutionCounter++;
 
@@ -505,16 +520,43 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
                         monitor.writeMessage("\t precision: " + solution.getScore().getPrecision());
                         monitor.writeMessage("\t recall: " + solution.getScore().getRecall());
                         monitor.writeMessage("\t f_measure: " + solution.getScore().getF_measure());
-
                     }
+
+                    // add to the accuracy total
+                    f1Total += solution.getScore().getF_measure();
+                    precisionTotal += solution.getScore().getPrecision();
+                    recallTotal += solution.getScore().getRecall();
+                    coverageTotal += solution.getScore().getCoverage();
+
+                    // calculate max
+                    f1Max = Math.max(solution.getScore().getF_measure(), f1Max);
+                    precisionMax = Math.max(solution.getScore().getPrecision(), precisionMax);
+                    recallMax = Math.max(solution.getScore().getRecall(), recallMax);
+                    coverageMax = Math.max(solution.getScore().getCoverage(), coverageMax);
                 }
             }
-        });
+        }
 
         logger.info("Total solutions found using raw list: " + SharedDataHolder.SortedCandidateSolutionListV2.size());
         logger.info("Total solutions found after removing empty solution: " + solutionCounter);
 
         monitor.writeMessage("\nTotal solutions found: " + solutionCounter);
+
+        /// average of all accuracy
+        f1Average = f1Total == 0 ? 0 : f1Total / (double) solutionCounter;
+        precisionAverage = precisionTotal == 0 ? 0 : precisionTotal / (double) solutionCounter;
+        recallAverage = recallTotal == 0 ? 0 : recallTotal / (double) solutionCounter;
+        coverageAverage = coverageTotal == 0 ? 0 : coverageTotal / (double) solutionCounter;
+
+        monitor.writeMessage("\nF1 average: " + f1Average);
+        monitor.writeMessage("Precision average: " + precisionAverage);
+        monitor.writeMessage("Recall average: " + recallAverage);
+        monitor.writeMessage("Coverage average: " + coverageAverage);
+
+        monitor.writeMessage("\nF1 max: " + f1Max);
+        monitor.writeMessage("Precision max: " + precisionMax);
+        monitor.writeMessage("Recall max: " + recallMax);
+        monitor.writeMessage("Coverage max: " + coverageMax);
     }
 
     /**

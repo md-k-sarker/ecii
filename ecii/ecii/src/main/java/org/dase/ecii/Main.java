@@ -677,7 +677,7 @@ public class Main {
         SharedDataHolder.programStartingDir = System.getProperty("user.dir");
         logger.info("Working directory/Program starting directory = " + SharedDataHolder.programStartingDir);
 
-        logger.debug("args.length: " + args.length);
+        logger.info("args.length: " + args.length);
 
         if (args.length > 0) {
             if (args.length == 1) {
