@@ -565,6 +565,8 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
      * This is now a hard problem. It can be easily analyzed if the hornClause only have positive type, but no idea, if it also contains negative types.
      * todo(zaman): need to formulate idea to solve this.
      *
+     *             //  It's producing (Human and Mammal) And (Human and Animal) as valid!!!
+     *             // which is weird, it can be reduced to (Human and Mammal and Animal)
      * @param aList
      * @return
      */

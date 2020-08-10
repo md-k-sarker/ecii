@@ -289,7 +289,7 @@ public final class ConfigParams {
      *
      * If total positive individual is less than the provided value it will take the
      * minimum of half of SharedDataHolder.posIndivs.size() or provided value.
-     * posTypeMinCoverIndivsSize = Math.min(posTypeMinCoverIndivsSize, SharedDataHolder.posIndivs.size()/2)
+     * posTypeMinCoverIndivsSize = Math.min(posTypeMinCoverIndivsSize, SharedDataHolder.posIndivs.size()/3)
      *
      * Integer, Optional, Default: 1
      */
@@ -305,8 +305,8 @@ public final class ConfigParams {
      * also only being used inside: solution using multiple positive and multiple negative type
      *
      * If total negative individual is less than the provided value it will take the minimum of those.
-     * negTypeMinCoverIndivsSize = Math.min(negTypeMinCoverIndivsSize, SharedDataHolder.negIndivs.size())
-     * for posTypeMinCoverIndivsSize it's half of the posIndivs size.
+     * negTypeMinCoverIndivsSize = Math.min(negTypeMinCoverIndivsSize, SharedDataHolder.negIndivs.size()/2)
+     * for posTypeMinCoverIndivsSize it's 1/3 of the posIndivs size.
      * Integer, Optional, Default: 1
      */
     public static int negTypeMinCoverIndivsSize = 1;
@@ -389,16 +389,16 @@ public final class ConfigParams {
             removeCommonTypes = Boolean.parseBoolean(prop.getProperty("removeCommonTypes", "true"));
             removeCommonTypesFromOneSideOnly = Boolean.parseBoolean(prop.getProperty("removeCommonTypesFromOneSideOnly", "true"));
             validateByReasonerSize = Integer.valueOf(prop.getProperty("validateByReasonerSize", "0"));
-            limitPosTypes = Boolean.parseBoolean(prop.getProperty("limitPosTypes", "false"));
+            limitPosTypes = true; //Boolean.parseBoolean(prop.getProperty("limitPosTypes", "false"));
             posClassListMaxSize = Integer.valueOf(prop.getProperty("posClassListMaxSize", "20"));
             posTypeMinCoverIndivsSize = Integer.valueOf(prop.getProperty("posTypeMinCoverIndivsSize", "1"));
             // override the min value
-            posTypeMinCoverIndivsSize = Math.min(posTypeMinCoverIndivsSize, SharedDataHolder.posIndivs.size() / 2);
-            limitNegTypes = Boolean.parseBoolean(prop.getProperty("limitNegTypes", "false"));
+            posTypeMinCoverIndivsSize = Math.min(posTypeMinCoverIndivsSize, SharedDataHolder.posIndivs.size() / 3);
+            limitNegTypes = true; //Boolean.parseBoolean(prop.getProperty("limitNegTypes", "false"));
             negClassListMaxSize = Integer.valueOf(prop.getProperty("negClassListMaxSize", "20"));
             negTypeMinCoverIndivsSize = Integer.valueOf(prop.getProperty("negTypeMinCoverIndivsSize", "1"));
             // override the min value
-            negTypeMinCoverIndivsSize = Math.min(negTypeMinCoverIndivsSize, SharedDataHolder.negIndivs.size());
+            negTypeMinCoverIndivsSize = Math.min(negTypeMinCoverIndivsSize, SharedDataHolder.negIndivs.size()/2);
             runPairwiseSimilarity = Boolean.parseBoolean(prop.getProperty("runPairwiseSimilarity", "false"));
             ascendingOfStringLength = Boolean.parseBoolean(prop.getProperty("ascendingOfStringLength", "false"));
             resultFileExtension = prop.getProperty("resultFileExtension", "_results_ecii_" + ECIIAlgorithmVersion + ".txt");

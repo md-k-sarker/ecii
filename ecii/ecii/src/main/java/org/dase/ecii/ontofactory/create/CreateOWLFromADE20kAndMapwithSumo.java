@@ -16,37 +16,28 @@ import java.util.HashSet;
 import java.util.stream.Collectors;
 
 /**
- * Create Ontology from the conf file.
+ * Create Ontology from the attribute file of ADE20K by comparing with the sumo individuals.
  */
-public class CreateOWLFromADE20kAndMapwithWiki {
+public class CreateOWLFromADE20kAndMapwithSumo {
 
-    // public static String ConfigParams.namespace ="http://www.daselab.com/residue/analysis#"
+    // public static String ConfigParams.namespace ="http://www.daselab.org/ontologies/sumo#"
     public static String rootADE20KPath = "/Users/sarker/Dropbox/Emerald-Tailor-Expr-Data/ade20k_images_and_owls";
     public static String imageContainsObjPropertyName = "imageContains";
 
-    // wiki cats ontology or wikip pages ontology or a combined one
-    public static String wikiOntoPath = "/Users/sarker/Workspaces/Jetbrains/residue-emerald/residue/data/KGS/automated_wiki/wiki_cats_v1_non_cyclic.owl";
-    public static HashSet<String> wikiIndivsHashSet = new HashSet<>();
-    public static HashSet<String> wikiConceptsHashSet = new HashSet<>();
-    public static OWLOntology owlOntologyWiki;
+    public static String sumoOntoPath = "/Users/sarker/Workspaces/Jetbrains/residue-emerald/residue/data/KGS/SUMO_properly_named.owl";
+    public static HashSet<String> sumoConceptsHashSet = new HashSet<>();
+    public static OWLOntology owlOntologysumo;
 
     /**
-     * The objects which has same (string similarity) name as of any wiki pages are saved to this variable.
+     * The objects which has same (string similarity) name as of any sumo concepts are saved to this variable.
      * For example, objects names are in column[3]/wordnet and in column[4]/normal_names column.
-     * Those names are matched with wikipedia pages ontology.
+     * Those names are matched with sumo concepts.
      * If same name found then it is stored in this variable.
      */
-    public static HashSet<String> matchedObjectswithWikiPages = new HashSet<>();
-    /**
-     * The objects which has same (string similarity) name as of any wiki concepts are saved to this variable.
-     * For example, objects names are in column[3]/wordnet and in column[4]/normal_names column.
-     * Those names are matched with wikipedia pages ontology.
-     * If same name found then it is stored in this variable.
-     */
-    public static HashSet<String> matchedObjectswithWikiConcepts = new HashSet<>();
-    public static String csvPathForMatchedEntity = "/Users/sarker/Dropbox/Emerald-Tailor-Expr-Data/ade20k_images_and_owls/matched_objects_with_wiki_concepts.csv";
+    public static HashSet<String> matchedObjectswithSumoConcepts = new HashSet<>();
+    public static String csvPathForMatchedEntity = "/Users/sarker/Dropbox/Emerald-Tailor-Expr-Data/ade20k_images_and_owls/matched_objects_with_sumo_concepts.csv";
     public static String csvPathForAllEntity = "/Users/sarker/Dropbox/Emerald-Tailor-Expr-Data/ade20k_images_and_owls/all_objects_in_ADE20K.csv";
-    public static String csvPathForNonMatchedEntity = "/Users/sarker/Dropbox/Emerald-Tailor-Expr-Data/ade20k_images_and_owls/non_matched_objects_with_wiki_concepts.csv";
+    public static String csvPathForNonMatchedEntity = "/Users/sarker/Dropbox/Emerald-Tailor-Expr-Data/ade20k_images_and_owls/non_matched_objects_with_sumo_concepts.csv";
     /**
      * All the objects in ade20 images.
      */
@@ -59,17 +50,17 @@ public class CreateOWLFromADE20kAndMapwithWiki {
         try {
 
             // fixing the base iri:
-            ConfigParams.namespace = "http://www.daselab.com/residue/analysis";
+            ConfigParams.namespace = "http://www.daselab.org/ontologies/sumo";
 
-            // load wikipedia page ontology and cache the individuals
-            System.out.println("Loading the ontology.......");
-            System.out.println("Onto path: " + wikiOntoPath);
+            // load sumo ontology and cache the concepts/individuals
+            System.out.println("Loading the ontology and caching concepts.......");
+            System.out.println("Onto path: " + sumoOntoPath);
             Long startTime = System.currentTimeMillis();
-            owlOntologyWiki = Utility.loadOntology(wikiOntoPath);
-            wikiConceptsHashSet = owlOntologyWiki.getClassesInSignature().stream()
+            owlOntologysumo = Utility.loadOntology(sumoOntoPath);
+            sumoConceptsHashSet = owlOntologysumo.getClassesInSignature().stream()
                     .map(owlClass -> Utility.getShortName(owlClass))
                     .collect(Collectors.toCollection(HashSet::new));
-            System.out.println("Loading the ontology successfull");
+            System.out.println("Loading the ontology and caching concepts successfull");
             Long loadEndTime = System.currentTimeMillis();
             System.out.println("Ontology load time: " + (loadEndTime - startTime) / 1000 + " seconds");
 
@@ -95,22 +86,22 @@ public class CreateOWLFromADE20kAndMapwithWiki {
 
             // print total entity size
             System.out.println("Total objects in ADE20K: " + allObjectsInADE20K.size());
-            System.out.println("Matched objects in ADE20K with Wiki: " + matchedObjectswithWikiConcepts.size());
+            System.out.println("Matched objects in ADE20K with Sumo: " + matchedObjectswithSumoConcepts.size());
 
             System.out.println("Saving to csv.............");
             // save all entities to csv file
             ArrayList<String> columnNamesForAllEntity = new ArrayList<>();
             columnNamesForAllEntity.add("AllEntities");
-//            if (Utility.writeToCSV(csvPathForAllEntity, columnNamesForAllEntity, new ArrayList<>(allObjectsInADE20K))) {
-//                System.out.println("Wrote csv successfully at: " + csvPathForAllEntity);
-//            } else {
-//                System.out.println("Failed to write csv at: " + csvPathForAllEntity);
-//            }
+            if (Utility.writeToCSV(csvPathForAllEntity, columnNamesForAllEntity, new ArrayList<>(allObjectsInADE20K))) {
+                System.out.println("Wrote csv successfully at: " + csvPathForAllEntity);
+            } else {
+                System.out.println("Failed to write csv at: " + csvPathForAllEntity);
+            }
 
             // save the matched entities to csv file
             ArrayList<String> columnNamesForMatchedEntity = new ArrayList<>();
             columnNamesForMatchedEntity.add("MatchedEntities");
-            if (Utility.writeToCSV(csvPathForMatchedEntity, columnNamesForMatchedEntity, new ArrayList<>(matchedObjectswithWikiConcepts))) {
+            if (Utility.writeToCSV(csvPathForMatchedEntity, columnNamesForMatchedEntity, new ArrayList<>(matchedObjectswithSumoConcepts))) {
                 System.out.println("Wrote csv successfully at: " + csvPathForMatchedEntity);
             } else {
                 System.out.println("Failed to write csv at: " + csvPathForMatchedEntity);
@@ -120,7 +111,7 @@ public class CreateOWLFromADE20kAndMapwithWiki {
             // save the non-matched entities to csv file
             ArrayList<String> columnNamesForNonMatchedEntity = new ArrayList<>();
             columnNamesForNonMatchedEntity.add("NonMatchedEntities");
-            allObjectsInADE20K.removeAll(matchedObjectswithWikiConcepts);
+            allObjectsInADE20K.removeAll(matchedObjectswithSumoConcepts);
             if (Utility.writeToCSV(csvPathForNonMatchedEntity, columnNamesForNonMatchedEntity, new ArrayList<>(allObjectsInADE20K))) {
                 System.out.println("Wrote csv successfully at: " + csvPathForNonMatchedEntity);
             } else {
@@ -226,10 +217,9 @@ public class CreateOWLFromADE20kAndMapwithWiki {
 
         IRI ontologyIRI = IRI.create(ConfigParams.namespace);
 
-        String temp = f.getAbsolutePath().replaceAll("_atr.txt", "_mapped_with_wiki_concept.owl");
+        String temp = f.getAbsolutePath().replaceAll("_atr.txt", "_sumo.owl");
         String diskFileName = temp.replace("\\", "/");
         IRI owlDiskFileIRI = IRI.create("file:" + diskFileName);
-
 
         OWLOntology ontology = owlManager.createOntology(ontologyIRI);
         System.out.println("created ontology: " + ontology.getOntologyID());
@@ -275,6 +265,7 @@ public class CreateOWLFromADE20kAndMapwithWiki {
                 column[i] = column[i].trim();
             }
 
+
             // Column[4] Raw name
             String[] rawClasses = column[4].split(",");
             for (String eachClass : rawClasses) {
@@ -285,12 +276,12 @@ public class CreateOWLFromADE20kAndMapwithWiki {
                 // cache it
                 allObjectsInADE20K.add(eachClass);
                 /**
-                 * Does this class name has any matching page name/concept name in wikipedia ?
-                 * if it has then must assign the individual,
+                 * Does this class name matches with any concept name in sumo ?
+                 * if it matches then we must assign the individual to that type,
                  * otherwise there is no need to assign any types for this version of ontology.
                  */
-                if (wikiConceptsHashSet.contains(eachClass)) {
-                    matchedObjectswithWikiConcepts.add(eachClass);
+                if (sumoConceptsHashSet.contains(eachClass)) {
+                    matchedObjectswithSumoConcepts.add(eachClass);
 
                     // create object/namedIndividual
                     // column[0]
@@ -305,7 +296,7 @@ public class CreateOWLFromADE20kAndMapwithWiki {
                     owlManager.applyChange(addAxiom);
 
                     // create class. if the IRI of 2 entities are same, then that will be a single entity in ontology and
-                    // we will be able to access that from wiki ontology.
+                    // we will be able to access that from sumo ontology.
                     IRI iriClass = IRI.create(ConfigParams.namespace + "#" + eachClass);
                     OWLClass owlClass = owlDataFactory.getOWLClass(iriClass);
 
@@ -321,7 +312,7 @@ public class CreateOWLFromADE20kAndMapwithWiki {
         // Save Ontology
         // for some reason this was creating problem on Jun,13,2020
         // owlManager.saveOntology(ontology, new OWLXMLDocumentFormat(), owlDiskFileIRI);
-//        owlManager.saveOntology(ontology, owlDiskFileIRI);
+        owlManager.saveOntology(ontology, owlDiskFileIRI);
         System.out.println("ontology has total " + ontology.getAxioms().size() + " axioms");
         System.out.println("saved on file: " + owlDiskFileIRI + "\nSuccessfull");
     }

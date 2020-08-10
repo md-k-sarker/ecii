@@ -14,7 +14,7 @@ public enum ScoreType {
             case RECALL:
                 return "RECALL";
             case F_MEASURE:
-                return "F_MEASURE";
+                return "F1_MEASURE";
             case COVERAGE:
                 return "COVERAGE";
             case PRECISION_by_REASONER:
