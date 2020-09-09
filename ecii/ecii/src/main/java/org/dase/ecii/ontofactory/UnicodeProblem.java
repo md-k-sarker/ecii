@@ -9,6 +9,10 @@ import java.lang.invoke.MethodHandles;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Fix the unicode problem of ontology.
+ * Specifically, remove/replace any non-unicode from the ontology
+ */
 public class UnicodeProblem {
     final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private String inputKGPath;

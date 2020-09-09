@@ -26,7 +26,7 @@ import java.util.*;
  * Prune the ontology.
  * Input:
  * 1. Ontology, (possibly a large ontology, in our case the wikipedia hierarchy)
- * 2. Entities (proving by csv files)
+ * 2. Entities (providing by csv files)
  * 3. Object properties (in most case we have indiv1 imgContains obj1 and then we look for the type of obj1)
  * <p>
  * Output:
@@ -37,6 +37,12 @@ import java.util.*;
  * General information:
  * We should use extractAxiomsRelatedToIndivs(...) this function instead of extractAxiomsRelatedToOWLClasses(...) whenever possible.
  * See documentation of function extractAxiomsRelatedToIndivs(...) for details.
+ *
+ * ----
+ * Date: 08/12/2020
+ * Minor bug found, when stripping Dbpedia (combined with ade20k mountains, workroom ontos) ontology!!. Although concept island was referred by
+ * some object in mountain image, those were completely being stripped from the ontology.
+ * ---
  */
 public class StripDownOntology {
 
@@ -168,7 +174,7 @@ public class StripDownOntology {
         } catch (Exception ex) {
             logger.error("readEntityFromCSVFile failed!!!! Reading entity file error, entity file name: " + entityTxtFilePath);
             ex.printStackTrace();
-            return listofObjPropAndIndivTextualName;
+            return null;
         }
     }
 

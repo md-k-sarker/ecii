@@ -271,36 +271,41 @@ public class Main {
         ListofObjPropAndIndivTextualName listofObjPropAndIndivTextualName = stripDownOntology.
                 readEntityFromCSVFile(entityCsvFilePath, objPropColumnName, indivColumnName);
 
-        // process objprops and direct indivs
-        ListofObjPropAndIndiv listofObjPropAndIndiv = stripDownOntology.
-                convertToOntologyEntity(listofObjPropAndIndivTextualName);
+        if (null != listofObjPropAndIndivTextualName) {
+            // process objprops and direct indivs
+            ListofObjPropAndIndiv listofObjPropAndIndiv = stripDownOntology.
+                    convertToOntologyEntity(listofObjPropAndIndivTextualName);
 
-        // process indirect indivs
-        listofObjPropAndIndiv = stripDownOntology.processIndirectIndivsUsingObjProps(listofObjPropAndIndiv);
+            // process indirect indivs
+            listofObjPropAndIndiv = stripDownOntology.processIndirectIndivsUsingObjProps(listofObjPropAndIndiv);
 
-        HashSet<OWLAxiom> axiomsToKeep = stripDownOntology.extractAxiomsRelatedToIndivs(listofObjPropAndIndiv.directIndivs, listofObjPropAndIndiv.inDirectIndivs);
+            HashSet<OWLAxiom> axiomsToKeep = stripDownOntology.extractAxiomsRelatedToIndivs(listofObjPropAndIndiv.directIndivs, listofObjPropAndIndiv.inDirectIndivs);
 
-        OWLOntologyManager outputOntoManager = OWLManager.createOWLOntologyManager();
+            OWLOntologyManager outputOntoManager = OWLManager.createOWLOntologyManager();
 
-        OWLOntology outputOntology = null;
-        try {
-            outputOntology = outputOntoManager.createOntology(IRI.create(outputOntoIRI));
-        } catch (OWLOntologyCreationException e) {
-            e.printStackTrace();
+            OWLOntology outputOntology = null;
+            try {
+                outputOntology = outputOntoManager.createOntology(IRI.create(outputOntoIRI));
+            } catch (OWLOntologyCreationException e) {
+                e.printStackTrace();
+            }
+            outputOntoManager.addAxioms(outputOntology, axiomsToKeep);
+
+            try {
+
+                Utility.saveOntology(outputOntology, outputOntoPath);
+
+                monitor.displayMessage("File stripped successfully and saved at: " + outputOntoPath, true);
+
+            } catch (OWLOntologyStorageException e) {
+                e.printStackTrace();
+            }
+
+            initiateSingleOpsEnd(outputLogPath);
+        }else {
+            logger.error("listofObjPropAndIndivTextualName is null, because coudn't read entity from csv, program exiting!!!");
+            monitor.stopSystem("listofObjPropAndIndivTextualName is null, because coudn't read entity from csv, program exiting!!!", true);
         }
-        outputOntoManager.addAxioms(outputOntology, axiomsToKeep);
-
-        try {
-
-            Utility.saveOntology(outputOntology, outputOntoPath);
-
-            monitor.displayMessage("File stripped successfully and saved at: " + outputOntoPath, true);
-
-        } catch (OWLOntologyStorageException e) {
-            e.printStackTrace();
-        }
-
-        initiateSingleOpsEnd(outputLogPath);
     }
 
     /**
