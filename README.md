@@ -1,5 +1,19 @@
 # ecii
-Learning description from examples: An efficient approach to analyzing big data
+Learning description from examples: An efficient approach to analyze big data.
+
+Originally concept induction algorithm, where other functionality is added to provide:
+- Similarity between natural language (sentence, paragraph, tweet etc).
+- Provide insights of machine learning decisions.
+- Identify new complex entities for knowledge graph.  
+
+
+
+## Program options:
+1. Measure similarity between ontology entities
+2. Perform concept induction
+3. Strip down ontology or keeping entities of interest while discarding others
+4. Create ontology from CSV file
+5. Combine multiple ontology
 
 This repository contains the source code of ECII. 
 Source code is in ecii/ecii directory.
@@ -33,7 +47,7 @@ Sample configuration files is in config-file-sample-scripts directory.
         // K2/hornClauseLimit
         hornClauseLimit : integer, optional, default 3
 
-        // K3/permutate/combination untill this number of objectproperties
+        // K3/permutate/combination until this number of objectproperties
         objPropsCombinationLimit: integer, optional, default 3
 
         // K5 select upto k5 hornClauses to make combination
