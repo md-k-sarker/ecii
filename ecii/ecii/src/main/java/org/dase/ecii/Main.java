@@ -4,11 +4,11 @@ package org.dase.ecii;
 import org.apache.commons.io.FilenameUtils;
 import org.dase.ecii.core.ConceptInductionM;
 import org.dase.ecii.core.SharedDataHolder;
-import org.dase.ecii.ontofactory.create.CreateOWLFromCSV;
 import org.dase.ecii.ontofactory.OntoCombiner;
-import org.dase.ecii.ontofactory.strip.StripDownOntology;
+import org.dase.ecii.ontofactory.create.CreateOWLFromCSV;
 import org.dase.ecii.ontofactory.strip.ListofObjPropAndIndiv;
 import org.dase.ecii.ontofactory.strip.ListofObjPropAndIndivTextualName;
+import org.dase.ecii.ontofactory.strip.StripDownOntology;
 import org.dase.ecii.util.ConfigParams;
 import org.dase.ecii.util.Monitor;
 import org.dase.ecii.util.Utility;
@@ -302,7 +302,7 @@ public class Main {
             }
 
             initiateSingleOpsEnd(outputLogPath);
-        }else {
+        } else {
             logger.error("listofObjPropAndIndivTextualName is null, because coudn't read entity from csv, program exiting!!!");
             monitor.stopSystem("listofObjPropAndIndivTextualName is null, because coudn't read entity from csv, program exiting!!!", true);
         }
@@ -377,28 +377,35 @@ public class Main {
      * @param ontoIRI
      * @param providingEntityFullName, if false it will use  ontoIRI+entityName to generate full name
      * @param delimeter
-     * @param objPropColumnName
+     * @param objPropName
      */
-    public static void createOntologyFromCSV(String csvPath, String indivColumnName, String typeColumnName, String ontoIRI, String providingEntityFullName, String delimeter, String objPropColumnName) {
+    public static void createOntologyFromCSV(String csvPath, String indivColumnName, String typeColumnName, String usePrefixForIndivCreation, String indivPrefix,
+                                             String ontoIRI, String providingEntityFullName, String delimeter, String objPropName) {
 
         initiateSingleOpsStart(null);
-
-        CreateOWLFromCSV createOWLFromCSV = null;
-        logger.info("Creating ontology by processing csv file: " + csvPath + " started............");
+        boolean usePrefixForIndivCreation_ = false;
         boolean isProvidingEntityFullName = false;
+
+        if (usePrefixForIndivCreation.toString().toLowerCase().equals("true")) {
+            usePrefixForIndivCreation_ = true;
+        }
         if (providingEntityFullName.toString().toLowerCase().equals("true")) {
             isProvidingEntityFullName = true;
         }
+        CreateOWLFromCSV createOWLFromCSV = null;
+        logger.info("Creating ontology by processing csv file: " + csvPath + " started............");
+
         try {
             // "http://www.daselab.com/residue/analysis"
-            createOWLFromCSV = new CreateOWLFromCSV(csvPath.toString(), "talksAbout",
+            createOWLFromCSV = new CreateOWLFromCSV(csvPath.toString(), objPropName,
                     ontoIRI, isProvidingEntityFullName, delimeter);
         } catch (OWLOntologyCreationException e) {
             logger.error("Error in creating ontology: " + csvPath + " !!!!!!!!!!!!");
             e.printStackTrace();
         }
 
-        createOWLFromCSV.parseCSVToCreateIndivAndTheirTypes(indivColumnName, typeColumnName);
+        // params -- String indivColumnName, String typesColumnName, boolean usePrefixForIndiv, String indivPrefix
+        createOWLFromCSV.parseCSVToCreateIndivAndTheirTypes(indivColumnName, typeColumnName, usePrefixForIndivCreation_, indivPrefix);
         logger.info("Creating ontology by processing csv file: " + csvPath + " finished.");
 
         initiateSingleOpsEnd(null);
@@ -416,7 +423,8 @@ public class Main {
      * @param providingEntityFullName,  if false it will use  ontoIRI+entityName to generate full name
      * @param delimeter
      */
-    public static void createOntologyFromCSV(String csvPath, String entityColumnName, String usePrefixForIndivCreation, String indivPrefix, String assignTypeUsingSameEntity, String ontoIRI, String providingEntityFullName, String delimeter) {
+    public static void createOntologyFromCSV(String csvPath, String entityColumnName, String usePrefixForIndivCreation, String indivPrefix, String assignTypeUsingSameEntity,
+                                             String ontoIRI, String providingEntityFullName, String delimeter) {
 
         initiateSingleOpsStart(null);
         boolean usePrefixForIndivCreation_ = false;
@@ -442,7 +450,7 @@ public class Main {
             logger.error("Error in creating ontology: " + csvPath + " !!!!!!!!!!!!");
             e.printStackTrace();
         }
-//     public void parseCSVToCreateIndivAndTheirTypes(String entityColumnName, boolean usePrefixForIndivCreation, String indivPrefix, boolean assignTypeUsingSameEntity)
+        //     public void parseCSVToCreateIndivAndTheirTypes(String entityColumnName, boolean usePrefixForIndivCreation, String indivPrefix, boolean assignTypeUsingSameEntity)
 
         createOWLFromCSV.parseCSVToCreateIndivAndTheirTypes(entityColumnName, usePrefixForIndivCreation_, indivPrefix, assignTypeUsingSameEntity_);
         logger.info("Creating ontology by processing csv file: " + csvPath + " finished.");
@@ -483,7 +491,7 @@ public class Main {
                 "\n\t-c [inputOntologiesDirectory, outputOntologyIRI]" +
                 "\n\t\t-c [outputPath, traversingRootPath, csvPath, csvColumnName, useFileNameExtender, fileNameExtender]" +
                 "\n\t-s [-obj/type] [inputOntoPath, entityCsvFilePath, indivColumnName, objPropColumnName/typeColumnName, outputOntoIRI] " +
-                "\n\t-o [entityCsvFilePath, indivColumnName, typeColumnName, outputOntoIRI, providingEntityFullName, delimeter, objPropColumnName]" +
+                "\n\t-o [entityCsvFilePath, indivColumnName, typeColumnName, usePrefixForIndivCreation, indivPrefix, ontoIRI, providingEntityFullName, delimeter, objPropName]" +
                 "\n\t\t-o [entityCsvFilePath, entityColumnName, usePrefixForIndivCreation, indivPrefix, assignTypeUsingSameEntity, ontoIRI, providingEntityFullName, delimeter]" +
                 "\n\nTo measure similarity between ontology entities..... or " +
                 "\nTo perform concept induction....." +
@@ -621,13 +629,22 @@ public class Main {
                 printHelp();
             }
         } else if (args[0].equalsIgnoreCase("-o")) {
-            // -o [entityCsvFilePath, indivColumnName, typeColumnName, outputOntoIRI, objPropColumnName]"
-            if (args.length == 8 || args.length == 9) {
+            // obj-prop: -o [entityCsvFilePath, indivColumnName, typeColumnName, usePrefixForIndivCreation, indivPrefix, ontoIRI, providingEntityFullName, delimeter, objPropName]
+            // no-obj-prop: -o [entityCsvFilePath, entityColumnName, usePrefixForIndivCreation, indivPrefix, assignTypeUsingSameEntity, ontoIRI, providingEntityFullName, delimeter]
+            if (args.length == 9 || args.length == 10) {
                 logger.info("Program starting to create ontology");
-                if (args.length == 8) {
-                    createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
-                } else if (args.length == 9) {
+
+                if (args.length == 9) {
+                    // just indiv and type
+                    // String csvPath, String entityColumnName, String usePrefixForIndivCreation, String indivPrefix, String assignTypeUsingSameEntity,
+                    //                                             String ontoIRI, String providingEntityFullName, String delimeter
+                    boolean usePrefixForIndivCreation = false;
                     createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
+                } else {
+                    // indiv, type and obj-prop
+                    //String csvPath, String indivColumnName, String typeColumnName, String usePrefixForIndivCreation, String indivPrefix,
+                    //                                             String ontoIRI, String providingEntityFullName, String delimeter, String objPropName
+                    createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]);
                 }
             } else {
                 logger.error(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);

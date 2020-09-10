@@ -244,7 +244,7 @@ public class CreateOWLFromCSV {
      * @param indivColumnName
      * @param typesColumnName
      */
-    public void parseCSVToCreateIndivAndTheirTypes(String indivColumnName, String typesColumnName) {
+    public void parseCSVToCreateIndivAndTheirTypes(String indivColumnName, String typesColumnName, boolean usePrefixForIndiv, String indivPrefix) {
 
         logger.info("Parsing csv and creating ontology from the data starting..........");
         if (null == indivColumnName || null == this.csvPath) {
@@ -260,23 +260,31 @@ public class CreateOWLFromCSV {
         for (CSVRecord csvRecord : csvRecords) {
             String indivName = csvRecord.get(indivColumnName);
 
-            OWLNamedIndividual owlNamedIndividual = createOWLNamedIndividual(indivName);
-            owlOntologyManager.addAxiom(outputOntology, createTypeRelation(owlNamedIndividual, owlDataFactory.getOWLThing()));
-            counter++;
+            if (indivName.length() > 0) {
+                String indivNameWithPrefix = indivName;
 
-            // property assertion
-            if (null != this.baseObjProp && null != this.baseIndividual) {
-                OWLAxiom owlAxiom = owlDataFactory.getOWLObjectPropertyAssertionAxiom(this.baseObjProp, this.baseIndividual, owlNamedIndividual);
-                owlOntologyManager.addAxiom(outputOntology, owlAxiom);
-            }
+                if (usePrefixForIndiv) {
+                    indivNameWithPrefix = indivPrefix + indivName;
+                }
+                OWLNamedIndividual owlNamedIndividual = createOWLNamedIndividual(indivNameWithPrefix);
 
-            // type assertion
-            if (null != typesColumnName) {
-                String typeNames = csvRecord.get(typesColumnName);
-                String[] typeNamesArray = typeNames.split(";");
-                for (String eachTypeName : typeNamesArray) {
-                    OWLClass owlClass = createOWLClass(eachTypeName);
-                    owlOntologyManager.addAxiom(outputOntology, createTypeRelation(owlNamedIndividual, owlClass));
+                owlOntologyManager.addAxiom(outputOntology, createTypeRelation(owlNamedIndividual, owlDataFactory.getOWLThing()));
+                counter++;
+
+                // property assertion
+                if (null != this.baseObjProp && null != this.baseIndividual) {
+                    OWLAxiom owlAxiom = owlDataFactory.getOWLObjectPropertyAssertionAxiom(this.baseObjProp, this.baseIndividual, owlNamedIndividual);
+                    owlOntologyManager.addAxiom(outputOntology, owlAxiom);
+                }
+
+                // type assertion
+                if (null != typesColumnName) {
+                    String typeNames = csvRecord.get(typesColumnName);
+                    String[] typeNamesArray = typeNames.split(";");
+                    for (String eachTypeName : typeNamesArray) {
+                        OWLClass owlClass = createOWLClass(eachTypeName);
+                        owlOntologyManager.addAxiom(outputOntology, createTypeRelation(owlNamedIndividual, owlClass));
+                    }
                 }
             }
         }

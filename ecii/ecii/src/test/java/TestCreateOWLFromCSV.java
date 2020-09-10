@@ -40,7 +40,9 @@ public class TestCreateOWLFromCSV {
 
                         createOWLFromCSV.parseCSVToCreateIndivAndTheirTypes(
                                 "local_onto_resource",
-                                "local_onto_types");
+                                "local_onto_types",
+                                true,
+                                "indiv_");
                     });
 
         } catch (IOException e) {
