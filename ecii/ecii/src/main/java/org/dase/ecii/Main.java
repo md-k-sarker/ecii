@@ -321,7 +321,7 @@ public class Main {
             return;
         }
         initiateSingleOpsStart(null);
-        OntoCombiner ontoCombiner = new OntoCombiner(outputOntologyIRI);
+        OntoCombiner ontoCombiner = new OntoCombiner(outputOntologyIRI, monitor);
         ontoCombiner.combineOntologies(null, inputOntologiesDirectory);
         initiateSingleOpsEnd(null);
     }
@@ -341,6 +341,7 @@ public class Main {
     public static void combineOntologiesBySearchingFilesFromCSV(String outputPath,
                                                                 String traversingRootPath,
                                                                 String csvPath, String csvColumnName,
+                                                                String fileExtensionToSearch,
                                                                 String useFileNameExtender, String fileNameExtender) {
         boolean shouldUseFileNameExtender = Boolean.parseBoolean(useFileNameExtender);
 
@@ -356,12 +357,17 @@ public class Main {
             logger.error("Error!!!!!! csvColumnName can't be null");
             return;
         }
+        if (null == fileExtensionToSearch) {
+            logger.error("Error!!!!!! fileExtensionToSearch can't be null");
+            return;
+        }
         initiateSingleOpsStart(null);
-        OntoCombiner ontoCombiner = new OntoCombiner();
+        OntoCombiner ontoCombiner = new OntoCombiner(monitor);
         ontoCombiner.combineOntologiesBySearchingFilesFromCSV(outputPath,
                 traversingRootPath,
                 csvPath,
                 csvColumnName,
+                fileExtensionToSearch,
                 shouldUseFileNameExtender,
                 fileNameExtender);
         initiateSingleOpsEnd(null);
@@ -376,11 +382,11 @@ public class Main {
      * @param typeColumnName
      * @param ontoIRI
      * @param providingEntityFullName, if false it will use  ontoIRI+entityName to generate full name
-     * @param delimeter
+     * @param delimiter
      * @param objPropName
      */
     public static void createOntologyFromCSV(String csvPath, String indivColumnName, String typeColumnName, String usePrefixForIndivCreation, String indivPrefix,
-                                             String ontoIRI, String providingEntityFullName, String delimeter, String objPropName) {
+                                             String ontoIRI, String providingEntityFullName, String delimiter, String objPropName) {
 
         initiateSingleOpsStart(null);
         boolean usePrefixForIndivCreation_ = false;
@@ -398,7 +404,7 @@ public class Main {
         try {
             // "http://www.daselab.com/residue/analysis"
             createOWLFromCSV = new CreateOWLFromCSV(csvPath.toString(), objPropName,
-                    ontoIRI, isProvidingEntityFullName, delimeter);
+                    ontoIRI, isProvidingEntityFullName, delimiter);
         } catch (OWLOntologyCreationException e) {
             logger.error("Error in creating ontology: " + csvPath + " !!!!!!!!!!!!");
             e.printStackTrace();
@@ -421,10 +427,10 @@ public class Main {
      * @param assignTypeUsingSameEntity
      * @param ontoIRI
      * @param providingEntityFullName,  if false it will use  ontoIRI+entityName to generate full name
-     * @param delimeter
+     * @param delimiter
      */
     public static void createOntologyFromCSV(String csvPath, String entityColumnName, String usePrefixForIndivCreation, String indivPrefix, String assignTypeUsingSameEntity,
-                                             String ontoIRI, String providingEntityFullName, String delimeter) {
+                                             String ontoIRI, String providingEntityFullName, String delimiter) {
 
         initiateSingleOpsStart(null);
         boolean usePrefixForIndivCreation_ = false;
@@ -445,7 +451,7 @@ public class Main {
 
         try {
             // "http://www.daselab.com/residue/analysis"
-            createOWLFromCSV = new CreateOWLFromCSV(csvPath.toString(), ontoIRI, isProvidingEntityFullName, delimeter);
+            createOWLFromCSV = new CreateOWLFromCSV(csvPath.toString(), ontoIRI, isProvidingEntityFullName, delimiter);
         } catch (OWLOntologyCreationException e) {
             logger.error("Error in creating ontology: " + csvPath + " !!!!!!!!!!!!");
             e.printStackTrace();
@@ -469,7 +475,65 @@ public class Main {
     static String argErrorStr2 = "is not in correct format.";
     static String argErrorNoArgGiven = "No options and parameter is provided. You need to specify a option and correspoding parameters.";
 
-    public static void printHelp() {
+    public static void printHelpCombine() {
+        String helpCommand = "\nParameters for combine ontology:" +
+                "\n\t-c [inputOntologiesDirectory, outputOntologyIRI]" +
+                "\n\t\tor" +
+                "\n\t-c [outputPath, traversingRootPath, csvPath, csvColumnName," +
+                " fileExtensionToSearch, useFileNameExtender, fileNameExtender]" +
+                "\n\n\tDetails of combining ontology: " +
+                "https://github.com/md-k-sarker/ecii/wiki/Combine-Ontology";
+
+        System.out.println(helpCommand);
+    }
+
+    public static void printHelpStrip() {
+        String helpCommand = "\nParameters for stripping ontology:" +
+                "\n\t-s [-obj/type] [inputOntoPath, entityCsvFilePath, indivColumnName, objPropColumnName/typeColumnName, outputOntoIRI] " +
+                "\n\n\tDetails of stripping ontology: " +
+                "https://github.com/md-k-sarker/ecii/wiki/Strip-down-ontology";
+        System.out.println(helpCommand);
+    }
+
+    public static void printHelpCreateOnto() {
+        String helpCommand = "\nParameters for creating ontology:" +
+                "\n\t-o [entityCsvFilePath, indivColumnName, typeColumnName, usePrefixForIndivCreation, indivPrefix, ontoIRI, " +
+                "providingEntityFullName, delimiter, objPropName]" +
+                "\n\t\tor" +
+                "\n\t-o [entityCsvFilePath, entityColumnName, usePrefixForIndivCreation, indivPrefix, assignTypeUsingSameEntity, " +
+                "ontoIRI, providingEntityFullName, delimiter]" +
+                "\n\n\tDetails of stripping ontology: " +
+                "https://github.com/md-k-sarker/ecii/wiki/Create-Ontology-or-Knowledge-Graph";
+
+        System.out.println(helpCommand);
+    }
+
+    public static void printHelpConceptInduction() {
+        String helpCommand = "\nParameters for concept induction:" +
+                "\n\t-e [config_file_path]" +
+                "\n\t\tor"+
+                "\n\t-e [-b] [directory_path]" +
+                "\n\n\tDetails of concept induction:" +
+                "https://github.com/md-k-sarker/ecii/wiki/Contextual-data-analysis-using-ECII";
+
+        System.out.println(helpCommand);
+    }
+
+    public static void printHelpSimilarityMeasure() {
+        String helpCommand = "\nParameters for similarity measure by concept induction:" +
+                "\n\t-m [config_file_path]" +
+                "\n\t\tor"+
+                "\n\t-m [-b] [directory_path]" +
+                "\n\n\tDetails of similarity measure:" +
+                "https://github.com/md-k-sarker/ecii/wiki/Contextual-data-analysis-using-ECII";
+
+        System.out.println(helpCommand);
+    }
+
+    /**
+     * Help for overall option
+     */
+    public static void printHelpOverAll() {
         String helpCommand = "\n\nProgram options:" +
                 "\n1. Measure similarity between ontology entities" +
                 "\n2. Perform concept induction" +
@@ -489,10 +553,10 @@ public class Main {
                 "\n\t-m or -e [config_file_path]" +
                 "\n\t-m or -e [-b] [directory_path]" +
                 "\n\t-c [inputOntologiesDirectory, outputOntologyIRI]" +
-                "\n\t\t-c [outputPath, traversingRootPath, csvPath, csvColumnName, useFileNameExtender, fileNameExtender]" +
+                "\n\t\t-c [outputPath, traversingRootPath, csvPath, csvColumnName, fileExtensionToSearch, useFileNameExtender, fileNameExtender]" +
                 "\n\t-s [-obj/type] [inputOntoPath, entityCsvFilePath, indivColumnName, objPropColumnName/typeColumnName, outputOntoIRI] " +
-                "\n\t-o [entityCsvFilePath, indivColumnName, typeColumnName, usePrefixForIndivCreation, indivPrefix, ontoIRI, providingEntityFullName, delimeter, objPropName]" +
-                "\n\t\t-o [entityCsvFilePath, entityColumnName, usePrefixForIndivCreation, indivPrefix, assignTypeUsingSameEntity, ontoIRI, providingEntityFullName, delimeter]" +
+                "\n\t-o [entityCsvFilePath, indivColumnName, typeColumnName, usePrefixForIndivCreation, indivPrefix, ontoIRI, providingEntityFullName, delimiter, objPropName]" +
+                "\n\t\t-o [entityCsvFilePath, entityColumnName, usePrefixForIndivCreation, indivPrefix, assignTypeUsingSameEntity, ontoIRI, providingEntityFullName, delimiter]" +
                 "\n\nTo measure similarity between ontology entities..... or " +
                 "\nTo perform concept induction....." +
                 "\nProgram runs in two mode. " +
@@ -571,7 +635,7 @@ public class Main {
                     }
                 } else {
                     logger.error(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
-                    printHelp();
+                    printHelpConceptInduction();
                 }
             } else {
                 //  if (args.length == 2), this is always true for this decideOp function
@@ -588,12 +652,12 @@ public class Main {
                     initiateSingleOpsEnd(ConfigParams.outputResultPath);
                 } else {
                     logger.error("\nError!!! Config file must end with .config\n");
-                    printHelp();
+                    printHelpOverAll();
                 }
             }
         } else if (args[0].equalsIgnoreCase("-c")) {
             logger.debug("given program argument: " + sb.toString());
-            if (args.length == 2 || args.length == 3 || args.length == 7) {
+            if (args.length == 2 || args.length == 3 || args.length == 8) {
                 logger.info("Program starting to combine ontologies");
                 if (args.length == 2) {
                     combineOntologies(args[1], null);
@@ -601,20 +665,20 @@ public class Main {
                 if (args.length == 3) {
                     combineOntologies(args[1], args[2]);
                 }
-                if (args.length == 7) {
-                    combineOntologiesBySearchingFilesFromCSV(args[1], args[2], args[3], args[4], args[5], args[6]);
+                if (args.length == 8) {
+                    combineOntologiesBySearchingFilesFromCSV(args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
                 }
             } else {
                 logger.error(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
-                printHelp();
+                printHelpCombine();
             }
         } else if (args[0].equalsIgnoreCase("-s")) {
             // strip down
             // -s [obj/type] [inputOntoPath, entityCsvFilePath, indivColumnName, objPropColumnName/typeColumnName, outputOntoIRI]
             if (args.length == 7) {
-                if (args[1].equals("obj") || args[1].equals("type")) {
+                if (args[1].equals("-obj") || args[1].equals("-type")) {
                     logger.info("Program starting to strip/prune ontology entities");
-                    if (args[1].equals("obj")) {
+                    if (args[1].equals("-obj")) {
                         // this function is preferable instead of the indivTypes.
                         stripDownOntoIndivsObjProps(args[2], args[3], args[4], args[5], args[6]);
                     } else {
@@ -622,37 +686,37 @@ public class Main {
                     }
                 } else {
                     logger.error(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
-                    printHelp();
+                    printHelpOverAll();
                 }
             } else {
                 logger.error(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
-                printHelp();
+                printHelpStrip();
             }
         } else if (args[0].equalsIgnoreCase("-o")) {
-            // obj-prop: -o [entityCsvFilePath, indivColumnName, typeColumnName, usePrefixForIndivCreation, indivPrefix, ontoIRI, providingEntityFullName, delimeter, objPropName]
-            // no-obj-prop: -o [entityCsvFilePath, entityColumnName, usePrefixForIndivCreation, indivPrefix, assignTypeUsingSameEntity, ontoIRI, providingEntityFullName, delimeter]
+            // obj-prop: -o [entityCsvFilePath, indivColumnName, typeColumnName, usePrefixForIndivCreation, indivPrefix, ontoIRI, providingEntityFullName, delimiter, objPropName]
+            // no-obj-prop: -o [entityCsvFilePath, entityColumnName, usePrefixForIndivCreation, indivPrefix, assignTypeUsingSameEntity, ontoIRI, providingEntityFullName, delimiter]
             if (args.length == 9 || args.length == 10) {
                 logger.info("Program starting to create ontology");
 
                 if (args.length == 9) {
                     // just indiv and type
                     // String csvPath, String entityColumnName, String usePrefixForIndivCreation, String indivPrefix, String assignTypeUsingSameEntity,
-                    //                                             String ontoIRI, String providingEntityFullName, String delimeter
+                    //                                             String ontoIRI, String providingEntityFullName, String delimiter
                     boolean usePrefixForIndivCreation = false;
                     createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
                 } else {
                     // indiv, type and obj-prop
                     //String csvPath, String indivColumnName, String typeColumnName, String usePrefixForIndivCreation, String indivPrefix,
-                    //                                             String ontoIRI, String providingEntityFullName, String delimeter, String objPropName
+                    //                                             String ontoIRI, String providingEntityFullName, String delimiter, String objPropName
                     createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]);
                 }
             } else {
                 logger.error(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
-                printHelp();
+                printHelpCreateOnto();
             }
         } else {
             logger.error(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);
-            printHelp();
+            printHelpOverAll();
             return false;
         }
         return true;
@@ -705,10 +769,10 @@ public class Main {
             if (args.length == 1) {
                 if (args[0].equals("-h"))
                     //if (args[0].equals("-h"))
-                    printHelp();
+                    printHelpOverAll();
                 else {
                     System.out.println(argErrorStr1 + " " + args[0] + " " + argErrorStr2);
-                    printHelp();
+                    printHelpOverAll();
                 }
             } else {
                 // args.length => 2
@@ -716,13 +780,13 @@ public class Main {
                     decideOp(args);
                 } else {
                     System.out.println(argErrorStr1 + " " + args[0] + " " + argErrorStr2);
-                    printHelp();
+                    printHelpOverAll();
                 }
             }
         } else {
             // args.length == 0
             System.out.println(argErrorNoArgGiven + "\n");
-            printHelp();
+            printHelpOverAll();
         }
     }
 }

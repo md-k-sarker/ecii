@@ -34,7 +34,7 @@ public class TestOntoCombiner {
         inputOntos.add("/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/expr_types/onto_combiner_test/onto_combiner_input1.owl");
         inputOntos.add("/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/expr_types/onto_combiner_test/onto_combiner_input2.owl");
 
-        OntoCombiner ontoCombiner = new OntoCombiner();
+        OntoCombiner ontoCombiner = new OntoCombiner(null);
         // this method worked for class combiner, when the input was
         // onto1:
         //      classF subClassOf owl:Thing and
@@ -53,7 +53,7 @@ public class TestOntoCombiner {
         inputOntos.add("/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/expr_types/onto_combiner_test/onto_combiner_input3.owl");
         inputOntos.add("/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/expr_types/onto_combiner_test/onto_combiner_input4.owl");
 
-        ontoCombiner = new OntoCombiner();
+        ontoCombiner = new OntoCombiner(null);
         // this method worked for class combiner, when the input was
         // onto3:
         //      classF subClassOf owl:Thing and
@@ -72,7 +72,7 @@ public class TestOntoCombiner {
         inputOntos.add("/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/expr_types/onto_combiner_test/onto_combiner_input5.owl");
         inputOntos.add("/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/expr_types/onto_combiner_test/onto_combiner_input6.owl");
 
-        ontoCombiner = new OntoCombiner();
+        ontoCombiner = new OntoCombiner(null);
         // this method worked for class combiner, when the input was
         // onto5:
         //      classF subClassOf owl:Thing and

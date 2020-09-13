@@ -109,17 +109,17 @@ public class TestConfParsing {
     private static void testParsing(){
         try {
             logger.debug("ObjectProperties:");
-            Utility.readObjectPropsFromConf(SharedDataHolder.confFileFullContent, ConfigParams.delimeterOntoEntityIRI).forEach((owlObjectProperty, aDouble) -> {
+            Utility.readObjectPropsFromConf(SharedDataHolder.confFileFullContent, ConfigParams.delimiterOntoEntityIRI).forEach((owlObjectProperty, aDouble) -> {
                 logger.debug(owlObjectProperty.getIRI().toString() + " " + aDouble.toString());
             });
 
             logger.debug("Positive Individuals:");
-            Utility.readPosExamplesFromConf(SharedDataHolder.confFileFullContent, ConfigParams.delimeterOntoEntityIRI).forEach(owlNamedIndividual -> {
+            Utility.readPosExamplesFromConf(SharedDataHolder.confFileFullContent, ConfigParams.delimiterOntoEntityIRI).forEach(owlNamedIndividual -> {
                 logger.debug(owlNamedIndividual.getIRI().toString());
             });
 
             logger.debug("Negative Individuals:");
-            Utility.readNegExamplesFromConf(SharedDataHolder.confFileFullContent, ConfigParams.delimeterOntoEntityIRI).forEach(owlNamedIndividual -> {
+            Utility.readNegExamplesFromConf(SharedDataHolder.confFileFullContent, ConfigParams.delimiterOntoEntityIRI).forEach(owlNamedIndividual -> {
                 logger.debug(owlNamedIndividual.getIRI().toString());
             });
         }catch (MalFormedIRIException ex){

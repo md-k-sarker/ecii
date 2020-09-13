@@ -23,6 +23,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 /**
@@ -53,8 +54,8 @@ public class OntoCombiner {
     /**
      * private empty construcor
      */
-    public OntoCombiner() {
-        this(null);
+    public OntoCombiner(Monitor monitor) {
+        this(null, monitor);
     }
 
     /**
@@ -62,9 +63,12 @@ public class OntoCombiner {
      *
      * @param outputOntoIRIString
      */
-    public OntoCombiner(String outputOntoIRIString) {
+    public OntoCombiner(String outputOntoIRIString, Monitor monitor) {
         this.outputOntoIRIString = outputOntoIRIString;
         this.owlAxioms = new HashSet<>();
+
+        // often monitor is null for ontocombiner
+        monitor = monitor;
     }
 
     /**
@@ -222,6 +226,22 @@ public class OntoCombiner {
     }
 
     /**
+     * @param filePath
+     */
+    private void checkUserInputForFileOverWriting(String filePath) {
+        while (true) {
+            Scanner scanner = new Scanner(System.in);
+            String answer = scanner.next();
+            if (answer.equalsIgnoreCase("yes") || answer.equalsIgnoreCase("y")) {
+                break;
+            } else {
+                System.out.println("File " + filePath + " already exist. Program exiting");
+                System.exit(0);
+            }
+        }
+    }
+
+    /**
      * @param outputPath
      * @param inputDirPath
      */
@@ -229,6 +249,10 @@ public class OntoCombiner {
         try {
             if (null == outputPath) {
                 outputPath = Paths.get(inputDirPath).toString() + "/combined.owl";
+            }
+            if (new File(outputPath).exists()) {
+                System.out.println("File " + outputPath + " already exist. If you want to overwrite this file write yes to continue");
+                checkUserInputForFileOverWriting(outputPath);
             }
             File inputDirPathAsFile = new File(inputDirPath);
             logger.info("Processing combineOntologies started...............");
@@ -265,16 +289,31 @@ public class OntoCombiner {
      * @param useFileNameExtender
      * @param fileNameExtender
      */
-    public void combineOntologiesBySearchingFilesFromCSV(String outputPath, String traversingRootPath, String csvPath, String csvColumnName, boolean useFileNameExtender, String fileNameExtender) {
+    public void combineOntologiesBySearchingFilesFromCSV(String outputPath, String traversingRootPath, String csvPath, String csvColumnName, String fileExtensionToSearch, boolean useFileNameExtender, String fileNameExtender) {
         try {
 
             logger.info("Processing combineOntologies started...............");
+            if (null == outputPath) {
+                logger.error("Error!!!!!! Can't combine ontology as output path to save ontology is null");
+                monitor.stopSystem("Error!!!!!! Can't combine ontology as output path to " +
+                        "save ontology is null, program exiting.", true);
+                return;
+            }
+            if (new File(outputPath).isDirectory()) {
+                logger.info("Given outputPath is a directory. Output will be saved as combined.owl on the \n\t" + outputPath + " directory");
+                outputPath = outputPath + "/combined.owl";
+
+                if (new File(outputPath).exists()) {
+                    System.out.println("File " + outputPath + " already exist. If you want to overwrite this file write yes to continue");
+                    checkUserInputForFileOverWriting(outputPath);
+                }
+            }
             HashSet<String> owl_files_path = new HashSet<>();
 
             // create file hierarchy map. key is the file name and value is the full path
             HashMap<String, String> all_image_files_path = new HashMap<>();
             Files.walk(Paths.get(traversingRootPath))
-                    .filter(f -> f.toFile().isFile() && f.toString().endsWith(".jpg")).
+                    .filter(f -> f.toFile().isFile() && f.toString().endsWith(fileExtensionToSearch)).
                     forEach(f -> all_image_files_path.put(f.getFileName().toString(), f.toString()));
 
             CSVParser csvRecords = Utility.parseCSV(csvPath, true);
@@ -285,7 +324,7 @@ public class OntoCombiner {
 
                     String each_image_file_path = all_image_files_path.get(each_image_file_name);
 
-                    String each_image_file_path_without_extension = each_image_file_path.replace(".jpg", "");
+                    String each_image_file_path_without_extension = each_image_file_path.replace(fileExtensionToSearch, "");
 
                     if (useFileNameExtender) {
                         each_image_file_path_without_extension = each_image_file_path_without_extension + fileNameExtender;
@@ -319,6 +358,14 @@ public class OntoCombiner {
      * @param inputOntoPaths
      */
     public void combineOntologies(String outputPath, HashSet<String> inputOntoPaths) {
+
+        if (null == outputPath) {
+            logger.error("Error!!!!!! Can't combine ontology as output path to save ontology is null");
+            monitor.stopSystem("Error!!!!!! Can't combine ontology as output path to " +
+                    "save ontology is null, program exiting.", true);
+            return;
+        }
+
         owlAxioms = new HashSet<>();
 
         // load each onto.
@@ -449,13 +496,14 @@ public class OntoCombiner {
 //        test1(p1, p2, ontoIRIString);
 
 
-        OntoCombiner ontoCombiner = new OntoCombiner("http://www.daselab.com/residue/analysis");
+        OntoCombiner ontoCombiner = new OntoCombiner("http://www.daselab.com/residue/analysis", null);
         // combineOntologies(String outputPath, String traversingRootPath, String csvPath, String csvColumnName, boolean useFileNameExtender, String fileNameExtender)
         ontoCombiner.combineOntologiesBySearchingFilesFromCSV(
                 "/Users/sarker/Workspaces/Jetbrains/residue-emerald/emerald/data/classification_data_by_srikanth/combined_small_owls_sumo_iri_untill_6_14_2020.owl",
                 "/Users/sarker/Dropbox/Emerald-Tailor-Expr-Data/ade20k_images_and_owls",
                 "/Users/sarker/Workspaces/Jetbrains/residue-emerald/emerald/data/classification_data_by_srikanth/images_untill_6_14_2020.csv",
                 "image_names",
+                ".jpg",
                 false,
                 "_wiki");
 

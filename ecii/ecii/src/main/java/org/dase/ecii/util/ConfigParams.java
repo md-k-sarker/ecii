@@ -89,11 +89,11 @@ public final class ConfigParams {
     public static HashMap<String, String> prefixes;
 
     /**
-     * Default delimeter of ontology entity
+     * Default delimiter of ontology entity
      * Only allowables are #, : or /
      * Default #
      */
-    public static String delimeterOntoEntityIRI = "#";
+    public static String delimiterOntoEntityIRI = "#";
 
     /**
      * Exension of result file.
@@ -359,8 +359,8 @@ public final class ConfigParams {
             // default prefix is the namespace
             namespace = prop.getProperty("namespace");
             prefixes.put("", namespace);
-            // delimeter
-            delimeterOntoEntityIRI = prop.getProperty("delimeter", "#");
+            // delimiter
+            delimiterOntoEntityIRI = prop.getProperty("delimiter", "#");
 
             // pos and neg indivs
             parsePosAndNegIndivTypes(prop, "lp.positiveExamples", "lp.negativeExamples");
@@ -376,7 +376,7 @@ public final class ConfigParams {
             reasonerName = prop.getProperty("reasoner.reasonerImplementation", "pellet");
 
             // obj property
-            SharedDataHolder.objProperties = Utility.readObjectPropsFromConf(SharedDataHolder.confFileFullContent, delimeterOntoEntityIRI);
+            SharedDataHolder.objProperties = Utility.readObjectPropsFromConf(SharedDataHolder.confFileFullContent, delimiterOntoEntityIRI);
             // add none object property
             SharedDataHolder.objProperties.put(SharedDataHolder.noneOWLObjProp, 1.0);
 

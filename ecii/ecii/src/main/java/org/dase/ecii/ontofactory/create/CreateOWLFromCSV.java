@@ -31,7 +31,7 @@ public class CreateOWLFromCSV {
      * Example: # or / or :
      * Default is #
      */
-    private String delimeter = "#";
+    private String delimiter = "#";
     /**
      * Whether the input entity has full name or short name
      * For example it may have name
@@ -54,15 +54,15 @@ public class CreateOWLFromCSV {
      * @param ontoIRI
      * @throws OWLOntologyCreationException
      */
-    public CreateOWLFromCSV(String csvPath, String objPropName, String ontoIRI, boolean providingEntityFullName, String delimeter) throws OWLOntologyCreationException {
+    public CreateOWLFromCSV(String csvPath, String objPropName, String ontoIRI, boolean providingEntityFullName, String delimiter) throws OWLOntologyCreationException {
 
-        this(csvPath, ontoIRI, providingEntityFullName, delimeter);
+        this(csvPath, ontoIRI, providingEntityFullName, delimiter);
 
         if (null != objPropName) {
             this.baseObjProp = createObjProp(objPropName);
         }
         this.baseIndividual = owlDataFactory.getOWLNamedIndividual(
-                IRI.create(ontoIRI + delimeter + new File(csvPath).getName()
+                IRI.create(ontoIRI + delimiter + new File(csvPath).getName()
                         .replace(".csv", "")));
     }
 
@@ -73,17 +73,17 @@ public class CreateOWLFromCSV {
      * @param ontoIRI
      * @throws OWLOntologyCreationException
      */
-    public CreateOWLFromCSV(String csvPath, String ontoIRI, boolean providingEntityFullName, String delimeter) throws OWLOntologyCreationException {
+    public CreateOWLFromCSV(String csvPath, String ontoIRI, boolean providingEntityFullName, String delimiter) throws OWLOntologyCreationException {
 
         this.csvPath = csvPath;
         this.providingEntityFullName = providingEntityFullName;
-        // remove the delimeter from the ontoIRI
-        if (ontoIRI.endsWith(delimeter)) {
-            this.ontoIRI = ontoIRI.replaceAll(delimeter + "$", "");
+        // remove the delimiter from the ontoIRI
+        if (ontoIRI.endsWith(delimiter)) {
+            this.ontoIRI = ontoIRI.replaceAll(delimiter + "$", "");
         } else {
             this.ontoIRI = ontoIRI;
         }
-        this.delimeter = delimeter;
+        this.delimiter = delimiter;
 
         this.owlOntologyManager = OWLManager.createOWLOntologyManager();
         this.outputOntology = this.owlOntologyManager.createOntology(IRI.create(this.ontoIRI));
@@ -92,7 +92,7 @@ public class CreateOWLFromCSV {
         this.outputOntoPath = csvPath.replace(".csv", ".owl");
 
         logger.info("this.ontoIRI: " + this.ontoIRI);
-        logger.debug("delimeter: " + delimeter);
+        logger.debug("delimiter: " + delimiter);
 
     }
 
@@ -111,7 +111,7 @@ public class CreateOWLFromCSV {
      * <p>
      * if providingEntityFullName is true it just create the iri.
      * if providingEntityFullName is false it create iri by combing other information
-     * delimeter and ontoIRI to create full iri. ontoIRI + delimeter + entityName
+     * delimiter and ontoIRI to create full iri. ontoIRI + delimiter + entityName
      *
      * @param entityName
      * @return
@@ -123,11 +123,11 @@ public class CreateOWLFromCSV {
             if (providingEntityFullName) {
                 new_name = entityName;
             } else {
-                if (null != ontoIRI && null != delimeter) {
-                    if (entityName.startsWith(delimeter)) {
+                if (null != ontoIRI && null != delimiter) {
+                    if (entityName.startsWith(delimiter)) {
                         new_name = ontoIRI + entityName;
                     } else {
-                        new_name = ontoIRI + delimeter + entityName;
+                        new_name = ontoIRI + delimiter + entityName;
                     }
                 } else {
                     logger.error("ERROR!!!!!!!!entityName is null");
@@ -202,11 +202,11 @@ public class CreateOWLFromCSV {
             return null;
         }
 
-//        if (indivName.startsWith(delimeter)) {
+//        if (indivName.startsWith(delimiter)) {
 //            OWLNamedIndividual owlNamedIndividual = owlDataFactory.getOWLNamedIndividual(IRI.create(indivName));
 //            return owlNamedIndividual;
 //        } else {
-//            OWLNamedIndividual owlNamedIndividual = owlDataFactory.getOWLNamedIndividual(IRI.create(ontoIRI + delimeter + indivName));
+//            OWLNamedIndividual owlNamedIndividual = owlDataFactory.getOWLNamedIndividual(IRI.create(ontoIRI + delimiter + indivName));
 //            logger.info("ontoIRI: " + ontoIRI);
 //            logger.info("owlNamedIndividual else: " + owlNamedIndividual);
 //            return owlNamedIndividual;
