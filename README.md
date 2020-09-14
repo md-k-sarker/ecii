@@ -15,7 +15,7 @@ Originally concept induction algorithm, where other functionality is added to pr
 2. Measure similarity between ontology entities
 3. Strip down ontology or keeping entities of interest while discarding others
 4. Create ontology
-5. Combine multiple ontology
+5. Combine multiple ontologies
 
 This repository contains the source code of ECII. 
 Source code is in ecii/ecii directory.
@@ -27,17 +27,20 @@ Sample/example files is in examples directory.
 
 ## Tutorials
 
-    Contextual data analysis: https://github.com/md-k-sarker/ecii/wiki/Contextual-data-analysis-using-ECII
-    Strip down ontology: https://github.com/md-k-sarker/ecii/wiki/Strip-down-ontology
-    Create ontology: https://github.com/md-k-sarker/ecii/wiki/Create-Ontology-or-Knowledge-Graph
-    Combine ontology: https://github.com/md-k-sarker/ecii/wiki/Combine-Ontology
+Contextual data analysis: https://github.com/md-k-sarker/ecii/wiki/Contextual-data-analysis-using-ECII
+
+Strip down ontology: https://github.com/md-k-sarker/ecii/wiki/Strip-down-ontology
+
+Create ontology: https://github.com/md-k-sarker/ecii/wiki/Create-Ontology-or-Knowledge-Graph
+
+Combine ontologies: https://github.com/md-k-sarker/ecii/wiki/Combine-Ontology
 
 ## Details of the parameters
 
-    https://github.com/md-k-sarker/ecii/wiki/ECII-parameters
+https://github.com/md-k-sarker/ecii/wiki/ECII-parameters
 
 
-### If you use this algorithm please cite this paper
+### Details of the algorithm
 
 ```latex
 @inproceedings{sarker2019efficient,
