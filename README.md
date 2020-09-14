@@ -23,7 +23,8 @@ Sample/example files is in examples directory.
 
 ## How to run the program
 
-    Program can be run from source code directly or from jar. Running from source code is preferable, as running from jar may produce memory limit exception for very big knowledge graph.  
+    Program can be run from source code directly or from jar. Running from source code is preferable, 
+    as running from jar may produce memory limit exception for very big knowledge graph.  
 
 ## Tutorials
 
