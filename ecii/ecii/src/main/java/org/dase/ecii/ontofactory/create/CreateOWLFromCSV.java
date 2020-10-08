@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.lang.invoke.MethodHandles;
+import java.nio.file.Paths;
 
 /**
  * Create ontology by taking the data from csv file.
@@ -46,34 +47,64 @@ public class CreateOWLFromCSV {
     private String outputOntoPath;
     private OWLObjectProperty baseObjProp;
 
+
     /**
-     * Constructor
-     *
      * @param csvPath
      * @param objPropName
      * @param ontoIRI
+     * @param providingEntityFullName
+     * @param delimiter
      * @throws OWLOntologyCreationException
      */
     public CreateOWLFromCSV(String csvPath, String objPropName, String ontoIRI, boolean providingEntityFullName, String delimiter) throws OWLOntologyCreationException {
+        this(csvPath, false, objPropName, ontoIRI, providingEntityFullName, delimiter);
+    }
 
-        this(csvPath, ontoIRI, providingEntityFullName, delimiter);
+    /**
+     * if eachRowIsAIndividual==true then it will be used to create multiple ontologies from a single csv file
+     *
+     * @param csvPath
+     * @param eachRowIsAIndividual
+     * @param objPropName
+     * @param ontoIRI
+     * @param providingEntityFullName
+     * @param delimiter
+     * @throws OWLOntologyCreationException
+     */
+    public CreateOWLFromCSV(String csvPath, boolean eachRowIsAIndividual, String objPropName, String ontoIRI, boolean providingEntityFullName, String delimiter) throws OWLOntologyCreationException {
+
+        this(csvPath, eachRowIsAIndividual, ontoIRI, providingEntityFullName, delimiter);
 
         if (null != objPropName) {
             this.baseObjProp = createObjProp(objPropName);
         }
-        this.baseIndividual = owlDataFactory.getOWLNamedIndividual(
-                IRI.create(ontoIRI + delimiter + new File(csvPath).getName()
-                        .replace(".csv", "")));
+        if (!eachRowIsAIndividual) {
+            this.baseIndividual = owlDataFactory.getOWLNamedIndividual(
+                    IRI.create(ontoIRI + delimiter + new File(csvPath).getName()
+                            .replace(".csv", "")));
+        }
     }
 
     /**
-     * Constructor
-     *
      * @param csvPath
      * @param ontoIRI
+     * @param providingEntityFullName
+     * @param delimiter
      * @throws OWLOntologyCreationException
      */
     public CreateOWLFromCSV(String csvPath, String ontoIRI, boolean providingEntityFullName, String delimiter) throws OWLOntologyCreationException {
+        this(csvPath, false, ontoIRI, providingEntityFullName, delimiter);
+    }
+
+    /**
+     * @param csvPath
+     * @param eachRowIsAIndividual
+     * @param ontoIRI
+     * @param providingEntityFullName
+     * @param delimiter
+     * @throws OWLOntologyCreationException
+     */
+    public CreateOWLFromCSV(String csvPath, boolean eachRowIsAIndividual, String ontoIRI, boolean providingEntityFullName, String delimiter) throws OWLOntologyCreationException {
 
         this.csvPath = csvPath;
         this.providingEntityFullName = providingEntityFullName;
@@ -86,14 +117,19 @@ public class CreateOWLFromCSV {
         this.delimiter = delimiter;
 
         this.owlOntologyManager = OWLManager.createOWLOntologyManager();
-        this.outputOntology = this.owlOntologyManager.createOntology(IRI.create(this.ontoIRI));
-        this.owlDataFactory = this.outputOntology.getOWLOntologyManager().getOWLDataFactory();
 
-        this.outputOntoPath = csvPath.replace(".csv", ".owl");
+        this.owlDataFactory = this.owlOntologyManager.getOWLDataFactory();
+
+        if (!eachRowIsAIndividual) {
+            this.outputOntology = this.owlOntologyManager.createOntology(IRI.create(this.ontoIRI));
+            this.outputOntoPath = csvPath.replace(".csv", ".owl");
+        } else {
+            this.outputOntoPath = Paths.get(csvPath).getParent().toString();
+            logger.info("outputOntoPath: " + this.outputOntoPath);
+        }
 
         logger.info("this.ontoIRI: " + this.ontoIRI);
         logger.debug("delimiter: " + delimiter);
-
     }
 
     /**
@@ -303,28 +339,6 @@ public class CreateOWLFromCSV {
         logger.info("Parsing csv and creating ontology from the data finished.");
     }
 
-
-    /**
-     * Create axioms and save the ontology
-     * <p>
-     * Axioms created:
-     * 1. indivEntity-------owlNamedIndividual
-     * here, indivEntity are the entities of column entityColumnName
-     * <p>
-     * 2. this.baseObjProp-------this.baseIndividual------owlNamedIndividual
-     * here, if baseObjProp or baseIndividual is null then this axiom is not created.
-     * <p>
-     * 3. typeEntity--------owlClass
-     * here, typeEntity are the entities of column typesColumnName
-     * <p>
-     * 4. owlNamedIndividual-----rdf:Type-----------------owlClass
-     * <p>
-     * owlNamedIndividual-------
-     *
-     * @param entityColumnName
-     * @param typesColumnName
-     */
-
     /**
      * Create axioms and save the ontology
      * <p>
@@ -392,4 +406,103 @@ public class CreateOWLFromCSV {
     }
 
 
+    /**
+     * This function create 1 ontology per row of the csv file
+     * <p>
+     * for each row:
+     * following axioms created:
+     * 1. indiv-------owlNamedIndividual
+     * here, indiv is the row-id
+     * <p>
+     * 2. indivEntity-------owlNamedIndividual
+     * here, indivEntity are the entities of column entityColumnName separated by separator
+     * <p>
+     * 3. this.baseObjProp-------indiv------indivEntity
+     * here, if baseObjProp or baseIndividual is null then this axiom is not created.
+     * @param rowIdColumnName
+     * @param entityColumnName
+     * @param separator : separator between multiple entities, for example ; or , etc
+     * @param usePrefixForIndivCreation : boolean
+     * @param indivPrefix
+     */
+    public void parseCSVToCreateOneIndivsForEachRow(String rowIdColumnName, String entityColumnName, String separator, boolean usePrefixForIndivCreation, String indivPrefix) {
+
+        logger.info("Parsing csv and creating ontology from the data starting..........");
+        if (null == rowIdColumnName || null == entityColumnName || null == this.csvPath) {
+            logger.error("rowIdColumnName or entityColumnName or csvPath is null!!!!!\n Parsing csv and creating ontology from the data can't continue. \n\t returning.");
+            return;
+        }
+
+        CSVParser csvRecords = Utility.parseCSV(this.csvPath, true);
+        logger.info("Parsing CSV finished");
+
+        logger.info("Iterating over csv data and creating ontologies started............");
+        int counter = 0;
+        for (CSVRecord csvRecord : csvRecords) {
+            String rowIdentifier = csvRecord.get(rowIdColumnName);
+            String indivNames = csvRecord.get(entityColumnName);
+            if (rowIdentifier.length() > 0 && indivNames.length() > 0) {
+                OWLOntology localOntology = null;
+                try {
+                    // create ontology
+                    localOntology = this.owlOntologyManager.createOntology(IRI.create(this.ontoIRI+rowIdentifier));
+                    // do we need to remove axioms from this localOntology ?
+                    this.owlDataFactory = localOntology.getOWLOntologyManager().getOWLDataFactory();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                    System.exit(-1);
+                }
+
+                // create base indiv
+                String baseIndivNameWithPrefix = rowIdentifier;
+                if (usePrefixForIndivCreation) {
+                    baseIndivNameWithPrefix = indivPrefix + rowIdentifier;
+                }
+                OWLNamedIndividual baseOwlNamedIndividual = createOWLNamedIndividual(baseIndivNameWithPrefix);
+                owlOntologyManager.addAxiom(localOntology, createTypeRelation(baseOwlNamedIndividual, owlDataFactory.getOWLThing()));
+
+                // create attributes
+                for (String indivName : indivNames.split(separator)) {
+                    if (indivName.length() > 0) {
+                        String indivNameWithPrefix = indivName;
+
+//                        if (usePrefixForIndivCreation) {
+//                            indivNameWithPrefix = indivPrefix + indivName;
+//                        }
+                        OWLNamedIndividual owlNamedIndividual = createOWLNamedIndividual(indivNameWithPrefix);
+                        if (counter == 2) {
+                            logger.info("owlNamedIndividual: " + owlNamedIndividual);
+                        }
+
+                        owlOntologyManager.addAxiom(localOntology, createTypeRelation(owlNamedIndividual, owlDataFactory.getOWLThing()));
+                        counter++;
+
+                        // property assertion
+                        if (null != this.baseObjProp && null != baseOwlNamedIndividual) {
+                            OWLAxiom owlAxiom = owlDataFactory.getOWLObjectPropertyAssertionAxiom(this.baseObjProp,
+                                    baseOwlNamedIndividual, owlNamedIndividual);
+                            owlOntologyManager.addAxiom(localOntology, owlAxiom);
+                        }
+                    }
+                }
+
+                // save the ontology
+                try {
+                    logger.info("Saving ontology..........");
+                    String localOntoPath = outputOntoPath + "/" + rowIdentifier + "_pos.owl";
+                    Utility.saveOntology(localOntology, localOntoPath);
+                    logger.info("Saving ontology finished.");
+                    logger.info("Ontology saved at: " + localOntoPath);
+                } catch (OWLOntologyStorageException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        logger.info("Parsing csv and creating ontology from the data finished.");
+    }
+
+    public static void main(String [] args){
+
+    }
 }

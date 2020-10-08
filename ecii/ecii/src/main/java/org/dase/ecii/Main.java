@@ -268,44 +268,49 @@ public class Main {
 
         StripDownOntology stripDownOntology = new StripDownOntology(inputOntoPath);
 
+        // load csv first
         ListofObjPropAndIndivTextualName listofObjPropAndIndivTextualName = stripDownOntology.
                 readEntityFromCSVFile(entityCsvFilePath, objPropColumnName, indivColumnName);
 
         if (null != listofObjPropAndIndivTextualName) {
-            // process objprops and direct indivs
-            ListofObjPropAndIndiv listofObjPropAndIndiv = stripDownOntology.
-                    convertToOntologyEntity(listofObjPropAndIndivTextualName);
 
-            // process indirect indivs
-            listofObjPropAndIndiv = stripDownOntology.processIndirectIndivsUsingObjProps(listofObjPropAndIndiv);
+            // load ontology related resources
+            if (stripDownOntology.loadOntologyRelatedResources()) {
 
-            HashSet<OWLAxiom> axiomsToKeep = stripDownOntology.extractAxiomsRelatedToIndivs(listofObjPropAndIndiv.directIndivs, listofObjPropAndIndiv.inDirectIndivs);
+                // process objprops and direct indivs
+                ListofObjPropAndIndiv listofObjPropAndIndiv = stripDownOntology.
+                        convertToOntologyEntity(listofObjPropAndIndivTextualName);
 
-            OWLOntologyManager outputOntoManager = OWLManager.createOWLOntologyManager();
+                // process indirect indivs
+                listofObjPropAndIndiv = stripDownOntology.processIndirectIndivsUsingObjProps(listofObjPropAndIndiv);
 
-            OWLOntology outputOntology = null;
-            try {
-                outputOntology = outputOntoManager.createOntology(IRI.create(outputOntoIRI));
-            } catch (OWLOntologyCreationException e) {
-                e.printStackTrace();
+                HashSet<OWLAxiom> axiomsToKeep = stripDownOntology.extractAxiomsRelatedToIndivs(listofObjPropAndIndiv.directIndivs, listofObjPropAndIndiv.inDirectIndivs);
+
+                OWLOntologyManager outputOntoManager = OWLManager.createOWLOntologyManager();
+
+                OWLOntology outputOntology = null;
+                try {
+                    outputOntology = outputOntoManager.createOntology(IRI.create(outputOntoIRI));
+                } catch (OWLOntologyCreationException e) {
+                    e.printStackTrace();
+                }
+                outputOntoManager.addAxioms(outputOntology, axiomsToKeep);
+
+                try {
+
+                    Utility.saveOntology(outputOntology, outputOntoPath);
+
+                    monitor.displayMessage("File stripped successfully and saved at: " + outputOntoPath, true);
+
+                } catch (OWLOntologyStorageException e) {
+                    e.printStackTrace();
+                }
             }
-            outputOntoManager.addAxioms(outputOntology, axiomsToKeep);
-
-            try {
-
-                Utility.saveOntology(outputOntology, outputOntoPath);
-
-                monitor.displayMessage("File stripped successfully and saved at: " + outputOntoPath, true);
-
-            } catch (OWLOntologyStorageException e) {
-                e.printStackTrace();
-            }
-
-            initiateSingleOpsEnd(outputLogPath);
         } else {
             logger.error("listofObjPropAndIndivTextualName is null, because coudn't read entity from csv, program exiting!!!");
             monitor.stopSystem("listofObjPropAndIndivTextualName is null, because coudn't read entity from csv, program exiting!!!", true);
         }
+        initiateSingleOpsEnd(outputLogPath);
     }
 
     /**
@@ -385,7 +390,8 @@ public class Main {
      * @param delimiter
      * @param objPropName
      */
-    public static void createOntologyFromCSV(String csvPath, String indivColumnName, String typeColumnName, String usePrefixForIndivCreation, String indivPrefix,
+    public static void createOntologyFromCSV(String csvPath, String indivColumnName, String typeColumnName,
+                                             String usePrefixForIndivCreation, String indivPrefix,
                                              String ontoIRI, String providingEntityFullName, String delimiter, String objPropName) {
 
         initiateSingleOpsStart(null);
@@ -418,6 +424,57 @@ public class Main {
     }
 
     /**
+     * // -o [entityCsvFilePath, rowIdColumnName, indivColumnName, separator,
+     * //       usePrefixForIndivCreation, indivPrefix, ontoIRI,
+     * //       providingEntityFullName, delimeter, objPropName]
+     * for each row of the csv create an ontology.
+     *
+     * @param csvPath
+     * @param rowIdColumnName
+     * @param indivColumnName
+     * @param separator
+     * @param usePrefixForIndivCreation
+     * @param indivPrefix
+     * @param ontoIRI
+     * @param providingEntityFullName
+     * @param delimiter
+     * @param objPropName
+     */
+    public static void createOntologyFromCSV(String csvPath, String rowIdColumnName, String indivColumnName, String separator,
+                                             String usePrefixForIndivCreation, String indivPrefix,
+                                             String ontoIRI, String providingEntityFullName, String delimiter, String objPropName) {
+
+        initiateSingleOpsStart(null);
+        boolean usePrefixForIndivCreation_ = false;
+        boolean isProvidingEntityFullName = false;
+
+        if (usePrefixForIndivCreation.toString().toLowerCase().equals("true")) {
+            usePrefixForIndivCreation_ = true;
+        }
+        if (providingEntityFullName.toString().toLowerCase().equals("true")) {
+            isProvidingEntityFullName = true;
+        }
+        CreateOWLFromCSV createOWLFromCSV = null;
+        logger.info("Creating ontology by processing csv file: " + csvPath + " started............");
+
+        try {
+            // "http://www.daselab.com/residue/analysis"
+            createOWLFromCSV = new CreateOWLFromCSV(csvPath.toString(), true, objPropName,
+                    ontoIRI, isProvidingEntityFullName, delimiter);
+        } catch (OWLOntologyCreationException e) {
+            logger.error("Error in creating ontology: " + csvPath + " !!!!!!!!!!!!");
+            e.printStackTrace();
+        }
+
+        // params -- String indivColumnName, String typesColumnName, boolean usePrefixForIndiv, String indivPrefix
+        // parseCSVToCreateOneIndivsForEachRow(String rowIdColumnName, String entityColumnName, String separator, boolean usePrefixForIndivCreation, String indivPrefix)
+        createOWLFromCSV.parseCSVToCreateOneIndivsForEachRow(rowIdColumnName, indivColumnName, separator, usePrefixForIndivCreation_, indivPrefix);
+        logger.info("Creating ontology by processing csv file: " + csvPath + " finished.");
+
+        initiateSingleOpsEnd(null);
+    }
+
+    /**
      * Call functions to create ontology by using the entity names from csv
      *
      * @param csvPath
@@ -429,7 +486,8 @@ public class Main {
      * @param providingEntityFullName,  if false it will use  ontoIRI+entityName to generate full name
      * @param delimiter
      */
-    public static void createOntologyFromCSV(String csvPath, String entityColumnName, String usePrefixForIndivCreation, String indivPrefix, String assignTypeUsingSameEntity,
+    public static void createOntologyFromCSV(String csvPath, String entityColumnName, String usePrefixForIndivCreation,
+                                             String indivPrefix, String assignTypeUsingSameEntity,
                                              String ontoIRI, String providingEntityFullName, String delimiter) {
 
         initiateSingleOpsStart(null);
@@ -511,7 +569,7 @@ public class Main {
     public static void printHelpConceptInduction() {
         String helpCommand = "\nParameters for concept induction:" +
                 "\n\t-e [config_file_path]" +
-                "\n\t\tor"+
+                "\n\t\tor" +
                 "\n\t-e [-b] [directory_path]" +
                 "\n\n\tDetails of concept induction:" +
                 "https://github.com/md-k-sarker/ecii/wiki/Contextual-data-analysis-using-ECII";
@@ -522,7 +580,7 @@ public class Main {
     public static void printHelpSimilarityMeasure() {
         String helpCommand = "\nParameters for similarity measure by concept induction:" +
                 "\n\t-m [config_file_path]" +
-                "\n\t\tor"+
+                "\n\t\tor" +
                 "\n\t-m [-b] [directory_path]" +
                 "\n\n\tDetails of similarity measure:" +
                 "https://github.com/md-k-sarker/ecii/wiki/Contextual-data-analysis-using-ECII";
@@ -679,7 +737,7 @@ public class Main {
                 if (args[1].equals("-obj") || args[1].equals("-type")) {
                     logger.info("Program starting to strip/prune ontology entities");
                     if (args[1].equals("-obj")) {
-                        // this function is preferable instead of the indivTypes.
+                        // this function is preferable/recommended/should-use instead of the indivTypes.
                         stripDownOntoIndivsObjProps(args[2], args[3], args[4], args[5], args[6]);
                     } else {
                         stripDownOntoIndivsTypes(args[2], args[3], args[4], args[5], args[6]);
@@ -695,7 +753,7 @@ public class Main {
         } else if (args[0].equalsIgnoreCase("-o")) {
             // obj-prop: -o [entityCsvFilePath, indivColumnName, typeColumnName, usePrefixForIndivCreation, indivPrefix, ontoIRI, providingEntityFullName, delimiter, objPropName]
             // no-obj-prop: -o [entityCsvFilePath, entityColumnName, usePrefixForIndivCreation, indivPrefix, assignTypeUsingSameEntity, ontoIRI, providingEntityFullName, delimiter]
-            if (args.length == 9 || args.length == 10) {
+            if (args.length == 9 || args.length == 10 || args.length == 11) {
                 logger.info("Program starting to create ontology");
 
                 if (args.length == 9) {
@@ -704,11 +762,16 @@ public class Main {
                     //                                             String ontoIRI, String providingEntityFullName, String delimiter
                     boolean usePrefixForIndivCreation = false;
                     createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
-                } else {
+                } else if (args.length == 10) {
                     // indiv, type and obj-prop
                     //String csvPath, String indivColumnName, String typeColumnName, String usePrefixForIndivCreation, String indivPrefix,
                     //                                             String ontoIRI, String providingEntityFullName, String delimiter, String objPropName
                     createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]);
+                } else {
+                    // -o [entityCsvFilePath, rowIdColumnName, indivColumnName, separator,
+                    //       usePrefixForIndivCreation, indivPrefix, ontoIRI,
+                    //       providingEntityFullName, delimeter, objPropName]
+                    createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10]);
                 }
             } else {
                 logger.error(argErrorStr1 + " " + sb.toString() + " " + argErrorStr2);

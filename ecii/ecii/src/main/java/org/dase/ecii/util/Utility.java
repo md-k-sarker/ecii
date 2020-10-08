@@ -113,7 +113,19 @@ public class Utility {
      * @throws IOException
      */
     public static OWLOntology loadOntology(String ontoFilePath) throws OWLOntologyCreationException, IOException {
-        return loadOntology(Paths.get(ontoFilePath), null);
+        return loadOntology(Paths.get(ontoFilePath), null, false);
+    }
+
+    /**
+     * Load ontology from file system
+     *
+     * @param ontoFilePath
+     * @return
+     * @throws OWLOntologyCreationException
+     * @throws IOException
+     */
+    public static OWLOntology loadOntology(String ontoFilePath, boolean reportOntoInfo) throws OWLOntologyCreationException, IOException {
+        return loadOntology(Paths.get(ontoFilePath), null, reportOntoInfo);
     }
 
     /**
@@ -127,7 +139,36 @@ public class Utility {
      */
     public static OWLOntology loadOntology(String ontologyPath, Monitor monitor) throws OWLOntologyCreationException, IOException {
         Path ontoPath = Paths.get(ontologyPath).toAbsolutePath();
-        return loadOntology(ontoPath, monitor);
+        return loadOntology(ontoPath, monitor, false);
+    }
+
+
+    /**
+     * Load ontology from file system
+     *
+     * @param ontologyPath
+     * @param monitor
+     * @return
+     * @throws OWLOntologyCreationException
+     * @throws IOException
+     */
+    public static OWLOntology loadOntology(String ontologyPath, Monitor monitor, boolean reportOntoInfo) throws OWLOntologyCreationException, IOException {
+        Path ontoPath = Paths.get(ontologyPath).toAbsolutePath();
+        return loadOntology(ontoPath, monitor, reportOntoInfo);
+    }
+
+
+    /**
+     * Load ontology from file system
+     *
+     * @param ontologyPath
+     * @param monitor
+     * @return
+     * @throws OWLOntologyCreationException
+     * @throws IOException
+     */
+    public static OWLOntology loadOntology(Path ontologyPath, Monitor monitor) throws OWLOntologyCreationException, IOException {
+        return loadOntology(ontologyPath, monitor, false);
     }
 
     /**
@@ -143,7 +184,7 @@ public class Utility {
      * @throws OWLOntologyCreationException
      * @throws IOException
      */
-    public static OWLOntology loadOntology(Path ontologyPath, Monitor monitor) throws OWLOntologyCreationException, IOException {
+    public static OWLOntology loadOntology(Path ontologyPath, Monitor monitor, boolean reportOntoInfo) throws OWLOntologyCreationException, IOException {
 
         logger.info("Ontology Path before resolving: " + ontologyPath.toString());
         Path ontoPath = ontologyPath;
@@ -169,17 +210,19 @@ public class Utility {
         OWLOntology owlOntology = owlOntologyManager.loadOntologyFromOntologyDocument(ontoFile);
 
         // Report information about the owlOntology
-        logger.info("Ontology Loaded");
-        logger.info("Ontology path: " + ontoFile.getAbsolutePath());
-        logger.info("Ontology id : " + owlOntology.getOntologyID());
-        OWLProfileReport report = Profiles.OWL2_EL.checkOntology(owlOntology);
+        if (reportOntoInfo) {
+            logger.info("Ontology Loaded");
+            logger.info("Ontology path: " + ontoFile.getAbsolutePath());
+            logger.info("Ontology id : " + owlOntology.getOntologyID());
+            OWLProfileReport report = Profiles.OWL2_EL.checkOntology(owlOntology);
 
-        if (report.isInProfile()) {
-            logger.info("Is in OWL_EL: " + report.isInProfile());
-        } else {
-            logger.info("total violations: " + report.getViolations().size());
+            if (report.isInProfile()) {
+                logger.info("Is in OWL_EL: " + report.isInProfile());
+            } else {
+                logger.info("total violations: " + report.getViolations().size());
+            }
+            logger.info("Format : " + owlOntologyManager.getOntologyFormat(owlOntology));
         }
-        logger.info("Format : " + owlOntologyManager.getOntologyFormat(owlOntology));
 
         // save the prefixes
         SharedDataHolder.owlDocumentFormat = owlOntologyManager.getOntologyFormat(owlOntology);
@@ -392,7 +435,7 @@ public class Utility {
 
     /**
      * Write data to csv file.
-     * This can wirte data like pandas dataframe, where we can specify column name and column values, row by row.
+     * This can write data like pandas dataframe, where we can specify column name and column values, row by row.
      *
      * This works perfectly, tested with TestUtility.testWriteToCSV
      * @param csvPath

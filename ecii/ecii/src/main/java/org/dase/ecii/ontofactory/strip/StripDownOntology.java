@@ -8,8 +8,6 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.log4j.PropertyConfigurator;
 import org.dase.ecii.core.SharedDataHolder;
-import org.dase.ecii.ontofactory.strip.ListofObjPropAndIndiv;
-import org.dase.ecii.ontofactory.strip.ListofObjPropAndIndivTextualName;
 import org.dase.ecii.util.Utility;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.model.parameters.ChangeApplied;
@@ -37,7 +35,7 @@ import java.util.*;
  * General information:
  * We should use extractAxiomsRelatedToIndivs(...) this function instead of extractAxiomsRelatedToOWLClasses(...) whenever possible.
  * See documentation of function extractAxiomsRelatedToIndivs(...) for details.
- *
+ * <p>
  * ----
  * Date: 08/12/2020
  * Minor bug found, when stripping Dbpedia (combined with ade20k mountains, workroom ontos) ontology!!. Although concept island was referred by
@@ -52,6 +50,9 @@ public class StripDownOntology {
      * axioms to keep
      */
     private HashSet<OWLAxiom> axiomsToKeep = new HashSet<>();
+
+    private String inputOntoPath;
+    private String entityCSVFilePath;
 
     /**
      * Ontology manipulator
@@ -77,26 +78,13 @@ public class StripDownOntology {
      * @param inputOntoPath
      */
     public StripDownOntology(String inputOntoPath) {
-        try {
-            if (null != inputOntoPath) {
-                logger.info("Initiating ontology related resources...............");
-                long ontoLoadStartTime = System.currentTimeMillis();
-                inputOntology = Utility.loadOntology(inputOntoPath);
-                inputOntoManager = inputOntology.getOWLOntologyManager();
-                ontoDataFacotry = inputOntoManager.getOWLDataFactory();
-
-//                outputOntoManager = OWLManager.createOWLOntologyManager();
-                logger.info("Initiating ontology related resources successfull");
-                long ontoLoadEndTime = System.currentTimeMillis();
-                logger.info("Onto load time: " + (ontoLoadEndTime - ontoLoadStartTime) / 1000 + " seconds");
-
-            } else {
-                logger.error("Can't construct the StripDownOntology constructor");
-                logger.error("Initiating ontology related resources failed!!!!!!!!!!!!! because inputOntoPath is null");
-            }
-        } catch (Exception ex) {
-            logger.error("Initiating ontology related resources failed!!!!!!!!!!!!!");
-            ex.printStackTrace();
+        // ontology loading is deferred until the csv is read
+        // need to call function loadOntologyRelatedResources()
+        if (null != inputOntoPath) {
+            this.inputOntoPath = inputOntoPath;
+        }else {
+            logger.error("Input ontology path is null!!!, program exiting.");
+            System.exit(-1);
         }
     }
 
@@ -116,7 +104,37 @@ public class StripDownOntology {
             logger.error("Initiating ontology related resources failed!!!!!!!!!!!!!");
             ex.printStackTrace();
         }
+    }
 
+    /**
+     * ontology loader and intiator. This function should be called after reading csv
+     *
+     * @return
+     */
+    public boolean loadOntologyRelatedResources() {
+        try {
+            if (null != inputOntoPath) {
+                logger.info("Initiating ontology related resources...............");
+                long ontoLoadStartTime = System.currentTimeMillis();
+                inputOntology = Utility.loadOntology(inputOntoPath);
+                inputOntoManager = inputOntology.getOWLOntologyManager();
+                ontoDataFacotry = inputOntoManager.getOWLDataFactory();
+
+                // outputOntoManager = OWLManager.createOWLOntologyManager();
+                logger.info("Initiating ontology related resources successfull");
+                long ontoLoadEndTime = System.currentTimeMillis();
+                logger.info("Onto load time: " + (ontoLoadEndTime - ontoLoadStartTime) / 1000 + " seconds");
+                return true;
+            } else {
+                logger.error("Can't construct the StripDownOntology constructor");
+                logger.error("Initiating ontology related resources failed!!!!!!!!!!!!! because inputOntoPath is null");
+                return false;
+            }
+        } catch (Exception ex) {
+            logger.error("Initiating ontology related resources failed!!!!!!!!!!!!!");
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -131,6 +149,7 @@ public class StripDownOntology {
      * @ exception: java.lang.IllegalArgumentException: Mapping for not found for any header name not found on csv file
      */
     public ListofObjPropAndIndivTextualName readEntityFromCSVFile(String csvFilePath, String objPropColumnName, String indivColumnName) {
+        this.entityCSVFilePath = csvFilePath;
         ListofObjPropAndIndivTextualName listofObjPropAndIndivTextualName = null;
         try {
             if (null != csvFilePath) {
@@ -172,7 +191,7 @@ public class StripDownOntology {
                 return listofObjPropAndIndivTextualName;
             }
         } catch (Exception ex) {
-            logger.error("readEntityFromCSVFile failed!!!! Reading entity file error, entity file name: " + entityTxtFilePath);
+            logger.error("readEntityFromCSVFile failed!!!! Reading entity file error, entity file name: " + entityCSVFilePath);
             ex.printStackTrace();
             return null;
         }
@@ -691,9 +710,9 @@ public class StripDownOntology {
      * 3. Entities are kept in a text file seperated by new line
      * 4. object properties list
      */
-    private static String inputOntoPath = "/Users/sarker/Workspaces/Jetbrains/residue/data/KGS/automated_wiki/wiki_full_cats_with_pages_v1_non_cyclic_jan_20_32808131_fixed_non_unicode.rdf";
-    private static String outputOntoPath = "/Users/sarker/Workspaces/Jetbrains/residue/data/KGS/automated_wiki/wiki_full_cats_with_pages_v1_non_cyclic_jan_20_32808131_fixed_non_unicode_stripped_for_7_ifps.rdf";
-    private static String entityTxtFilePath = "/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/expr_types/river_vs_other_concepts_from_r/river_45_vs_29_from_r_training_entities.txt";
+//    private static String inputOntoPath = "/Users/sarker/Workspaces/Jetbrains/residue/data/KGS/automated_wiki/wiki_full_cats_with_pages_v1_non_cyclic_jan_20_32808131_fixed_non_unicode.rdf";
+//    private static String outputOntoPath = "/Users/sarker/Workspaces/Jetbrains/residue/data/KGS/automated_wiki/wiki_full_cats_with_pages_v1_non_cyclic_jan_20_32808131_fixed_non_unicode_stripped_for_7_ifps.rdf";
+//    private static String entityTxtFilePath = "/Users/sarker/Workspaces/Jetbrains/ecii/ecii/ecii/src/test/resources/expr_types/river_vs_other_concepts_from_r/river_45_vs_29_from_r_training_entities.txt";
 
     /**
      * Being used to test different methods easily
