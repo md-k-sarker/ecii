@@ -188,7 +188,7 @@ public class TestUtility {
 
     public static void main(String[] args) {
         TestUtility tu = new TestUtility();
-        tu.testGetShortNameWithPrefix();
+        tu.testRestrictedPermutations();
 
     }
 }

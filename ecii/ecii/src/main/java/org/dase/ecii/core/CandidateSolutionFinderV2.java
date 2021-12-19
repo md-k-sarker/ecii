@@ -427,6 +427,15 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
      * Create solutions using the combination of candidateClasses.
      * This function at first select the top K6 candidateClass and,
      * make combination of them to produce solutions
+     *
+     * V2: combination of candidateclass should be based on multiple object property not on single
+     *      object property
+     *      for example, it should be:  highFor.(Gene1 and Gene2) and lowFor.Gene3
+     *      not: highFor.Gene1 and highFor.Gene2
+     *
+     *   todo:   to implement this: we can group the candidate classes based on the owlobjectproperty. grouping is already implemented
+     *   in candidatesolutionv-x.java
+     *
      */
     private void createSolutionByCombiningCandidateClass() {
         /**
@@ -447,6 +456,23 @@ public class CandidateSolutionFinderV2 extends CandidateSolutionFinder {
                     origList.add(candidateClasses);
                 }
             });
+
+            /**
+             * debug some code
+             */
+            logger.debug("debugging owlObjectProperty: origList before objPropsCombination");
+            origList.forEach(candidateClassV2s -> {
+                logger.debug("objprops: ");
+                candidateClassV2s.forEach(candidateClassV2 -> {
+                    logger.debug(candidateClassV2.owlObjectProperty + "\t");
+                });
+                logger.debug("\n");
+            });
+            /**
+             * Insights from debugging. our origList is producing list as [[highFor., highFor., highFor.], [empty., empty., empty.,]]
+             * details log is in: /Users/sarker/Workspaces/Jetbrains/residue-emerald/residue/experiments/phite/pliers/phase-3/phite-settings-v1_results_ecii_V2_log.log file
+             */
+
             Collection<List<CandidateClassV2>> objPropsCombination = Utility.restrictedCombinationHelper(origList);
 
             //  Valid combination of ObjectProperties.

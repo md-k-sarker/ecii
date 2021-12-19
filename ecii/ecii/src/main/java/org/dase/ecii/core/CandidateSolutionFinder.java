@@ -132,12 +132,12 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
         // create combination of objectproperties
         logger.info("createCombination of Objectproperties started...............");
         SharedDataHolder.objPropertiesCombination = createCombinationOfObjectProperties();
-        logger.info("createCombination of Objectproperties finished. size: "+ SharedDataHolder.objPropertiesCombination.size());
+        logger.info("createCombination of Objectproperties finished. size: " + SharedDataHolder.objPropertiesCombination.size());
 
         // init variables
         initVariables();
 
-        // save initial solutions
+        // save solutions
         logger.info("createAndSaveSolutions started...............");
         createAndSaveSolutions();
         logger.info("createAndSaveSolutions finished");
@@ -518,11 +518,25 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
         if (ConfigParams.objPropsCombinationLimit >= 2)
             listCombination = Utility.combinationHelper(objectPropertyArrayList, 2);
 
+
         // combination from 3 to upto conceptsCombinationLimit or k3 limit
         for (int combinationCounter = 3; combinationCounter <= ConfigParams.objPropsCombinationLimit; combinationCounter++) {
             // combination of combinationCounter
             listCombination.addAll(Utility.combinationHelper(objectPropertyArrayList, combinationCounter));
         }
+
+
+        /**
+         * debug some code
+         */
+        logger.debug("debugging owlObjectProperty");
+        listCombination.forEach(owlObjectProperties -> {
+            owlObjectProperties.forEach(owlObjectProperty -> {
+                logger.debug(owlObjectProperty + "\t");
+            });
+            logger.debug("\n");
+        });
+
         return listCombination;
     }
 
@@ -564,9 +578,10 @@ public abstract class CandidateSolutionFinder implements ICandidateSolutionFinde
      * a combination is valid if and only if it doesn't have self subClass.
      * This is now a hard problem. It can be easily analyzed if the hornClause only have positive type, but no idea, if it also contains negative types.
      * todo(zaman): need to formulate idea to solve this.
+     * <p>
+     * //  It's producing (Human and Mammal) And (Human and Animal) as valid!!!
+     * // which is weird, it can be reduced to (Human and Mammal and Animal)
      *
-     *             //  It's producing (Human and Mammal) And (Human and Animal) as valid!!!
-     *             // which is weird, it can be reduced to (Human and Mammal and Animal)
      * @param aList
      * @return
      */

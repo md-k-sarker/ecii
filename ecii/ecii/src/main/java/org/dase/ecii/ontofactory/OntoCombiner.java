@@ -333,7 +333,7 @@ public class OntoCombiner {
 
                     owl_files_path.add(each_owl_file_path);
                 } else {
-                    logger.error(" Error!!!!!!!!!!. image file not found in " + traversingRootPath);
+                    logger.error(" Error!!!!!!!!!!. file "+ each_image_file_name +" not found in " + traversingRootPath);
                 }
             });
 

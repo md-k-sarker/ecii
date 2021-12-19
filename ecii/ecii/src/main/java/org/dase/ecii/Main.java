@@ -17,7 +17,7 @@ import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.misc.Unsafe;
+//import sun.misc.Unsafe;
 
 import javax.swing.*;
 import java.io.BufferedOutputStream;
@@ -514,9 +514,11 @@ public class Main {
             logger.error("Error in creating ontology: " + csvPath + " !!!!!!!!!!!!");
             e.printStackTrace();
         }
-        //     public void parseCSVToCreateIndivAndTheirTypes(String entityColumnName, boolean usePrefixForIndivCreation, String indivPrefix, boolean assignTypeUsingSameEntity)
+        //     public void parseCSVToCreateIndivAndTheirTypes(String entityColumnName, boolean usePrefixForIndivCreation,
+        //     String indivPrefix, boolean assignTypeUsingSameEntity)
 
-        createOWLFromCSV.parseCSVToCreateIndivAndTheirTypes(entityColumnName, usePrefixForIndivCreation_, indivPrefix, assignTypeUsingSameEntity_);
+        createOWLFromCSV.parseCSVToCreateIndivAndTheirTypes(entityColumnName, usePrefixForIndivCreation_,
+                indivPrefix, assignTypeUsingSameEntity_);
         logger.info("Creating ontology by processing csv file: " + csvPath + " finished.");
         initiateSingleOpsEnd(null);
     }
@@ -771,6 +773,7 @@ public class Main {
                     // -o [entityCsvFilePath, rowIdColumnName, indivColumnName, separator,
                     //       usePrefixForIndivCreation, indivPrefix, ontoIRI,
                     //       providingEntityFullName, delimeter, objPropName]
+                    // multiple ontology from a single csv file
                     createOntologyFromCSV(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10]);
                 }
             } else {
@@ -792,13 +795,13 @@ public class Main {
      */
     public static void disableWarning() {
         try {
-            Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
-            theUnsafe.setAccessible(true);
-            Unsafe u = (Unsafe) theUnsafe.get(null);
-
-            Class cls = Class.forName("jdk.internal.module.IllegalAccessLogger");
-            Field logger = cls.getDeclaredField("logger");
-            u.putObjectVolatile(cls, u.staticFieldOffset(logger), null);
+//            Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
+//            theUnsafe.setAccessible(true);
+//            Unsafe u = (Unsafe) theUnsafe.get(null);
+//
+//            Class cls = Class.forName("jdk.internal.module.IllegalAccessLogger");
+//            Field logger = cls.getDeclaredField("logger");
+//            u.putObjectVolatile(cls, u.staticFieldOffset(logger), null);
         } catch (Exception e) {
             // ignore
         }

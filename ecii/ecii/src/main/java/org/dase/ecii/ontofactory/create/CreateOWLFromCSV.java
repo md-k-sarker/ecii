@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Paths;
+import java.util.HashSet;
 
 /**
  * Create ontology by taking the data from csv file.
@@ -419,9 +420,10 @@ public class CreateOWLFromCSV {
      * <p>
      * 3. this.baseObjProp-------indiv------indivEntity
      * here, if baseObjProp or baseIndividual is null then this axiom is not created.
+     *
      * @param rowIdColumnName
      * @param entityColumnName
-     * @param separator : separator between multiple entities, for example ; or , etc
+     * @param separator                 : separator between multiple entities, for example ; or , etc
      * @param usePrefixForIndivCreation : boolean
      * @param indivPrefix
      */
@@ -438,14 +440,25 @@ public class CreateOWLFromCSV {
 
         logger.info("Iterating over csv data and creating ontologies started............");
         int counter = 0;
+        //--------- tmp for google-open-images-------
+        HashSet<String> indivNamesUnique = new HashSet<>();
+        // remove after task is done
         for (CSVRecord csvRecord : csvRecords) {
             String rowIdentifier = csvRecord.get(rowIdColumnName);
             String indivNames = csvRecord.get(entityColumnName);
+            //--------- tmp for google-open-images-------
+            if (indivNamesUnique.contains(rowIdentifier))
+                continue;
+            indivNamesUnique.add(rowIdentifier);
+            // remove after task is done
             if (rowIdentifier.length() > 0 && indivNames.length() > 0) {
                 OWLOntology localOntology = null;
                 try {
+                    //--------- tmp for google-open-images-------
+                    rowIdentifier = rowIdentifier.replace(".jpg", "");
+                    // remove after task is done
                     // create ontology
-                    localOntology = this.owlOntologyManager.createOntology(IRI.create(this.ontoIRI+rowIdentifier));
+                    localOntology = this.owlOntologyManager.createOntology(IRI.create(this.ontoIRI + rowIdentifier));
                     // do we need to remove axioms from this localOntology ?
                     this.owlDataFactory = localOntology.getOWLOntologyManager().getOWLDataFactory();
                 } catch (Exception exception) {
@@ -462,20 +475,36 @@ public class CreateOWLFromCSV {
                 owlOntologyManager.addAxiom(localOntology, createTypeRelation(baseOwlNamedIndividual, owlDataFactory.getOWLThing()));
 
                 // create attributes
+                //--------- tmp for google-open-images-------
+                indivNames = indivNames.replace("[", "").replace("]", "");
+                // remove after task is done
                 for (String indivName : indivNames.split(separator)) {
                     if (indivName.length() > 0) {
+                        counter++;
+                        //--------- tmp for google-open-images-------
+                        indivName = Utility.beautifyNameAsWikiOnto(indivName);
+                        //indivName.replaceAll("'", "").replaceAll("\"", "").trim().replaceAll(" ", "_");
+                        //String indivNameWithPrefix = "obj_indiv_" + counter + "_" + indivName;
+                        // remove after task is done
                         String indivNameWithPrefix = indivName;
 
 //                        if (usePrefixForIndivCreation) {
 //                            indivNameWithPrefix = indivPrefix + indivName;
 //                        }
                         OWLNamedIndividual owlNamedIndividual = createOWLNamedIndividual(indivNameWithPrefix);
-                        if (counter == 2) {
-                            logger.info("owlNamedIndividual: " + owlNamedIndividual);
-                        }
+                        //if (counter == 30) {
+                        //   break;
+                        //logger.info("owlNamedIndividual: " + owlNamedIndividual);
+                        // }
 
                         owlOntologyManager.addAxiom(localOntology, createTypeRelation(owlNamedIndividual, owlDataFactory.getOWLThing()));
-                        counter++;
+
+                        //--------- tmp for google-open-images-------
+                        // type assertion. use the same indivname for type creation
+                        // hope that those type will be in the wikipedia category
+                        //OWLClass owlClass = createOWLClass(indivName);
+                        //owlOntologyManager.addAxiom(localOntology, createTypeRelation(owlNamedIndividual, owlClass));
+                        // remove after task is done
 
                         // property assertion
                         if (null != this.baseObjProp && null != baseOwlNamedIndividual) {
@@ -489,7 +518,7 @@ public class CreateOWLFromCSV {
                 // save the ontology
                 try {
                     logger.info("Saving ontology..........");
-                    String localOntoPath = outputOntoPath + "/" + rowIdentifier + "_pos.owl";
+                    String localOntoPath = outputOntoPath + "/" + rowIdentifier + ".owl";
                     Utility.saveOntology(localOntology, localOntoPath);
                     logger.info("Saving ontology finished.");
                     logger.info("Ontology saved at: " + localOntoPath);
@@ -502,7 +531,7 @@ public class CreateOWLFromCSV {
         logger.info("Parsing csv and creating ontology from the data finished.");
     }
 
-    public static void main(String [] args){
+    public static void main(String[] args) {
 
     }
 }

@@ -140,7 +140,11 @@ public final class ConfigParams {
      * <p>
      * If we have it's value as more than 1, we will get solution like:
      * ∃ :imageContains.((:Artifact ⊓ ¬ (:Substance) ⊓ (:Artifact ⊓ ¬ (:Plant)))
-     * Setting this to 1 will fix this kind of problem
+     * Setting this to 1 will fix this kind of problem.
+     *
+     * Thoughts...
+     * Is this used to combine different object properties? or it also combine same object-property multiple times?
+     *
      * Also named as K3.
      * Integer, Optional, Default: 1
      */
@@ -389,12 +393,12 @@ public final class ConfigParams {
             removeCommonTypes = Boolean.parseBoolean(prop.getProperty("removeCommonTypes", "true"));
             removeCommonTypesFromOneSideOnly = Boolean.parseBoolean(prop.getProperty("removeCommonTypesFromOneSideOnly", "true"));
             validateByReasonerSize = Integer.valueOf(prop.getProperty("validateByReasonerSize", "0"));
-            limitPosTypes = true; //Boolean.parseBoolean(prop.getProperty("limitPosTypes", "false"));
+            limitPosTypes = Boolean.parseBoolean(prop.getProperty("limitPosTypes", "false"));
             posClassListMaxSize = Integer.valueOf(prop.getProperty("posClassListMaxSize", "20"));
             posTypeMinCoverIndivsSize = Integer.valueOf(prop.getProperty("posTypeMinCoverIndivsSize", "1"));
             // override the min value
             posTypeMinCoverIndivsSize = Math.min(posTypeMinCoverIndivsSize, SharedDataHolder.posIndivs.size() / 3);
-            limitNegTypes = true; //Boolean.parseBoolean(prop.getProperty("limitNegTypes", "false"));
+            limitNegTypes = Boolean.parseBoolean(prop.getProperty("limitNegTypes", "false"));
             negClassListMaxSize = Integer.valueOf(prop.getProperty("negClassListMaxSize", "20"));
             negTypeMinCoverIndivsSize = Integer.valueOf(prop.getProperty("negTypeMinCoverIndivsSize", "1"));
             // override the min value

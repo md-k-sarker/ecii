@@ -10,6 +10,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Level;
 import org.dase.ecii.core.SharedDataHolder;
 import org.dase.ecii.exceptions.MalFormedIRIException;
@@ -261,6 +262,19 @@ public class Utility {
         logger.info("DefaultIRIPrefix: " + defaultOntologyIRIPrefix);
 
         return defaultOntologyIRIPrefix;
+    }
+
+    private static String trimOrReplaceSearchChars = " `~!@#$%^&*()-+={}[]|\\;'\"<>,.?/";
+    // length of replaceChars must be same with trimOrReplaceSearchChars
+    // https://commons.apache.org/proper/commons-lang/javadocs/api-2.6/org/apache/commons/lang/StringUtils.html#replaceChars(java.lang.String,%20java.lang.String,%20java.lang.String)
+    private static String replaceChars = "_______________________________";
+
+    /*
+    beautify the name of the entity as we did for the wikipedia ontology
+     */
+    public static String beautifyNameAsWikiOnto(String name) {
+        String trimmed = StringUtils.strip(name, trimOrReplaceSearchChars);
+        return StringUtils.replaceChars(trimmed, trimOrReplaceSearchChars, replaceChars);
     }
 
 
