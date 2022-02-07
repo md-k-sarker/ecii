@@ -25,6 +25,12 @@ Sample/example files is in examples directory.
 
     Program can be run from source code directly or from jar. Running from source code is preferable, 
     as running from jar may produce memory limit exception for very big knowledge graph.  
+    
+
+## FAQ
+
+FAQ: https://github.com/md-k-sarker/ecii/wiki/FAQ
+
 
 ## Tutorials
 
@@ -36,12 +42,14 @@ Create ontology: https://github.com/md-k-sarker/ecii/wiki/Create-Ontology-or-Kno
 
 Combine ontologies: https://github.com/md-k-sarker/ecii/wiki/Combine-Ontology
 
+
 ## Details of the parameters
 
 https://github.com/md-k-sarker/ecii/wiki/ECII-parameters
 
 
-### Details of the algorithm
+
+### Algorithm (paper)
 
 ```latex
 @inproceedings{sarker2019efficient,
