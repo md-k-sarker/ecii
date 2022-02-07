@@ -49,7 +49,7 @@ https://github.com/md-k-sarker/ecii/wiki/ECII-parameters
 
 
 
-### Algorithm (paper)
+## Algorithm (paper)
 
 ```latex
 @inproceedings{sarker2019efficient,
