@@ -2,7 +2,7 @@
 
 Learning description from examples: An efficient approach for contextual data analysis.
 
-Originally concept induction algorithm, where other functionality is added to provide:
+Originally concept induction algorithm, where other functionalities are added to provide:
 
 - Contextual data analysis
 - Similarity between natural language (sentence, paragraph, tweet etc).
